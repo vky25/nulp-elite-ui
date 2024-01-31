@@ -1,0 +1,6 @@
+{
+  "compilerOptions": {
+    "baseUrl": "src"
+  },
+  "include": ["src", "../student-app/src/api's/getNewAccessToken.jsx"]
+}

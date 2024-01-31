@@ -1,0 +1,39 @@
+{
+  "name": "root",
+  "private": true,
+  "workspaces": {
+    "packages": [
+      "packages/common-lib",
+      "packages/core"
+    ]
+  },
+  "scripts": {
+    "start": "lerna run --parallel start",
+    "build": "lerna run build",
+    "serve": "lerna run --parallel serve",
+    "clean": "lerna run --parallel clean",
+    "cls-dep": "npx rimraf ./**/node_modules",
+    "format": "prettier --write .",
+    "format:check": "prettier --check ."
+  },
+  "devDependencies": {
+    "lerna": "4.0.0",
+    "prettier": "^2.6.0"
+  },
+  "dependencies": {
+    "@chakra-ui/react": "^2.8.0",
+    "@emotion/react": "^11.11.1",
+    "@emotion/styled": "^11.11.0",
+    "@hookform/resolvers": "^3.3.1",
+    "@mui/material": "^5.14.7",
+    "ag-grid-community": "^30.1.0",
+    "antd": "^5.9.3",
+    "axios": "^1.5.0",
+    "framer-motion": "^10.16.2",
+    "papaparse": "^5.4.1",
+    "react-ga": "^3.3.1",
+    "react-hook-form": "^7.45.4",
+    "react-modal": "^3.16.1",
+    "yup": "^1.2.0"
+  }
+}
