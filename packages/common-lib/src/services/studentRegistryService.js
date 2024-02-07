@@ -170,7 +170,7 @@ export const getByTeacher = async () => {
     })
 
     if (classResult[0].id) {
-     const groupdID =  localStorage.getItem("groupId")
+      const groupdID = localStorage.getItem('groupId')
       return {
         class: groupdID,
         data: await getAll({
