@@ -39,8 +39,8 @@ function CommingSoon({ footerLinks }) {
         LeftIcon: (
           <HStack>
             <img
-            width={"100px"}
-            src={require("../../src/assets/TSHeader.png")}
+              width={"100px"}
+              src={require("../../src/assets/TSHeader.png")}
             />
           </HStack>
         ),

@@ -79,7 +79,7 @@ export default function Login({ swPath }) {
       );
       if (result?.data) {
         let token = result.data.access_token;
-        sessionStorage.setItem('token', token);
+        sessionStorage.setItem("token", token);
 
         const resultTeacher = await userRegistryService.getOne();
         if (resultTeacher?.id) {
@@ -179,7 +179,6 @@ export default function Login({ swPath }) {
         <Center width={width}>
           <VStack space="" w="300px">
             <Box style={{ marginLeft: "25px" }}>
-            
               <Heading>{t("WELCOME")}</Heading>
             </Box>
             <VStack space={2} pt={"25px"} pb={"25px"}>

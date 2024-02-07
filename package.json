@@ -4,7 +4,8 @@
   "workspaces": {
     "packages": [
       "packages/common-lib",
-      "packages/core"
+      "packages/core",
+      "packages/nulp_elite"
     ]
   },
   "scripts": {
@@ -14,7 +15,8 @@
     "clean": "lerna run --parallel clean",
     "cls-dep": "npx rimraf ./**/node_modules",
     "format": "prettier --write .",
-    "format:check": "prettier --check ."
+    "format:check": "prettier --check .",
+    "prettier": "prettier --check \"**/*.js\""
   },
   "devDependencies": {
     "lerna": "4.0.0",
