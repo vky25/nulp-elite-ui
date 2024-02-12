@@ -1,10 +1,18 @@
-import { Layout } from "@shiksha/common-lib";
 import { Link } from "react-router-dom";
-import { Box, HStack, Text, VStack } from "native-base";
+import React, { useEffect } from "react";
+import { H2, Heading, BodyLarge, Widget } from "@shiksha/common-lib";
+import { Layout, NameTag } from "@shiksha/common-lib";
+import { Box, Stack, VStack,Text, HStack, Avatar, Image, Button } from "native-base";
+import { useTranslation } from "react-i18next";
+import moment from "moment";
+import manifest from "../../src/manifest.json";
+import "ag-grid-community/styles/ag-grid.css";
+
 
 export default function Sample() {
   return (
-    <Layout
+<div>
+<Layout
       _header={{
         title: "Sample Module",
         isEnableSearchBtn: true,
@@ -14,16 +22,6 @@ export default function Sample() {
             to="/"
             style={{ color: "rgb(63, 63, 70)", textDecoration: "none" }}
           >
-            <Box
-              rounded="full"
-              borderColor="button.500"
-              borderWidth="1"
-              _text={{ color: "button.500" }}
-              px={6}
-              py={2}
-            >
-              Button
-            </Box>
           </Link>
         ),
       }}
@@ -34,7 +32,7 @@ export default function Sample() {
         >
           <HStack space="4" justifyContent="space-between">
             <VStack>
-              <Text fontSize={"lg"}>Sample Module</Text>
+              <Text fontSize={"lg"}>preferences</Text>
             </VStack>
           </HStack>
         </Link>
@@ -48,29 +46,26 @@ export default function Sample() {
             route: "/",
           },
           {
-            title: "CLASSES",
-            icon: "TeamLineIcon",
-            route: "/classes",
-          },
-          {
-            title: "SCHOOL",
-            icon: "GovernmentLineIcon",
-            route: "/",
-          },
-          {
-            title: "MATERIALS",
+            title: "Courses",
             icon: "BookOpenLineIcon",
-            route: "/",
+            route: "/Courses",
           },
           {
-            title: "CAREER",
-            icon: "UserLineIcon",
-            route: "/",
+            title: "All",
+            icon: "GovernmentLineIcon",
+            route: "/Contents",
           },
+          {
+            title: "Discussion Forum",
+            icon: "TeamLineIcon",
+            route: "/",
+          }
         ],
       }}
     >
       <h1>Sample Module</h1>
     </Layout>
+</div>
+
   );
 }
