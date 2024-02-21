@@ -13,6 +13,7 @@
     "@testing-library/react": "^11.2.7",
     "@testing-library/user-event": "^12.8.3",
     "axios": "^0.24.0",
+    "dotenv": "^16.4.5",
     "expo-font": "^10.0.3",
     "i18next": "^21.6.7",
     "moment": "^2.29.1",

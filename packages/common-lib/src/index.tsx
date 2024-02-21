@@ -39,6 +39,10 @@ import {
   sendReadReceipt
 } from './services/firebaseHistoryRegistryService'
 import * as subjectListRegistryService from './services/subjectListRegistryService'
+import * as contentService from './services/content/contentService'
+import * as formService from './services/form/formService'
+import * as courseService from './services/course/courseService'
+import * as learnerService from './services/learner/learnerService'
 
 import AppRoutesContainer from './components/AppRoutesContainer'
 import { useAuthFlow, getAuthUser } from './hooks/useAuthFlow'
@@ -95,7 +99,11 @@ export {
   SunbirdPlayer,
   RoundedProgressBar,
   subjectListRegistryService,
-  Breadcrumb
+  Breadcrumb,
+  contentService,
+  formService,
+  courseService,
+  learnerService
 }
 
 export * from './services/Auth'

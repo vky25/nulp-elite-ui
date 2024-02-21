@@ -11,7 +11,12 @@ for f  do
     fi
 done 
 ' sh {} +
-cp -r  packages/student-app/build/* prod-build/
-cp -r  packages/players/* prod-build/
+cp -r  packages/nulp_elite/build/* prod-build/
+# cp -r  packages/players/* prod-build/
 find  prod-build -name  'modules.json' | xargs sed -i 's|http://localhost:[0-9]*||g'
 cd prod-build && tar -cf ../shiksha-ui.tar . && cd ../
+if [ ! -d "../dist" ]; then
+    mkdir ../dist
+fi
+cp -r prod-build/* ../dist/
+find ../dist -type f -name 'index.html' -exec bash -c 'mv "$1" "${1%.html}.ejs"' _ {} \;
