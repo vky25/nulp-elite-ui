@@ -1,23 +1,23 @@
 import React from "react";
 import "./App.css";
-import { AppShell } from "@shiksha/common-lib";
 import Sample from "pages/Sample";
 import Home from "pages/Home";
 import Courses from "pages/Courses";
 import Contents from "pages/Contents";
 import { extendTheme, NativeBaseProvider } from "native-base";
-
+// import dotenv from "dotenv";
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
-import { DEFAULT_THEME, initializeI18n } from "@shiksha/common-lib";
 import Registration from "pages/Registration";
 
+// import { DEFAULT_THEME, initializeI18n } from "@shiksha/common-lib";
+// dotenv.config();
 function App() {
   // const theme = extendTheme(DEFAULT_THEME);
 
   const routes = [
     {
       moduleName: "nulp_elite",
-      path: "/",
+      path: "/home",
       component: Home,
     },
     {
@@ -43,7 +43,21 @@ function App() {
   );
   // <NativeBaseProvider > <Sample /></NativeBaseProvider>;
 
-  // <AppShell routes={routes} AuthComponent={LoginComponent} />;
+  // return (
+  //   <NativeBaseProvider>
+  //     <Router>
+  //       <Routes>
+  //         {routes.map((route, index) => (
+  //           <Route
+  //             key={index}
+  //             path={route.path}
+  //             element={<route.component />}
+  //           />
+  //         ))}
+  //       </Routes>
+  //     </Router>
+  //   </NativeBaseProvider>
+  // );
 }
 
 export default App;
