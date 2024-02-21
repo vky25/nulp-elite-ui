@@ -9,7 +9,7 @@ import { extendTheme, NativeBaseProvider } from "native-base";
 
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 import { DEFAULT_THEME, initializeI18n } from "@shiksha/common-lib";
-
+import Registration from "pages/Registration";
 
 function App() {
   // const theme = extendTheme(DEFAULT_THEME);
@@ -19,11 +19,13 @@ function App() {
       moduleName: "nulp_elite",
       path: "/",
       component: Home,
-    },{
+    },
+    {
       moduleName: "nulp_elite",
       path: "/Contents",
       component: Contents,
-    },{
+    },
+    {
       moduleName: "nulp_elite",
       path: "/Courses",
       component: Courses,
@@ -31,14 +33,14 @@ function App() {
   ];
   // const LoginComponent = React.lazy(() => import("core/Login"));
 
-  return(
-  
-    <NativeBaseProvider >
-    <Router>
-    <Sample />
-    </Router>
-</NativeBaseProvider>
-  ); 
+  return (
+    <NativeBaseProvider>
+      <Router>
+        <Sample />
+        <Registration />
+      </Router>
+    </NativeBaseProvider>
+  );
   // <NativeBaseProvider > <Sample /></NativeBaseProvider>;
 
   // <AppShell routes={routes} AuthComponent={LoginComponent} />;
