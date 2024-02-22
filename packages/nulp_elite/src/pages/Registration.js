@@ -1,9 +1,11 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
+import axios from "axios";
 import styled from "styled-components";
 import { useFormik } from "formik";
 import { signUpSchema } from "../schemes";
 import { Radio, RadioGroup, Stack, Input, Box } from "@chakra-ui/react";
 import { ViewIcon, ViewOffIcon } from "@chakra-ui/icons";
+import { contentService } from "@shiksha/common-lib";
 
 const initialValues = {
   name: "",
@@ -23,6 +25,10 @@ const Registration = () => {
   const startYear = 1925;
   const [confirmPassword, setConfirmPassword] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
+  const [data, setData] = useState([]);
+  const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState(null);
+
   const yearOptions = [];
   for (let year = currentYear; year >= startYear; year--) {
     yearOptions.push(year);
@@ -47,7 +53,6 @@ const Registration = () => {
       action.resetForm();
     },
   });
-  const handleSubmit = () => {};
 
   const togglePasswordVisibility = () => {
     setShowPassword(!showPassword);
@@ -59,6 +64,60 @@ const Registration = () => {
 
   const handleSelectChange = (event) => {
     setBirthYear(event.target.value);
+  };
+
+  useEffect(() => {
+    const getCaptcha = async () => {
+      setIsLoading(true);
+      setError(null);
+
+      let data = JSON.stringify({
+        request: {
+          key: "snehal2020@yopmail.com",
+          templateId: "wardLoginOTP",
+          type: "email",
+        },
+      });
+
+      // Headers
+      const headers = {
+        "Content-Type": "application/json",
+        Cookie: `connect.sid=${getCookieValue("connect.sid")}`,
+      };
+      const url = `https://www.google.com/recaptcha/api2/reload?k=6LeTKjcpAAAAANWJtGOk-GIQdybiXjHEbKSkyxob`;
+      try {
+        const response = await contentService.getCaptchaResponse(
+          url,
+          data,
+          headers
+        );
+        console.log(response.data.result);
+        setData(response.data.result);
+      } catch (error) {
+        setError(error.message);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    getCaptcha();
+  }, []);
+
+  const handleSubmit = () => {
+    useEffect();
+  };
+
+  // Function to get cookie value by name
+  const getCookieValue = (name) => {
+    const cookies = document.cookie.split("; ");
+    for (let i = 0; i < cookies.length; i++) {
+      const cookie = cookies[i];
+      const [cookieName, cookieValue] = cookie.split("=");
+      if (cookieName === name) {
+        return cookieValue;
+      }
+    }
+    return "";
   };
 
   return (
@@ -302,6 +361,16 @@ const Registration = () => {
                       Continue
                     </button>
                   </Box>
+
+                  {isLoading && <p>Loading...</p>}
+                  {error && <p>Error: {error}</p>}
+                  {Object.keys(data).map((key) => (
+                    <div key={key}>
+                      <p>
+                        {key}: {JSON.stringify(data[key])}
+                      </p>
+                    </div>
+                  ))}
                 </form>
                 <p className="sign-up">
                   Already have an account? <a href="#">Login</a>
@@ -354,7 +423,6 @@ const Wrapper = styled.section`
     font-weight: 400;
     color: ##1e1e1d;
     text-align: center;
-    
   }
   .form-error {
     font-size: 0.7rem;
@@ -466,7 +534,6 @@ const Wrapper = styled.section`
     background : #8692ed;
     border-radius:50%
   }
-  
   .input-block input {
     outline: 0;
     border: 0;
@@ -507,7 +574,6 @@ const Wrapper = styled.section`
     }
   }
 
- 
 `;
 
 export default Registration;

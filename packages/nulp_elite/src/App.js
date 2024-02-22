@@ -30,34 +30,29 @@ function App() {
       path: "/Courses",
       component: Courses,
     },
+    {
+      moduleName: "nulp_elite",
+      path: "/registration",
+      component: Registration,
+    },
   ];
   // const LoginComponent = React.lazy(() => import("core/Login"));
 
   return (
     <NativeBaseProvider>
       <Router>
-        <Sample />
-        <Registration />
+        <Routes>
+          {routes.map((route, index) => (
+            <Route
+              key={index}
+              path={route.path}
+              element={<route.component />}
+            />
+          ))}
+        </Routes>
       </Router>
     </NativeBaseProvider>
   );
-  // <NativeBaseProvider > <Sample /></NativeBaseProvider>;
-
-  // return (
-  //   <NativeBaseProvider>
-  //     <Router>
-  //       <Routes>
-  //         {routes.map((route, index) => (
-  //           <Route
-  //             key={index}
-  //             path={route.path}
-  //             element={<route.component />}
-  //           />
-  //         ))}
-  //       </Routes>
-  //     </Router>
-  //   </NativeBaseProvider>
-  // );
 }
 
 export default App;
