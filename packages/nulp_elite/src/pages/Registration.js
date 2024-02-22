@@ -84,6 +84,7 @@ const Registration = () => {
         "Content-Type": "application/json",
         Cookie: `connect.sid=${getCookieValue("connect.sid")}`,
       };
+
       const url = `https://www.google.com/recaptcha/api2/reload?k=6LeTKjcpAAAAANWJtGOk-GIQdybiXjHEbKSkyxob`;
       try {
         const response = await contentService.getCaptchaResponse(
