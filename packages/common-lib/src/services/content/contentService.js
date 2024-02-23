@@ -34,22 +34,3 @@ export const update = async (data = {}, headers = {}) => {
     return {}
   }
 }
-
-export const getCaptchaResponse = async (url, header) => {
-  // axios
-  //   .post(url, data, { headers })
-  //   .then((response) => {
-  //     console.log(response.data)
-  //   })
-  //   .catch((error) => {
-  //     console.log(error)
-  //   })
-  const result = await axios(url, {
-    header
-  })
-  if (result) {
-    return result
-  } else {
-    return []
-  }
-}

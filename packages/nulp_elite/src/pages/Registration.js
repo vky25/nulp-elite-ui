@@ -1,11 +1,15 @@
-import React, { useState, useEffect } from "react";
-import axios from "axios";
-import styled from "styled-components";
+import React, { useEffect, useState, useRef } from "react";
 import { useFormik } from "formik";
 import { signUpSchema } from "../schemes";
 import { Radio, RadioGroup, Stack, Input, Box } from "@chakra-ui/react";
 import { ViewIcon, ViewOffIcon } from "@chakra-ui/icons";
 import { contentService } from "@shiksha/common-lib";
+import ReactDOM from "react-dom";
+import ReCAPTCHA from "react-google-recaptcha";
+import styled from "styled-components";
+
+const SITE_KEY = "6Ldk3O8UAAAAAC2tm0qkPGbJC7YJVpVzMeIuhumb";
+const DELAY = 1500;
 
 const initialValues = {
   name: "",
@@ -28,6 +32,18 @@ const Registration = () => {
   const [data, setData] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState(null);
+  const [callback, setCallback] = useState("not fired");
+  const [value, setValue] = useState("[empty]");
+  const [load, setLoad] = useState(false);
+  const [expired, setExpired] = useState(false);
+  const [recaptchaLoaded, setRecaptchaLoaded] = useState(false);
+  const reCaptchaRef = useRef(null);
+
+  useEffect(() => {
+    setTimeout(() => {
+      setLoad(true);
+    }, DELAY);
+  }, []);
 
   const yearOptions = [];
   for (let year = currentYear; year >= startYear; year--) {
@@ -66,48 +82,24 @@ const Registration = () => {
     setBirthYear(event.target.value);
   };
 
-  useEffect(() => {
-    const getCaptcha = async () => {
-      setIsLoading(true);
-      setError(null);
-
-      let data = JSON.stringify({
-        request: {
-          key: "snehal2020@yopmail.com",
-          templateId: "wardLoginOTP",
-          type: "email",
-        },
-      });
-
-      // Headers
-      const headers = {
-        "Content-Type": "application/json",
-        Cookie: `connect.sid=${getCookieValue("connect.sid")}`,
-      };
-
-      const url = `https://www.google.com/recaptcha/api2/reload?k=6LeTKjcpAAAAANWJtGOk-GIQdybiXjHEbKSkyxob`;
-      try {
-        const response = await contentService.getCaptchaResponse(
-          url,
-          data,
-          headers
-        );
-        console.log(response.data.result);
-        setData(response.data.result);
-      } catch (error) {
-        setError(error.message);
-      } finally {
-        setIsLoading(false);
-      }
-    };
-
-    getCaptcha();
-  }, []);
-
   const handleSubmit = () => {
     useEffect();
   };
 
+  useEffect(() => {
+    setTimeout(() => {
+      setLoad(true);
+    }, DELAY);
+    console.log("didMount - reCaptcha Ref-", reCaptchaRef);
+  }, []);
+
+  const handleChangeCaptcha = (newValue) => {
+    // Your handleChangeCaptcha implementation
+  };
+
+  const asyncScriptOnLoad = () => {
+    setRecaptchaLoaded(true);
+  };
   // Function to get cookie value by name
   const getCookieValue = (name) => {
     const cookies = document.cookie.split("; ");
@@ -381,6 +373,26 @@ const Registration = () => {
           </Box>
         </Box>
       </Wrapper>
+      <h1>
+        <a
+          href="https://github.com/dozoisch/react-google-recaptcha"
+          target="_blank"
+        ></a>
+      </h1>
+
+      {load && (
+        <ReCAPTCHA
+          style={{ display: "inline-block" }}
+          theme="dark"
+          size="invisible"
+          ref={reCaptchaRef}
+          sitekey={SITE_KEY}
+          onChange={handleChangeCaptcha}
+          asyncScriptOnLoad={asyncScriptOnLoad}
+        />
+      )}
+
+      <Box className="container"></Box>
     </>
   );
 };
@@ -577,4 +589,88 @@ const Wrapper = styled.section`
 
 `;
 
+const rootElement = document.getElementById("root");
+ReactDOM.render(<Registration />, rootElement);
+
 export default Registration;
+
+// import React, { useEffect, useState, useRef } from "react";
+// import ReactDOM from "react-dom";
+// import ReCAPTCHA from "react-google-recaptcha";
+// import { useFormik } from "formik";
+// import { signUpSchema } from "../schemes";
+// import styled from "styled-components";
+// import { Box } from "@chakra-ui/react";
+
+// const SITE_KEY = "6Ldk3O8UAAAAAC2tm0qkPGbJC7YJVpVzMeIuhumb";
+// const DELAY = 1500;
+
+// const initialValues = {
+//   name: "",
+//   // Other initial values
+// };
+
+// const Registration = () => {
+//   const [load, setLoad] = useState(false);
+//   const [recaptchaLoaded, setRecaptchaLoaded] = useState(false);
+//   const reCaptchaRef = useRef(null);
+
+//   useEffect(() => {
+//     setTimeout(() => {
+//       setLoad(true);
+//     }, DELAY);
+//   }, []);
+
+//   const handleChangeCaptcha = (newValue) => {
+//     // Your handleChangeCaptcha implementation
+//   };
+
+//   const asyncScriptOnLoad = () => {
+//     setRecaptchaLoaded(true);
+//   };
+
+//   const { handleSubmit, handleChange, handleBlur, values, errors, touched } =
+//     useFormik({
+//       initialValues,
+//       validationSchema: signUpSchema,
+//       onSubmit: (values, action) => {
+//         console.log(values);
+//         // Action to handle form submission
+//         action.resetForm();
+//       },
+//     });
+
+//   return (
+//     <Wrapper>
+//       <h1>
+//         <a
+//           href="https://github.com/dozoisch/react-google-recaptcha"
+//           target="_blank"
+//         ></a>
+//       </h1>
+
+//       {load && (
+//         <ReCAPTCHA
+//           style={{ display: "inline-block" }}
+//           theme="dark"
+//           size="invisible"
+//           ref={reCaptchaRef}
+//           sitekey={SITE_KEY}
+//           onChange={handleChangeCaptcha}
+//           asyncScriptOnLoad={asyncScriptOnLoad}
+//         />
+//       )}
+
+//       <Box className="container">{/* Your registration form JSX */}</Box>
+//     </Wrapper>
+//   );
+// };
+
+// const Wrapper = styled.section`
+//   /* Your styled component CSS */
+// `;
+
+// const rootElement = document.getElementById("root");
+// ReactDOM.render(<Registration />, rootElement);
+
+// export default Registration;
