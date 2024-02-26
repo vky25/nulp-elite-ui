@@ -7,7 +7,7 @@ import ReactDOM from "react-dom";
 import ReCAPTCHA from "react-google-recaptcha";
 import styled from "styled-components";
 
-const SITE_KEY = "6Ldk3O8UAAAAAC2tm0qkPGbJC7YJVpVzMeIuhumb";
+const SITE_KEY = "xyz";
 const DELAY = 1500;
 
 const initialValues = {
