@@ -1,6 +1,6 @@
 import React, { useEffect, useState, useRef } from "react";
 import { useFormik } from "formik";
-import { signUpSchema } from "../schemes";
+import { signUpSchema } from "../schemes/index";
 import { Radio, RadioGroup, Stack, Input, Box } from "@chakra-ui/react";
 import { ViewIcon, ViewOffIcon } from "@chakra-ui/icons";
 import ReactDOM from "react-dom";
