@@ -9,108 +9,71 @@ const Contents = () => {
   const [error, setError] = useState(null);
 
   // Example of API Call
-  // useEffect(() => {
-  //   const fetchData = async () => {
-  //     setIsLoading(true);
-  //     setError(null);
-  //     // Filters for API
-  //     let data = JSON.stringify({
-  //       request: {
-  //         filters: {
-  //           primaryCategory: [
-  //             "Collection",
-  //             "Resource",
-  //             "Content Playlist",
-  //             "Course",
-  //             "Course Assessment",
-  //             "Digital Textbook",
-  //             "eTextbook",
-  //             "Explanation Content",
-  //             "Learning Resource",
-  //             "Lesson Plan Unit",
-  //             "Practice Question Set",
-  //             "Teacher Resource",
-  //             "Textbook Unit",
-  //             "LessonPlan",
-  //             "FocusSpot",
-  //             "Learning Outcome Definition",
-  //             "Curiosity Questions",
-  //             "MarkingSchemeRubric",
-  //             "ExplanationResource",
-  //             "ExperientialResource",
-  //             "Practice Resource",
-  //             "TVLesson",
-  //             "Course Unit",
-  //             "Exam Question",
-  //           ],
-  //           visibility: ["Default", "Parent"],
-  //         },
-  //         limit: 100,
-  //         sort_by: {
-  //           lastPublishedOn: "desc",
-  //         },
-  //         fields: [
-  //           "name",
-  //           "appIcon",
-  //           "mimeType",
-  //           "gradeLevel",
-  //           "identifier",
-  //           "medium",
-  //           "pkgVersion",
-  //           "board",
-  //           "subject",
-  //           "resourceType",
-  //           "primaryCategory",
-  //           "contentType",
-  //           "channel",
-  //           "organisation",
-  //           "trackable",
-  //         ],
-  //         facets: [
-  //           "se_boards",
-  //           "se_gradeLevels",
-  //           "se_subjects",
-  //           "se_mediums",
-  //           "primaryCategory",
-  //         ],
-  //         offset: 0,
-  //       },
-  //     });
-
-  //     // Headers
-  //     const headers = {
-  //       "Content-Type": "application/json",
-  //       Cookie: `connect.sid=${getCookieValue("connect.sid")}`,
-  //     };
-  //     const url = `https://nulp.niua.org/api/content/v1/search?orgdetails=orgName,email&licenseDetails=name,description,url`;
-  //     try {
-  //       const response = await contentService.getAllContents(
-  //         url,
-  //         data,
-  //         headers
-  //       );
-  //       console.log(response.data.result);
-  //       setData(response.data.result);
-  //     } catch (error) {
-  //       setError(error.message);
-  //     } finally {
-  //       setIsLoading(false);
-  //     }
-  //   };
-
-  //   fetchData();
-  // }, [filters]);
-
   useEffect(() => {
-    const getCaptcha = async () => {
+    const fetchData = async () => {
       setIsLoading(true);
       setError(null);
-
+      // Filters for API
       let data = JSON.stringify({
         request: {
-          key: "snehal2020@yopmail.com",
-          templateId: "wardLoginOTP",
-          type: "email",
+          filters: {
+            primaryCategory: [
+              "Collection",
+              "Resource",
+              "Content Playlist",
+              "Course",
+              "Course Assessment",
+              "Digital Textbook",
+              "eTextbook",
+              "Explanation Content",
+              "Learning Resource",
+              "Lesson Plan Unit",
+              "Practice Question Set",
+              "Teacher Resource",
+              "Textbook Unit",
+              "LessonPlan",
+              "FocusSpot",
+              "Learning Outcome Definition",
+              "Curiosity Questions",
+              "MarkingSchemeRubric",
+              "ExplanationResource",
+              "ExperientialResource",
+              "Practice Resource",
+              "TVLesson",
+              "Course Unit",
+              "Exam Question",
+            ],
+            visibility: ["Default", "Parent"],
+          },
+          limit: 100,
+          sort_by: {
+            lastPublishedOn: "desc",
+          },
+          fields: [
+            "name",
+            "appIcon",
+            "mimeType",
+            "gradeLevel",
+            "identifier",
+            "medium",
+            "pkgVersion",
+            "board",
+            "subject",
+            "resourceType",
+            "primaryCategory",
+            "contentType",
+            "channel",
+            "organisation",
+            "trackable",
+          ],
+          facets: [
+            "se_boards",
+            "se_gradeLevels",
+            "se_subjects",
+            "se_mediums",
+            "primaryCategory",
+          ],
+          offset: 0,
         },
       });
 
@@ -119,9 +82,9 @@ const Contents = () => {
         "Content-Type": "application/json",
         Cookie: `connect.sid=${getCookieValue("connect.sid")}`,
       };
-      const url = `https://www.google.com/recaptcha/api2/reload?k=6LeTKjcpAAAAANWJtGOk-GIQdybiXjHEbKSkyxob`;
+      const url = `https://nulp.niua.org/api/content/v1/search?orgdetails=orgName,email&licenseDetails=name,description,url`;
       try {
-        const response = await contentService.getCaptchaResponse(
+        const response = await contentService.getAllContents(
           url,
           data,
           headers
@@ -135,13 +98,13 @@ const Contents = () => {
       }
     };
 
-    getCaptcha();
-  }, []);
+    fetchData();
+  }, [filters]);
 
   const handleChange = () => {};
-  // const handleFilterChange = (field, value) => {
-  //   setFilters({ ...filters, [field]: value });
-  // };
+  const handleFilterChange = (field, value) => {
+    setFilters({ ...filters, [field]: value });
+  };
   // Function to get cookie value by name
   const getCookieValue = (name) => {
     const cookies = document.cookie.split("; ");
