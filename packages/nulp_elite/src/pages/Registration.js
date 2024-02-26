@@ -6,8 +6,7 @@ import { ViewIcon, ViewOffIcon } from "@chakra-ui/icons";
 import ReactDOM from "react-dom";
 import ReCAPTCHA from "react-google-recaptcha";
 import styled from "styled-components";
-
-const SITE_KEY = "xyz";
+import { SITE_KEY } from "../configs/Keys";
 const DELAY = 1500;
 
 const initialValues = {
@@ -341,7 +340,7 @@ const Registration = () => {
                   ))}
                 </form>
                 <p className="sign-up">
-                  Already have an account? <a href="#">Login</a>
+                  Already have an account? <a href="/contents">Login</a>
                 </p>
               </Box>
             </Box>

@@ -101,7 +101,7 @@ const Contents = () => {
     fetchData();
   }, [filters]);
 
-  const handleChange = () => {};
+  const navigateToCourse = () => {};
   const handleFilterChange = (field, value) => {
     setFilters({ ...filters, [field]: value });
   };
@@ -127,7 +127,7 @@ const Contents = () => {
         Enhance your knowledge and skills with our diverse range of courses and
         content.
       </Text>
-      <Button colorScheme="blue" size="lg" onClick={handleChange()}>
+      <Button colorScheme="blue" size="lg" onClick={navigateToCourse()}>
         Explore Courses
       </Button>
 
