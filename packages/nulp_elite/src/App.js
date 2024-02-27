@@ -7,6 +7,8 @@ import Contents from "pages/Contents";
 import { extendTheme, NativeBaseProvider } from "native-base";
 // import dotenv from "dotenv";
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
+import Registration from "pages/Registration";
+
 // import { DEFAULT_THEME, initializeI18n } from "@shiksha/common-lib";
 // dotenv.config();
 function App() {
@@ -28,7 +30,13 @@ function App() {
       path: "/Courses",
       component: Courses,
     },
+    {
+      moduleName: "nulp_elite",
+      path: "/registration",
+      component: Registration,
+    },
   ];
+  // const LoginComponent = React.lazy(() => import("core/Login"));
 
   return (
     <NativeBaseProvider>
