@@ -43,7 +43,8 @@ import * as contentService from './services/content/contentService'
 import * as formService from './services/form/formService'
 import * as courseService from './services/course/courseService'
 import * as learnerService from './services/learner/learnerService'
-
+import * as frameworkService from './services/framework/frameworkService'
+import * as userService from './services/user/userService'
 import AppRoutesContainer from './components/AppRoutesContainer'
 import { useAuthFlow, getAuthUser } from './hooks/useAuthFlow'
 import StarRating from './components/StarRating'
@@ -103,7 +104,9 @@ export {
   contentService,
   formService,
   courseService,
-  learnerService
+  learnerService,
+  frameworkService,
+  userService
 }
 
 export * from './services/Auth'
