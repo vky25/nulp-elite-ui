@@ -9,6 +9,8 @@ import { extendTheme, NativeBaseProvider } from "native-base";
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 import Registration from "pages/Registration";
 import UserPrefPopup from "pages/UserPrefPopup";
+import Framework from "pages/Framework";
+import { ChakraProvider } from "@chakra-ui/react";
 
 // import { DEFAULT_THEME, initializeI18n } from "@shiksha/common-lib";
 // dotenv.config();
@@ -47,17 +49,19 @@ function App() {
 
   return (
     <NativeBaseProvider>
-      <Router>
-        <Routes>
-          {routes.map((route, index) => (
-            <Route
-              key={index}
-              path={route.path}
-              element={<route.component />}
-            />
-          ))}
-        </Routes>
-      </Router>
+      <ChakraProvider>
+        <Router>
+          <Routes>
+            {routes.map((route, index) => (
+              <Route
+                key={index}
+                path={route.path}
+                element={<route.component />}
+              />
+            ))}
+          </Routes>
+        </Router>
+      </ChakraProvider>
     </NativeBaseProvider>
   );
 }
