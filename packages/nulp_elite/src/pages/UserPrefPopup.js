@@ -1,171 +1,3 @@
-// import { React, useState } from "react";
-// import {
-//   Modal,
-//   ModalOverlay,
-//   ModalContent,
-//   ModalHeader,
-//   ModalFooter,
-//   ModalBody,
-//   CloseButton,
-//   Button,
-//   FormControl,
-//   FormLabel,
-//   Input,
-//   Box,
-//   Select,
-// } from "@chakra-ui/react";
-// import { useDisclosure } from "@chakra-ui/react";
-// import { Checkbox, CheckboxGroup } from "@chakra-ui/react";
-
-// function UserPrefPopup() {
-//   const { isOpen, onOpen, onClose } = useDisclosure();
-//   const [categories, setCategories] = useState([]);
-//   const [subCategories, setSubCategories] = useState([]);
-
-//   // const initialRef = React.useRef(null);
-//   // const finalRef = React.useRef(null);
-
-//   return (
-//     <>
-//       <Button
-//         onClick={onOpen}
-//         style={{ padding: "10px" }}
-//         position="relative"
-//         h="10vh"
-//         w="30vh"
-//       >
-//         Open Modal
-//       </Button>
-
-//       <Modal isOpen={isOpen} onClose={onClose}>
-//         <ModalOverlay />
-
-//         <ModalContent
-//           style={{
-//             backgroundColor: "#ffffff",
-//             borderRadius: "8px",
-//             padding: "20px",
-//             width: "400px",
-//           }}
-//         >
-//           <ModalHeader
-//             style={{
-//               fontSize: "20px",
-//               fontWeight: "bold",
-//               marginBottom: "15px",
-//             }}
-//           >
-//             Your preferences
-//           </ModalHeader>
-//           <Box position="relative" h="10vh">
-//             <CloseButton onClick={onClose} />
-//           </Box>
-
-//           <ModalBody style={{ marginBottom: "15px" }}>
-//             <FormControl>
-//               <FormLabel style={{ fontSize: "16px", marginBottom: "8px" }}>
-//                 Category
-//               </FormLabel>
-
-//               <Select
-//                 placeholder="Select category"
-//                 style={{
-//                   width: "100%",
-//                   padding: "10px",
-//                   border: "1px solid #cccccc",
-//                   borderRadius: "4px",
-//                   fontSize: "16px",
-//                   marginBottom: "10px",
-//                 }}
-//               >
-//                 <option value="option1">Accessibility</option>
-//                 <option value="option2">Accessibility</option>
-//                 <option value="option3">Audit</option>
-//                 <option value="option3">C Section</option>
-//                 <option value="option3">City Transformation Office</option>
-//                 <option value="option3">Civil</option>
-//                 <option value="option3">Community Leadership</option>
-//                 <option value="option3">CSR Cell</option>
-//                 <option value="option3">Education</option>
-//                 <option value="option3">Electrical</option>
-//                 <option value="option3">Nulp</option>
-//               </Select>
-//             </FormControl>
-
-//             <FormControl mt={4}>
-//               <FormLabel style={{ fontSize: "16px", marginBottom: "8px" }}>
-//                 Sub - Category
-//               </FormLabel>
-//               <Input
-//                 style={{
-//                   width: "100%",
-//                   padding: "10px",
-//                   border: "1px solid #cccccc",
-//                   borderRadius: "4px",
-//                   fontSize: "16px",
-//                   marginBottom: "10px",
-//                 }}
-//                 placeholder="Last name"
-//               />
-//             </FormControl>
-
-//             <FormControl mt={4}>
-//               <FormLabel style={{ fontSize: "16px", marginBottom: "8px" }}>
-//                 Language
-//               </FormLabel>
-//               <Input
-//                 style={{
-//                   width: "100%",
-//                   padding: "10px",
-//                   border: "1px solid #cccccc",
-//                   borderRadius: "4px",
-//                   fontSize: "16px",
-//                   marginBottom: "10px",
-//                 }}
-//                 placeholder="Last name"
-//               />
-//             </FormControl>
-//           </ModalBody>
-
-//           <ModalFooter style={{ display: "flex", justifyContent: "flex-end" }}>
-//             <Button
-//               colorScheme="blue"
-//               style={{
-//                 padding: "10px 20px",
-//                 border: "none",
-//                 borderRadius: "4px",
-//                 cursor: "pointer",
-//                 fontSize: "16px",
-//                 backgroundColor: "#007bff",
-//                 color: "#ffffff",
-//                 marginLeft: "10px",
-//               }}
-//               mr={3}
-//             >
-//               Save
-//             </Button>
-//             <Button
-//               onClick={onClose}
-//               style={{
-//                 padding: "10px 20px",
-//                 border: "none",
-//                 borderRadius: "4px",
-//                 cursor: "pointer",
-//                 fontSize: "16px",
-//                 backgroundColor: "#cccccc",
-//                 color: "#000000",
-//               }}
-//             >
-//               Cancel
-//             </Button>
-//           </ModalFooter>
-//         </ModalContent>
-//       </Modal>
-//     </>
-//   );
-// }
-// export default UserPrefPopup;
-
 import React, { useState, useEffect } from "react";
 import {
   Modal,
@@ -178,91 +10,93 @@ import {
   Button,
   FormControl,
   FormLabel,
-  Input,
-  Box,
   Select,
+  Checkbox,
+  Stack,
+  Box,
+  Icon,
 } from "@chakra-ui/react";
 import { useDisclosure } from "@chakra-ui/react";
+import { frameworkService } from "@shiksha/common-lib";
+import { ChevronDownIcon } from "@chakra-ui/icons";
 
-function UserPrefPopup() {
+const UserPrefPopup = () => {
   const { isOpen, onOpen, onClose } = useDisclosure();
   const [categories, setCategories] = useState([]);
   const [subCategories, setSubCategories] = useState([]);
   const [languages, setLanguages] = useState([]);
+  const [topics, setTopics] = useState([]);
+  const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState(null);
+  const [selectedLanguages, setSelectedLanguages] = useState([]);
+  const [showCheckboxOptions, setShowCheckboxOptions] = useState(false);
 
   useEffect(() => {
-    fetchData();
-  }, []);
+    const fetchData = async () => {
+      setIsLoading(true);
+      setError(null);
+      const headers = {
+        "Content-Type": "application/json",
+      };
+      const url = `https://nulp.niua.org/api/framework/v1/read/nulp`;
+      try {
+        const response = await frameworkService.getFrameworkCategories(
+          url,
+          headers
+        );
+        const data = response.data.result.framework.categories;
+        setCategories(data[0].terms);
+        setSubCategories(data[1].terms);
+        setTopics(data[2].terms);
+        setLanguages(data[3].terms);
+      } catch (error) {
+        setError(error.message);
+      } finally {
+        setIsLoading(false);
+      }
+    };
 
-  const fetchData = () => {
-    // Example API call to fetch all data
-    fetch("your-api-url-for-all-data")
-      .then((response) => response.json())
-      .then((data) => {
-        setCategories(data.categories);
-        setSubCategories(data.subCategories);
-        setLanguages(data.languages);
-      })
-      .catch((error) => {
-        console.error("Error fetching data:", error);
-      });
+    if (isOpen) {
+      fetchData();
+    }
+  }, [isOpen]);
+
+  const handleLanguageChange = (language) => {
+    if (selectedLanguages.includes(language)) {
+      setSelectedLanguages(
+        selectedLanguages.filter((lang) => lang !== language)
+      );
+    } else {
+      setSelectedLanguages([...selectedLanguages, language]);
+    }
+  };
+
+  const isChecked = (language) => {
+    return selectedLanguages.includes(language);
+  };
+
+  const handleSelectAll = () => {
+    if (selectedLanguages.length === languages.length) {
+      setSelectedLanguages([]);
+    } else {
+      setSelectedLanguages(languages.map((language) => language.name));
+    }
   };
 
   return (
     <>
-      <Button
-        onClick={onOpen}
-        style={{ padding: "10px" }}
-        position="relative"
-        h="10vh"
-        w="30vh"
-      >
-        Open Modal
-      </Button>
-
+      <Button onClick={onOpen}>Open Modal</Button>
       <Modal isOpen={isOpen} onClose={onClose}>
         <ModalOverlay />
-
-        <ModalContent
-          style={{
-            backgroundColor: "#ffffff",
-            borderRadius: "8px",
-            padding: "20px",
-            width: "400px",
-          }}
-        >
-          <ModalHeader
-            style={{
-              fontSize: "20px",
-              fontWeight: "bold",
-              marginBottom: "15px",
-            }}
-          >
-            Your preferences
-          </ModalHeader>
-          <Box position="relative" h="10vh">
-            <CloseButton onClick={onClose} />
-          </Box>
-
-          <ModalBody style={{ marginBottom: "15px" }}>
+        <ModalContent>
+          <ModalHeader>Your preferences</ModalHeader>
+          <CloseButton onClick={onClose} />
+          <ModalBody>
             <FormControl>
-              <FormLabel style={{ fontSize: "16px", marginBottom: "8px" }}>
-                Category
-              </FormLabel>
-
-              <Select
-                placeholder="Select category"
-                style={{
-                  width: "100%",
-                  padding: "10px",
-                  border: "1px solid #cccccc",
-                  borderRadius: "4px",
-                  fontSize: "16px",
-                  marginBottom: "10px",
-                }}
-              >
+              <FormLabel>Category</FormLabel>
+              <Select placeholder="Select category" borderRadius={"12px"}>
                 {categories.map((category) => (
-                  <option key={category.id} value={category.value}>
+                  <option key={category.index} value={category.value}>
                     {category.name}
                   </option>
                 ))}
@@ -270,89 +104,100 @@ function UserPrefPopup() {
             </FormControl>
 
             <FormControl>
-              <FormLabel style={{ fontSize: "16px", marginBottom: "8px" }}>
-                Sub-Category
-              </FormLabel>
-
-              <Select
-                placeholder="Select sub-category"
-                style={{
-                  width: "100%",
-                  padding: "10px",
-                  border: "1px solid #cccccc",
-                  borderRadius: "4px",
-                  fontSize: "16px",
-                  marginBottom: "10px",
-                }}
-              >
+              <FormLabel>Sub-Category</FormLabel>
+              <Select placeholder="Select sub-category" borderRadius={"12px"}>
                 {subCategories.map((subCategory) => (
-                  <option key={category.id} value={category.value}>
-                    {category.name}
+                  <option key={subCategory.index} value={subCategory.value}>
+                    {subCategory.name}
                   </option>
                 ))}
               </Select>
             </FormControl>
 
-            <FormControl>
-              <FormLabel style={{ fontSize: "16px", marginBottom: "8px" }}>
-                Language
-              </FormLabel>
-
-              <Select
-                placeholder="Select language"
-                style={{
-                  width: "100%",
-                  padding: "10px",
-                  border: "1px solid #cccccc",
-                  borderRadius: "4px",
-                  fontSize: "16px",
-                  marginBottom: "10px",
-                }}
+            <Stack direction="column" spacing={2}>
+              <Box>
+                <FormLabel>Language</FormLabel>
+              </Box>
+              <Box
+                w={"100%"}
+                display={"flex"}
+                alignItems="center"
+                minHeight={"40px"}
+                border={"1px solid"}
+                borderColor={"gray.200"}
+                borderRadius={"12px"}
+                onClick={() => setShowCheckboxOptions(!showCheckboxOptions)}
+                cursor="pointer"
+                position="relative"
               >
-                {languages.map((language) => (
-                  <option key={language.id} value={language.value}>
-                    {language.name}
+                <Box flex="1" pl={2}>
+                  {selectedLanguages.map((language, index) => (
+                    <Box
+                      key={index}
+                      bg="gray.100"
+                      p={1}
+                      m={1}
+                      borderRadius="md"
+                      display="inline-block"
+                    >
+                      {language}
+                    </Box>
+                  ))}
+                </Box>
+                <Icon
+                  as={ChevronDownIcon}
+                  w={6}
+                  h={6}
+                  mr={2}
+                  color="black.500"
+                  position="absolute"
+                  right={2}
+                  top="50%"
+                  transform="translateY(-50%)"
+                />
+              </Box>
+              {showCheckboxOptions && (
+                <>
+                  <Checkbox
+                    isChecked={selectedLanguages.length === languages.length}
+                    onChange={handleSelectAll}
+                  >
+                    Select All
+                  </Checkbox>
+                  {languages.map((language) => (
+                    <Checkbox
+                      key={language.id}
+                      isChecked={isChecked(language.name)}
+                      onChange={() => handleLanguageChange(language.name)}
+                    >
+                      {language.name}
+                    </Checkbox>
+                  ))}
+                </>
+              )}
+            </Stack>
+            <FormControl>
+              <FormLabel>Topic</FormLabel>
+              <Select placeholder="Select topic" borderRadius={"12px"}>
+                {topics.map((topic) => (
+                  <option key={topic.index} value={topic.value}>
+                    {topic.name}
                   </option>
                 ))}
               </Select>
             </FormControl>
           </ModalBody>
 
-          <ModalFooter style={{ display: "flex", justifyContent: "flex-end" }}>
-            <Button
-              colorScheme="blue"
-              style={{
-                padding: "10px 20px",
-                border: "none",
-                borderRadius: "4px",
-                cursor: "pointer",
-                fontSize: "16px",
-                backgroundColor: "#007bff",
-                color: "#ffffff",
-                marginLeft: "10px",
-              }}
-              mr={3}
-            >
+          <ModalFooter>
+            <Button colorScheme="blue" mr={3}>
               Save
             </Button>
-            <Button
-              onClick={onClose}
-              style={{
-                padding: "10px 20px",
-                border: "none",
-                borderRadius: "4px",
-                cursor: "pointer",
-                fontSize: "16px",
-                backgroundColor: "#cccccc",
-                color: "#000000",
-              }}
-            >
-              Cancel
-            </Button>
+            <Button onClick={onClose}>Cancel</Button>
           </ModalFooter>
         </ModalContent>
       </Modal>
     </>
   );
-}
+};
+
 export default UserPrefPopup;

@@ -4,12 +4,13 @@ import Sample from "pages/Sample";
 import Home from "pages/Home";
 import Courses from "pages/Courses";
 import Contents from "pages/Contents";
+import User from "pages/User";
 import { extendTheme, NativeBaseProvider } from "native-base";
 // import dotenv from "dotenv";
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 import Registration from "pages/Registration";
 import UserPrefPopup from "pages/UserPrefPopup";
-import Framework from "pages/Framework";
+import Framework from "pages/Frmework";
 import { ChakraProvider } from "@chakra-ui/react";
 
 // import { DEFAULT_THEME, initializeI18n } from "@shiksha/common-lib";
@@ -35,6 +36,14 @@ function App() {
     },
     {
       moduleName: "nulp_elite",
+      path: "/Framework",
+      component: Framework,
+    },
+    {
+      moduleName: "nulp_elite",
+      path: "/User",
+      component: User,
+
       path: "/registration",
       component: Registration,
     },
