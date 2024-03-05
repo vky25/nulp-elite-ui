@@ -4,6 +4,8 @@ import Sample from "pages/Sample";
 import Home from "pages/Home";
 import Courses from "pages/Courses";
 import Contents from "pages/Contents";
+import Framework from "pages/Frmework";
+import User from "pages/User";
 import { extendTheme, NativeBaseProvider } from "native-base";
 // import dotenv from "dotenv";
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
@@ -32,6 +34,14 @@ function App() {
     },
     {
       moduleName: "nulp_elite",
+      path: "/Framework",
+      component: Framework,
+    },
+    {
+      moduleName: "nulp_elite",
+      path: "/User",
+      component: User,
+
       path: "/registration",
       component: Registration,
     },
