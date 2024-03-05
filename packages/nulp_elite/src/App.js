@@ -12,7 +12,15 @@ import { Link , useParams} from "react-router-dom";
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 import { DEFAULT_THEME, initializeI18n,H2, } from "@shiksha/common-lib";
 import { useTranslation } from 'react-i18next'
+import Framework from "pages/Frmework";
+import User from "pages/User";
+import { extendTheme, NativeBaseProvider } from "native-base";
+// import dotenv from "dotenv";
+import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
+import Registration from "pages/Registration";
 
+// import { DEFAULT_THEME, initializeI18n } from "@shiksha/common-lib";
+// dotenv.config();
 function App() {
   const [search, setSearch] = React.useState(true);
   const [searchState, setSearchState] = React.useState(false);
@@ -23,13 +31,15 @@ function App() {
   const routes = [
     {
       moduleName: "nulp_elite",
-      path: "/",
+      path: "/home",
       component: Home,
-    },{
+    },
+    {
       moduleName: "nulp_elite",
       path: "/Contents",
       component: Contents,
-    },{
+    },
+    {
       moduleName: "nulp_elite",
       path: "/Courses",
       component: Courses,
@@ -42,8 +52,20 @@ function App() {
     moduleName: "nulp_elite",
     path: "/profile",
     component: Profile,
-  }
+  },
+    {
+      moduleName: "nulp_elite",
+      path: "/Framework",
+      component: Framework,
+    },
+    {
+      moduleName: "nulp_elite",
+      path: "/User",
+      component: User,
 
+      path: "/registration",
+      component: Registration,
+    },
   ];
 
   return(
@@ -130,6 +152,21 @@ function App() {
   // <NativeBaseProvider > <Sample /></NativeBaseProvider>;
 
   // <AppShell routes={routes} AuthComponent={LoginComponent} />;
+  return (
+    <NativeBaseProvider>
+      <Router>
+        <Routes>
+          {routes.map((route, index) => (
+            <Route
+              key={index}
+              path={route.path}
+              element={<route.component />}
+            />
+          ))}
+        </Routes>
+      </Router>
+    </NativeBaseProvider>
+  );
 }
 
 
