@@ -10,6 +10,7 @@ import { extendTheme, NativeBaseProvider } from "native-base";
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 import Registration from "pages/Registration";
 import UserPrefPopup from "pages/UserPrefPopup";
+import UserPrefData from "pages/UserPrefData";
 import Framework from "pages/Frmework";
 import { ChakraProvider } from "@chakra-ui/react";
 
@@ -51,6 +52,11 @@ function App() {
       moduleName: "nulp_elite",
       path: "/userPrefPopup",
       component: UserPrefPopup,
+    },
+    {
+      moduleName: "nulp_elite",
+      path: "/userPrefData",
+      component: UserPrefData,
     },
   ];
 

@@ -46,3 +46,15 @@ export const getSelectedFrameworkCategories = async (url, header) => {
     return []
   }
 }
+
+export const getUserData = async (url, header, requestBody) => {
+  const result = await patch(url, {
+    header,
+    requestBody
+  })
+  if (result) {
+    return result
+  } else {
+    return []
+  }
+}

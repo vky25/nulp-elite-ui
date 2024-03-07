@@ -30,6 +30,7 @@ const UserPrefPopup = () => {
   const [error, setError] = useState(null);
   const [selectedLanguages, setSelectedLanguages] = useState([]);
   const [showCheckboxOptions, setShowCheckboxOptions] = useState(false);
+  const [frameworkCategories, getFrameworkCategories] = useState(null);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -45,10 +46,10 @@ const UserPrefPopup = () => {
           headers
         );
         const data = response.data.result.framework.categories;
-        setCategories(data[0].terms);
-        setSubCategories(data[1].terms);
-        setTopics(data[2].terms);
-        setLanguages(data[3].terms);
+        setCategories(data[0]);
+        setSubCategories(data[1]);
+        setTopics(data[2]);
+        setLanguages(data[3]);
       } catch (error) {
         setError(error.message);
       } finally {
@@ -76,10 +77,40 @@ const UserPrefPopup = () => {
   };
 
   const handleSelectAll = () => {
-    if (selectedLanguages.length === languages.length) {
+    if (selectedLanguages.length === languages?.terms?.length) {
       setSelectedLanguages([]);
     } else {
-      setSelectedLanguages(languages.map((language) => language.name));
+      setSelectedLanguages(languages?.terms?.map((language) => language.name));
+    }
+  };
+
+  const updateUserData = async () => {
+    setIsLoading(true);
+    setError(null);
+    const headers = {
+      "Content-Type": "application/json",
+    };
+    const requestBody = {
+      framework: {
+        board: ["Audit"],
+        gradeLevel: [],
+        id: "nulp",
+        medium: [],
+      },
+      userId: "5d757783-a86a-40cd-a814-1b6a16d37cb6",
+    };
+    const url = `https://nulp.niua.org/learner/user/v3/update`;
+    try {
+      const response = await frameworkService.updateUserData(
+        url,
+        headers,
+        requestBody
+      );
+      const data = response?.result?.response;
+    } catch (error) {
+      setError(error.message);
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -89,13 +120,21 @@ const UserPrefPopup = () => {
       <Modal isOpen={isOpen} onClose={onClose}>
         <ModalOverlay />
         <ModalContent>
-          <ModalHeader>Your preferences</ModalHeader>
-          <CloseButton onClick={onClose} />
+          <ModalHeader>Your Preferences</ModalHeader>
+          <CloseButton
+            onClick={onClose}
+            position={"absolute"}
+            right={"10px"}
+            top={"10px"}
+          />
           <ModalBody>
             <FormControl>
-              <FormLabel>Category</FormLabel>
-              <Select placeholder="Select category" borderRadius={"12px"}>
-                {categories.map((category) => (
+              <Select
+                placeholder={categories.name}
+                borderRadius={"12px"}
+                margin={"20px"}
+              >
+                {categories?.terms?.map((category) => (
                   <option key={category.index} value={category.value}>
                     {category.name}
                   </option>
@@ -104,9 +143,12 @@ const UserPrefPopup = () => {
             </FormControl>
 
             <FormControl>
-              <FormLabel>Sub-Category</FormLabel>
-              <Select placeholder="Select sub-category" borderRadius={"12px"}>
-                {subCategories.map((subCategory) => (
+              <Select
+                placeholder={subCategories.name}
+                borderRadius={"12px"}
+                margin={"20px"}
+              >
+                {subCategories?.terms?.map((subCategory) => (
                   <option key={subCategory.index} value={subCategory.value}>
                     {subCategory.name}
                   </option>
@@ -115,9 +157,6 @@ const UserPrefPopup = () => {
             </FormControl>
 
             <Stack direction="column" spacing={2}>
-              <Box>
-                <FormLabel>Language</FormLabel>
-              </Box>
               <Box
                 w={"100%"}
                 display={"flex"}
@@ -129,11 +168,12 @@ const UserPrefPopup = () => {
                 onClick={() => setShowCheckboxOptions(!showCheckboxOptions)}
                 cursor="pointer"
                 position="relative"
+                margin={"20px"}
               >
                 <Box flex="1" pl={2}>
-                  {selectedLanguages.map((language, index) => (
+                  {selectedLanguages.map((language) => (
                     <Box
-                      key={index}
+                      key={language.id}
                       bg="gray.100"
                       p={1}
                       m={1}
@@ -159,12 +199,14 @@ const UserPrefPopup = () => {
               {showCheckboxOptions && (
                 <>
                   <Checkbox
-                    isChecked={selectedLanguages.length === languages.length}
+                    isChecked={
+                      selectedLanguages.length === languages?.terms?.length
+                    }
                     onChange={handleSelectAll}
                   >
                     Select All
                   </Checkbox>
-                  {languages.map((language) => (
+                  {languages?.terms?.map((language) => (
                     <Checkbox
                       key={language.id}
                       isChecked={isChecked(language.name)}
@@ -177,9 +219,12 @@ const UserPrefPopup = () => {
               )}
             </Stack>
             <FormControl>
-              <FormLabel>Topic</FormLabel>
-              <Select placeholder="Select topic" borderRadius={"12px"}>
-                {topics.map((topic) => (
+              <Select
+                placeholder={topics.name}
+                borderRadius={"12px"}
+                margin={"20px"}
+              >
+                {topics?.term?.map((topic) => (
                   <option key={topic.index} value={topic.value}>
                     {topic.name}
                   </option>
@@ -189,7 +234,7 @@ const UserPrefPopup = () => {
           </ModalBody>
 
           <ModalFooter>
-            <Button colorScheme="blue" mr={3}>
+            <Button colorScheme="blue" mr={3} onClick={updateUserData}>
               Save
             </Button>
             <Button onClick={onClose}>Cancel</Button>
