@@ -6,7 +6,6 @@ import Courses from "pages/Courses";
 import Contents from "pages/Contents";
 import Framework from "pages/Frmework";
 import Certificate from "pages/Certificate";
-import Search from "pages/Search";
 
 import User from "pages/User";
 import { extendTheme, NativeBaseProvider } from "native-base";
