@@ -4,46 +4,55 @@ import { Box, Heading, Text, Button } from "@chakra-ui/react";
 import { contentService, userService } from "@shiksha/common-lib";
 const Contents = () => {
   const [data, setData] = useState([]);
-  const [filters, setFilters] = useState({});
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState(null);
 
   // Example of API Call
-  useEffect(() => {
-    const fetchData = async () => {
-      setIsLoading(true);
-      setError(null);
-      // Filters for API
-      let data = JSON.stringify({
-        // Request body data
-      });
+  useEffect(() => {}, []);
 
-      // Headers
-      try {
-        const cookie =
-          "_ga=GA1.1.1679344062.1706002901; _ga_QH3SHT9MTG=GS1.1.1706072634.2.1.1706072649.0.0.0; _ga_EJDFKF9L1X=GS1.1.1706072635.2.1.1706072649.0.0.0; _clck=awo761%7C2%7Cfjl%7C0%7C1457; connect.sid=s%3AfQtI-IxZKQuipm4MdaCGIjBdWuzW1cDp.bRJ64XvlWLUbiTyFB%2FoS%2F4IwQGMORMeZOd8fDQOvzg0";
-        const headers = {
-          Cookie: cookie,
-          "Content-Type": "application/json", // Assuming JSON data is being sent
-        };
-        const url =
-          "https://nulp.niua.org/learner/user/v5/read/5d757783-a86a-40cd-a814-1b6a16d37cb6?fields=organisations,roles,locations,declarations,externalIds";
-        const response = await userService.getUserData(url, headers);
-        console.log(response.data.result);
-        setData(response.data.result);
-      } catch (error) {
-        setError(error.message);
-      } finally {
-        setIsLoading(false);
-      }
-    };
+  // const getUserInfo = async () => {
+  //   setIsLoading(true);
+  //   setError(null);
+  //   let data = JSON.stringify({});
+  //   try {
+  //     const headers = {
+  //       "Content-Type": "application/json",
+  //     };
+  //     const url =
+  //       "https://nulp.niua.org/learner/user/v5/read/5d757783-a86a-40cd-a814-1b6a16d37cb6?fields=organisations,roles,locations,declarations,externalIds";
+  //     const response = await userService.getUserData(url, headers);
+  //     console.log(data?.result?.response?.rootOrg?.rootOrgId);
+  //     setData(data?.result?.response?.rootOrg?.rootOrgId);
+  //   } catch (error) {
+  //     setError(error.message);
+  //   } finally {
+  //     setIsLoading(false);
+  //   }
+  // };
 
-    fetchData();
-  }, [filters]);
+  // getUserInfo();
 
-  const handleFilterChange = (field, value) => {
-    setFilters({ ...filters, [field]: value });
+  const getUserData = async () => {
+    setIsLoading(true);
+    setError(null);
+    let data = JSON.stringify({});
+    try {
+      const headers = {
+        "Content-Type": "application/json",
+      };
+      const url = `https://nulp.niua.org/learner/user/v3/update`;
+      const response = await userService.getUserData(url, headers);
+      console.log(data?.result?.response?.rootOrg?.rootOrgId);
+      setData(data?.result?.response?.rootOrg?.rootOrgId);
+    } catch (error) {
+      setError(error.message);
+    } finally {
+      setIsLoading(false);
+    }
   };
+
+  getUserData();
+
   // Function to get cookie value by name
   const getCookieValue = (name) => {
     const cookies = document.cookie.split("; ");

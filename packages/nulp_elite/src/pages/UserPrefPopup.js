@@ -15,6 +15,7 @@ import {
   Stack,
   Box,
   Icon,
+  background,
 } from "@chakra-ui/react";
 import { useDisclosure } from "@chakra-ui/react";
 import { frameworkService } from "@shiksha/common-lib";
@@ -31,8 +32,17 @@ const UserPrefPopup = () => {
   const [selectedLanguages, setSelectedLanguages] = useState([]);
   const [showCheckboxOptions, setShowCheckboxOptions] = useState(false);
   const [frameworkCategories, getFrameworkCategories] = useState(null);
+  const [currentPreference, setCurrentPreference] = useState(null);
+  const [selectedCategory, setSelectedCategory] = useState(null);
+  const [selectedSubCategory, setSelectedSubCategory] = useState(null);
+  // const [selectedTopic, setSelectedTopic] = useState(null);
 
   useEffect(() => {
+    setCurrentPreference(JSON.parse(localStorage.getItem("preference")));
+    setSelectedCategory(currentPreference?.board[0]);
+    setSelectedSubCategory(currentPreference?.gradeLevel[0]);
+    setSelectedLanguages(currentPreference?.medium);
+    // setSelectedTopic(currentPreference?.topic[0]);
     const fetchData = async () => {
       setIsLoading(true);
       setError(null);
@@ -91,27 +101,47 @@ const UserPrefPopup = () => {
       "Content-Type": "application/json",
     };
     const requestBody = {
-      framework: {
-        board: ["Audit"],
-        gradeLevel: [],
-        id: "nulp",
-        medium: [],
+      params: {},
+      request: {
+        framework: {
+          board: [selectedCategory],
+          medium: selectedLanguages,
+          gradeLevel: [selectedSubCategory],
+          id: "nulp",
+        },
+        userId: "11a10742-7bbf-4117-909d-10a6ce5a9942",
       },
-      userId: "5d757783-a86a-40cd-a814-1b6a16d37cb6",
     };
+    console.log("requestBody", requestBody);
     const url = `https://nulp.niua.org/learner/user/v3/update`;
     try {
-      const response = await frameworkService.updateUserData(
-        url,
-        headers,
-        requestBody
-      );
-      const data = response?.result?.response;
+      const response = await frameworkService.getUserData(url, {
+        method: "POST",
+        headers: headers,
+        body: JSON.stringify(requestBody),
+      });
+      console.log("response", response);
+      const data = await response.json();
+      console.log("data", data);
     } catch (error) {
       setError(error.message);
     } finally {
       setIsLoading(false);
     }
+  };
+
+  const onChangeCategory = (event) => {
+    setSelectedCategory(event.target.value);
+    setSelectedSubCategory("");
+    setSelectedLanguages("");
+  };
+
+  const onChangeSubCategory = (event) => {
+    setSelectedSubCategory(event.target.value);
+  };
+
+  const onChangeLanguage = (event) => {
+    setSelectedLanguages(event.target.value);
   };
 
   return (
@@ -130,6 +160,8 @@ const UserPrefPopup = () => {
           <ModalBody>
             <FormControl>
               <Select
+                value={selectedCategory}
+                onChange={onChangeCategory}
                 placeholder={categories.name}
                 borderRadius={"12px"}
                 margin={"20px"}
@@ -144,6 +176,8 @@ const UserPrefPopup = () => {
 
             <FormControl>
               <Select
+                value={selectedSubCategory}
+                onChange={onChangeSubCategory}
                 placeholder={subCategories.name}
                 borderRadius={"12px"}
                 margin={"20px"}
@@ -158,6 +192,8 @@ const UserPrefPopup = () => {
 
             <Stack direction="column" spacing={2}>
               <Box
+                value={selectedLanguages}
+                onChange={onChangeLanguage}
                 w={"100%"}
                 display={"flex"}
                 alignItems="center"
@@ -171,18 +207,20 @@ const UserPrefPopup = () => {
                 margin={"20px"}
               >
                 <Box flex="1" pl={2}>
-                  {selectedLanguages.map((language) => (
-                    <Box
-                      key={language.id}
-                      bg="gray.100"
-                      p={1}
-                      m={1}
-                      borderRadius="md"
-                      display="inline-block"
-                    >
-                      {language}
-                    </Box>
-                  ))}
+                  {selectedLanguages &&
+                    selectedLanguages.map((language) => (
+                      <Box
+                        placeholder={language.name}
+                        key={language.id}
+                        bg="gray.100"
+                        p={1}
+                        m={1}
+                        borderRadius="md"
+                        display="inline-block"
+                      >
+                        {language}
+                      </Box>
+                    ))}
                 </Box>
                 <Icon
                   as={ChevronDownIcon}
@@ -218,8 +256,10 @@ const UserPrefPopup = () => {
                 </>
               )}
             </Stack>
-            <FormControl>
+            {/* <FormControl>
               <Select
+                value={selectedTopic}
+                onChange={onChangeTopic}
                 placeholder={topics.name}
                 borderRadius={"12px"}
                 margin={"20px"}
@@ -230,7 +270,7 @@ const UserPrefPopup = () => {
                   </option>
                 ))}
               </Select>
-            </FormControl>
+            </FormControl> */}
           </ModalBody>
 
           <ModalFooter>
