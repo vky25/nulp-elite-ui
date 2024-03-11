@@ -1,3 +1,5 @@
+src
+
 # Dependency directories
 node_modules/
 
@@ -16,3 +18,4 @@ package-lock.json
 /public
 .min.js
 .min.css
+
