@@ -50,11 +50,6 @@ function App() {
     },
     {
       moduleName: "nulp_elite",
-      path: "/userPrefPopup",
-      component: UserPrefPopup,
-    },
-    {
-      moduleName: "nulp_elite",
       path: "/userPrefData",
       component: UserPrefData,
     },
