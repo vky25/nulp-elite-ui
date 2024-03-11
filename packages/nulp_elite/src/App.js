@@ -5,6 +5,9 @@ import Home from "pages/Home";
 import Courses from "pages/Courses";
 import Contents from "pages/Contents";
 import Framework from "pages/Frmework";
+import Certificate from "pages/Certificate";
+import Search from "pages/Search";
+
 import User from "pages/User";
 import { extendTheme, NativeBaseProvider } from "native-base";
 // import dotenv from "dotenv";
@@ -44,6 +47,21 @@ function App() {
 
       path: "/registration",
       component: Registration,
+    },
+    {
+      moduleName: "nulp_elite",
+      path: "/User",
+      component: User,
+    },
+    {
+      moduleName: "nulp_elite",
+      path: "/Certificate",
+      component: Certificate,
+    },
+    {
+      moduleName: "nulp_elite",
+      path: "/Search",
+      component: Search,
     },
   ];
   // const LoginComponent = React.lazy(() => import("core/Login"));
