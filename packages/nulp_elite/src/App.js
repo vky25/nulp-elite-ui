@@ -14,7 +14,6 @@ import { DEFAULT_THEME, initializeI18n,H2, } from "@shiksha/common-lib";
 import { useTranslation } from 'react-i18next'
 import Framework from "pages/Frmework";
 import User from "pages/User";
-import { extendTheme } from "native-base";
 import Registration from "pages/Registration";
 import Profile from "pages/Profile";
 
