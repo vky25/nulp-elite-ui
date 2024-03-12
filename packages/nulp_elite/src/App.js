@@ -14,10 +14,8 @@ import { DEFAULT_THEME, initializeI18n,H2, } from "@shiksha/common-lib";
 import { useTranslation } from 'react-i18next'
 import Framework from "pages/Frmework";
 import User from "pages/User";
-import { extendTheme, NativeBaseProvider } from "native-base";
-// import dotenv from "dotenv";
-import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 import Registration from "pages/Registration";
+import Profile from "pages/Profile";
 
 // import { DEFAULT_THEME, initializeI18n } from "@shiksha/common-lib";
 // dotenv.config();
@@ -81,7 +79,7 @@ function App() {
             to="/Courses"
             style={{ color: "rgb(63, 63, 70)", textDecoration: "none" }}
           >
-             <IconByName name='Notification2LineIcon' />
+            <IconByName size='20px' name='Notification2LineIcon' />
           </Link>
         ),
       }}
