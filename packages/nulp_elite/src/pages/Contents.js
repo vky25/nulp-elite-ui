@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { Box, Heading, Text, Button } from "@chakra-ui/react";
 import { contentService } from "@shiksha/common-lib";
+import URLSConfig from "../configs/urlConfig.json";
 const Contents = () => {
   const [data, setData] = useState([]);
   const [filters, setFilters] = useState({});
@@ -17,72 +18,35 @@ const Contents = () => {
       let data = JSON.stringify({
         request: {
           filters: {
-            primaryCategory: [
+            status: ["Live"],
+            contentType: [
               "Collection",
-              "Resource",
-              "Content Playlist",
+              "TextBook",
               "Course",
-              "Course Assessment",
-              "Digital Textbook",
-              "eTextbook",
-              "Explanation Content",
-              "Learning Resource",
-              "Lesson Plan Unit",
-              "Practice Question Set",
-              "Teacher Resource",
-              "Textbook Unit",
               "LessonPlan",
-              "FocusSpot",
-              "Learning Outcome Definition",
-              "Curiosity Questions",
-              "MarkingSchemeRubric",
+              "Resource",
+              "SelfAssess",
+              "PracticeResource",
+              "LearningOutcomeDefinition",
               "ExplanationResource",
               "ExperientialResource",
-              "Practice Resource",
+              "eTextBook",
               "TVLesson",
-              "Course Unit",
-              "Exam Question",
             ],
-            visibility: ["Default", "Parent"],
           },
-          limit: 100,
+          offset: null,
           sort_by: {
-            lastPublishedOn: "desc",
+            lastUpdatedOn: "desc",
           },
-          fields: [
-            "name",
-            "appIcon",
-            "mimeType",
-            "gradeLevel",
-            "identifier",
-            "medium",
-            "pkgVersion",
-            "board",
-            "subject",
-            "resourceType",
-            "primaryCategory",
-            "contentType",
-            "channel",
-            "organisation",
-            "trackable",
-          ],
-          facets: [
-            "se_boards",
-            "se_gradeLevels",
-            "se_subjects",
-            "se_mediums",
-            "primaryCategory",
-          ],
-          offset: 0,
         },
       });
 
       // Headers
       const headers = {
         "Content-Type": "application/json",
-        Cookie: `connect.sid=${getCookieValue("connect.sid")}`,
       };
-      const url = `https://nulp.niua.org/api/content/v1/search?orgdetails=orgName,email&licenseDetails=name,description,url`;
+
+      const url = `http://localhost:3000/content/${URLSConfig.URLS.CONTENT.SEARCH}?orgdetails=orgName,email`;
       try {
         const response = await contentService.getAllContents(
           url,
@@ -104,18 +68,6 @@ const Contents = () => {
   const navigateToCourse = () => {};
   const handleFilterChange = (field, value) => {
     setFilters({ ...filters, [field]: value });
-  };
-  // Function to get cookie value by name
-  const getCookieValue = (name) => {
-    const cookies = document.cookie.split("; ");
-    for (let i = 0; i < cookies.length; i++) {
-      const cookie = cookies[i];
-      const [cookieName, cookieValue] = cookie.split("=");
-      if (cookieName === name) {
-        return cookieValue;
-      }
-    }
-    return "";
   };
 
   return (
