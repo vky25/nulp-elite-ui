@@ -31,55 +31,55 @@ export default function Sample() {
   return (
 <div>
 <Layout
-      // _header={{
-      //   title: "Sample Module",
-      //   isEnableSearchBtn: true,
-      //   subHeading: "Sub Heading of Sub Module",
-      //   iconComponent: (
-      //     <Link
-      //       to="/"
-      //       style={{ color: "rgb(63, 63, 70)", textDecoration: "none" }}
-      //     >
-      //     </Link>
-      //   ),
-      // }}
-      // subHeader={
-      //   <Link
-      //     to="/"
-      //     style={{ color: "rgb(63, 63, 70)", textDecoration: "none" }}
-      //   >
-      //     <HStack space="4" justifyContent="space-between">
-      //       <VStack>
-      //         <Text fontSize={"lg"}>preferences</Text>
-      //       </VStack>
-      //     </HStack>
-      //   </Link>
-      // }
-      // _subHeader={{ bg: "rgb(248, 117, 88)" }}
-      // _footer={{
-      //   menues: [
-      //     {
-      //       title: "HOME",
-      //       icon: "Home4LineIcon",
-      //       route: "/",
-      //     },
-      //     {
-      //       title: "Courses",
-      //       icon: "BookOpenLineIcon",
-      //       route: "/Courses",
-      //     },
-      //     {
-      //       title: "All",
-      //       icon: "GovernmentLineIcon",
-      //       route: "/Contents",
-      //     },
-      //     {
-      //       title: "Discussion Forum",
-      //       icon: "TeamLineIcon",
-      //       route: "/",
-      //     }
-      //   ],
-      // }}
+      _header={{
+        title: "Sample Module",
+        isEnableSearchBtn: true,
+        subHeading: "Sub Heading of Sub Module",
+        iconComponent: (
+          <Link
+            to="/"
+            style={{ color: "rgb(63, 63, 70)", textDecoration: "none" }}
+          >
+          </Link>
+        ),
+      }}
+      subHeader={
+        <Link
+          to="/"
+          style={{ color: "rgb(63, 63, 70)", textDecoration: "none" }}
+        >
+          <HStack space="4" justifyContent="space-between">
+            <VStack>
+              <Text fontSize={"lg"}>preferences</Text>
+            </VStack>
+          </HStack>
+        </Link>
+      }
+      _subHeader={{ bg: "rgb(248, 117, 88)" }}
+      _footer={{
+        menues: [
+          {
+            title: "HOME",
+            icon: "Home4LineIcon",
+            route: "/",
+          },
+          {
+            title: "Courses",
+            icon: "BookOpenLineIcon",
+            route: "/Courses",
+          },
+          {
+            title: "All",
+            icon: "GovernmentLineIcon",
+            route: "/Contents",
+          },
+          {
+            title: "Discussion Forum",
+            icon: "TeamLineIcon",
+            route: "/",
+          }
+        ],
+      }}
     >
       <h1>Sample Module</h1>
       <Box textAlign="center" fontSize="xl">

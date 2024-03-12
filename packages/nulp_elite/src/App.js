@@ -15,6 +15,8 @@ import { useTranslation } from 'react-i18next'
 import Framework from "pages/Frmework";
 import User from "pages/User";
 import Registration from "pages/Registration";
+import UserPrefData from "pages/UserPrefData";
+import { ChakraProvider } from "@chakra-ui/react";
 import Profile from "pages/Profile";
 
 // import { DEFAULT_THEME, initializeI18n } from "@shiksha/common-lib";
@@ -60,11 +62,20 @@ function App() {
       moduleName: "nulp_elite",
       path: "/User",
       component: User,
-
+    },
+    { 
+      moduleName: "nulp_elite",
       path: "/registration",
       component: Registration,
     },
+    {
+      moduleName: "nulp_elite",
+      path: "/userPrefData",
+      component: UserPrefData,
+    },
   ];
+
+  // const LoginComponent = React.lazy(() => import("core/Login"));
 
   return(
     <NativeBaseProvider >
@@ -152,17 +163,19 @@ function App() {
   // <AppShell routes={routes} AuthComponent={LoginComponent} />;
   return (
     <NativeBaseProvider>
-      <Router>
-        <Routes>
-          {routes.map((route, index) => (
-            <Route
-              key={index}
-              path={route.path}
-              element={<route.component />}
-            />
-          ))}
-        </Routes>
-      </Router>
+      <ChakraProvider>
+        <Router>
+          <Routes>
+            {routes.map((route, index) => (
+              <Route
+                key={index}
+                path={route.path}
+                element={<route.component />}
+              />
+            ))}
+          </Routes>
+        </Router>
+      </ChakraProvider>
     </NativeBaseProvider>
   );
 }
