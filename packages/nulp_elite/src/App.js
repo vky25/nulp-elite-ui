@@ -16,7 +16,6 @@ import Framework from "pages/Frmework";
 import User from "pages/User";
 import Registration from "pages/Registration";
 import UserPrefData from "pages/UserPrefData";
-import Framework from "pages/Frmework";
 import { ChakraProvider } from "@chakra-ui/react";
 import Profile from "pages/Profile";
 
