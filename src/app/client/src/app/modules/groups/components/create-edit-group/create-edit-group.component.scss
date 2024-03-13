@@ -1,8 +1,0 @@
-@import"variables";
-@import 'mixins/mixins';
-@import 'pages/mat-modal';
-
-.create-group-title{
-    font-size: calculateRem(16px);
-    font-weight: bold;
-  }
