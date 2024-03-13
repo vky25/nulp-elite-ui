@@ -50,7 +50,10 @@ export const userMigrate = async (url, data) => {
 export const getUserData = async (url, headers) => {
   try {
     const response = await get(url, headers)
-    return response.data
+    console.log('response', response)
+    return {
+      response
+    }
   } catch (error) {
     console.error('Error fetching user data:', error)
     throw error
@@ -128,6 +131,16 @@ export const getGuestUser = async (url) => {
 }
 
 export const getAnonymousUserPreference = async (url) => {
+  try {
+    const response = await get(url)
+    return response.data
+  } catch (error) {
+    console.error('Error getting anonymous user preference:', error)
+    throw error
+  }
+}
+
+export const getCustodianOrgData = async (url) => {
   try {
     const response = await get(url)
     return response.data

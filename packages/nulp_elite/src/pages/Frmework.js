@@ -43,20 +43,20 @@ const Framework = () => {
       } finally {
         setIsLoading(false);
       }
-      try {
-        const url = `https://nulp.niua.org/api/framework/v1/read/nulp`;
+      // try {
+      //   const url = `https://nulp.niua.org/api/framework/v1/read/nulp`;
 
-        const response = await frameworkService.getFrameworkCategories(
-          url,
-          headers
-        );
-        console.log(response.data.result);
-        setData(response.data.result);
-      } catch (error) {
-        setError(error.message);
-      } finally {
-        setIsLoading(false);
-      }
+      //   const response = await frameworkService.getFrameworkCategories(
+      //     url,
+      //     headers
+      //   );
+      //   console.log(response.data.result);
+      //   setData(response.data.result);
+      // } catch (error) {
+      //   setError(error.message);
+      // } finally {
+      //   setIsLoading(false);
+      // }
       try {
         const url = `https://nulp.niua.org/learner/data/v1/system/settings/get/courseFrameworkId`;
 
