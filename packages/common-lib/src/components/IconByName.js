@@ -129,7 +129,6 @@ import IncreaseDecreaseLineIcon from 'remixicon-react/IncreaseDecreaseLineIcon'
 import LinksLineIcon from 'remixicon-react/LinksLineIcon'
 import AccountCircleLineIcon from 'remixicon-react/AccountCircleLineIcon'
 
-
 function IconButton({ icon, isDisabled, prefix, ...props }) {
   if (!isDisabled) {
     return <IconButtonCustom {...props} icon={icon} />
@@ -1166,7 +1165,7 @@ export default function IconByName({ _icon, ...props }) {
         />
       )
       break
-      case 'LinksLineIcon':
+      case 'AccountCircleLineIcon':
       icon = (
         <IconButton
           {...props}
