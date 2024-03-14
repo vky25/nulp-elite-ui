@@ -49,7 +49,6 @@ function App() {
       path: "/all",
       component: Courses,
     },
-    ,
     {
       moduleName: "nulp_elite",
       path: "/sample",
