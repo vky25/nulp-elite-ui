@@ -3,6 +3,8 @@ import "./App.css";
 import Sample from "pages/Sample";
 import Home from "pages/Home";
 import Courses from "pages/Courses";
+import Coursetest from "pages/CourseTest";
+
 import Contents from "pages/Contents";
 import {
   NativeBaseProvider,
@@ -79,6 +81,11 @@ function App() {
       moduleName: "nulp_elite",
       path: "/user",
       component: User,
+    },
+    {
+      moduleName: "nulp_elite",
+      path: "/coursetest",
+      component: Coursetest,
     },
   ];
 
