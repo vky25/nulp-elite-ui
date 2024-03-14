@@ -1,49 +1,57 @@
+//This is for  Tesing perpose
+
 import React, { useState, useEffect } from "react";
-import axios from "axios";
 import { Box, Heading, Text, Button } from "@chakra-ui/react";
-import { contentService, userService } from "@shiksha/common-lib";
-const Contents = () => {
-  const [data, setData] = useState([]);
+import URLSConfig from "../configs/urlConfig.json";
+import {
+  endSession,
+  getOrganizationDetails,
+  acceptTermsAndConditions,
+  getUserByKey,
+  registerUser,
+  userMigrate,
+  getUserData,
+  getFeedData,
+  getIsUserExistsUserByKey,
+  updateGuestUser,
+  createGuestUser,
+  updateAnonymousUserDetails,
+  createAnonymousUser,
+  getGuestUser,
+  getAnonymousUserPreference,
+  updateUserData,
+} from "../services/userService";
+
+const User = () => {
+  const [data, setData] = useState({});
+  const [userid, setUserid] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState(null);
+  const [organisationIds, setOrganisationIds] = useState("");
 
-  // Example of API Call
-  useEffect(() => {}, []);
-
-  // const getUserInfo = async () => {
-  //   setIsLoading(true);
-  //   setError(null);
-  //   let data = JSON.stringify({});
-  //   try {
-  //     const headers = {
-  //       "Content-Type": "application/json",
-  //     };
-  //     const url =
-  //       "https://nulp.niua.org/learner/user/v5/read/5d757783-a86a-40cd-a814-1b6a16d37cb6?fields=organisations,roles,locations,declarations,externalIds";
-  //     const response = await userService.getUserData(url, headers);
-  //     console.log(data?.result?.response?.rootOrg?.rootOrgId);
-  //     setData(data?.result?.response?.rootOrg?.rootOrgId);
-  //   } catch (error) {
-  //     setError(error.message);
-  //   } finally {
-  //     setIsLoading(false);
-  //   }
-  // };
-
-  // getUserInfo();
-
-  const getUserData = async () => {
-    setIsLoading(true);
-    setError(null);
-    let data = JSON.stringify({});
+  useEffect(() => {
+    endSessionPage();
+    getUserDataPage();
+    updateUserDataPage();
+    getOrganizationDetailsPage();
+    registerUserPage();
+    getAnonymousUserPreferencePage();
+    getIsUserExistsUserByKeyPage();
+    getGuestUserPage();
+    getUserByKeyPage();
+    getFeedDataPage();
+    userMigratePage();
+  }, []);
+  const headers = {
+    "content-type": "Application/json",
+  };
+  const endSessionPage = async () => {
     try {
-      const headers = {
-        "Content-Type": "application/json",
-      };
-      const url = `https://nulp.niua.org/learner/user/v3/update`;
-      const response = await userService.getUserData(url, headers);
-      console.log(data?.result?.response?.rootOrg?.rootOrgId);
-      setData(data?.result?.response?.rootOrg?.rootOrgId);
+      setIsLoading(true);
+      const url = URLSConfig.URLS.USER.END_SESSION;
+      const response = await endSession(url);
+      console.log(response.data.result);
+      setData(response.data.result);
     } catch (error) {
       setError(error.message);
     } finally {
@@ -51,19 +59,160 @@ const Contents = () => {
     }
   };
 
-  getUserData();
+  const getUserDataPage = async () => {
+    try {
+      // setIsLoading(true);
+      const params = URLSConfig.params.userReadParam.fields;
 
-  // Function to get cookie value by name
-  const getCookieValue = (name) => {
-    const cookies = document.cookie.split("; ");
-    for (let i = 0; i < cookies.length; i++) {
-      const cookie = cookies[i];
-      const [cookieName, cookieValue] = cookie.split("=");
-      if (cookieName === name) {
-        return cookieValue;
-      }
+      const baseUrl =
+        "http://localhost:3000/learner/" + URLSConfig.URLS.USER.GET_PROFILE; // Assuming this does not contain /modules/nulp_elite
+      const url = `${baseUrl}5d757783-a86a-40cd-a814-1b6a16d37cb6?fields=${params}`;
+      console.log(url);
+      const response = await getUserData(url, headers);
+      console.log(response.data.result);
+      setData(response.data.result);
+    } catch (error) {
+      setError(error.message);
+    } finally {
+      setIsLoading(false);
     }
-    return "";
+  };
+
+  const updateUserDataPage = async () => {
+    try {
+      const url =
+        "http://localhost:3000/learner/" +
+        URLSConfig.URLS.USER.UPDATE_USER_PROFILE;
+      const response = await updateUserData(url, data);
+      console.log(response.data.result);
+      setData(response.data.result);
+    } catch (error) {
+      setError(error.message);
+    }
+  };
+
+  const getAnonymousUserPreferencePage = async () => {
+    try {
+      const url =
+        "http://localhost:3000/api/" + URLSConfig.URLS.OFFLINE.READ_USER;
+      const response = await getAnonymousUserPreference(url);
+      console.log(response.data.result);
+      setData(response.data.result);
+    } catch (error) {
+      setError(error.message);
+    }
+  };
+
+  const getGuestUserPage = async () => {
+    try {
+      const url =
+        "http://localhost:3000/api/" + URLSConfig.URLS.OFFLINE.READ_USER;
+      const response = await getGuestUser(url);
+      console.log(response.data.result);
+      setData(response.data.result);
+    } catch (error) {
+      setError(error.message);
+    }
+  };
+
+  const getIsUserExistsUserByKeyPage = async (key) => {
+    try {
+      const response = await getIsUserExistsUserByKey(
+        (url =
+          "http://localhost:3000/api/" +
+          URLSConfig.URLS.USER.USER_EXISTS_GET_USER_BY_KEY +
+          "/" +
+          key)
+      );
+      console.log(response.data.result);
+      setData(response.data.result);
+    } catch (error) {
+      setError(error.message);
+    }
+  };
+
+  const getUserByKeyPage = async (key) => {
+    try {
+      const response = await getUserByKey(
+        (url =
+          "http://localhost:3000/api/" +
+          URLSConfig.URLS.USER.GET_USER_BY_KEY +
+          "/" +
+          key)
+      );
+      console.log(response.data.result);
+      setData(response.data.result);
+    } catch (error) {
+      setError(error.message);
+    }
+  };
+
+  const getFeedDataPage = async () => {
+    try {
+      const response = await getFeedData(
+        (url =
+          "http://localhost:3000/api/" +
+          URLSConfig.URLS.USER.GET_USER_FEED +
+          "/" +
+          userid)
+      );
+      console.log(response.data.result);
+      setData(response.data.result);
+    } catch (error) {
+      setError(error.message);
+    }
+  };
+
+  const userMigratePage = async () => {
+    try {
+      const url =
+        "http://localhost:3000/learner/" + URLSConfig.URLS.USER.USER_MIGRATE;
+      const response = await userMigrate(url, data);
+      console.log(response.data.result);
+      setData(response.data.result);
+    } catch (error) {
+      setError(error.message);
+    }
+  };
+
+  const registerUserPage = async () => {
+    try {
+      const url =
+        "http://localhost:3000/learner/" +
+        URLSConfig.URLS.USER.SIGN_UP_MANAGED_USER;
+      const response = await registerUser(url, data).pipe(
+        map((resp) => {
+          createManagedUser.emit(_.get(resp, "result.userId"));
+          return resp;
+        })
+      );
+      console.log(response.data.result);
+      setData(response.data.result);
+    } catch (error) {
+      setError(error.message);
+    }
+  };
+
+  const getOrganizationDetailsPage = async () => {
+    try {
+      const url =
+        "http://localhost:3000/api/" + URLSConfig.URLS.ADMIN.ORG_EXT_SEARCH;
+      const data = {
+        request: {
+          filters: {
+            id: organisationIds,
+          },
+        },
+      };
+      const response = await getOrganizationDetails(url, data); // Call the imported function
+      console.log(response.data.result);
+      setData(response.data.result);
+    } catch (error) {
+      setError(error.message);
+    }
+  };
+  const handleFilterChange = (field, value) => {
+    // Handle filter change logic here
   };
 
   return (
@@ -75,8 +224,8 @@ const Contents = () => {
         Enhance your knowledge and skills with our diverse range of courses and
         content.
       </Text>
-      <Button colorScheme="blue" size="lg">
-        Explore Courses
+      <Button colorScheme="blue" size="lg" onClick={getUserData}>
+        Get User Data
       </Button>
 
       {isLoading && <p>Loading...</p>}
@@ -92,4 +241,4 @@ const Contents = () => {
   );
 };
 
-export default Contents;
+export default User;
