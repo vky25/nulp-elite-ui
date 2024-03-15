@@ -4,7 +4,8 @@ import { contentService } from "@shiksha/common-lib";
 import URLSConfig from "../configs/urlConfig.json";
 import { Layout,IconByName,SearchLayout,FilterButton,overrideColorTheme } from "@shiksha/common-lib";
 import { NativeBaseProvider,Box, Stack, VStack,Text, HStack, Button, extendTheme,
-  Actionsheet,ScrollView,Heading } from "native-base";
+  Actionsheet,ScrollView,Heading ,useDisclose, Menu ,Image} from "native-base";
+
 import { Link , useParams} from "react-router-dom";
 
 const Contents = () => {
@@ -83,24 +84,91 @@ const Contents = () => {
   return (
     <Layout
     isDisabledAppBar={true}
-   _header={{
-     title: "User Name",
-     // isEnableSearchBtn: true,
-     subHeading: "Hello",
-     iconComponent: (
-       <Link
-         to="/Courses"
-         style={{ color: "rgb(63, 63, 70)", textDecoration: "none" }}
-       >
-          <IconByName size='20px' name='Notification2LineIcon' />
-       </Link>
-     ),
-   }}
+    _header={
+      {
+        rightIcon: (
+          <HStack paddingBottom={"25px"}>
+            <IconByName name="CloseCircleFillIcon" />
+          </HStack>
+        ),
+        customeComponent: (
+          <Box flex={1}  minH={"40px"}>
+           
+            <HStack>
+              <VStack   position={"relative"}
+               padding="10px"
+               top={"10px"}>
+
+              <Menu w="160"
+    trigger={triggerProps => {
+      return <Button alignSelf="center" variant="solid" {...triggerProps}>
+                <IconByName size='20px' name='MenuFillIcon' />
+            </Button>;
+
+    }}>
+        <Menu.Item>Help</Menu.Item>
+        <Menu.Item>Logout</Menu.Item>
+      </Menu>
+
+     </VStack>
+     <VStack></VStack>
+     <VStack>
+            <Image source={require("../assets/nulp_logo.jpeg")} alt="" size="sm" />
+            </VStack>
+            </HStack>
+          
+            {/* <Right> */}
+            <Box 
+            position={"absolute"}
+            right={"20px"}
+            top={"10px"}>
+             <Menu w="160"
+    trigger={triggerProps => {
+      return <Button alignSelf="center" variant="solid" {...triggerProps}>
+              Language
+            </Button>;
+    // }}>
+          
+          }}>
+              <Menu.Item>English</Menu.Item>
+              <Menu.Item> Hindi</Menu.Item>
+          </Menu>
+            </Box>
+            {/* </Right> */}
+           
+           
+          {/* <Avatar
+           size="48px"
+           borderRadius=""
+              source={require("../assets/nulp_logo.jpeg")}
+          /> */}
+         
+          {/* <VStack>
+          <Avatar
+            size="37px"
+            borderRadius="md"
+            source={{
+              uri: "https://via.placeholder.com/50x50.png",
+            }}
+          />
+          </VStack> */}
+          
+          </Box>
+        ),
+        // title: "User Name",
+        // // isEnableSearchBtn: true,
+        // subHeading: "Hello",
+        // iconComponent: (
+         
+        // ),
+      }
+
+    }
    subHeader={
    
      <Link
        to="/"
-       style={{ color: "rgb(63, 63, 70)", textDecoration: "none" }}
+       style={{ textDecoration: "none" }}
      >
        <HStack space="4" justifyContent="space-between">
          <VStack>
@@ -118,7 +186,7 @@ const Contents = () => {
        </HStack>
       </Link>
    }
-   _subHeader={{ bg: "rgb(248, 117, 88)" }}
+   _subHeader={{ size: "20px" }}
    _footer={{
     menues: [
       {
@@ -132,7 +200,7 @@ const Contents = () => {
        route: "/all",
      },
      {
-       title: "AccountCircleLineIcon",
+       title: "Connections",
        icon: "TeamLineIcon",
        route: "/home",
      },

@@ -15,6 +15,7 @@ import Registration from "pages/Registration";
 import UserPrefData from "pages/UserPrefData";
 import { ChakraProvider } from "@chakra-ui/react";
 import Profile from "pages/Profile";
+import FAQPage from "pages/FAQPage"
 
 function App() {
   const [search, setSearch] = React.useState(true);
@@ -56,8 +57,9 @@ function App() {
   {
     moduleName: "nulp_elite",
     path: "/user",
-    component: User,
-
+    component: User
+  },{
+    moduleName: "nulp_elite",
     path: "/registration",
     component: Registration,
   },
@@ -66,6 +68,11 @@ function App() {
     path: "/userPrefData",
     component: UserPrefData,
   },
+  {
+    moduleName: "nulp_elite",
+    path: "/help",
+    component: FAQPage,
+  }
   ];
 
   // return(

@@ -40,7 +40,7 @@ const Contents = () => {
       const headers = {
         "Content-Type": "application/json",
       };
-      const url = `https://nulp.niua.org/learner/user/v3/update`;
+      const url = `http://localhost:3000/learner/user/v3/update`;
       const response = await userService.getUserData(url, headers);
       console.log(data?.result?.response?.rootOrg?.rootOrgId);
       setData(data?.result?.response?.rootOrg?.rootOrgId);

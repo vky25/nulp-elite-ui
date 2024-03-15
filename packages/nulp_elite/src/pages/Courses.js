@@ -1,9 +1,10 @@
 // Courses.js
 import React from "react";
-import { NativeBaseProvider,Box, Stack, VStack,Text, HStack, Button,  Image,extendTheme,H4,H1,BodyLarge,Avatar,
-  Actionsheet,ScrollView,Heading,useDisclose, Menu, Pressable } from "native-base";
-import { Layout,IconByName,SearchLayout,FilterButton,overrideColorTheme } from "@shiksha/common-lib";
+import { Box,  VStack,Text, HStack, Button,  Image,
+ Heading,useDisclose, Menu } from "native-base";
+import { Layout,IconByName,SearchLayout } from "@shiksha/common-lib";
 import { Link , useParams} from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
 const Courses = () => {
   const [search, setSearch] = React.useState(true);
@@ -17,13 +18,12 @@ const Courses = () => {
     onOpen,
     onClose
   } = useDisclose();
-  const logout = () => {
-    alert("logout");
-  };
+  const navigate = useNavigate();
 
-  const openHelp = () => {
-    alert("openHelp")
-  };
+  const redirectTo = async (path) => {
+    // Perform logout logic here if path is logout
+    window.location.href = path;     
+  }
   return (
     <Layout
     isDisabledAppBar={true}
@@ -38,83 +38,43 @@ const Courses = () => {
           <Box flex={1}  minH={"40px"}>
            
             <HStack>
-              <VStack>
-            <Menu w="190" trigger={triggerProps => {
-      return <Pressable accessibilityLabel="More options menu" {...triggerProps}>
+            <VStack   position={"relative"}
+               padding="10px"
+               top={"10px"}>
+             <Menu w="160"
+    trigger={triggerProps => {
+      return <Button alignSelf="center" variant="solid" {...triggerProps}>
                 <IconByName size='20px' name='MenuFillIcon' />
-                Menu
-            </Pressable>;
+            </Button>;
+
     }}>
-        <Menu.Item>Arial</Menu.Item>
-        <Menu.Item>Nunito Sans</Menu.Item>
-        <Menu.Item>Roboto</Menu.Item>
-        <Menu.Item>Poppins</Menu.Item>
-        <Menu.Item>SF Pro</Menu.Item>
-        <Menu.Item>Helvetica</Menu.Item>
-        <Menu.Item isDisabled>Sofia</Menu.Item>
-        <Menu.Item>Cookie</Menu.Item>
+        <Menu.Item onPress={(item) => redirectTo("/help")}>Help</Menu.Item>
+        <Menu.Item onPress={(item) => redirectTo("/logoff")}>Logout</Menu.Item>
       </Menu>
+
      </VStack>
-     <VStack></VStack>
      <VStack>
             <Image source={require("../assets/nulp_logo.jpeg")} alt="" size="sm" />
             </VStack>
             </HStack>
-          
-            {/* <Right> */}
+
             <Box 
             position={"absolute"}
             right={"20px"}
             top={"10px"}>
-            <Menu w="190" trigger={triggerProps => {
-            return <Pressable accessibilityLabel="More options menu" {...triggerProps}>                     
-                      Language
-                  </Pressable>;
+             <Menu w="160"
+    trigger={triggerProps => {
+      return <Button alignSelf="center" variant="solid" {...triggerProps}>
+              Language
+            </Button>;         
           }}>
               <Menu.Item>English</Menu.Item>
               <Menu.Item> Hindi</Menu.Item>
           </Menu>
-            </Box>
-            {/* </Right> */}
-           
-           
-          {/* <Avatar
-           size="48px"
-           borderRadius=""
-              source={require("../assets/nulp_logo.jpeg")}
-          /> */}
-         
-          {/* <VStack>
-          <Avatar
-            size="37px"
-            borderRadius="md"
-            source={{
-              uri: "https://via.placeholder.com/50x50.png",
-            }}
-          />
-          </VStack> */}
-          
+            </Box>                
           </Box>
-        ),
-        // title: "User Name",
-        // // isEnableSearchBtn: true,
-        // subHeading: "Hello",
-        // iconComponent: (
-         
-        // ),
-      }
-      // <Link
-      //        to="/Courses"
-      //        style={{ color: "rgb(63, 63, 70)", textDecoration: "none" }}
-      //      >
-      //       <HStack space="50" justifyContent="space-between">
-      //    <VStack>
-      //         <IconByName size='20px' name='MenuFillIcon' />
-              
-      //         </VStack>
-      //         </HStack>
-      //      </Link>
-     
+        ),       
+      }     
     }
    subHeader={
    
@@ -152,7 +112,7 @@ const Courses = () => {
        route: "/all",
      },
      {
-       title: "AccountCircleLineIcon",
+      title: "Connections",
        icon: "TeamLineIcon",
        route: "/home",
      },

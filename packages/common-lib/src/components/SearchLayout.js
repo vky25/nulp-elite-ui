@@ -68,8 +68,9 @@ export default function SearchLayout({
               placeholder={
                 searchPlaceholder
                   ? searchPlaceholder
-                  : `Type ${minStringLenght ? 'min ' + minStringLenght : ''}
-               to search `
+                  :'Search Here'
+                  // : `Type ${minStringLenght ? 'min ' + minStringLenght : ''}to search `
+              
               }
             />
           </HStack>
