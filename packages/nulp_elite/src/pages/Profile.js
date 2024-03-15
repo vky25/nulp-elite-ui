@@ -1,32 +1,99 @@
 // Profile.js
-import React from 'react';
-import { Box, Heading, Text, Button } from '@chakra-ui/react';
+
+import React, { useState, useEffect } from "react";
+// import { Box, Heading, Text, Button } from '@chakra-ui/react';
+import { Layout,IconByName,SearchLayout,FilterButton,overrideColorTheme } from "@shiksha/common-lib";
+import { NativeBaseProvider,Box, Stack, VStack,Text, HStack, Button, extendTheme,
+  Actionsheet,ScrollView,Heading ,useDisclose, Menu ,Image} from "native-base";
+import { Link , useParams} from "react-router-dom";
 
 const Profile = () => {
+  const [search, setSearch] = React.useState(true);
+  const [searchState, setSearchState] = React.useState(false);
+ 
   return (
     <Layout
     isDisabledAppBar={true}
-   _header={
-    <Link
-           to="/Courses"
-           style={{ color: "rgb(63, 63, 70)", textDecoration: "none" }}
-         >
-            <IconByName size='20px' name='MenuFillIcon' />
-         </Link>
-  //   {
-  //    title: "User Name",
-  //    // isEnableSearchBtn: true,
-  //    subHeading: "Hello",
-  //    iconComponent: (
-  //      <Link
-  //        to="/Courses"
-  //        style={{ color: "rgb(63, 63, 70)", textDecoration: "none" }}
-  //      >
-  //         <IconByName size='20px' name='Notification2LineIcon' />
-  //      </Link>
-  //    ),
-  //  }
-  }
+    _header={
+      {
+        rightIcon: (
+          <HStack paddingBottom={"25px"}>
+            <IconByName name="CloseCircleFillIcon" />
+          </HStack>
+        ),
+        customeComponent: (
+          <Box flex={1}  minH={"40px"}>
+           
+            <HStack>
+              <VStack
+               position={"relative"}
+               padding="10px"
+               top={"10px"}
+              >
+              <Menu w="160"
+    trigger={triggerProps => {
+      return <Button alignSelf="center" variant="solid" {...triggerProps}>
+                <IconByName size='20px' name='MenuFillIcon' />
+            </Button>;
+
+    }}>
+        <Menu.Item>Help</Menu.Item>
+        <Menu.Item>Logout</Menu.Item>
+      </Menu>
+     </VStack>
+    
+     <VStack>
+            <Image source={require("../assets/nulp_logo.jpeg")} alt="" size="sm" />
+            </VStack>
+            </HStack>
+          
+            {/* <Right> */}
+            <Box 
+            position={"absolute"}
+            right={"20px"}
+            top={"10px"}>
+             <Menu w="160"
+    trigger={triggerProps => {
+      return <Button alignSelf="center" variant="solid" {...triggerProps}>
+              Language
+            </Button>;
+    // }}>
+          
+          }}>
+              <Menu.Item>English</Menu.Item>
+              <Menu.Item> Hindi</Menu.Item>
+          </Menu>
+            </Box>
+            {/* </Right> */}
+           
+           
+          {/* <Avatar
+           size="48px"
+           borderRadius=""
+              source={require("../assets/nulp_logo.jpeg")}
+          /> */}
+         
+          {/* <VStack>
+          <Avatar
+            size="37px"
+            borderRadius="md"
+            source={{
+              uri: "https://via.placeholder.com/50x50.png",
+            }}
+          />
+          </VStack> */}
+          
+          </Box>
+        ),
+        // title: "User Name",
+        // // isEnableSearchBtn: true,
+        // subHeading: "Hello",
+        // iconComponent: (
+         
+        // ),
+      }
+
+    }
    subHeader={
    
      <Link
@@ -63,7 +130,7 @@ const Profile = () => {
        route: "/all",
      },
      {
-       title: "AccountCircleLineIcon",
+      title: "Connections",
        icon: "TeamLineIcon",
        route: "/home",
      },
@@ -84,13 +151,7 @@ const Profile = () => {
         Log Out
       </Button>
     </Box>
- 
- <Routes>
-       <Route path="/" element={<Home />} />
-       <Route path="/Contents" element={<Contents />} />
-       <Route path="/Courses" element={<Courses />} />
-       <Route path="/Sample" element={<Sample />} />
- </Routes>    
+   
  </Layout>
   
   );
