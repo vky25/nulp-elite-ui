@@ -127,6 +127,7 @@ import EnglishInputIcon from 'remixicon-react/EnglishInputIcon'
 import CalculatorLineIcon from 'remixicon-react/CalculatorLineIcon'
 import IncreaseDecreaseLineIcon from 'remixicon-react/IncreaseDecreaseLineIcon'
 import LinksLineIcon from 'remixicon-react/LinksLineIcon'
+import AccountCircleLineIcon from 'remixicon-react/AccountCircleLineIcon'
 
 function IconButton({ icon, isDisabled, prefix, ...props }) {
   if (!isDisabled) {
@@ -279,6 +280,14 @@ export default function IconByName({ _icon, ...props }) {
         <IconButton
           {...props}
           icon={<GovernmentLineIcon {...(_icon ? _icon : {})} />}
+        />
+      )
+      break
+    case 'search-line':
+      icon = (
+        <IconButton
+          {...props}
+          icon={<search-line {...(_icon ? _icon : {})} />}
         />
       )
       break
@@ -1153,6 +1162,14 @@ export default function IconByName({ _icon, ...props }) {
         <IconButton
           {...props}
           icon={<LinksLineIcon {...(_icon ? _icon : {})} />}
+        />
+      )
+      break
+    case 'AccountCircleLineIcon':
+      icon = (
+        <IconButton
+          {...props}
+          icon={<AccountCircleLineIcon {...(_icon ? _icon : {})} />}
         />
       )
       break

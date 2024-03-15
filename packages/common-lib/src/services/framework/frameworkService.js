@@ -15,11 +15,11 @@ export const getChannel = async (url, header) => {
 }
 
 export const getFrameworkCategories = async (url, header) => {
-  const result = await get(url, {
+  const response = await get(url, {
     header
   })
-  if (result) {
-    return result
+  if (response) {
+    return response
   } else {
     return []
   }
@@ -39,6 +39,18 @@ export const getCourseFramework = async (url, header) => {
 export const getSelectedFrameworkCategories = async (url, header) => {
   const result = await get(url, {
     header
+  })
+  if (result) {
+    return result
+  } else {
+    return []
+  }
+}
+
+export const getUserData = async (url, header, requestBody) => {
+  const result = await patch(url, {
+    header,
+    requestBody
   })
   if (result) {
     return result

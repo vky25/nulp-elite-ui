@@ -1,34 +1,36 @@
-// Courses.js
-import React from "react";
+// Profile.js
+
+import React, { useState, useEffect } from "react";
+// import { Box, Heading, Text, Button } from '@chakra-ui/react';
 import {
+  Layout,
+  IconByName,
+  SearchLayout,
+  FilterButton,
+  overrideColorTheme,
+} from "@shiksha/common-lib";
+import {
+  NativeBaseProvider,
   Box,
+  Stack,
   VStack,
   Text,
   HStack,
   Button,
-  Image,
+  extendTheme,
+  Actionsheet,
+  ScrollView,
   Heading,
   useDisclose,
   Menu,
+  Image,
 } from "native-base";
-import { Layout, IconByName, SearchLayout } from "@shiksha/common-lib";
 import { Link, useParams } from "react-router-dom";
-import { useNavigate } from "react-router-dom";
 
-const Courses = () => {
+const Profile = () => {
   const [search, setSearch] = React.useState(true);
   const [searchState, setSearchState] = React.useState(false);
-  // const theme = extendTheme(DEFAULT_THEME);
-  const colors = "";
-  const [sortArray, setSortArray] = React.useState([]);
-  const [showModalSort, setShowModalSort] = React.useState(false);
-  const { isOpen, onOpen, onClose } = useDisclose();
-  const navigate = useNavigate();
 
-  const redirectTo = async (path) => {
-    // Perform logout logic here if path is logout
-    window.location.href = path;
-  };
   return (
     <Layout
       isDisabledAppBar={true}
@@ -56,14 +58,11 @@ const Courses = () => {
                     );
                   }}
                 >
-                  <Menu.Item onPress={(item) => redirectTo("/help")}>
-                    Help
-                  </Menu.Item>
-                  <Menu.Item onPress={(item) => redirectTo("/logoff")}>
-                    Logout
-                  </Menu.Item>
+                  <Menu.Item>Help</Menu.Item>
+                  <Menu.Item>Logout</Menu.Item>
                 </Menu>
               </VStack>
+
               <VStack>
                 <Image
                   source={require("../assets/nulp_logo.jpeg")}
@@ -73,6 +72,7 @@ const Courses = () => {
               </VStack>
             </HStack>
 
+            {/* <Right> */}
             <Box position={"absolute"} right={"20px"} top={"10px"}>
               <Menu
                 w="160"
@@ -86,14 +86,38 @@ const Courses = () => {
                       Language
                     </Button>
                   );
+                  // }}>
                 }}
               >
                 <Menu.Item>English</Menu.Item>
                 <Menu.Item> Hindi</Menu.Item>
               </Menu>
             </Box>
+            {/* </Right> */}
+
+            {/* <Avatar
+           size="48px"
+           borderRadius=""
+              source={require("../assets/nulp_logo.jpeg")}
+          /> */}
+
+            {/* <VStack>
+          <Avatar
+            size="37px"
+            borderRadius="md"
+            source={{
+              uri: "https://via.placeholder.com/50x50.png",
+            }}
+          />
+          </VStack> */}
           </Box>
         ),
+        // title: "User Name",
+        // // isEnableSearchBtn: true,
+        // subHeading: "Hello",
+        // iconComponent: (
+
+        // ),
       }}
       subHeader={
         <Link
@@ -145,16 +169,12 @@ const Courses = () => {
         <Heading as="h1" size="2xl" marginBottom="4">
           Welcome to Our Learning Portal
         </Heading>
-        <Text fontSize="xl" marginBottom="8">
-          Enhance your knowledge and skills with our diverse range of courses
-          and content.
-        </Text>
         <Button colorScheme="blue" size="lg">
-          Explore Courses
+          Log Out
         </Button>
       </Box>
     </Layout>
   );
 };
 
-export default Courses;
+export default Profile;

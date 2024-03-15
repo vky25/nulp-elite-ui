@@ -21,9 +21,9 @@ export default function SearchLayout({
 
   return (
     <Center>
-      <Box minH={Height} w={width}>
+      <Box w={width}>
         <Stack
-          width={'100%'}
+          width={'90%'}
           style={{
             backgroundImage: imageUrl
               ? 'url(' + imageUrl + ')'
@@ -37,7 +37,7 @@ export default function SearchLayout({
         >
           <HStack bg='white' space='1' alignItems='center' p='5'>
             <IconByName
-              size='sm'
+              size='20px'
               name='ArrowLeftLineIcon'
               color='button.500'
               onPress={(e) => {
@@ -68,8 +68,9 @@ export default function SearchLayout({
               placeholder={
                 searchPlaceholder
                   ? searchPlaceholder
-                  : `Type ${minStringLenght ? 'min ' + minStringLenght : ''}
-               to search `
+                  : `Type ${
+                      minStringLenght ? 'min ' + minStringLenght : ''
+                    }to search `
               }
             />
           </HStack>
