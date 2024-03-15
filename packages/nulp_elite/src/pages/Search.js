@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { Box, Heading, Text, Button } from "@chakra-ui/react";
 import URLSConfig from "../configs/urlConfig.json";
-// import { userService } from "@shiksha/common-lib";
 import { userService } from "@shiksha/common-lib";
 import { logDOM } from "@testing-library/react";
 import * as _ from "lodash-es";
