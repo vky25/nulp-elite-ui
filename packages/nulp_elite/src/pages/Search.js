@@ -5,7 +5,16 @@ import URLSConfig from "../configs/urlConfig.json";
 import { userService } from "@shiksha/common-lib";
 import { logDOM } from "@testing-library/react";
 import * as _ from "lodash-es";
-import { post, get } from "@shiksha/common-lib";
+import {
+  batchSearch,
+  getUserList,
+  globalUserSearch,
+  getSubOrganisationDetails,
+  userSearch,
+  orgSearch,
+  courseSearch,
+  updateOption,
+} from "../services/searchService";
 
 const Search = () => {
   const [data, setData] = useState({});
@@ -20,21 +29,21 @@ const Search = () => {
   });
 
   useEffect(() => {
-    batchSearch();
-    getUserList();
-    globalUserSearch();
-    getSubOrganisationDetails();
-    courseSearch();
-    userSearch();
-    orgSearch();
-    contentSearch();
+    batchSearchPage();
+    getUserListPage();
+    globalUserSearchPage();
+    getSubOrganisationDetailsPage();
+    courseSearchPage();
+    userSearchPage();
+    orgSearchPage();
+    contentSearchPage();
   }, []);
 
   const headers = {
     "content-type": "Application/json",
   };
 
-  const batchSearch = async () => {
+  const batchSearchPage = async () => {
     try {
       const offset =
         requestParam.offset === 0 || requestParam.offset
@@ -50,7 +59,7 @@ const Search = () => {
           sort_by: requestParam.sort_by,
         },
       };
-      const response = await post(url, data, headers);
+      const response = await batchSearch(url, data, headers);
       console.log(response);
       setData(response);
     } catch (error) {
@@ -60,7 +69,7 @@ const Search = () => {
     }
   };
 
-  const getUserList = async () => {
+  const getUserListPage = async () => {
     try {
       const offset =
         requestParam.offset === 0 || requestParam.offset
@@ -76,7 +85,7 @@ const Search = () => {
           sort_by: requestParam.sort_by,
         },
       };
-      const response = await post(url, data, headers);
+      const response = await getUserList(url, data, headers);
       console.log(response);
       setData(response);
     } catch (error) {
@@ -86,7 +95,7 @@ const Search = () => {
     }
   };
 
-  const globalUserSearch = async () => {
+  const globalUserSearchPage = async () => {
     try {
       const offset =
         requestParam.offset === 0 || requestParam.offset
@@ -99,7 +108,7 @@ const Search = () => {
           filters: requestParam.filters,
         },
       };
-      const response = await post(url, data, headers);
+      const response = await globalUserSearch(url, data, headers);
       console.log(response);
       setData(response);
     } catch (error) {
@@ -109,7 +118,7 @@ const Search = () => {
     }
   };
 
-  const getSubOrganisationDetails = async () => {
+  const getSubOrganisationDetailsPage = async () => {
     try {
       const url =
         "http://localhost:3000/api/" + URLSConfig.URLS.ADMIN.ORG_EXT_SEARCH;
@@ -120,7 +129,7 @@ const Search = () => {
           },
         },
       };
-      const response = await post(url, data, headers);
+      const response = await getSubOrganisationDetails(url, data, headers);
       console.log(response);
       setData(response);
     } catch (error) {
@@ -130,7 +139,7 @@ const Search = () => {
     }
   };
 
-  const userSearch = async () => {
+  const userSearchPage = async () => {
     try {
       const url =
         "http://localhost:3000/learner/" + URLSConfig.URLS.ADMIN.USER_SEARCH;
@@ -143,7 +152,7 @@ const Search = () => {
           softConstraints: { badgeAssertions: 1 },
         },
       };
-      const response = await post(url, data, headers);
+      const response = await userSearch(url, data, headers);
       console.log(response);
       setData(response);
     } catch (error) {
@@ -153,7 +162,7 @@ const Search = () => {
     }
   };
 
-  const orgSearch = async () => {
+  const orgSearchPage = async () => {
     try {
       const url =
         "http://localhost:3000/api/" + URLSConfig.URLS.ADMIN.ORG_EXT_SEARCH;
@@ -166,7 +175,7 @@ const Search = () => {
           ...(requestParam.fields && { fields: requestParam.fields }),
         },
       };
-      const response = await post(url, data, headers);
+      const response = await orgSearch(url, data, headers);
       console.log(response);
       setData(response);
     } catch (error) {
@@ -176,7 +185,7 @@ const Search = () => {
     }
   };
 
-  const courseSearch = async () => {
+  const courseSearchPage = async () => {
     try {
       const url = "http://localhost:3000/api/" + URLSConfig.URLS.COURSE.SEARCH;
       const data = {
@@ -190,7 +199,7 @@ const Search = () => {
           facets: requestParam.facets,
         },
       };
-      const response = await post(url, data, headers);
+      const response = await courseSearch(url, data, headers);
       console.log(response);
       setData(response);
     } catch (error) {
@@ -200,7 +209,7 @@ const Search = () => {
     }
   };
 
-  const contentSearch = async () => {
+  const contentSearchPage = async () => {
     try {
       const option = {
         url: "http://localhost:3000/learner/" + URLSConfig.URLS.CONTENT.SEARCH,
@@ -231,26 +240,6 @@ const Search = () => {
     } finally {
       setIsLoading(false);
     }
-  };
-
-  const updateOption = (option) => {
-    if (_.get(option, "data.request.filters.board")) {
-      option.data.request.filters["se_boards"] =
-        option.data.request.filters.board;
-      delete option.data.request.filters.board;
-    }
-    if (_.get(option, "data.request.filters.gradeLevel")) {
-      option.data.request.filters["se_gradeLevels"] =
-        option.data.request.filters.gradeLevel;
-      delete option.data.request.filters.gradeLevel;
-    }
-    if (_.get(option, "data.request.filters.medium")) {
-      option.data.request.filters["se_mediums"] =
-        option.data.request.filters.medium;
-      delete option.data.request.filters.medium;
-    }
-
-    return option.data;
   };
 
   const handleFilterChange = (field, value) => {};

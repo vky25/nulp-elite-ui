@@ -4,6 +4,7 @@ import Sample from "pages/Sample";
 import Home from "pages/Home";
 import Courses from "pages/Courses";
 import Coursetest from "pages/CourseTest";
+import Search from "pages/Search";
 
 import Contents from "pages/Contents";
 import {
@@ -27,7 +28,7 @@ import Registration from "pages/Registration";
 import UserPrefData from "pages/UserPrefData";
 import { ChakraProvider } from "@chakra-ui/react";
 import Profile from "pages/Profile";
-import FAQPage from "pages/FAQPage"
+import FAQPage from "pages/FAQPage";
 
 function App() {
   const [search, setSearch] = React.useState(true);
@@ -91,7 +92,12 @@ function App() {
       moduleName: "nulp_elite",
       path: "/coursetest",
       component: Coursetest,
-    }
+    },
+    {
+      moduleName: "nulp_elite",
+      path: "/search",
+      component: Search,
+    },
   ];
 
   // return(
