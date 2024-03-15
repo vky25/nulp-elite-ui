@@ -23,14 +23,13 @@ import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 import { DEFAULT_THEME, initializeI18n, H2 } from "@shiksha/common-lib";
 import { useTranslation } from "react-i18next";
 import Framework from "pages/Frmework";
-import Certificate from "pages/Certificate";
-
 import User from "pages/User";
 import Registration from "pages/Registration";
 import UserPrefData from "pages/UserPrefData";
 import { ChakraProvider } from "@chakra-ui/react";
 import Profile from "pages/Profile";
 import FAQPage from "pages/FAQPage";
+import Certificate from "pages/Certificate";
 
 function App() {
   const [search, setSearch] = React.useState(true);
@@ -99,6 +98,11 @@ function App() {
       moduleName: "nulp_elite",
       path: "/search",
       component: Search,
+    },
+    {
+      moduleName: "nulp_elite",
+      path: "/certificate",
+      component: Certificate,
     },
   ];
 

@@ -1,8 +1,11 @@
 import React, { useState, useEffect } from "react";
 import { Box, Heading, Text, Button } from "@chakra-ui/react";
 import URLSConfig from "../configs/urlConfig.json";
-import { post, get } from "@shiksha/common-lib";
-
+import {
+  validateCertificate,
+  fetchCertificatePreferences,
+  getBatchDetails,
+} from "../services/cetificateService";
 const Certificate = () => {
   const [data, setData] = useState({});
   const [bathId, setbatchId] = useState("");
@@ -10,20 +13,20 @@ const Certificate = () => {
   const [error, setError] = useState(null);
   const [organisationIds, setOrganisationIds] = useState("");
   useEffect(() => {
-    validateCertificate();
-    fetchCertificatePreferences();
-    getBatchDetails();
+    validateCertificatePage();
+    fetchCertificatePreferencesPage();
+    getBatchDetailsPage();
   }, []);
   const headers = {
     "content-type": "Application/json",
   };
 
-  const validateCertificate = async () => {
+  const validateCertificatePage = async () => {
     try {
       const url =
         "http://localhost:3000/learner/" +
         URLSConfig.URLS.USER.VALIDATE_CERTIFICATE;
-      const response = await post(url, data);
+      const response = await validateCertificate(url, data);
       console.log(response.data.result);
       setData(response.data.result);
     } catch (error) {
@@ -31,12 +34,12 @@ const Certificate = () => {
     }
   };
 
-  const fetchCertificatePreferences = async () => {
+  const fetchCertificatePreferencesPage = async () => {
     try {
       const url =
         "http://localhost:3000/learner/" +
         URLSConfig.URLS.TENANT_PREFERENCE.READ;
-      const response = await post(url, data);
+      const response = await fetchCertificatePreferences(url, data);
       console.log(response.data.result);
       setData(response.data.result);
     } catch (error) {
@@ -44,14 +47,14 @@ const Certificate = () => {
     }
   };
 
-  const getBatchDetails = async () => {
+  const getBatchDetailsPage = async () => {
     try {
       const url =
         "http://localhost:3000/learner/" +
         URLSConfig.URLS.BATCH.GET_DETAILS +
         "/" +
         `${bathId}`;
-      const response = await get(url);
+      const response = await getBatchDetails(url);
       console.log(response.data.result);
       setData(response.data.result);
     } catch (error) {
