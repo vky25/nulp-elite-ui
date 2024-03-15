@@ -1,15 +1,33 @@
 import { Link } from "react-router-dom";
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { H2, Heading, BodyLarge, Widget } from "@shiksha/common-lib";
 import { Layout, NameTag } from "@shiksha/common-lib";
-import { Box, Stack, VStack,Text, HStack, Avatar, Image, Button } from "native-base";
+import {
+  Box,
+  Button,
+} from "native-base";
 import { useTranslation } from "react-i18next";
 import moment from "moment";
 import manifest from "../../src/manifest.json";
 import "ag-grid-community/styles/ag-grid.css";
-
+import { Container } from '@chakra-ui/react';
+import FilterPopup from './../components/FilterPopup';
 
 export default function Sample() {
+  const [isFilterPopupOpen, setIsFilterPopupOpen] = useState(false);
+
+  const openFilterPopup = () => {
+    setIsFilterPopupOpen(true);
+  };
+
+  const closeFilterPopup = () => {
+    setIsFilterPopupOpen(false);
+  };
+  
+
+  const applyFilters = (selectedFilters) => {
+    // Handle filter application logic here
+    console.log('Applied filters:', selectedFilters);}
   return (
 <div>
 <Layout
@@ -64,7 +82,14 @@ export default function Sample() {
       }}
     >
       <h1>Sample Module</h1>
-    </Layout>
+      <Box textAlign="center" fontSize="xl">
+        <Container>
+          <Button onClick={openFilterPopup}>Open Filter Popup</Button>
+        </Container>
+      </Box>
+      <FilterPopup isOpen={isFilterPopupOpen} onClose={closeFilterPopup} applyFilters={applyFilters} />
+
+    </Layout> 
 </div>
 
   );
