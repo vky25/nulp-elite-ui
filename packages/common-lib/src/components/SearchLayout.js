@@ -68,8 +68,7 @@ export default function SearchLayout({
               placeholder={
                 searchPlaceholder
                   ? searchPlaceholder
-                  :'Search Here'
-                  // : `Type ${minStringLenght ? 'min ' + minStringLenght : ''}to search `
+                  : `Type ${minStringLenght ? 'min ' + minStringLenght : ''}to search `
               
               }
             />
