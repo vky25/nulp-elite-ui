@@ -30,9 +30,8 @@ import UserPrefData from "pages/UserPrefData";
 import { ChakraProvider } from "@chakra-ui/react";
 import Profile from "pages/Profile";
 import FAQPage from "pages/FAQPage";
-// import enTranslation from "./locales/en/translation.json"
-// import hiTranslation from "./locales/hi/translation.json"
-// import { I18nextProvider } from "react-i18next";
+import Certificate from "pages/Certificate";
+
 function App() {
   // const [t] = useTranslation();
   const [search, setSearch] = React.useState(true);
@@ -102,6 +101,11 @@ function App() {
       moduleName: "nulp_elite",
       path: "/search",
       component: Search,
+    },
+    {
+      moduleName: "nulp_elite",
+      path: "/certificate",
+      component: Certificate,
     },
   ];
    // public_url="http://localhost:5000"
