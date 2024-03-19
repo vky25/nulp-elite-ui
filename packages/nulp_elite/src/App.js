@@ -20,8 +20,9 @@ import {
   ScrollView,
 } from "native-base";
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
-import { DEFAULT_THEME, initializeI18n, H2 } from "@shiksha/common-lib";
-import { useTranslation } from "react-i18next";
+import { DEFAULT_THEME, H2 ,initializeI18n} from "@shiksha/common-lib";
+import { useTranslation, initReactI18next } from "react-i18next";
+import i18n from 'i18next';
 import Framework from "pages/Frmework";
 import User from "pages/User";
 import Registration from "pages/Registration";
@@ -32,13 +33,15 @@ import FAQPage from "pages/FAQPage";
 import Certificate from "pages/Certificate";
 
 function App() {
+  // const [t] = useTranslation();
   const [search, setSearch] = React.useState(true);
   const [searchState, setSearchState] = React.useState(false);
   // const theme = extendTheme(DEFAULT_THEME);
   const colors = "";
   const [sortArray, setSortArray] = React.useState([]);
-
+  
   const routes = [
+
     {
       moduleName: "nulp_elite",
       path: "/home",
@@ -105,6 +108,41 @@ function App() {
       component: Certificate,
     },
   ];
+   // public_url="http://localhost:5000"
+  //  public_url="https://alt.uniteframework.io"
+  // initializeI18n(
+  //   ["translation"],
+  //   // `${process.env.PUBLIC_URL}/locales/{{lng}}/{{ns}}.json`
+  //   // `http://localhost:3300/locales/{{lng}}/{{ns}}.json`
+  // );
+  initializeI18n(
+    ["translation"],
+    `${process.env.PUBLIC_URL}/locales/{{lng}}/{{ns}}.json`
+  );
+
+  // const resources = {
+  //   en: {
+  //     translation: {
+  //       enTranslation
+  //     }
+  //   },
+  //   hi: {
+  //     translation: {
+  //       hiTranslation
+  //     }
+  //   }
+  // };
+  // console.log(hiTranslation)
+  
+  // i18n.use(initReactI18next).init({
+  //   resources,
+  //   lng: 'en',
+  
+  //   interpolation: {
+  //     escapeValue: false
+  //   }
+  // });
+
 
   // return(
   //   // <Box></Box>
@@ -121,9 +159,12 @@ function App() {
   // <AppShell routes={routes} AuthComponent={LoginComponent} />;
   return (
     <NativeBaseProvider>
+      {/* <I18nextProvider i18n={i18n}> */}
       <ChakraProvider>
+        <React.Suspense>
         <Router>
           <Routes>
+          
             {routes.map((route, index) => (
               <Route
                 key={index}
@@ -133,7 +174,9 @@ function App() {
             ))}
           </Routes>
         </Router>
+        </React.Suspense>
       </ChakraProvider>
+      {/* </I18nextProvider> */}
     </NativeBaseProvider>
   );
 }
