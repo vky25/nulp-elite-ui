@@ -2,6 +2,8 @@ import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { contentService } from "@shiksha/common-lib";
 import URLSConfig from "../configs/urlConfig.json";
+import { useTranslation } from "react-i18next";
+import{changeLanguage} from "i18next";
 import {
   Layout,
   IconByName,
@@ -26,9 +28,10 @@ import {
   Image,
 } from "native-base";
 
-import { Link, useParams } from "react-router-dom";
+import { Link, useParams,useNavigate } from "react-router-dom";
 
 const Contents = () => {
+   const { t } = useTranslation();
   const [search, setSearch] = React.useState(true);
   const [searchState, setSearchState] = React.useState(false);
   // const theme = extendTheme(DEFAULT_THEME);
@@ -39,6 +42,7 @@ const Contents = () => {
   const [filters, setFilters] = useState({});
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState(null);
+  const navigate = useNavigate();
 
   // Example of API Call
   useEffect(() => {
@@ -101,6 +105,11 @@ const Contents = () => {
     setFilters({ ...filters, [field]: value });
   };
 
+  // const changeLanguage = (lng) => {
+  //   changeLanguage(lng);
+   
+  // };
+  
   return (
     <Layout
       isDisabledAppBar={true}
@@ -128,8 +137,14 @@ const Contents = () => {
                     );
                   }}
                 >
-                  <Menu.Item>Help</Menu.Item>
-                  <Menu.Item>Logout</Menu.Item>
+                   <Menu.Item onPress={(item) => navigate("/help")}>
+                    {t("HELP")}
+                  </Menu.Item>
+                  <Menu.Item onPress={(item) => navigate("/logoff")}>
+                    {t("LOGOUT")}                    
+                  </Menu.Item>
+                 
+                 
                 </Menu>
               </VStack>
               <VStack></VStack>
@@ -153,41 +168,18 @@ const Contents = () => {
                       variant="solid"
                       {...triggerProps}
                     >
-                      Language
+                      {t("LANGUAGE")}
                     </Button>
                   );
                   // }}>
                 }}
               >
-                <Menu.Item>English</Menu.Item>
-                <Menu.Item> Hindi</Menu.Item>
+                <Menu.Item onPress={(item) => changeLanguage('en')}>{t("ENGLISH")}</Menu.Item>
+                <Menu.Item onPress={(item) => changeLanguage('hi')}>{t("HINDI")}</Menu.Item>
               </Menu>
             </Box>
-            {/* </Right> */}
-
-            {/* <Avatar
-           size="48px"
-           borderRadius=""
-              source={require("../assets/nulp_logo.jpeg")}
-          /> */}
-
-            {/* <VStack>
-          <Avatar
-            size="37px"
-            borderRadius="md"
-            source={{
-              uri: "https://via.placeholder.com/50x50.png",
-            }}
-          />
-          </VStack> */}
           </Box>
         ),
-        // title: "User Name",
-        // // isEnableSearchBtn: true,
-        // subHeading: "Hello",
-        // iconComponent: (
-
-        // ),
       }}
       subHeader={
         <Link to="/" style={{ textDecoration: "none" }}>
@@ -234,14 +226,14 @@ const Contents = () => {
     >
       <Box textAlign="center" padding="10">
         <Heading as="h1" size="2xl" marginBottom="4">
-          Welcome to Our Learning Portal Content
+          {t("WELCOME_TEXT")}
         </Heading>
-        <Text fontSize="xl" marginBottom="8">
+        {/* <Text fontSize="xl" marginBottom="8">
           Enhance your knowledge and skills with our diverse range of courses
           and content.
-        </Text>
+        </Text> */}
         <Button colorScheme="blue" size="lg" onClick={navigateToCourse()}>
-          Explore Courses
+         {t( "EXPLORE_COURSES")}
         </Button>
 
         {isLoading && <p>Loading...</p>}
@@ -255,13 +247,14 @@ const Contents = () => {
         ))}
       </Box>
 
-      {/* <Routes>
-       <Route path="/" element={<Home />} />
-       <Route path="/Contents" element={<Contents />} />
-       <Route path="/Courses" element={<Courses />} />
-       <Route path="/Sample" element={<Sample />} />
- </Routes>     */}
-    </Layout>
+       {/* <Routes>
+      //  <Route path="/" element={<Home />} />
+      //  <Route path="/Contents" element={<Contents />} />
+      //  <Route path="/Courses" element={<Courses />} />
+      //  <Route path="/Sample" element={<Sample />} />
+      // </Routes>     */}
+     </Layout>
+    //  <Box>HERE</Box>
   );
 };
 

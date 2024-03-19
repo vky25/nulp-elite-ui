@@ -24,11 +24,6 @@ const Courses = () => {
   const [showModalSort, setShowModalSort] = React.useState(false);
   const { isOpen, onOpen, onClose } = useDisclose();
   const navigate = useNavigate();
-
-  const redirectTo = async (path) => {
-    // Perform logout logic here if path is logout
-    window.location.href = path;
-  };
   return (
     <Layout
       isDisabledAppBar={true}
@@ -56,10 +51,10 @@ const Courses = () => {
                     );
                   }}
                 >
-                  <Menu.Item onPress={(item) => redirectTo("/help")}>
+                  <Menu.Item onPress={(item) => navigate("/help")}>
                     Help
                   </Menu.Item>
-                  <Menu.Item onPress={(item) => redirectTo("/logoff")}>
+                  <Menu.Item onPress={(item) => navigate("/logoff")}>
                     Logout
                   </Menu.Item>
                 </Menu>
@@ -153,7 +148,7 @@ const Courses = () => {
           Explore Courses
         </Button>
       </Box>
-    </Layout>
+      </Layout> 
   );
 };
 

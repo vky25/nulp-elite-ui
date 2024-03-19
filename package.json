@@ -4,7 +4,7 @@
   "workspaces": {
     "packages": [
       "packages/common-lib",
-      "packages/core",
+     "packages/core",
       "packages/nulp_elite"
     ]
   },
@@ -42,7 +42,7 @@
     "normalize-css-color": "^1.0.2",
     "papaparse": "^5.4.1",
     "react": "^18.2.0",
-    "react-dom": "^18.2.0",
+    "react-dom ": "^18.2.0",
     "react-ga": "^3.3.1",
     "react-google-recaptcha": "^3.1.0",
     "react-hook-form": "^7.45.4",
