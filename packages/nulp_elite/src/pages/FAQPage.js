@@ -1,4 +1,5 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
+// import { post, get, update } from "../services/RestClient.ts";
 import {
   View,
   Heading,
@@ -9,7 +10,17 @@ import {
   AccordionPanel,
   AccordionIcon,
 } from "native-base";
-import data from "./FAQData.json"; // Import your data JSON file
+var data= {};
+ fetch('https://nulpstorage1.blob.core.windows.net/public/portal-faq/resources/res/faq-en.json')
+  .then(response => {
+    if (!response.ok) {
+      throw new Error('Network response was not ok');
+    }
+    return response.json();
+  })
+  .then(result => {
+     data=  result;
+  })
 
 const FAQPage = () => {
   return (
