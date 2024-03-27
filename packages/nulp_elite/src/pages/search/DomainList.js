@@ -25,7 +25,7 @@ import Grid from '@mui/material/Grid';
 import { styled } from '@mui/material/styles';
 import Paper from '@mui/material/Paper';
 import Container from '@mui/material/Container';
-// import BoxCard from "components/Card";
+import BoxCard from "components/Card";
 
 const Item = styled(Paper)(({ theme }) => ({
   backgroundColor: theme.palette.mode === 'dark' ? '#1A2027' : '#fff',
@@ -185,7 +185,7 @@ const DomainList = () => {
       }}
     >
       <Container>
-        {/* <BoxCard></BoxCard> */}
+        <BoxCard></BoxCard>
        <ThemeProvider theme={theme}>
        <Typography variant="h3" sx={{ marginTop: '30px' }}>Filter by popular domain</Typography>
     </ThemeProvider>
