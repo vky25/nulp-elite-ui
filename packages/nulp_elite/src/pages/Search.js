@@ -202,6 +202,7 @@ const Search = () => {
       console.log(response);
       setData(response);
     } catch (error) {
+      console.log("courseSearchPage err---", error)
       setError(error.message);
     } finally {
       setIsLoading(false);

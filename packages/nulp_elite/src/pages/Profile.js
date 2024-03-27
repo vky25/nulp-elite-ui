@@ -26,10 +26,56 @@ import {
   Image,
 } from "native-base";
 import { Link, useParams } from "react-router-dom";
+import {
+  endSession,
+  getOrganizationDetails,
+  acceptTermsAndConditions,
+  getUserByKey,
+  registerUser,
+  userMigrate,
+  getUserData,
+  getFeedData,
+  getIsUserExistsUserByKey,
+  updateGuestUser,
+  createGuestUser,
+  updateAnonymousUserDetails,
+  createAnonymousUser,
+  getGuestUser,
+  getAnonymousUserPreference,
+  updateUserData,
+} from "../services/userService";
+import URLSConfig from "../configs/urlConfig.json";
 
 const Profile = () => {
   const [search, setSearch] = React.useState(true);
   const [searchState, setSearchState] = React.useState(false);
+  const [error, setError] = useState(null);
+  const [data, setData] = useState({});
+  // const userId = document.getElementById('userId').value;
+  useEffect(() => {   
+    getUserDataPage();
+  }, []);
+  const headers = {
+    "content-type": "Application/json",
+  };
+  const getUserDataPage = async () => {
+    try {
+      // setIsLoading(true);
+      const params = URLSConfig.params.userReadParam.fields;
+      const baseUrl =
+        "http://localhost:3000/learner/" + URLSConfig.URLS.USER.GET_PROFILE; // Assuming this does not contain /modules/nulp_elite
+      const url = `${baseUrl}5d757783-a86a-40cd-a814-1b6a16d37cb6?fields=${params}`;
+      console.log("now", url);
+      const response = await getUserData(url, headers);
+      console.log(response);
+      setData(response.data.result);
+    } catch (error) {
+      setError(error.message);
+    } finally {
+      // setIsLoading(false);
+    }
+  };
+
 
   return (
     <Layout

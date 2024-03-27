@@ -29,9 +29,9 @@ export const globalUserSearch = async (url, data = {}, headers = {}) => {
   }
 };
 
-export const batchSearch = async (url, data = {}, headers = {}) => {
+export const batchSearch = async (url, request = {}, headers = {}) => {
   try {
-    const response = await post(url, { data }, { headers });
+    const response = await post(url, { request }, { headers });
     return response.data;
   } catch (error) {
     console.error("Error getting user list:", error);
@@ -73,9 +73,9 @@ export const orgSearch = async (url, data = {}, headers = {}) => {
   }
 };
 
-export const courseSearch = async (url, data = {}, headers = {}) => {
+export const courseSearch = async (url, request = {}, headers = {}) => {
   try {
-    const response = await post(url, { data }, { headers });
+    const response = await post(url, { request }, { headers });
     return response.data;
   } catch (error) {
     console.error("Error getting user list:", error);
