@@ -1,5 +1,6 @@
 import React from "react";
 import "./App.css";
+import "./styles/style.css"
 import Sample from "pages/Sample";
 import Home from "pages/Home";
 import Courses from "pages/Courses";
@@ -26,10 +27,12 @@ import Framework from "pages/Frmework";
 import User from "pages/User";
 import Registration from "pages/Registration";
 import UserPrefData from "pages/UserPrefData";
-import { ChakraProvider } from "@chakra-ui/react";
+// import { ChakraProvider } from "@chakra-ui/react";
 import Profile from "pages/Profile";
 import FAQPage from "pages/FAQPage";
 import Certificate from "pages/Certificate";
+import AddConnections from "pages/connections/AddConnections"; 
+import MyConnections from "pages/connections/MyConnections"; 
 
 function App() {
   const [search, setSearch] = React.useState(true);
@@ -81,6 +84,16 @@ function App() {
     },
     {
       moduleName: "nulp_elite",
+      path: "/AddConnections",
+      component: AddConnections,
+    },
+    {
+      moduleName: "nulp_elite",
+      path: "/MyConnections",
+      component: MyConnections,
+    },
+    {
+      moduleName: "nulp_elite",
       path: "/userPrefData",
       component: UserPrefData,
     },
@@ -121,7 +134,8 @@ function App() {
   // <AppShell routes={routes} AuthComponent={LoginComponent} />;
   return (
     <NativeBaseProvider>
-      <ChakraProvider>
+      {/* <ChakraProvider> */}
+      <React.Suspense>
         <Router>
           <Routes>
             {routes.map((route, index) => (
@@ -133,7 +147,8 @@ function App() {
             ))}
           </Routes>
         </Router>
-      </ChakraProvider>
+        </React.Suspense>
+      {/* </ChakraProvider> */}
     </NativeBaseProvider>
   );
 }
