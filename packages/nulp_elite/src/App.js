@@ -6,7 +6,7 @@ import Home from "pages/Home";
 import Courses from "pages/Courses";
 import Coursetest from "pages/CourseTest";
 import Search from "pages/Search";
-
+  
 import Contents from "pages/Contents";
 import {
   NativeBaseProvider,
@@ -33,6 +33,7 @@ import FAQPage from "pages/FAQPage";
 import Certificate from "pages/Certificate";
 import AddConnections from "pages/connections/AddConnections"; 
 import MyConnections from "pages/connections/MyConnections"; 
+import DomainList from "pages/search/DomainList";
 
 function App() {
   const [search, setSearch] = React.useState(true);
@@ -91,6 +92,11 @@ function App() {
       moduleName: "nulp_elite",
       path: "/MyConnections",
       component: MyConnections,
+    },
+    {
+      moduleName: "nulp_elite",
+      path: "/DomainList",
+      component: DomainList,
     },
     {
       moduleName: "nulp_elite",
