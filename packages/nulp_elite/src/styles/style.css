@@ -1,76 +1,12 @@
-/* styles.css */
-.horizontal-menu {
-  list-style: none;
-  display: flex;
-  justify-content: space-around; /* Adjust as needed */
-  padding: 0;
-  margin: 0;
+@import url('https://fonts.googleapis.com/css2?family=Hind+Madurai:wght@300;400;500;600;700&family=Overpass:ital,wght@0,200;1,200&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,600;0,700;1,600&display=swap');
+
+body{
+  font-family: "Hind Madurai", sans-serif !important;
+  font-weight: 500;
+  font-style: normal;
 }
 
-.horizontal-menu li {
-  margin: 0;
-}
-
-.horizontal-menu a {
-  text-decoration: none;
-  color: #333;
-  padding: 10px;
-  display: inline-block;
-  transition: background-color 0.3s ease;
-}
-
-.horizontal-menu a:hover {
-  background-color: #eee;
-}
-
-.App {
-  color: #72a24d;
-}
-
-.App {
-  position: absolute;
-  top: 0;
-  left: 0;
-  height: 100%;
-  width: 100%;
-  background-color: #eeeeee;
-  font-family: sans-serif;
-  text-align: center;
-}
-
-button {
-  /* display: block; */
-  /* width: 200px; */
-  cursor: pointer;
-  height: 40px;
-  line-height: 40px;
-  font-size: 18px;
-  font-family: sans-serif;
-  text-decoration: none;
-  color: #333;
-  border: 2px solid #333;
-  letter-spacing: 2px;
-  text-align: center;
-  position: relative;
-  transition: all 0.35s;
-}
-
-button:after {
-  position: absolute;
-  opacity: 0.2;
-  content: "";
-  top: 0;
-  left: 0;
-  width: 0;
-  height: 100%;
-  background: #9c9c9c;
-  transition: all 0.35s;
-}
-
-button:hover {
-  color: rgb(0, 0, 0);
-}
-
-button:hover:after {
+/* Registration */
+.css-132u4s-MuiFormControl-root-MuiTextField-root{
   width: 100%;
 }
