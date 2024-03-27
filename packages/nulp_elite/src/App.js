@@ -88,12 +88,12 @@ function App() {
     },
     {
       moduleName: "nulp_elite",
-      path: "/AddConnections",
+      path: "/connections/addConnections",
       component: AddConnections,
     },
     {
       moduleName: "nulp_elite",
-      path: "/MyConnections",
+      path: "/connections/myConnections",
       component: MyConnections,
     },
     {

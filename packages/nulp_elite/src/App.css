@@ -6,7 +6,10 @@
   height: 40vmin;
   pointer-events: none;
 }
-
+.PrivateTabIndicator-colorSecondary-5 {
+  background-color:' #004367' !important;
+  padding:'10px'
+}
 @media (prefers-reduced-motion: no-preference) {
   .App-logo {
     animation: App-logo-spin infinite 20s linear;
