@@ -1,5 +1,5 @@
 // Courses.js
-import React from "react";
+import React,{useState, useEffect} from "react";
 import {
   Box,
   VStack,
@@ -14,16 +14,131 @@ import {
 import { Layout, IconByName, SearchLayout } from "@shiksha/common-lib";
 import { Link, useParams } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
+import URLSConfig from "../configs/urlConfig.json";
 
+import {
+  batchSearch,
+  getUserList,
+  globalUserSearch,
+  getSubOrganisationDetails,
+  userSearch,
+  orgSearch,
+  courseSearch,
+  updateOption,
+} from "../services/searchService";
 const Courses = () => {
   const [search, setSearch] = React.useState(true);
   const [searchState, setSearchState] = React.useState(false);
   // const theme = extendTheme(DEFAULT_THEME);
+  const [data, setData] = useState({});
+
   const colors = "";
   const [sortArray, setSortArray] = React.useState([]);
   const [showModalSort, setShowModalSort] = React.useState(false);
   const { isOpen, onOpen, onClose } = useDisclose();
+  const [error, setError] = useState(null);
+  const [requestParam, setRequestParam] = useState({
+    filters: {
+      primaryCategory: [
+        "Collection",
+        "Resource",
+        "Content Playlist",
+        "Course",
+        "Course Assessment",
+        "Digital Textbook",
+        "eTextbook",
+        "Explanation Content",
+        "Learning Resource",
+        "Lesson Plan Unit",
+        "Practice Question Set",
+        "Teacher Resource",
+        "Textbook Unit",
+        "LessonPlan",
+        "FocusSpot",
+        "Learning Outcome Definition",
+        "Curiosity Questions",
+        "MarkingSchemeRubric",
+        "ExplanationResource",
+        "ExperientialResource",
+        "Practice Resource",
+        "TVLesson",
+        "Course Unit",
+        "Exam Question"
+    ]},
+    offset: 0,
+    pageNumber: 1,
+    facets: [
+  "se_boards",
+  "se_gradeLevels",
+  "se_subjects",
+  "se_mediums",
+  "primaryCategory"
+],
+    limit: 10,
+    sort_by: {
+      "lastPublishedOn": "desc"
+    }
+    // Add other properties with default values if needed
+  });
+
   const navigate = useNavigate();
+  useEffect(() => { 
+    courseSearchPage();   
+    batchSearchPage();
+  }, []);
+  const headers = {
+    "content-type": "Application/json",
+  };
+  const courseSearchPage = async () => {
+   try {
+      const url = "http://localhost:3000/learner/" + URLSConfig.URLS.COURSE.SEARCH;
+      const request = {
+       
+          filters: { primaryCategory: requestParam.filters.primaryCategory},
+          fields: requestParam.fields || [],
+          offset: (requestParam.pageNumber - 1) * requestParam.limit,
+          limit: requestParam.limit,
+          query: requestParam.query,
+          sort_by: requestParam.sort_by,
+          facets: requestParam.facets
+        
+      };
+      const response = await courseSearch(url, request, headers);
+      console.log("courseSearch---",response);
+      setData(response);
+    } catch (error) {
+      console.log("courseSearch error---",error);
+
+      setError(error.message);
+    } finally {
+      // setIsLoading(false);
+    }
+  };
+  const batchSearchPage = async () => {
+   
+    try {
+      const offset =
+        requestParam.offset === 0 || requestParam.offset
+          ? requestParam.offset
+          : (requestParam.pageNumber - 1) * requestParam.limit;
+      const url =
+        "http://localhost:3000/learner/" + URLSConfig.URLS.BATCH.GET_BATCHS;
+      const request = {       
+          filters: requestParam.filters,
+          offset,
+          limit: requestParam.limit,
+          sort_by: requestParam.sort_by,     
+      };
+      const response = await batchSearch(url, request, headers);
+      console.log("batchSearchPage--", response);
+      setData(response);
+    } catch (error) {
+      console.log("batch error---",error);
+      setError(error.message);
+    } finally {
+      // setIsLoading(false);
+    }
+  };
   return (
     <Layout
       isDisabledAppBar={true}

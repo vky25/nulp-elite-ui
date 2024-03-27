@@ -4,6 +4,8 @@ import { contentService } from "@shiksha/common-lib";
 import URLSConfig from "../configs/urlConfig.json";
 import { useTranslation } from "react-i18next";
 import{changeLanguage} from "i18next";
+import { frameworkService } from "@shiksha/common-lib";
+
 import {
   Layout,
   IconByName,
@@ -44,65 +46,122 @@ const Contents = () => {
   const [error, setError] = useState(null);
   const navigate = useNavigate();
 
-  // Example of API Call
-  useEffect(() => {
-    const fetchData = async () => {
-      setIsLoading(true);
-      setError(null);
-      // Filters for API
-      let data = JSON.stringify({
-        request: {
-          filters: {
-            status: ["Live"],
-            contentType: [
-              "Collection",
-              "TextBook",
-              "Course",
-              "LessonPlan",
-              "Resource",
-              "SelfAssess",
-              "PracticeResource",
-              "LearningOutcomeDefinition",
-              "ExplanationResource",
-              "ExperientialResource",
-              "eTextBook",
-              "TVLesson",
-            ],
-          },
-          offset: null,
-          sort_by: {
-            lastUpdatedOn: "desc",
-          },
-        },
-      });
-
-      // Headers
-      const headers = {
-        "Content-Type": "application/json",
-      };
-
-      const url = `http://localhost:3000/content/${URLSConfig.URLS.CONTENT.SEARCH}?orgdetails=orgName,email`;
-      try {
-        const response = await contentService.getAllContents(
-          url,
-          data,
-          headers
-        );
-        console.log(response.data.result);
-        setData(response.data.result);
-      } catch (error) {
-        setError(error.message);
-      } finally {
-        setIsLoading(false);
-      }
-    };
-
+  // Example of API Call   
+  useEffect(() => {  
+    fetchDataFramework();
     fetchData();
   }, [filters]);
+
+  const fetchData = async () => {
+    setIsLoading(true);
+    setError(null);
+    // Filters for API
+    let data = JSON.stringify({
+      request: {
+        filters: {
+          status: ["Live"],
+          contentType: [
+            "Collection",
+            "TextBook",
+            "Course",
+            "LessonPlan",
+            "Resource",
+            "SelfAssess",
+            "PracticeResource",
+            "LearningOutcomeDefinition",
+            "ExplanationResource",
+            "ExperientialResource",
+            "eTextBook",
+            "TVLesson",
+          ],
+        },
+        offset: null,
+        sort_by: {
+          lastUpdatedOn: "desc",
+        },
+      },
+    });
+
+    // Headers
+    const headers = {
+      "Content-Type": "application/json",
+    };
+
+    const url = `http://localhost:3000/content/${URLSConfig.URLS.CONTENT.SEARCH}?orgdetails=orgName,email`;
+    try {
+      const response = await contentService.getAllContents(
+        url,
+        data,
+        headers
+      );
+      console.log(response.data.result);
+      setData(response.data.result);
+    } catch (error) {
+      console.log("error---",error);
+
+      setError(error.message);
+    } finally {
+      console.log("finally---");
+      setIsLoading(false);
+    }
+  };
+
+
+
+  const fetchDataFramework = async () => {
+    setIsLoading(true);
+    setError(null);
+
+    // Headers
+    const headers = {
+      "Content-Type": "application/json",
+      Cookie: `connect.sid=${getCookieValue("connect.sid")}`,
+    };
+    const url = `https://nulp.niua.org/api/channel/v1/read/0130701891041689600`;
+    try {
+      const response = await frameworkService.getChannel(url, headers);
+      console.log("channel---",response.data.result);
+      setData(response.data.result);
+    } catch (error) {
+      setError(error.message);
+    } finally {
+      setIsLoading(false);
+    }
+    try {
+      const url = `http://localhost:3000/api/framework/v1/read/nulp?categories=board,gradeLevel,medium,class,subject`;
+
+      const response = await frameworkService.getSelectedFrameworkCategories(
+        url,
+        headers
+      );
+      console.log("nulp---",response.data.result);
+      setData(response.data.result);
+    } catch (error) {
+      console.log("nulp--  error-",error);
+
+      setError(error.message);
+    } finally {
+      console.log("nulp finally---");
+
+      setIsLoading(false);
+    }
+  }
 
   const navigateToCourse = () => {};
   const handleFilterChange = (field, value) => {
     setFilters({ ...filters, [field]: value });
+  };
+
+  const getCookieValue = (name) => {
+    const cookies = document.cookie.split("; ");
+    for (let i = 0; i < cookies.length; i++) {
+      const cookie = cookies[i];
+      const [cookieName, cookieValue] = cookie.split("=");
+      if (cookieName === name) {
+        return cookieValue;
+      }
+    }
+    return "";
   };
 
   // const changeLanguage = (lng) => {
@@ -143,8 +202,6 @@ const Contents = () => {
                   <Menu.Item onPress={(item) => navigate("/logoff")}>
                     {t("LOGOUT")}                    
                   </Menu.Item>
-                 
-                 
                 </Menu>
               </VStack>
               <VStack></VStack>
@@ -246,7 +303,6 @@ const Contents = () => {
           </div>
         ))}
       </Box>
-
        {/* <Routes>
       //  <Route path="/" element={<Home />} />
       //  <Route path="/Contents" element={<Contents />} />
