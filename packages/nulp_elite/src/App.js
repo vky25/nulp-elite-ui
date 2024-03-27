@@ -1,5 +1,6 @@
 import React from "react";
 import "./App.css";
+import "./styles/style.css"
 import Sample from "pages/Sample";
 import Home from "pages/Home";
 import Courses from "pages/Courses";
@@ -27,10 +28,13 @@ import Framework from "pages/Frmework";
 import User from "pages/User";
 import Registration from "pages/Registration";
 import UserPrefData from "pages/UserPrefData";
-import { ChakraProvider } from "@chakra-ui/react";
+// import { ChakraProvider } from "@chakra-ui/react";
 import Profile from "pages/Profile";
 import FAQPage from "pages/FAQPage";
 import Certificate from "pages/Certificate";
+import AddConnections from "pages/connections/AddConnections"; 
+import MyConnections from "pages/connections/MyConnections"; 
+import DomainList from "pages/search/DomainList";
 
 function App() {
   // const [t] = useTranslation();
@@ -81,6 +85,21 @@ function App() {
       moduleName: "nulp_elite",
       path: "/registration",
       component: Registration,
+    },
+    {
+      moduleName: "nulp_elite",
+      path: "/AddConnections",
+      component: AddConnections,
+    },
+    {
+      moduleName: "nulp_elite",
+      path: "/MyConnections",
+      component: MyConnections,
+    },
+    {
+      moduleName: "nulp_elite",
+      path: "/DomainList",
+      component: DomainList,
     },
     {
       moduleName: "nulp_elite",
@@ -159,8 +178,10 @@ function App() {
   // <AppShell routes={routes} AuthComponent={LoginComponent} />;
   return (
     <NativeBaseProvider>
+      {/* <ChakraProvider> */}
+      {/* <React.Suspense> */}
       {/* <I18nextProvider i18n={i18n}> */}
-      <ChakraProvider>
+      {/* <ChakraProvider> */}
         <React.Suspense>
         <Router>
           <Routes>
@@ -175,7 +196,8 @@ function App() {
           </Routes>
         </Router>
         </React.Suspense>
-      </ChakraProvider>
+      {/* </ChakraProvider> */}
+      {/* </ChakraProvider> */}
       {/* </I18nextProvider> */}
     </NativeBaseProvider>
   );
