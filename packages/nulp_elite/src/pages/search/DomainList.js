@@ -2,20 +2,14 @@
 
 import React, { useState, useEffect } from "react";
 // import { Box, Heading, Text, Button } from '@chakra-ui/react';
-import {
-  Layout,
-  IconByName,
-
-} from "@shiksha/common-lib";
+import { Layout, IconByName } from "@shiksha/common-lib";
 import {
   NativeBaseProvider,
-  
   Stack,
   VStack,
   Text,
   HStack,
   Button,
- 
   Menu,
   Image,
 } from "native-base";
@@ -31,25 +25,23 @@ import data from "../../assets/framework.json"
 import Header from "components/header";
 
 const Item = styled(Paper)(({ theme }) => ({
-  backgroundColor: theme.palette.mode === 'dark' ? '#1A2027' : '#fff',
+  backgroundColor: theme.palette.mode === "dark" ? "#1A2027" : "#fff",
   ...theme.typography.body2,
   padding: theme.spacing(1),
-  textAlign: 'center',
+  textAlign: "center",
   color: theme.palette.text.secondary,
 }));
 const theme = createTheme();
 
 theme.typography.h3 = {
-  fontSize: '0.938rem',
-  '@media (min-width:600px)': {
-    fontSize: '1.1rem',
+  fontSize: "0.938rem",
+  "@media (min-width:600px)": {
+    fontSize: "1.1rem",
   },
-  [theme.breakpoints.up('md')]: {
-    fontSize: '1.125rem',
+  [theme.breakpoints.up("md")]: {
+    fontSize: "1.125rem",
   },
 };
-
-
 
 const DomainList = () => {
   // console.log(data.result.categories.terms.category);
@@ -144,7 +136,6 @@ const DomainList = () => {
 
         // ),
       }}
-     
       _subHeader={{ bg: "rgb(248, 117, 88)" }}
       _footer={{
         menues: [

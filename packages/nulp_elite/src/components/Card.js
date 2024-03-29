@@ -1,22 +1,30 @@
 import React from "react";
-import Card from '@mui/material/Card';
-import CardActions from '@mui/material/CardActions';
-import CardContent from '@mui/material/CardContent';
-import CardMedia from '@mui/material/CardMedia';
-import Button from '@mui/material/Button';
-import Typography from '@mui/material/Typography';
-import Box from '@mui/material/Box';
+import Card from "@mui/material/Card";
+import CardActions from "@mui/material/CardActions";
+import CardContent from "@mui/material/CardContent";
+import CardMedia from "@mui/material/CardMedia";
+import Button from "@mui/material/Button";
+import Typography from "@mui/material/Typography";
+import Box from "@mui/material/Box";
 import { Divider } from "native-base";
 
 
 
 export default function BoxCard({ items }) {
-  console.log(items.appIcon)
+  // console.log(items.appIcon)
   
   return (
-    <Card sx={{ maxWidth: 345, position:'relative' }}>
+    <Card sx={{ maxWidth: 345, position: "relative" }}>
       <CardMedia
-        sx={{ margin:'8px 3px 0 9px',height: 140,borderTopLeftRadius:'10px',borderTopRightRadius:'10px',position: 'relative',background: 'linear-gradient(45deg, RGBA(28, 25, 25, 0.46) 7%, RGBA(20, 18, 18, 0.57) 45%)' }}
+        sx={{
+          margin: "8px 3px 0 9px",
+          height: 140,
+          borderTopLeftRadius: "10px",
+          borderTopRightRadius: "10px",
+          position: "relative",
+          background:
+            "linear-gradient(45deg, RGBA(28, 25, 25, 0.46) 7%, RGBA(20, 18, 18, 0.57) 45%)",
+        }}
         image={require("../assets/card-bg.png")}
         title="green iguana"
       />
@@ -45,8 +53,12 @@ export default function BoxCard({ items }) {
 
           </Box>
 
-        <Typography variant="body2" color="#5B5B5B" style={{fontSize:'11px',padding:'20px 0',textAlign:'left'}}>
-        Engineering Staff College India
+        <Typography
+          variant="body2"
+          color="#5B5B5B"
+          style={{ fontSize: "11px", padding: "20px 0", textAlign: "left" }}
+        >
+          Engineering Staff College India
         </Typography>
         <Divider></Divider>
       </CardContent>

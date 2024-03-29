@@ -1,6 +1,6 @@
 import React from "react";
 import "./App.css";
-import "./styles/style.css"
+import "./styles/style.css";
 import Sample from "pages/Sample";
 import Home from "pages/Home";
 import Courses from "pages/Courses";
@@ -21,23 +21,23 @@ import {
   ScrollView,
 } from "native-base";
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
-import { DEFAULT_THEME, H2 ,initializeI18n} from "@shiksha/common-lib";
+import { DEFAULT_THEME, H2, initializeI18n } from "@shiksha/common-lib";
 import { useTranslation, initReactI18next } from "react-i18next";
-import i18n from 'i18next';
+import i18n from "i18next";
 import Framework from "pages/Frmework";
 import User from "pages/User";
-import Registration from "pages/Registration";
+
 import UserPrefData from "pages/UserPrefData";
-// import { ChakraProvider } from "@chakra-ui/react";
+import { ChakraProvider } from "@chakra-ui/react";
 import Profile from "pages/Profile";
 import FAQPage from "pages/FAQPage";
 import Certificate from "pages/Certificate";
-import AddConnections from "pages/connections/AddConnections"; 
-import MyConnections from "pages/connections/MyConnections"; 
+import AddConnections from "pages/connections/AddConnections";
+import MyConnections from "pages/connections/MyConnections";
 import DomainList from "pages/search/DomainList";
+import Registrationnew from "pages/registration/Registration";
+import Registrationold from "pages/registration/Registrationold";
 import ContentList from "pages/search/ContentList";
-
-
 
 function App() {
   // const [t] = useTranslation();
@@ -46,9 +46,8 @@ function App() {
   // const theme = extendTheme(DEFAULT_THEME);
   const colors = "";
   const [sortArray, setSortArray] = React.useState([]);
-  
-  const routes = [
 
+  const routes = [
     {
       moduleName: "nulp_elite",
       path: "/home",
@@ -86,12 +85,7 @@ function App() {
     },
     {
       moduleName: "nulp_elite",
-      path: "/registration",
-      component: Registration,
-    },
-    {
-      moduleName: "nulp_elite",
-      path: "/connections/addConnections",
+      path: "addConnections",
       component: AddConnections,
     },
     {
@@ -134,8 +128,18 @@ function App() {
       path: "/certificate",
       component: Certificate,
     },
+    {
+      moduleName: "nulp_elite",
+      path: "/registrationnew",
+      component: Registrationnew,
+    },
+    {
+      moduleName: "nulp_elite",
+      path: "/registrationold",
+      component: Registrationold,
+    },
   ];
-   // public_url="http://localhost:5000"
+  // public_url="http://localhost:5000"
   //  public_url="https://alt.uniteframework.io"
   // initializeI18n(
   //   ["translation"],
@@ -160,16 +164,15 @@ function App() {
   //   }
   // };
   // console.log(hiTranslation)
-  
+
   // i18n.use(initReactI18next).init({
   //   resources,
   //   lng: 'en',
-  
+
   //   interpolation: {
   //     escapeValue: false
   //   }
   // });
-
 
   // return(
   //   // <Box></Box>
@@ -190,10 +193,9 @@ function App() {
       {/* <React.Suspense> */}
       {/* <I18nextProvider i18n={i18n}> */}
       {/* <ChakraProvider> */}
-        <React.Suspense>
+      <React.Suspense>
         <Router>
           <Routes>
-          
             {routes.map((route, index) => (
               <Route
                 key={index}
@@ -203,7 +205,7 @@ function App() {
             ))}
           </Routes>
         </Router>
-        </React.Suspense>
+      </React.Suspense>
       {/* </ChakraProvider> */}
       {/* </ChakraProvider> */}
       {/* </I18nextProvider> */}
