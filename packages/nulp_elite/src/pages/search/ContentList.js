@@ -19,6 +19,7 @@ import Search from "components/search";
 import Filter from "components/filter"; 
 import data from "../../assets/contentSerach.json"
 import Grid from '@mui/material/Grid';
+import Footer from "components/Footer"; 
 
 
 const ContentList = (props) => {
@@ -177,7 +178,7 @@ const ContentList = (props) => {
         {data.result.content.map((items) => (
                         // console.log(items),
 
-                <Grid item xs={12} md={6} lg={3}  style={{marginBottom:'10px'}}>
+                <Grid item xs={12} md={6} lg={4}  style={{marginBottom:'10px'}}>
                 <BoxCard items ={items}></BoxCard>
 
                 </Grid>
@@ -187,6 +188,7 @@ const ContentList = (props) => {
         </Box>
   
       </Box>
+
     </Layout>
   );
 };
