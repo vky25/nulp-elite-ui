@@ -28,7 +28,7 @@ import Container from '@mui/material/Container';
 import Box from '@mui/material/Box';
 import Search from "components/search";
 import data from "../../assets/framework.json"
-
+import Header from "components/header";
 
 const Item = styled(Paper)(({ theme }) => ({
   backgroundColor: theme.palette.mode === 'dark' ? '#1A2027' : '#fff',
@@ -171,8 +171,10 @@ const DomainList = () => {
         ],
       }}
     >
+          <Header/>
+
        <Box sx={{background:'#2D2D2D',padding:'20px'}}>
-          <p style={{fontSize:'20px',fontWeight:'700',color:'#fff',paddingBottom:'5px',margin:'0'}}>Explore content related to your domain. Learn from well curated courses and content.</p>
+          <p style={{fontSize:'20px',fontWeight:'700',color:'#fff',paddingBottom:'5px',margin:'0'}}>Explore content related to your domain.Learn from well curated courses and content.</p>
           <p style={{fontSize:'16px',fontWeight:'700',color:'#C1C1C1',margin:'0',paddingBottom:'30px'}}>Learn from well curated courses and content.</p>
           <Search></Search>
         </Box>
@@ -185,7 +187,7 @@ const DomainList = () => {
 
         <Box sx={{paddingTop:'30px'}}>
         {data.result.framework.categories.map((faqIndex) => (
-            <Grid container spacing={2} style={{margin:'20px 0'}}  key={faqIndex} style={{marginBottom:'10px'}}>
+            <Grid container spacing={2} style={{margin:'20px 0',marginBottom:'10px'}}  key={faqIndex}>
             {faqIndex.terms.map(term => (
                 <Grid item xs={12} md={6} lg={3}  style={{marginBottom:'10px'}}>
 
@@ -199,7 +201,6 @@ const DomainList = () => {
         ))}
         </Box>
     </Container>
-
     </Layout>
   );
 };
