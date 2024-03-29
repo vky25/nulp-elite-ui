@@ -5,7 +5,6 @@ import React, { useState, useEffect } from "react";
 import { Layout, IconByName } from "@shiksha/common-lib";
 import {
   NativeBaseProvider,
-  Box,
   Stack,
   VStack,
   Text,
@@ -21,6 +20,7 @@ import { styled } from "@mui/material/styles";
 import Paper from "@mui/material/Paper";
 import Container from "@mui/material/Container";
 import BoxCard from "components/Card";
+import Box from "@mui/material/Box";
 
 const Item = styled(Paper)(({ theme }) => ({
   backgroundColor: theme.palette.mode === "dark" ? "#1A2027" : "#fff",
@@ -42,6 +42,7 @@ theme.typography.h3 = {
 };
 
 const DomainList = () => {
+  // console.log(data.result.categories.terms.category);
   const [search, setSearch] = React.useState(true);
   const [searchState, setSearchState] = React.useState(false);
 
@@ -133,26 +134,6 @@ const DomainList = () => {
 
         // ),
       }}
-      // subHeader={
-      //   <Link
-      //     to="/"
-      //     style={{ color: "rgb(63, 63, 70)", textDecoration: "none" }}
-      //   >
-      //     <HStack space="4" justifyContent="space-between">
-      //       <VStack>
-      //         <SearchLayout
-      //           {...{
-      //             search,
-      //             setSearch,
-      //             // minStringLenght: 3,
-      //             notFoundMessage: "TYPE_TO_START_SEARCHING_LEARNING",
-      //             onCloseSearch: setSearchState,
-      //           }}
-      //         ></SearchLayout>
-      //       </VStack>
-      //     </HStack>
-      //   </Link>
-      // }
       _subHeader={{ bg: "rgb(248, 117, 88)" }}
       _footer={{
         menues: [
