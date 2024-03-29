@@ -118,7 +118,6 @@ export default function OTP({ swPath }) {
       console.log("verifyUserresponse:", data.result);
       signupUser(data.reqData);
       acceptTermsAndConditions();
-      // setData(data.result);
     } catch (error) {
       setError(error.message);
     } finally {
@@ -180,7 +179,7 @@ export default function OTP({ swPath }) {
     const requestBody = {
       request: {
         version: "v12",
-        identifier: email,
+        identifier: userData.email,
       },
     };
     try {
@@ -193,7 +192,7 @@ export default function OTP({ swPath }) {
       });
 
       if (!response.ok) {
-        throw new Error("Failed to verify t&co");
+        throw new Error("Failed to verify terms&condition");
       }
 
       const data = await response.json();
