@@ -27,10 +27,10 @@ import{changeLanguage} from "i18next";
 
 
 const pages = ['Content', 'Connections', 'Profile'];
-const settings = ['Profile', 'Account', 'Dashboard', 'Logout'];
+const settings = ['Profile', 'Account', 'Logout'];
 
 
-function ResponsiveAppBar( ) {
+function Header( ) {
   const [age, setAge] = React.useState('');
   const { t } = useTranslation();
 
@@ -59,7 +59,7 @@ function ResponsiveAppBar( ) {
 
   return (
 <>
-<Box className='xs-hide' style={{background:'#fff',borderBottom:'solid 1px #ccc', display:'flex', justifyContent:'flex-end',alignItems:'center'}}>
+<Box className='xs-hide' style={{background:'#fff', display:'flex', justifyContent:'flex-end',alignItems:'center'}}>
        <Box style={{padding:'10px'}}><DevicesIcon style={{padding:'0 10px',verticalAlign:'middle',color:'#424242' }}/><Link href="#" underline="none" style={{color:'#424242',fontSize:'16px', borderRight:'solid 1px #424242',paddingRight:'10px'}}>Main Content  </Link></Box>  
         <Box style={{padding:'0 10px',color:'#424242',fontSize:'16px', borderRight:'solid 1px #424242'}}><Link href="#" underline="none" style={{color:'#424242',fontSize:'16px',paddingRight:'10px'}}> +A</Link> <Link href="#" underline="none" style={{color:'#424242',fontSize:'16px',paddingRight:'10px'}}>A - </Link><Link href="#" underline="none" style={{color:'#424242',fontSize:'16px',paddingRight:'10px'}}>A</Link> </Box>
         <Box style={{padding:'0 10px',color:'#424242',fontSize:'14px', borderRight:'solid 1px #424242'}}><WebIcon style={{padding:'0 10px',verticalAlign:'middle'}}/><Link href="#" underline="none" style={{color:'#424242',fontSize:'16px'}}>Screen Reader </Link></Box>
@@ -116,7 +116,7 @@ function ResponsiveAppBar( ) {
         <img src={require("../assets/logo.png")} style={{maxWidth:'100%'}} />
         </Box>
        
-          <Box sx={{ flexGrow: 3, display: { xs: 'flex', md: 'none' } }}>
+          <Box sx={{ flexGrow: 2, display: { xs: 'flex', md: 'none' } }}>
             
             <Menu
               id="menu-appbar"
@@ -144,7 +144,35 @@ function ResponsiveAppBar( ) {
                 </MenuItem>
               ))}
             </Menu>
+            
           </Box>
+          <InputLabel className='lg-hide' id="language-select-label"> {t("LANGUAGE")}</InputLabel>
+
+          <Select
+        labelId="language-select-label"
+        id="language-select"
+        className='language lg-hide'
+        style={{border:'none'}}
+        startIcon={<LanguageIcon />}
+        trigger={(triggerProps) => {
+          return (
+            <Button
+              alignSelf="center"
+              variant="solid"
+              {...triggerProps}
+            >
+              {t("LANGUAGE")}
+            </Button>
+          );
+          // }}>
+        }}
+      >
+        {/* <MenuItem value="">
+          <em>None</em>
+        </MenuItem> */}
+        <MenuItem onPress={(item) => changeLanguage('en')} value="English">{t("ENGLISH")}</MenuItem>
+        <MenuItem onPress={(item) => changeLanguage('hi')} value="Hindi">{t("HINDI")}</MenuItem>
+      </Select>
           <Box className="xs-hide" style={{ display: 'flex', alignItems: 'center',flexGrow: 3, paddingLeft:'40px' }}>
       <TextField
         placeholder="Search"
@@ -202,4 +230,4 @@ function ResponsiveAppBar( ) {
     </>
   );
 }
-export default ResponsiveAppBar;
+export default Header;
