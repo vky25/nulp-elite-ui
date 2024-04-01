@@ -50,12 +50,15 @@ body{
   font-size:12px;
   padding-top: 5px;
  }
+ .css-1fd8bcr{
+  width: 73% !important;
+ }
  .MuiBottomNavigation-root{
   justify-content: space-around !important;
  }
  .navigateActive{
   background: #004367 !important;
-  margin: -5px -51px -12px !important;
+  margin: -10px 0 !important;
  }
  .navigateActive svg, .navigateActive span{
   color:#fff !important;
@@ -75,4 +78,31 @@ body{
   .xs-hide{
     display: none !important;
   }
+  #menu-appbar .css-3dzjca-MuiPaper-root-MuiPopover-paper-MuiMenu-paper{
+    width: 300px;
+    height: 363px;
+    left: 0 !important;
+    max-height: inherit !important;
+    top: 0 !important;
  }
+ }
+ @media(min-width:769px) {
+  .lg-hide{
+    display: none !important;
+  }
+ }
+
+ .language fieldset{
+  border: none !important;
+ }
+ header{
+  box-shadow: none !important;
+ }
+/* mobile menu */
+ 
+ .container-pb{
+  padding-bottom: 50px !important;
+ }
+ .footer a{
+    border-bottom: solid 1px #fff;
+  }
