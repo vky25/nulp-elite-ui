@@ -19,4 +19,53 @@ if [ ! -d "../dist" ]; then
     mkdir ../dist
 fi
 cp -r prod-build/* ../dist/
-find ../dist -type f -name 'index.html' -exec bash -c 'mv "$1" "${1%.html}.ejs"' _ {} \;
+find ../dist -type f -name 'index.html' -exec bash -c 'mv "$1" "${1%.html}.ejs" && sed -i "/<body>/s|<body>|&\
+  <input type=\"hidden\" id=\"userId\" value=\"<%=userId%>\" />\
+  <input type=\"hidden\" id=\"userSid\" value=\"<%=userSid%>\" />\
+  <input type=\"hidden\" id=\"sessionId\" value=\"<%=sessionId%>\" />\
+  <input type=\"hidden\" id=\"appId\" value=\"<%=appId%>\" />\
+  <input type=\"hidden\" id=\"cloudStorageUrls\" value=\"<%=cloudStorageUrls%>\" />\
+  <input type=\"hidden\" id=\"publicStorageAccount\" value=\"<%=publicStorageAccount%>\" />\
+  <input type=\"hidden\" id=\"defaultTenant\" value=\"<%=defaultTenant%>\" />\
+  <input type=\"hidden\" id=\"exploreButtonVisibility\" value=\"<%=exploreButtonVisibility%>\" />\
+  <input type=\"hidden\" id=\"helpLinkVisibility\" value=\"<%=helpLinkVisibility%>\" />\
+  <input type=\"hidden\" id=\"apiCacheTtl\" value=\"<%=apiCacheTtl%>\" />\
+  <input type=\"hidden\" id=\"userUploadRefLink\" value=\"<%=userUploadRefLink%>\" />\
+  <input type=\"hidden\" id=\"defaultTenantIndexStatus\" value=\"<%=defaultTenantIndexStatus%>\" />\
+  <input type=\"hidden\" id=\"buildNumber\" value=\"<%=buildNumber%>\" />\
+  <input type=\"hidden\" id=\"extContWhitelistedDomains\" value=\"<%=extContWhitelistedDomains%>\" />\
+  <input type=\"hidden\" id=\"deviceRegisterApi\" value=\"<%=deviceRegisterApi%>\" />\
+  <input type=\"hidden\" id=\"deviceProfileApi\" value=\"<%=deviceProfileApi%>\" />\
+  <input type=\"hidden\" id=\"cdnUrl\" value=\"<%=cdnUrl%>\" />\
+  <input type=\"hidden\" id=\"theme\" value=\"<%=theme%>\" />\
+  <input type=\"hidden\" id=\"defaultPortalLanguage\" value=\"<%=defaultPortalLanguage%>\" />\
+  <input type=\"hidden\" id=\"instance\" value=\"<%=instance%>\" />\
+  <input type=\"hidden\" id=\"deviceId\" value=\"<%=deviceId%>\" />\
+  <input type=\"hidden\" id=\"googleCaptchaSiteKey\" value=\"<%=googleCaptchaSiteKey%>\" />\
+  <input type=\"hidden\" id=\"videoMaxSize\" value=\"<%=videoMaxSize%>\" />\
+  <input type=\"hidden\" id=\"sunbirdDefaultFileSize\" value=\"<%=sunbirdDefaultFileSize%>\" />\
+  <input type=\"hidden\" id=\"reportsLocation\" value=\"<%=reportsLocation%>\" />\
+  <input type=\"hidden\" id=\"previewCdnUrl\" value=\"<%=previewCdnUrl%>\" />\
+  <input type=\"hidden\" id=\"cdnWorking\" value=\"<%=cdnWorking%>\" />\
+  <input type=\"hidden\" id=\"offlineDesktopAppTenant\" value=\"<%=offlineDesktopAppTenant%>\" />\
+  <input type=\"hidden\" id=\"offlineDesktopAppVersion\" value=\"<%=offlineDesktopAppVersion%>\" />\
+  <input type=\"hidden\" id=\"offlineDesktopAppReleaseDate\" value=\"<%=offlineDesktopAppReleaseDate%>\" />\
+  <input type=\"hidden\" id=\"offlineDesktopAppSupportedLanguage\" value=\"<%=offlineDesktopAppSupportedLanguage%>\" />\
+  <input type=\"hidden\" id=\"offlineDesktopAppDownloadUrl\" value=\"<%=offlineDesktopAppDownloadUrl%>\" />\
+  <input type=\"hidden\" id=\"logFingerprintDetails\" value=\"<%=logFingerprintDetails%>\" />\
+  <input type=\"hidden\" id=\"deviceApi\" value=\"<%=deviceApi%>\" />\
+  <input type=\"hidden\" id=\"slugForProminentFilter\" value=\"<%=slugForProminentFilter%>\" />\
+  <input type=\"hidden\" id=\"collectionEditorURL\" value=\"<%=collectionEditorURL%>\" />\
+  <input type=\"hidden\" id=\"contentEditorURL\" value=\"<%=contentEditorURL%>\" />\
+  <input type=\"hidden\" id=\"genericEditorURL\" value=\"<%=genericEditorURL%>\" />\
+  <input type=\"hidden\" id=\"isBotConfigured\" value=\"<%=botConfigured%>\" />\
+  <input type=\"hidden\" id=\"botServiceURL\" value=\"<%=botServiceURL%>\" />\
+  <input type=\"hidden\" id=\"superAdminSlug\" value=\"<%=superAdminSlug%>\" />\
+  <input type=\"hidden\" id=\"enableSSO\" value=\"<%=enableSSO%>\" />\
+  <input type=\"hidden\" id=\"reportsListVersion\" value=\"<%=reportsListVersion%>\" />\
+  <input type=\"hidden\" id=\"baseUrl\" value=\"<%=baseUrl%>\" />\
+  <input type=\"hidden\" id=\"blobUrl\" value=\"<%=blobUrl%>\" />\
+  <input type=\"hidden\" id=\"sunbirdQuestionSetChildrenLimit\" value=\"<%=sunbirdQuestionSetChildrenLimit%>\" />\
+  <input type=\"hidden\" id=\"sunbirdCollectionChildrenLimit\" value=\"<%=sunbirdCollectionChildrenLimit%>\" />\
+  <input type=\"hidden\" id=\"uciBotPhoneNumber\" value=\"<%=uciBotPhoneNumber%>\" />\
+  |" "${1%.html}.ejs"' _ {} \;
