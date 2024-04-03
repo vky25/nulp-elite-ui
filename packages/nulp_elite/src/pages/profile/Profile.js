@@ -51,19 +51,23 @@ const Profile = () => {
                      <Typography component="div" variant="h5" style={{color:'#004367', fontSize:'16px',fontWeight:'600'}}>
                      {data.result.response.firstName} {data.result.response.lastName}
                     </Typography>
+                    <Typography variant="subtitle1"  color="text.secondary" component="div" style={{ fontSize:'12px',padding:'10px 0',display:'flex'}}>
+                       Designation   |   <Box style={{paddingLeft:'10px'}}> ID: </Box> {data.result.response.organisations.orgName}
+                    </Typography>
+                    <Typography variant="subtitle1"  color="text.secondary" component="div" style={{ fontSize:'12px'}}>
+                    A manager with the department of Revenue and taxes and has actively contributed to the growth and authenticity of the knowledge curated for the betterment of the department.                    </Typography>
  
-                    <Typography variant="subtitle1"  color="text.secondary" component="div" style={{ fontSize:'14px',padding:'10px 0',display:'flex'}}>
+                    {/* <Typography variant="subtitle1"  color="text.secondary" component="div" style={{ fontSize:'14px',padding:'10px 0',display:'flex'}}>
                     {data.result.response.roles.map((role) => (
                        <Chip label={role.role} color="primary" variant="outlined" style={{marginRight:'10px'}} />
                     //  <Box> {role.role} </Box>
                       ))} 
 
-                    </Typography>
-                      <Typography variant="subtitle1"  color="text.secondary" component="div" style={{ fontSize:'14px',padding:'10px 0',display:'flex'}}>
+                    </Typography> */}
+                      {/* <Typography variant="subtitle1"  color="text.secondary" component="div" style={{ fontSize:'14px',padding:'10px 0',display:'flex'}}>
                         <Box style={{fontWeight:'600',paddingRight:'10px'}}> ID: </Box> {data.result.response.organisations.orgName}
                     </Typography>
 
-                    {/* Access profile details from the role object */}
                     <Typography variant="subtitle1" color="text.secondary" component="div" style={{ fontSize:'14px',padding:'10px 0',display:'flex'}}>
                     <Box style={{fontWeight:'600',paddingRight:'10px'}}>Categories:   </Box> {data.result.response.framework.board}
                     </Typography>
@@ -84,7 +88,7 @@ const Profile = () => {
             }}
           >
             Edit
-          </Button>
+          </Button> */}
                   </CardContent>
 
                   
