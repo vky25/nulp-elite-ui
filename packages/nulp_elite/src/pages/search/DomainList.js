@@ -128,7 +128,7 @@ const DomainList = () => {
    </ThemeProvider> 
    <Box sx={{paddingTop:'30px'}}>
             {data && data.framework && data.framework.categories && data.framework.categories.map((faqIndex) => (
-            // {frameworkHardCodedData.result.framework.categories.map((faqIndex) => (
+            //  {frameworkHardCodedData.result.framework.categories.map((faqIndex) => (
                 <Grid container spacing={2} style={{margin:'20px 0',marginBottom:'10px'}}  key={faqIndex}>
                 {faqIndex.terms.map(term => (
                     <Grid item xs={12} md={6} lg={3}  style={{marginBottom:'10px'}}>

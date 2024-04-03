@@ -58,5 +58,16 @@
   "ENGLISH":"English",
   "HINDI":"Hindi",
   "WELCOME_TEXT": "Welcome to Our Learning Portal Content",
-  "EXPLORE_COURSES":" Explore Courses"
+  "EXPLORE_COURSES":" Explore Courses",
+  "CERTIFICATES":"Certificates",
+  "MY_PROFILE":"My Profile",
+  "CERTIFICATE_GIVEN_BY":" Certificate given by",
+  "CERTIFICATE_ISSUE_DATE":" Certificate Issue Date",
+  "ABOUT_ME":"About Me",
+  "CONTINUE_LEARNNG":"Continue Learning",
+  "DOWNLOAD_CERTIFICATES":" Download Certificates",
+  "LEARNING_TIME":"Learning Time",
+  "COURSES":"Courses",
+  "WEBINARS":"Webinars",
+  "PERFORMANCE":"Performance"
 }

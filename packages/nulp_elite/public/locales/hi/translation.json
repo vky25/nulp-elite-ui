@@ -8,5 +8,9 @@
   "ENGLISH":"अंग्रेज़ी",
   "HINDI":"हिंदी",
   "WELCOME_TEXT": "हमारे लर्निंग पोर्टल सामग्री में आपका स्वागत है",
-  "EXPLORE_COURSES":"पाठ्यक्रम खोजें"
+  "EXPLORE_COURSES":"पाठ्यक्रम खोजें",
+  "CERTIFICATES":"प्रमाण पत्र",
+  "MY_PROFILE":"मेरी प्रोफाइल",
+  "CERTIFICATE_GIVEN_BY":" द्वारा प्रमाण पत्र दिया गया",
+  "CERTIFICATE_ISSUE_DATE":"प्रमाणपत्र जारी करने की तिथि"
 }
