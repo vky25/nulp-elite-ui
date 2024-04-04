@@ -10,10 +10,10 @@ import Search from "components/search";
 import Filter from "components/filter";
 // import data from "../../assets/contentSerach.json";
 import Grid from "@mui/material/Grid";
-import Footer from "components/Footer";
 import { getAllContents } from "services/contentService";
 import Header from "components/header";
-
+import Footer from "components/Footer";
+import Link from "@mui/material/Link";
 const AllContent = (props) => {
   const [data, setData] = useState([]);
   const [error, setError] = useState(null);
@@ -21,7 +21,7 @@ const AllContent = (props) => {
   const [searchState, setSearchState] = React.useState(false);
   const [expandedCategory, setExpandedCategory] = useState(null);
   const [expandedItems, setExpandedItems] = useState([]);
-  //   let [prevCategory, setPrevCategory] = useState(null);
+  const [newCategory, setNewCategory] = useState([]);
   let prevCategory = null;
   // Logic to get content list
   useEffect(() => {
@@ -125,7 +125,15 @@ const AllContent = (props) => {
       setError(error.message);
     }
   };
-  const fetchMoreItems = (category) => {
+  // Group items by category
+  const groupedData = data.reduce((acc, item) => {
+    if (!acc[item.primaryCategory]) {
+      acc[item.primaryCategory] = [];
+    }
+    acc[item.primaryCategory].push(item);
+    return acc;
+  }, {});
+  const fetchMoreItems = async (category) => {
     setError(null);
     // Filters for API
     let data = JSON.stringify({
@@ -168,8 +176,8 @@ const AllContent = (props) => {
     const url = `http://localhost:3000/api/content/v1/search?orgdetails=orgName,email`;
     try {
       const response = await getAllContents(url, data, headers);
-      console.log("00000000", response.data.result.content);
-
+      console.log("moreData", response.data.result.content);
+      setNewCategory(category);
       setData(response.data.result.content);
     } catch (error) {
       console.log("error---", error);
@@ -177,64 +185,56 @@ const AllContent = (props) => {
       setError(error.message);
     }
   };
-
+  const handleViewAllClick = (category) => {
+    setExpandedCategory(category);
+    fetchMoreItems(category);
+  };
   return (
-    <div>
-    <Header/>
-    <Box textAlign="center" padding="10">
-      <Box sx={{ paddingTop: "30px" }}>
-        <Grid container spacing={2} style={{ margin: "20px 0" }}>
-          {data?.map((items) => {
-            const currentCategory = items.primaryCategory;
-            const printCategory = currentCategory !== prevCategory; // Check if current category is different from previous one
-            prevCategory = currentCategory; // Update the previous category
-            console.log(currentCategory, printCategory);
-            // Group items by category
-            const groupedData = data.reduce((acc, item) => {
-              if (!acc[item.primaryCategory]) {
-                acc[item.primaryCategory] = [];
-              }
-              acc[item.primaryCategory].push(item);
-              return acc;
-            }, {});
+    <>
+      <Header />
+      {Object.entries(groupedData).map(([category, items]) => (
+        <React.Fragment key={category}>
+          <p>{category || newCategory}</p>
 
-            return (
-              <>
-                {Object.entries(groupedData).map(([category, items]) => (
-                  <React.Fragment key={category}>
-                    <p>{category}</p>
-                    {items.length > 10 && (
-                      <Button
-                        variant="outlined"
-                        style={{ marginLeft: "870px" }}
-                      >
-                        View All
-                      </Button>
-                    )}
-                    <Grid container spacing={2}>
-                      {items.slice(0, 10).map((item) => (
-                        <Grid
-                          item
-                          xs={12}
-                          md={6}
-                          lg={4}
-                          key={item.id} // Assuming items have a unique id
-                          style={{ marginBottom: "10px" }}
-                        >
-                          <BoxCard items={item}></BoxCard>
-                        </Grid>
-                      ))}
-                    </Grid>
-                  </React.Fragment>
+          {items?.length > 10 && (
+            <Link
+              href="#"
+              underline="none"
+              onClick={() => handleViewAllClick(category)}
+              style={{ color: "#424242", fontSize: "16px" }}
+            >
+              View All{" "}
+            </Link>
+          )}
+
+          <Grid container spacing={2}>
+            {expandedCategory === category
+              ? expandedItems.map((item) => (
+                  <Grid
+                    item
+                    xs={12}
+                    md={6}
+                    lg={4}
+                    style={{ marginBottom: "10px" }}
+                  >
+                    <BoxCard items={item}></BoxCard>
+                  </Grid>
+                ))
+              : items.slice(0, 10).map((item) => (
+                  <Grid
+                    item
+                    xs={12}
+                    md={6}
+                    lg={4}
+                    style={{ marginBottom: "10px" }}
+                  >
+                    <BoxCard items={item}></BoxCard>
+                  </Grid>
                 ))}
-              </>
-            );
-          })}
-        </Grid>
-      </Box>
-    </Box>
-    </Footer>
-    </div>
+          </Grid>
+        </React.Fragment>
+      ))}
+    </>
   );
 };
 
