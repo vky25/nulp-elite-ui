@@ -152,6 +152,7 @@ const ContentList = (props) => {
 
       <Container maxWidth="xxl" role="main" className="container-pb">
         <Box style={{ margin: "20px 0" }}>
+           <domainCarousel></domainCarousel>
           <Filter
             options={gradeLevels}
             label="Filter by Grade Level"
