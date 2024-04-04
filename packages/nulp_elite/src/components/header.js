@@ -27,7 +27,7 @@ import{changeLanguage} from "i18next";
 
 
 const pages = ['Content', 'Connections', 'Profile'];
-const settings = ['Profile', 'Account', 'Logout'];
+const settings = ['Profile', 'Help', 'Logout'];
 
 
 function Header( ) {

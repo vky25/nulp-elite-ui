@@ -102,6 +102,7 @@ const ContentList = (props) => {
       </Box>
 
       <Container maxWidth="xxl" role="main" className="container-pb">
+        <domainCarousel></domainCarousel>
         <Box style={{margin:'20px 0'}}>
           <Filter/>
         </Box>

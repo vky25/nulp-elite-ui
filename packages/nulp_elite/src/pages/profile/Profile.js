@@ -38,6 +38,7 @@ const Profile = () => {
 
       <Box textAlign="center" padding="10">
       <Card sx={{marginTop:'10px', padding:'10px',boxShadow: '0px 4px 4px 0px #00000040' }}>
+
               <Box sx={{ display: 'flex', flexDirection: 'row', justifyContent:'space-between' }}>
                 <Box style={{display:'flex',alignItems:'center'}}><PersonIcon style={{paddingRight:'10px',fontSize:'28px'}}/>{t("ABOUT_ME")} </Box>
                 <ModeEditIcon/>

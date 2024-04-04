@@ -39,6 +39,7 @@ import DomainList from "pages/search/DomainList";
 import Registrationnew from "pages/registration/Registration";
 import Registrationold from "pages/registration/Registrationold";
 import ContentList from "pages/search/ContentList";
+import LearningHistory from "pages/profile/learningHistory";
 
 function App() {
   // const [t] = useTranslation();
@@ -78,6 +79,11 @@ function App() {
       moduleName: "nulp_elite",
       path: "profile/certificate",
       component: Certificate,
+    },
+    {
+      moduleName: "nulp_elite",
+      path: "profile/learningHistory",
+      component: LearningHistory,
     },
     {
       moduleName: "nulp_elite",
