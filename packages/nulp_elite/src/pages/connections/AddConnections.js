@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { Layout, IconByName } from "@shiksha/common-lib";
-import { Box, VStack, HStack, Menu } from "native-base";
+import { VStack, HStack, Menu } from "native-base";
 import Tab from "@mui/material/Tab";
 import TabContext from "@material-ui/lab/TabContext";
 import TabList from "@material-ui/lab/TabList";
@@ -17,7 +17,8 @@ import Link from "@mui/material/Link";
 import Autocomplete from "@mui/material/Autocomplete";
 import TextField from "@mui/material/TextField";
 import Divider from "@mui/material/Divider";
-
+import Box from "@mui/material/Box";
+import Typography from "@mui/material/Typography";
 import Search from "components/search";
 
 // Define modal styles
@@ -54,6 +55,21 @@ const AddConnections = () => {
   const handleClose = () => setOpen(false);
   const [showChat, setShowChat] = useState(false);
   const [buttonText, setButtonText] = useState("Start Chat");
+  const [currentPage, setCurrentPage] = useState(1);
+  const [pageSize, setPageSize] = useState(10);
+  const [activeTab, setActiveTab] = useState("Tab1");
+  const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState(null);
+  const [selectedUser, setSelectedUser] = useState("");
+  const [openModal, setOpenModal] = useState(false);
+  // const [userData, setUserData] = useState([]);
+  const [userdata, setUserData] = useState([]);
+  const [searchQuery, setSearchQuery] = useState("");
+  const [textValue, setTextValue] = useState(
+    "Hello ..., I would like to connect with you regarding some queries i had in your course."
+  );
+  const [showModal, setShowModal] = useState(false);
+  const [modalMessage, setModalMessage] = useState("");
 
   const toggleChat = () => {
     setShowChat(!showChat);
@@ -64,6 +80,207 @@ const AddConnections = () => {
     event.preventDefault();
     console.info("You clicked a breadcrumb.");
   }
+
+  const handleTabClick = (tab) => {
+    setActiveTab(tab);
+  };
+
+  const handlePageChange = (page) => {
+    setCurrentPage(page);
+    // onNewAdd();
+  };
+
+  const totalPages = Math.ceil(userdata.length / pageSize);
+  const pagination = [];
+
+  for (let i = 1; i <= totalPages; i++) {
+    pagination.push(
+      <button
+        key={i}
+        onClick={() => handlePageChange(i)}
+        className={currentPage === i ? "active" : ""}
+      >
+        {i}
+      </button>
+    );
+  }
+
+  const startIndex = (currentPage - 1) * pageSize;
+  const userData = userdata.slice(startIndex, startIndex + pageSize);
+
+  const handleOpenModal = (user) => {
+    setSelectedUser(user);
+    setOpenModal(true);
+  };
+
+  const handleCloseModal = () => {
+    setOpenModal(false);
+  };
+
+  const handleSearch = async () => {
+    setIsLoading(true);
+    setError(null);
+    setUserData([]);
+
+    const url = `http://localhost:3000/learner/user/v3/search`;
+    const requestBody = {
+      request: {
+        filters: {
+          status: "1",
+          rootOrgId: "0130701891041689600",
+        },
+        query: searchQuery,
+        pageNumber: currentPage,
+        pageSize: pageSize,
+      },
+    };
+
+    try {
+      const response = await fetch(url, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(requestBody),
+      });
+
+      if (!response.ok) {
+        throw new Error("Failed to search data");
+      }
+
+      const responseData = await response.json();
+      setUserData(responseData.result.response.content);
+      console.log("responseSearchData", responseData);
+    } catch (error) {
+      console.log("error", error);
+      setError(error.message);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+  const handleUserClick = (selectedUser) => {
+    setSelectedUser(selectedUser);
+  };
+  const handleTextareaChange = (event) => {
+    setTextValue(event.target.value);
+  };
+
+  // const sendChat = async () => {
+  //   setIsLoading(true);
+  //   setError(null);
+
+  //   const url = `http://localhost:3000/directConnect/send-chat`;
+  //   const requestBody = {
+  //     sender_id: "20431439-c03e-4e3d-af30-e0fe38768cde",
+  //     receiver_id: "be926164-37e8-4bf0-b2c2-6ed22ea311bc",
+  //     message: "Hello Mahesh",
+  //     sender_email: "snehal.sabade@tekditechnologies.com",
+  //     receiver_email: "reshma.mahadik@tekditechnologies.com",
+  //   };
+
+  //   try {
+  //     const response = await fetch(url, {
+  //       method: "POST",
+  //       headers: {
+  //         "Content-Type": "application/json",
+  //       },
+  //       body: JSON.stringify(requestBody),
+  //     });
+
+  //     if (!response.ok) {
+  //       throw new Error("Failed to send chat");
+  //     }
+
+  //     console.log("sentChatRequestToUser", response);
+  //     if (responseData.statusText === "OK" && responseData.status == 200) {
+  //       // setShowModal(true);
+  //       alert("Chat sent successfully"); // Set modal message
+  //       handleClose(true); // Close modal after some time if needed
+  //     }
+  //   } catch (error) {
+  //     setError(error.message);
+  //   } finally {
+  //     setIsLoading(false);
+  //   }
+  // };
+
+  const sendChat = async () => {
+    setIsLoading(true);
+    setError(null);
+
+    const url = `http://localhost:3000/directConnect/send-chat`;
+    const requestBody = {
+      sender_id: "20431439-c03e-4e3d-af30-e0fe38768cde",
+      receiver_id: "be926164-37e8-4bf0-b2c2-6ed22ea311bc",
+      message: "Hello reshma ",
+      sender_email: "snehal.sabade@tekditechnologies.com",
+      receiver_email: "reshma.mahadik@tekditechnologies.com",
+    };
+
+    try {
+      const response = await fetch(url, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(requestBody),
+      });
+
+      if (!response.ok) {
+        throw new Error("Failed to send chat");
+      }
+      setOpen(false);
+      // setShowModal(true);
+    } catch (error) {
+      setError(error.message);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  const handleSendClick = () => {
+    sendChat(); // Call sendChat function to send the chat message
+    toggleChat(); // Toggle chat display
+  };
+
+  const getChat = async () => {
+    setIsLoading(true);
+    setError(null);
+    // setData([]);
+
+    const params = new URLSearchParams({
+      sender_id: "20431439-c03e-4e3d-af30-e0fe38768cde",
+      receiver_id: "be926164-37e8-4bf0-b2c2-6ed22ea311bc",
+      is_accepted: false,
+    });
+
+    const url = `http://localhost:3000/directConnect/get-chats?${params.toString()}`;
+
+    try {
+      const response = await fetch(url, {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
+
+      if (!response.ok) {
+        throw new Error("Failed to get chat");
+      }
+
+      const responseData = await response.json();
+      // SetIsViewChatModalOpen(false);
+      console.log("get-chats", responseData);
+      // setData(responseData.result.response.content);
+    } catch (error) {
+      setError(error.message);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  const onMyConnection = () => {};
+
   return (
     <Layout
       isDisabledAppBar={true}
@@ -188,7 +405,7 @@ const AddConnections = () => {
           {
             title: "Connections",
             icon: "TeamLineIcon",
-            route: "/home",
+            route: "/addConnections",
           },
           {
             title: "Profie",
@@ -237,15 +454,26 @@ const AddConnections = () => {
                   label="My Connections"
                   value="1"
                   style={{ fontSize: "12px", color: "#484848" }}
+                  onClick={() => {
+                    handleTabClick("Tab1");
+                    setCurrentPage(1);
+                    onMyConnection();
+                  }}
                 />
                 <Tab
                   label="Add New"
                   value="2"
                   style={{ fontSize: "12px", color: "#484848" }}
+                  onClick={() => {
+                    handleTabClick("Tab2");
+                    setCurrentPage(1);
+                    // onNewAdd();
+                    handleSearch();
+                  }}
                 />
               </TabList>
             </Box>
-            <TabPanel value="1" style={{ padding: "0" }}>
+            {/* <TabPanel value="1" style={{ padding: "0" }}>
               <List sx={{}}>
                 <ListItem>
                   <ListItemText primary="KomalMane" secondary="Designation" />
@@ -267,34 +495,51 @@ const AddConnections = () => {
                   />
                 </ListItem>
               </List>
-            </TabPanel>
+              <TriggerButton type="button" onClick={handleOpen}>
+                  Open chat
+                </TriggerButton>
+            </TabPanel> */}
+            <List>
+              {/* {userData.map((user, index) => (
+                <React.Fragment key={index}>
+                  <ListItem button onClick={() => handleOpenModal(user)}>
+                    <ListItemText
+                      primary={user.name}
+                      secondary={user.designation}
+                    />
+                  </ListItem>
+                  <Divider />
+                </React.Fragment>
+              ))} */}
+            </List>
+
             <TabPanel value="2">
-              <Autocomplete
+              {/* <Autocomplete
                 disablePortal
                 id="combo-box-demo"
                 sx={{ width: "100%", background: "#fff" }}
                 renderInput={(params) => (
                   <TextField {...params} label="Filter by Designation" />
                 )}
-              />
-              <List>
-                <ListItem>
-                  <ListItemText primary="Snehal patl" secondary="Designation" />
-                </ListItem>
-                <Divider />
+              /> */}
+              {!isLoading && !error && (
+                <div className="button" onClick={handleOpen}>
+                  {userData.map((item) => (
+                    <div key={item.id} onClick={() => handleUserClick(item)}>
+                      <Box
+                        sx={{ border: "1px solid", borderRadius: "lg", p: 4 }}
+                      >
+                        <Typography variant="body2" fontSize="small">
+                          Name Surname: {item.firstName} {item.lastName}
+                        </Typography>
+                        <Typography variant="body2">Designation: </Typography>
+                      </Box>
+                    </div>
+                  ))}
+                  {/* <div className="pagination">{pagination}</div> */}
+                </div>
+              )}
 
-                <ListItem>
-                  <ListItemText primary="Reshma M" secondary="Learner" />
-                </ListItem>
-                <Divider />
-
-                <ListItem>
-                  <ListItemText primary="Mahesh M" secondary="Commissioner" />
-                </ListItem>
-                <TriggerButton type="button" onClick={handleOpen}>
-                  Open chat
-                </TriggerButton>
-              </List>
               <div>
                 <Modal
                   aria-labelledby="modal-title"
@@ -317,19 +562,29 @@ const AddConnections = () => {
                         paddingTop: "10px",
                         paddingRight: "10px",
                         paddingLeft: "10px",
-                        paddingRight: "10px",
+                        paddingBottom: "10px", // Changed to paddingBottom to avoid duplication
                         backgroundColor: "#004367",
                         color: "white",
-                        borderRadius: "md",
+                        borderRadius: "4px", // Changed to "4px" from "md" for borderRadius
                       }}
                     >
-                      <div style={{ fontSize: "14px", lineHeight: "1.6" }}>
-                        Manisha Kapdanis
-                      </div>
-                      <div style={{ fontSize: "12px", paddingBottom: "10px" }}>
-                        Designation
-                      </div>
+                      {selectedUser && (
+                        <div style={{ fontSize: "14px", lineHeight: "1.6" }}>
+                          {/* Use selectedUser instead of item */}
+                          Name Surname: {selectedUser?.firstName}
+                          {selectedUser?.lastName}
+                        </div>
+                      )}
+                      {/* Designation should be inside the conditional rendering block */}
+                      {selectedUser && (
+                        <div
+                          style={{ fontSize: "12px", paddingBottom: "10px" }}
+                        >
+                          Designation:
+                        </div>
+                      )}
                     </h2>
+
                     {!showChat && (
                       <p
                         style={{
@@ -347,10 +602,12 @@ const AddConnections = () => {
                             paddingBottom: "15px",
                           }}
                         >
-                          Name Surname is a manager with the department of
-                          Revenue and taxes and has actively contributed to the
-                          growth and authenticity of the knowledge curated for
-                          the betterment of the department.
+                          Name Surname: {selectedUser.firstName}{" "}
+                          {selectedUser.lastName} is a manager with the
+                          department of Revenue and taxes and has actively
+                          contributed to the growth and authenticity of the
+                          knowledge curated for the betterment of the
+                          department.
                         </Box>
                         <Box>
                           Connect with them to get insights on what they do or
@@ -361,17 +618,14 @@ const AddConnections = () => {
                     {showChat && (
                       <div>
                         {/* Your chat UI components go here */}
-                        <p
-                          style={{
-                            fontSize: "12px",
-                            paddingLeft: "10px",
-                            paddingRight: "10px",
-                            color: "#484848",
-                          }}
-                        >
-                          Hello Manisha K, I would like to connect with you
-                          regarding some queries i had in your course.
-                        </p>
+                        <TextField
+                          multiline
+                          rows={4} // You can adjust the number of rows as needed
+                          value={textValue}
+                          onChange={handleTextareaChange}
+                          placeholder="Enter your text here..."
+                          fullWidth
+                        />
                       </div>
                     )}
                     <Box
@@ -394,13 +648,13 @@ const AddConnections = () => {
                             fontSize: "12px",
                             border: "solid 1px #004367",
                           }}
+                          onClick={handleClose}
                         >
                           Cancel
                         </Button>
                       </Box>
                       <Box style={{ width: "50%" }}>
                         <Button
-                          onClick={toggleChat}
                           style={{
                             background: "#004367",
                             borderRadius: "10px",
@@ -410,6 +664,7 @@ const AddConnections = () => {
                             fontWeight: "500",
                             fontSize: "12px",
                           }}
+                          onClick={showChat ? handleSendClick : toggleChat} // Call handleSendClick or toggleChat based on showChat state
                         >
                           {buttonText}
                         </Button>
@@ -528,7 +783,7 @@ const TriggerButton = styled(Button)(
     border-radius: 8px;
     transition: all 150ms ease;
     cursor: pointer;
-    
+
     }
   `
 );

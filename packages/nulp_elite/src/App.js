@@ -85,7 +85,7 @@ function App() {
     },
     {
       moduleName: "nulp_elite",
-      path: "addConnections",
+      path: "/addConnections",
       component: AddConnections,
     },
     {

@@ -3,7 +3,7 @@ import axios from "axios";
 import { contentService } from "@shiksha/common-lib";
 import URLSConfig from "../configs/urlConfig.json";
 import { useTranslation } from "react-i18next";
-import{changeLanguage} from "i18next";
+import { changeLanguage } from "i18next";
 import { frameworkService } from "@shiksha/common-lib";
 
 import {
@@ -30,10 +30,10 @@ import {
   Image,
 } from "native-base";
 
-import { Link, useParams,useNavigate } from "react-router-dom";
+import { Link, useParams, useNavigate } from "react-router-dom";
 
 const Contents = () => {
-   const { t } = useTranslation();
+  const { t } = useTranslation();
   const [search, setSearch] = React.useState(true);
   const [searchState, setSearchState] = React.useState(false);
   // const theme = extendTheme(DEFAULT_THEME);
@@ -46,8 +46,8 @@ const Contents = () => {
   const [error, setError] = useState(null);
   const navigate = useNavigate();
 
-  // Example of API Call   
-  useEffect(() => {  
+  // Example of API Call
+  useEffect(() => {
     fetchDataFramework();
     fetchData();
   }, [filters]);
@@ -89,15 +89,11 @@ const Contents = () => {
 
     const url = `http://localhost:3000/content/${URLSConfig.URLS.CONTENT.SEARCH}?orgdetails=orgName,email`;
     try {
-      const response = await contentService.getAllContents(
-        url,
-        data,
-        headers
-      );
+      const response = await contentService.getAllContents(url, data, headers);
       console.log(response.data.result);
       setData(response.data.result);
     } catch (error) {
-      console.log("error---",error);
+      console.log("error---", error);
 
       setError(error.message);
     } finally {
@@ -105,8 +101,6 @@ const Contents = () => {
       setIsLoading(false);
     }
   };
-
-
 
   const fetchDataFramework = async () => {
     setIsLoading(true);
@@ -120,7 +114,7 @@ const Contents = () => {
     const url = `https://nulp.niua.org/api/channel/v1/read/0130701891041689600`;
     try {
       const response = await frameworkService.getChannel(url, headers);
-      console.log("channel---",response.data.result);
+      console.log("channel---", response.data.result);
       setData(response.data.result);
     } catch (error) {
       setError(error.message);
@@ -134,10 +128,10 @@ const Contents = () => {
         url,
         headers
       );
-      console.log("nulp---",response.data.result);
+      console.log("nulp---", response.data.result);
       setData(response.data.result);
     } catch (error) {
-      console.log("nulp--  error-",error);
+      console.log("nulp--  error-", error);
 
       setError(error.message);
     } finally {
@@ -145,7 +139,7 @@ const Contents = () => {
 
       setIsLoading(false);
     }
-  }
+  };
 
   const navigateToCourse = () => {};
   const handleFilterChange = (field, value) => {
@@ -166,9 +160,9 @@ const Contents = () => {
 
   // const changeLanguage = (lng) => {
   //   changeLanguage(lng);
-   
+
   // };
-  
+
   return (
     <Layout
       isDisabledAppBar={true}
@@ -196,11 +190,11 @@ const Contents = () => {
                     );
                   }}
                 >
-                   <Menu.Item onPress={(item) => navigate("/help")}>
+                  <Menu.Item onPress={(item) => navigate("/help")}>
                     {t("HELP")}
                   </Menu.Item>
                   <Menu.Item onPress={(item) => navigate("/logoff")}>
-                    {t("LOGOUT")}                    
+                    {t("LOGOUT")}
                   </Menu.Item>
                 </Menu>
               </VStack>
@@ -231,8 +225,12 @@ const Contents = () => {
                   // }}>
                 }}
               >
-                <Menu.Item onPress={(item) => changeLanguage('en')}>{t("ENGLISH")}</Menu.Item>
-                <Menu.Item onPress={(item) => changeLanguage('hi')}>{t("HINDI")}</Menu.Item>
+                <Menu.Item onPress={(item) => changeLanguage("en")}>
+                  {t("ENGLISH")}
+                </Menu.Item>
+                <Menu.Item onPress={(item) => changeLanguage("hi")}>
+                  {t("HINDI")}
+                </Menu.Item>
               </Menu>
             </Box>
           </Box>
@@ -271,7 +269,7 @@ const Contents = () => {
           {
             title: "Connections",
             icon: "TeamLineIcon",
-            route: "/home",
+            route: "/addConnections",
           },
           {
             title: "Profie",
@@ -290,7 +288,7 @@ const Contents = () => {
           and content.
         </Text> */}
         <Button colorScheme="blue" size="lg" onClick={navigateToCourse()}>
-         {t( "EXPLORE_COURSES")}
+          {t("EXPLORE_COURSES")}
         </Button>
 
         {isLoading && <p>Loading...</p>}
@@ -303,13 +301,13 @@ const Contents = () => {
           </div>
         ))}
       </Box>
-       {/* <Routes>
+      {/* <Routes>
       //  <Route path="/" element={<Home />} />
       //  <Route path="/Contents" element={<Contents />} />
       //  <Route path="/Courses" element={<Courses />} />
       //  <Route path="/Sample" element={<Sample />} />
       // </Routes>     */}
-     </Layout>
+    </Layout>
     //  <Box>HERE</Box>
   );
 };
