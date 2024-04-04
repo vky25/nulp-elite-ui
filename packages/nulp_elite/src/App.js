@@ -29,9 +29,10 @@ import User from "pages/User";
 
 import UserPrefData from "pages/UserPrefData";
 import { ChakraProvider } from "@chakra-ui/react";
-import Profile from "pages/Profile";
+import Profile from "pages/profile/Profile";
+import Certificate from "pages/profile/certificate";
+
 import FAQPage from "pages/FAQPage";
-import Certificate from "pages/Certificate";
 import AddConnections from "pages/connections/AddConnections";
 import MyConnections from "pages/connections/MyConnections";
 import DomainList from "pages/search/DomainList";
@@ -71,8 +72,13 @@ function App() {
     },
     {
       moduleName: "nulp_elite",
-      path: "/profile",
+      path: "profile/profile",
       component: Profile,
+    },
+    {
+      moduleName: "nulp_elite",
+      path: "profile/certificate",
+      component: Certificate,
     },
     {
       moduleName: "nulp_elite",
