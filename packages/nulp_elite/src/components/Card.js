@@ -8,9 +8,11 @@ import Typography from "@mui/material/Typography";
 import Box from "@mui/material/Box";
 import { Divider } from "native-base";
 
-export default function BoxCard({ items }) {
-  console.log(items);
 
+
+export default function BoxCard({ items }) {
+  // console.log(items.appIcon)
+  
   return (
     <Card sx={{ maxWidth: 345, position: "relative" }}>
       <CardMedia
@@ -26,83 +28,30 @@ export default function BoxCard({ items }) {
         image={require("../assets/card-bg.png")}
         title="green iguana"
       />
-      <div
-        style={{
-          position: "absolute",
-          top: 0,
-          left: 0,
-          right: "15px",
-          width: "95%",
-          height: "47%",
-          background:
-            "linear-gradient(45deg, RGBA(28, 25, 25, 0.46) 7%, RGBA(20, 18, 18, 0.57) 45%)",
-          zIndex: 1,
-          margin: "8px 10px 0 10px",
-          borderTopLeftRadius: "5px",
-          borderTopRightRadius: "20px",
-        }}
-      ></div>
+      <div style={{
+    position: 'absolute',
+    top: 0,
+    left: 0,
+    right:'15px',
+    width: '96%',
+    height: '47%',
+    background: 'linear-gradient(45deg, RGBA(28, 25, 25, 0.46) 7%, RGBA(20, 18, 18, 0.57) 45%)',
+    zIndex: 1,
+    margin: '8px 10px 0 10px',
+    borderTopLeftRadius: '5px',
+    borderTopRightRadius:'20px'
+  }}></div>
       <CardContent>
-        <Typography
-          gutterBottom
-          variant="h5"
-          component="div"
-          style={{
-            zIndex: "9999",
-            position: "absolute",
-            color: "#fff",
-            fontWeight: "500",
-            fontSize: "16px",
-            top: "76px",
-          }}
-        >
-          {items?.name}
+        <Typography gutterBottom variant="h5" component="div" className="cardTitle">
+           {items.name}
         </Typography>
-        <Typography
-          gutterBottom
-          variant="h7"
-          component="div"
-          style={{
-            zIndex: "9999",
-            position: "absolute",
-            top: "30px",
-            right: "7px",
-            color: "#fff",
-            width: "50%",
-            textAlign: "center",
-          }}
-        >
-          <Box
-            style={{
-              background: "#FFE459",
-              borderRadius: "24px 0px 0px 24px",
-              color: "#484848",
-              border: "solid 1px #fff",
-              paddingRight: "10px",
-              fontSize: "13px",
-            }}
-          >
-            {" "}
-            {items?.primaryCategory}
+        <Typography gutterBottom variant="h7" component="div" style={{zIndex:'9999',position:'absolute',top:'30px',right:'3px',color:'#fff',textAlign:'center'}}>
+                  <Box className="cardCourses"> {items.primaryCategory}</Box>
+                  </Typography>
+        <Box style={{background:'#fff',padding:'10px',borderRadius:'150px',height:'50px',width:'50px',border:'solid 1px #E1E1E1',position:'absolute',top:'115px',right:'30px',textAlign:'center',zIndex:'99'}}>
+          <img src={items.appIcon ? items.appIcon : require("assets/swm.png")} style={{height:'50px',maxWidth:'100%',objectFit:'contain'}} />
+
           </Box>
-        </Typography>
-        <Box
-          style={{
-            background: "#fff",
-            padding: "10px",
-            borderRadius: "150px",
-            height: "50px",
-            width: "50px",
-            border: "solid 1px #E1E1E1",
-            position: "absolute",
-            top: "115px",
-            right: "30px",
-            textAlign: "center",
-            zIndex: "99",
-          }}
-        >
-          <img src={require("../assets/swm.png")} style={{ width: "100%" }} />
-        </Box>
 
         <Typography
           variant="body2"
@@ -113,29 +62,18 @@ export default function BoxCard({ items }) {
         </Typography>
         <Divider></Divider>
       </CardContent>
-      <CardActions style={{ paddingBottom: "20px" }}>
-        <Button
-          size="small"
-          style={{
-            background: "#F4D46261",
-            color: "#484848",
-            fontSize: "10px",
-          }}
-        >
-          {" "}
-          {items?.board}
-        </Button>
-        <Button
-          size="small"
-          style={{
-            background: "#F4D46261",
-            color: "#484848",
-            fontSize: "10px",
-          }}
-        >
-          {" "}
-          {items?.gradeLevel}
-        </Button>
+      <CardActions style={{paddingBottom:'20px', height:'30px'}}>
+      {items.board ? (
+
+
+        <Button size="small" style={{background: '#F4D46261',color:'#484848',fontSize:'10px'}}> {items.board}</Button>
+        ) : null}
+        {items.gradeLevel ? (
+
+
+        <Button size="small" style={{background: '#F4D46261',color:'#484848',fontSize:'10px'}}> {items.gradeLevel}</Button>
+        ) : null}
+
       </CardActions>
     </Card>
   );
