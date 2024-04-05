@@ -69,5 +69,11 @@
   "LEARNING_TIME":"Learning Time",
   "COURSES":"Courses",
   "WEBINARS":"Webinars",
-  "PERFORMANCE":"Performance"
+  "PERFORMANCE":"Performance",
+  "LEARNNG_HISTORY":"Learning History",
+  "DESIGNATION":"Designation",
+  "CATEGORIES":"Categories",
+  "CERTIFICATIONS_RECEIVED":"Certifications Received",
+  "COURSES_THAN_LAST_MONTH":"Courses than last month",
+  "CHANGE_PREFERENCES":"Change Preferences"
 }

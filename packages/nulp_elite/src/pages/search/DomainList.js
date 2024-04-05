@@ -18,6 +18,7 @@ import { frameworkService } from "@shiksha/common-lib";
 import { generatePath, useNavigate ,useLocation} from "react-router-dom";
 import Footer from "../../components/Footer";
 import { contentService } from "@shiksha/common-lib";
+import DomainCarousel from "components/domainCarousel";
 
 
 const Item = styled(Paper)(({ theme }) => ({
@@ -111,6 +112,7 @@ const DomainList = () => {
     console.log(term);
     navigate('/search/contentList', { state: { domain: term.code } }); 
   }
+  console.log(frameworkHardCodedData.result.framework.categories[0].terms);
   return (
 <div>
 <Header/>
@@ -126,11 +128,15 @@ const DomainList = () => {
    <ThemeProvider theme={theme}>
    <Typography variant="h3" sx={{ marginTop: '30px' }}>Filter by popular domain</Typography>
    </ThemeProvider> 
+   {/* <DomainCarousel domain={frameworkHardCodedData.result.framework.categories[0].terms}></DomainCarousel> */}
+   {/* <DomainCarousel data={data.framework.categories[0].terms}></DomainCarousel> */}
+
    <Box sx={{paddingTop:'30px'}}>
-            {data && data.framework && data.framework.categories && data.framework.categories.map((faqIndex) => (
-            //  {frameworkHardCodedData.result.framework.categories.map((faqIndex) => (
+            {/* {data && data.framework && data.framework.categories && data.framework.categories.map((faqIndex) => ( */}
+             {frameworkHardCodedData.result.framework.categories.map((faqIndex) => (
                 <Grid container spacing={2} style={{margin:'20px 0',marginBottom:'10px'}}  key={faqIndex}>
                 {faqIndex.terms.map(term => (
+
                     <Grid item xs={12} md={6} lg={3}  style={{marginBottom:'10px'}}>
 
                     <Box onClick={() => loadContents(term)} style={{display:'flex', flexDirection:'row', alignItems:'center'}} key={faqIndex.id}>
@@ -138,8 +144,10 @@ const DomainList = () => {
                     <h5 style={{fontSize:'14px',fontWeight:'500',paddingLeft:'10px',margin:'0'}}>{term.name}</h5>
                     </Box>
                     </Grid>
+
                 ))}
                 </Grid>
+                
             ))}
             </Box>
 </Container>
