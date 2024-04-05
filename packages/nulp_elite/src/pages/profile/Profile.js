@@ -16,8 +16,8 @@ import LibraryAddCheckOutlinedIcon from "@mui/icons-material/LibraryAddCheckOutl
 import ReceiptLongOutlinedIcon from "@mui/icons-material/ReceiptLongOutlined";
 import FloatingChatIcon from "../../components/FloatingChatIcon";
 import CircularProgressWithLabel from "../../components/CircularProgressWithLabel";
-import Chip from "@mui/material/Chip";
-import Button from "@mui/material/Button";
+import RestoreOutlinedIcon from '@mui/icons-material/RestoreOutlined';
+import SettingsOutlinedIcon from '@mui/icons-material/SettingsOutlined';
 import * as util from "../../services/utilService";
 
 const Profile = () => {
@@ -110,7 +110,7 @@ const Profile = () => {
                         display: "flex",
                       }}
                     >
-                      Designation |{" "}
+                      {t("DESIGNATION")} |{" "}
                       <Box style={{ paddingLeft: "10px" }}> ID: </Box>{" "}
                       {userData.result.response.organisations.orgName}
                     </Typography>
@@ -136,7 +136,7 @@ const Profile = () => {
                       }}
                     >
                       <Box style={{ fontWeight: "600", paddingRight: "10px" }}>
-                        Categories:{" "}
+                        {t("CATEGORIES")}:{" "}
                       </Box>{" "}
                       {userData.result.response.framework.board}
                     </Typography>
@@ -146,7 +146,7 @@ const Profile = () => {
             </Box>
           </Card>
 
-          <Grid container spacing={2} style={{ padding: "10px 0" }}>
+          <Grid container spacing={2} style={{ padding: "5px 0" }}>
             <Grid item xs={12} md={6}>
               <Card
                 sx={{
@@ -200,6 +200,60 @@ const Profile = () => {
 
                 <Box style={{ paddingLeft: "20px" }}>
                   {t("DOWNLOAD_CERTIFICATES")}
+                </Box>
+              </Card>
+            </Grid>
+            <Grid item xs={12} md={6}>
+              <Card
+                sx={{
+                  padding: "10px",
+                  boxShadow: "0px 4px 4px 0px #00000040",
+                  display: "flex",
+                  alignItems: "baseline",
+                }}
+              >
+                <Box
+                  style={{
+                    background: "#004367",
+                    color: "#fff",
+                    padding: "40px",
+                    margin: "-10px",
+                    borderTopRightRadius: "250px",
+                    borderBottomRightRadius: "250px",
+                  }}
+                >
+                  <RestoreOutlinedIcon />
+                </Box>
+
+                <Box style={{ paddingLeft: "20px" }}>
+                  {t("LEARNNG_HISTORY")}
+                </Box>
+              </Card>
+            </Grid>
+            <Grid item xs={12} md={6}>
+              <Card
+                sx={{
+                  padding: "10px",
+                  boxShadow: "0px 4px 4px 0px #00000040",
+                  display: "flex",
+                  alignItems: "baseline",
+                }}
+              >
+                <Box
+                  style={{
+                    background: "#004367",
+                    color: "#fff",
+                    padding: "40px",
+                    margin: "-10px",
+                    borderTopRightRadius: "250px",
+                    borderBottomRightRadius: "250px",
+                  }}
+                >
+                  <SettingsOutlinedIcon />
+                </Box>
+
+                <Box style={{ paddingLeft: "20px" }}>
+                  {t("CHANGE_PREFERENCES")}
                 </Box>
               </Card>
             </Grid>
@@ -274,7 +328,7 @@ const Profile = () => {
             </Box>
           </Card>
 
-          <Card sx={{ margin: "10px 0 40px 0", padding: "10px" }}>
+          <Card sx={{ margin: "15px 0 40px 0", padding: "10px" }}>
             <Box>
               <Box
                 sx={{
@@ -313,7 +367,7 @@ const Profile = () => {
                       textAlign: "left",
                     }}
                   >
-                    Certifications Received
+                    {t("CERTIFICATIONS_RECEIVED")}
                   </Typography>
                 </Grid>
                 <Grid
@@ -333,7 +387,7 @@ const Profile = () => {
                       textAlign: "left",
                     }}
                   >
-                    Courses than last month
+                    {t("COURSES_THAN_LAST_MONTH")}
                   </Typography>
                 </Grid>
               </Grid>
