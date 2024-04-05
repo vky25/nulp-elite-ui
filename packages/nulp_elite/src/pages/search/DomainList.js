@@ -128,7 +128,7 @@ const DomainList = () => {
    <ThemeProvider theme={theme}>
    <Typography variant="h3" sx={{ marginTop: '30px' }}>Filter by popular domain</Typography>
    </ThemeProvider> 
-   <DomainCarousel domain={frameworkHardCodedData.result.framework.categories[0].terms}></DomainCarousel>
+   {/* <DomainCarousel domain={frameworkHardCodedData.result.framework.categories[0].terms}></DomainCarousel> */}
    {/* <DomainCarousel data={data.framework.categories[0].terms}></DomainCarousel> */}
 
    <Box sx={{paddingTop:'30px'}}>

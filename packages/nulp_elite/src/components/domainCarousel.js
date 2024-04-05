@@ -2,11 +2,8 @@ import * as React from 'react';
 import AspectRatio from '@mui/joy/AspectRatio';
 import Box from '@mui/joy/Box';
 import Typography from '@mui/joy/Typography';
-import Card from '@mui/joy/Card';
 import Button from '@mui/joy/Button';
 import { NavigateBefore, NavigateNext } from '@mui/icons-material';
-import Carousel from 'react-multi-carousel';
-import 'react-multi-carousel/lib/styles.css';
 
 export default function DomainCarousel({ domain }) {
   const containerRef = React.useRef(null);
@@ -76,14 +73,7 @@ export default function DomainCarousel({ domain }) {
           px: 2,
         }}
       >
-        <Button
-          disabled={activeIndex === 0}
-          onClick={handlePrev}
-          startIcon={<NavigateBefore />}
-          sx={{ alignSelf: 'center' }}
-        >
-          Prev
-        </Button>
+       
         <Box
           sx={{
             display: 'flex',
@@ -104,14 +94,7 @@ export default function DomainCarousel({ domain }) {
             />
           ))}
         </Box>
-        <Button
-          disabled={activeIndex === domain.length - 1}
-          onClick={handleNext}
-          endIcon={<NavigateNext />}
-          sx={{ alignSelf: 'center' }}
-        >
-          Next
-        </Button>
+       
       </Box>
     </Box>
   );
