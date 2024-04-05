@@ -29,15 +29,19 @@ import User from "pages/User";
 
 import UserPrefData from "pages/UserPrefData";
 import { ChakraProvider } from "@chakra-ui/react";
-import Profile from "pages/Profile";
+import Profile from "pages/profile/Profile";
+import Certificate from "pages/profile/certificate";
+
 import FAQPage from "pages/FAQPage";
-import Certificate from "pages/Certificate";
 import AddConnections from "pages/connections/AddConnections";
 import MyConnections from "pages/connections/MyConnections";
 import DomainList from "pages/search/DomainList";
 import Registrationnew from "pages/registration/Registration";
 import Registrationold from "pages/registration/Registrationold";
 import ContentList from "pages/search/ContentList";
+import AllContent from "pages/content/AllContent";
+import CategoryPage from "pages/content/CategoryPage";
+import LearningHistory from "pages/profile/learningHistory";
 
 function App() {
   // const [t] = useTranslation();
@@ -61,7 +65,7 @@ function App() {
     {
       moduleName: "nulp_elite",
       path: "/all",
-      component: Courses,
+      component: AllContent,
     },
     {
       moduleName: "nulp_elite",
@@ -70,8 +74,18 @@ function App() {
     },
     {
       moduleName: "nulp_elite",
-      path: "/profile",
+      path: "profile/profile",
       component: Profile,
+    },
+    {
+      moduleName: "nulp_elite",
+      path: "profile/certificate",
+      component: Certificate,
+    },
+    {
+      moduleName: "nulp_elite",
+      path: "profile/learningHistory",
+      component: LearningHistory,
     },
     {
       moduleName: "nulp_elite",
@@ -137,6 +151,11 @@ function App() {
       moduleName: "nulp_elite",
       path: "/registrationold",
       component: Registrationold,
+    },
+    {
+      moduleName: "nulp_elite",
+      path: "/view-all/:category",
+      component: CategoryPage,
     },
   ];
   // public_url="http://localhost:5000"

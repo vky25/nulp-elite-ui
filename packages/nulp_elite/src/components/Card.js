@@ -14,7 +14,7 @@ export default function BoxCard({ items }) {
   // console.log(items.appIcon)
   
   return (
-    <Card sx={{ maxWidth: 345, position: "relative" }}>
+    <Card sx={{  position: "relative" }}>
       <CardMedia
         sx={{
           margin: "8px 3px 0 9px",
@@ -36,19 +36,19 @@ export default function BoxCard({ items }) {
     width: '96%',
     height: '47%',
     background: 'linear-gradient(45deg, RGBA(28, 25, 25, 0.46) 7%, RGBA(20, 18, 18, 0.57) 45%)',
-    zIndex: 1,
+    zIndex: 999,
     margin: '8px 10px 0 10px',
     borderTopLeftRadius: '5px',
     borderTopRightRadius:'20px'
   }}></div>
       <CardContent>
-        <Typography gutterBottom variant="h5" component="div" className="cardTitle">
+        <Typography gutterBottom variant="h5" component="div" className="cardTitle" style={{fontSize:'14px',fontWeight:'600'}}>
            {items.name}
         </Typography>
-        <Typography gutterBottom variant="h7" component="div" style={{zIndex:'9999',position:'absolute',top:'30px',right:'3px',color:'#fff',textAlign:'center'}}>
+        <Typography gutterBottom variant="h7" component="div" style={{zIndex:'0 ',fontSize:'14px',position:'absolute',top:'30px',right:'3px',color:'#fff',textAlign:'center'}}>
                   <Box className="cardCourses"> {items.primaryCategory}</Box>
                   </Typography>
-        <Box style={{background:'#fff',padding:'10px',borderRadius:'150px',height:'50px',width:'50px',border:'solid 1px #E1E1E1',position:'absolute',top:'115px',right:'30px',textAlign:'center',zIndex:'99'}}>
+        <Box style={{background:'#fff',padding:'10px',borderRadius:'150px',height:'50px',width:'50px',border:'solid 1px #E1E1E1',position:'absolute',top:'115px',right:'30px',textAlign:'center',zIndex:'999'}}>
           <img src={items.appIcon ? items.appIcon : require("assets/swm.png")} style={{height:'50px',maxWidth:'100%',objectFit:'contain'}} />
 
           </Box>
