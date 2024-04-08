@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { Layout, IconByName } from "@shiksha/common-lib";
-import { VStack, HStack, Menu } from "native-base";
+import { VStack, HStack, Menu, Image } from "native-base";
 import Tab from "@mui/material/Tab";
 import TabContext from "@material-ui/lab/TabContext";
 import TabList from "@material-ui/lab/TabList";
@@ -21,6 +21,7 @@ import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
 import Search from "components/search";
 import { useLocation } from "react-router-dom";
+import * as util from "../../services/utilService";
 
 // Define modal styles
 const useStyles = makeStyles((theme) => ({
@@ -63,7 +64,7 @@ const AddConnections = () => {
   const [error, setError] = useState(null);
   const [selectedUser, setSelectedUser] = useState("");
   const [openModal, setOpenModal] = useState(false);
-  // const [userData, setUserData] = useState([]);
+  const [userSearchData, setUserSearchData] = useState({});
   const [userdata, setUserData] = useState([]);
   const [searchQuery, setSearchQuery] = useState("");
   const [textValue, setTextValue] = useState(
@@ -76,9 +77,8 @@ const AddConnections = () => {
   const [invitationNotAcceptedUsers, setInvitationNotAcceptedUsers] = useState(
     {}
   );
-  const userIdElement = document.getElementById("userId");
-  const userId = userIdElement ? userIdElement.value : "";
-  const [userChat, setUserChat] = useState();
+  const [loggedInUserId, setLoggedInUserId] = useState();
+
   const toggleChat = () => {
     setShowChat(!showChat);
     setButtonText(showChat ? "Start Chat" : "Send");
@@ -87,13 +87,29 @@ const AddConnections = () => {
   const [gradeLevels, setGradeLevels] = useState([]);
   const location = useLocation();
   const { domain } = location.state || {};
+  const [receivedUserChat, setReceivedUserchat] = useState("");
+  const [invitationReceiverByUser, setInvitationReceivedUserByIds] = useState(
+    {}
+  );
+  const [userChat, setUserChat] = useState("");
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
-  const handleFilterChange = (selectedOptions) => {
-    const selectedValues = selectedOptions.map((option) => option.value);
-    setFilters({ ...filters, firstName: selectedValues });
-  };
+  // const handleFilterChange = (selectedOptions) => {
+  //   const selectedValues = selectedOptions.map((option) => option.value);
+  //   setFilters({ ...filters, firstName: selectedValues });
+  // };
+
+  // const filteredUsers = userData?.filter(
+  //   (user) => user.name && user.name.includes(searchQuery)
+  // );
 
   useEffect(() => {
+    const _userId = util.userId();
+    console.log("_userId", _userId);
+    if (sessionStorage.length > 0) {
+      setLoggedInUserId(sessionStorage.getItem("loggedInUserId"));
+    }
+
     fetchData();
   }, [filters]);
 
@@ -126,7 +142,6 @@ const AddConnections = () => {
       }
 
       const responseData = await response.json();
-      // Assuming responseData.data.result is an array of grade levels
       setGradeLevels(responseData.data.result);
     } catch (error) {
       setError(error.message);
@@ -173,12 +188,13 @@ const AddConnections = () => {
 
   const handleCloseModal = () => {
     setOpenModal(false);
+    setIsModalOpen(false);
   };
 
   const handleSearch = async () => {
     setIsLoading(true);
     setError(null);
-    setUserData([]);
+    setUserSearchData([]);
 
     const url = `http://localhost:3000/learner/user/v3/search`;
     const requestBody = {
@@ -203,19 +219,27 @@ const AddConnections = () => {
       });
 
       if (!response.ok) {
-        throw new Error("Failed to search data");
+        throw new Error("Failed to fetch data");
       }
 
-      const responseData = await response.json();
-      setUserData(responseData.result.response.content);
+      let responseData = await response.json();
+      // const usedUsers = invitationAcceptedUsers
+      //   .concat(invitationNotAcceptedUsers)
+      //   .concat(invitationReceiverByUser);
+      // responseData = responseData.result.response.content.filter(function (el) {
+      //   return usedUsers.indexOf(el.userId) >= 0;
+      // });
+
+      setUserSearchData(responseData);
       console.log("responseSearchData", responseData);
     } catch (error) {
-      console.log("error", error);
-      setError(error.message);
+      console.error("Error fetching data:", error);
+      setError("Failed to fetch data. Please try again.");
     } finally {
       setIsLoading(false);
     }
   };
+
   const handleUserClick = (selectedUser) => {
     setSelectedUser(selectedUser);
   };
@@ -223,164 +247,20 @@ const AddConnections = () => {
     setTextValue(event.target.value);
   };
 
-  // const sendChat = async () => {
-  //   setIsLoading(true);
-  //   setError(null);
-
-  //   const url = `http://localhost:3000/directConnect/send-chat`;
-  //   const requestBody = {
-  //     sender_id: "20431439-c03e-4e3d-af30-e0fe38768cde",
-  //     receiver_id: "be926164-37e8-4bf0-b2c2-6ed22ea311bc",
-  //     message: "Hello Mahesh",
-  //     sender_email: "snehal.sabade@tekditechnologies.com",
-  //     receiver_email: "reshma.mahadik@tekditechnologies.com",
-  //   };
-
-  //   try {
-  //     const response = await fetch(url, {
-  //       method: "POST",
-  //       headers: {
-  //         "Content-Type": "application/json",
-  //       },
-  //       body: JSON.stringify(requestBody),
-  //     });
-
-  //     if (!response.ok) {
-  //       throw new Error("Failed to send chat");
-  //     }
-
-  //     console.log("sentChatRequestToUser", response);
-  //     if (responseData.statusText === "OK" && responseData.status == 200) {
-  //       // setShowModal(true);
-  //       alert("Chat sent successfully"); // Set modal message
-  //       handleClose(true); // Close modal after some time if needed
-  //     }
-  //   } catch (error) {
-  //     setError(error.message);
-  //   } finally {
-  //     setIsLoading(false);
-  //   }
-  // };
-
-  const sendChat = async () => {
-    setIsLoading(true);
-    setError(null);
-
-    const url = `http://localhost:3000/directConnect/send-chat`;
-    const requestBody = {
-      sender_id: "20431439-c03e-4e3d-af30-e0fe38768cde",
-      receiver_id: "be926164-37e8-4bf0-b2c2-6ed22ea311bc",
-      message: "Hello reshma ",
-      sender_email: "snehal.sabade@tekditechnologies.com",
-      receiver_email: "reshma.mahadik@tekditechnologies.com",
-    };
-
-    try {
-      const response = await fetch(url, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(requestBody),
-      });
-
-      if (!response.ok) {
-        throw new Error("Failed to send chat");
-      }
-      setOpen(false);
-      // setShowModal(true);
-    } catch (error) {
-      setError(error.message);
-    } finally {
-      setIsLoading(false);
-    }
-  };
-
   const handleSendClick = () => {
-    sendChat(); // Call sendChat function to send the chat message
-    toggleChat(); // Toggle chat display
+    sendChatRequestToUser(selectedUser.userId); // Call sendChat function to send the chat message
+    setShowChat(false);
+    toggleChat();
   };
 
-  const getUserChatAccepted = async () => {
-    setIsLoading(true);
-    setError(null);
-    // setData([]);
-
-    const params = new URLSearchParams({
-      sender_id: "20431439-c03e-4e3d-af30-e0fe38768cde",
-      // receiver_id: "be926164-37e8-4bf0-b2c2-6ed22ea311bc",
-      is_accepted: true,
-      is_connection: true,
-    });
-
-    const url = `http://localhost:3000/directConnect/get-chats?${params.toString()}`;
-
-    try {
-      const response = await fetch(url, {
-        method: "GET",
-        headers: {
-          "Content-Type": "application/json",
-        },
-      });
-
-      if (!response.ok) {
-        throw new Error("Failed to getUserChat");
-      }
-
-      const responseData = await response.json();
-      // SetIsViewChatModalOpen(false);
-      console.log("getUserChatAccepted", responseData);
-      setUserChat(responseData.result.response.content);
-    } catch (error) {
-      setError(error.message);
-    } finally {
-      setIsLoading(false);
-    }
-  };
-
-  const getUserChatNotAccepted = async () => {
-    setIsLoading(true);
-    setError(null);
-    // setData([]);
-
-    const params = new URLSearchParams({
-      sender_id: "20431439-c03e-4e3d-af30-e0fe38768cde",
-      receiver_id: "be926164-37e8-4bf0-b2c2-6ed22ea311bc",
-      is_accepted: false,
-      is_connection: false,
-    });
-
-    const url = `http://localhost:3000/directConnect/get-chats?${params.toString()}`;
-
-    try {
-      const response = await fetch(url, {
-        method: "GET",
-        headers: {
-          "Content-Type": "application/json",
-        },
-      });
-
-      if (!response.ok) {
-        throw new Error("Failed to getUserChatNotAccepted");
-      }
-
-      const responseData = await response.json();
-      // SetIsViewChatModalOpen(false);
-      console.log("getUserChatNotAccepted", responseData);
-      setUserChat(responseData.result.response.content);
-    } catch (error) {
-      setError(error.message);
-    } finally {
-      setIsLoading(false);
-    }
-  };
   const getConnections = async () => {
     setIsLoading(true);
     setError(null);
     // setData([]);
 
     const params = new URLSearchParams({
-      sender_id: "20431439-c03e-4e3d-af30-e0fe38768cde",
+      sender_id: loggedInUserId,
+      receiver_id: loggedInUserId,
       is_connection: true,
     });
 
@@ -397,17 +277,40 @@ const AddConnections = () => {
       if (!response.ok) {
         throw new Error("Failed to get connected user chat");
       }
-
+      setInvitationReceivedUserByIds([]);
+      setInvitationAcceptedUsers([]);
+      setInvitationNotAcceptedUsers([]);
       const responseData = await response.json();
       console.log("getConnections", responseData.result);
+
       const invitationNotAcceptedUserIds = responseData.result
-        .filter((res) => !res.is_accepted)
+        .filter((res) => !res.is_accepted && res.sender_id === loggedInUserId)
         .map((res) => res.receiver_id);
-      const invitationAcceptedUserIds = responseData.result
-        .filter((res) => res.is_accepted)
+
+      const sender = responseData.result
+        .filter((res) => res.is_accepted && res.receiver_id === loggedInUserId)
+        .map((res) => res.sender_id);
+      const receiver = responseData.result
+        .filter((res) => res.is_accepted && res.sender_id === loggedInUserId)
         .map((res) => res.receiver_id);
-      getInvitationNotAcceptedUserByIds(invitationNotAcceptedUserIds);
-      getInvitationAcceptedUserByIds(invitationAcceptedUserIds);
+      const invitationAcceptedUserIds = sender.concat(receiver);
+
+      const invitationReceivedUserIds = responseData.result
+        .filter(
+          (res) =>
+            !res.is_accepted &&
+            res.receiver_id == loggedInUserId &&
+            res.sender_id !== loggedInUserId
+        )
+        .map((res) => res.sender_id);
+
+      invitationReceivedUserIds.length > 0 &&
+        getInvitationReceivedUserByIds(invitationReceivedUserIds);
+      invitationNotAcceptedUserIds.length > 0 &&
+        getInvitationNotAcceptedUserByIds(invitationNotAcceptedUserIds);
+      invitationAcceptedUserIds.length > 0 &&
+        getInvitationAcceptedUserByIds(invitationAcceptedUserIds);
+
       // setData(responseData.result.response.content);
     } catch (error) {
       setError(error.message);
@@ -449,14 +352,9 @@ const AddConnections = () => {
       }
 
       const responseData = await response.json();
-      // console.log(responseData.result.response.content);
-      // // setUserData(responseData.result.response.content);
-      // console.log("responseSearchData", responseData);
-      // setInvitationNotAcceptedUsers((current) => [
-      //   ...current,
-      //   responseData.result.response.content,
-      // ]);
       setInvitationNotAcceptedUsers(responseData);
+      handleOpen(); // Open modal after successful API response
+      handleClose();
       console.log(
         "InvitationNotAcceptedUsers",
         responseData.result.response.content
@@ -515,18 +413,256 @@ const AddConnections = () => {
     }
   };
 
-  const onMyConnection = () => {
-    // getChat();
-    getConnections();
+  const getInvitationReceivedUserByIds = async (userIds) => {
+    setIsLoading(true);
+    setError(null);
+    setInvitationReceivedUserByIds([]);
+
+    const url = `http://localhost:3000/learner/user/v3/search`;
+    const requestBody = {
+      request: {
+        filters: {
+          status: "1",
+          rootOrgId: "0130701891041689600",
+          userId: userIds,
+        },
+        query: searchQuery,
+        pageNumber: currentPage,
+        pageSize: pageSize,
+      },
+    };
+
+    try {
+      const response = await fetch(url, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(requestBody),
+      });
+
+      if (!response.ok) {
+        throw new Error("Failed to search data");
+      }
+
+      const responseData = await response.json();
+      setInvitationReceivedUserByIds(responseData);
+      handleOpen(); // Open modal after successful API response
+      handleClose();
+      console.log(
+        "getInvitationReceivedUserByIds",
+        responseData.result.response.content
+      );
+    } catch (error) {
+      console.log("error", error);
+      setError(error.message);
+    } finally {
+      setIsLoading(false);
+    }
   };
 
-  const handleAcceptedChatOpen = () => {
+  const getInvitations = async () => {
+    setIsLoading(true);
+    setError(null);
+    // setData([]);
+
+    const params = new URLSearchParams({
+      sender_id: loggedInUserId,
+      receiver_id: loggedInUserId,
+      is_connection: true,
+    });
+
+    const url = `http://localhost:3000/directConnect/get-chats?${params.toString()}`;
+
+    try {
+      const response = await fetch(url, {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
+      setInvitationReceivedUserByIds([]);
+      if (!response.ok) {
+        throw new Error("Failed to get invited user");
+      }
+
+      const responseData = await response.json();
+      console.log("getInvitations", responseData.result);
+      const invitationReceivedUserIds = responseData.result
+        .filter(
+          (res) =>
+            !res.is_accepted &&
+            res.receiver_id == loggedInUserId &&
+            res.sender_id !== loggedInUserId
+        )
+        .map((res) => res.sender_id);
+
+      invitationReceivedUserIds.length > 0 &&
+        getInvitationReceivedUserByIds(invitationReceivedUserIds);
+    } catch (error) {
+      setError(error.message);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  const onMyConnection = () => {
+    getConnections();
+    //getInvitations();
+  };
+
+  const handleAcceptedChatOpen = (userId) => {
+    getUserChat(userId);
+    setIsModalOpen(true);
     setOpen(true);
-    getUserChatAccepted();
   };
 
   const handleNotAcceptedChatOpen = () => {
     getUserChatNotAccepted();
+  };
+
+  const acceptChat = (userId) => {
+    acceptChatInvitation(userId);
+  };
+
+  const blockChat = (userId) => {
+    blockChatInvitation(userId);
+  };
+
+  const acceptChatInvitation = async (userId) => {
+    setIsLoading(true);
+    setError(null);
+
+    const requestBody = {
+      sender_id: userId,
+      receiver_id: loggedInUserId,
+    };
+
+    const url = `http://localhost:3000/directConnect/accept-invitation`;
+
+    try {
+      const response = await fetch(url, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(requestBody),
+      });
+      if (!response.ok) {
+        throw new Error("Failed to accept chat");
+      }
+
+      const responseData = await response.json();
+      console.log("acceptChatInvitation", responseData.result);
+      onMyConnection();
+    } catch (error) {
+      setError(error.message);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+  const blockChatInvitation = async (userId) => {
+    setIsLoading(true);
+    setError(null);
+    const requestBody = {
+      sender_id: userId,
+      receiver_id: loggedInUserId,
+      reason: "block reason",
+    };
+
+    const url = `http://localhost:3000/directConnect/block-user`;
+
+    try {
+      const response = await fetch(url, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(requestBody),
+      });
+      if (!response.ok) {
+        throw new Error("Failed to block chat");
+      }
+
+      const responseData = await response.json();
+      console.log("blockChatInvitation", responseData.result);
+      // onMyConnection();
+      getConnections();
+    } catch (error) {
+      setError(error.message);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  const getUserChat = async (userId) => {
+    setIsLoading(true);
+    setError(null);
+    // setData([]);
+
+    const params = new URLSearchParams({
+      sender_id: loggedInUserId,
+      receiver_id: loggedInUserId,
+      is_accepted: true,
+      is_connection: true,
+    });
+
+    const url = `http://localhost:3000/directConnect/get-chats?${params.toString()}`;
+
+    try {
+      const response = await fetch(url, {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
+
+      if (!response.ok) {
+        throw new Error("Failed to get user chat");
+      }
+
+      const responseData = await response.json();
+      console.log("getUserChat", responseData.result);
+      const userChat = responseData.result;
+    } catch (error) {
+      setError(error.message);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  const sendChatRequestToUser = async (userId) => {
+    setIsLoading(true);
+    setError(null);
+
+    const url = `http://localhost:3000/directConnect/send-chat`;
+    const requestBody = {
+      sender_id: loggedInUserId,
+      receiver_id: userId,
+      message: textValue,
+      sender_email: "snehal.sabade@tekditechnologies.com",
+      receiver_email: "mahesh.mahajan@tekditechnologies.com",
+    };
+
+    try {
+      const response = await fetch(url, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(requestBody),
+      });
+
+      if (!response.ok) {
+        throw new Error("Failed to send chat");
+      }
+      setSelectedUser("");
+      console.log("sentChatRequest", response);
+    } catch (error) {
+      setError(error.message);
+    } finally {
+      setIsLoading(false);
+    }
   };
   return (
     <Layout
@@ -555,21 +691,23 @@ const AddConnections = () => {
                     );
                   }}
                 >
-                  <Menu.Item>Help</Menu.Item>
-                  <Menu.Item>Logout</Menu.Item>
+                  <Menu.Item onPress={(item) => navigate("/help")}>
+                    Help
+                  </Menu.Item>
+                  <Menu.Item onPress={(item) => navigate("/logoff")}>
+                    Logout
+                  </Menu.Item>
                 </Menu>
               </VStack>
-
               <VStack>
-                {/* <Image
-                  source={require("./assets/logo.png")}
+                <Image
+                  source={require("../../assets/nulp_logo.jpeg")}
                   alt=""
                   size="sm"
-                /> */}
+                />
               </VStack>
             </HStack>
 
-            {/* <Right> */}
             <Box position={"absolute"} right={"20px"} top={"10px"}>
               <Menu
                 w="160"
@@ -583,38 +721,14 @@ const AddConnections = () => {
                       Language
                     </Button>
                   );
-                  // }}>
                 }}
               >
                 <Menu.Item>English</Menu.Item>
                 <Menu.Item> Hindi</Menu.Item>
               </Menu>
             </Box>
-            {/* </Right> */}
-
-            {/* <Avatar
-           size="48px"
-           borderRadius=""
-              source={require("../assets/nulp_logo.jpeg")}
-          /> */}
-
-            {/* <VStack>
-          <Avatar
-            size="37px"
-            borderRadius="md"
-            source={{
-              uri: "https://via.placeholder.com/50x50.png",
-            }}
-          />
-          </VStack> */}
           </Box>
         ),
-        // title: "User Name",
-        // // isEnableSearchBtn: true,
-        // subHeading: "Hello",
-        // iconComponent: (
-
-        // ),
       }}
       // subHeader={
       //   <Link
@@ -690,7 +804,55 @@ const AddConnections = () => {
       <input type="text" placeholder="Search..." style={{ flex: 1, marginRight: '0.5rem', padding: '0.5rem', borderRadius: '4px', border: '1px solid #CACACA' }} />
       <button style={{ padding:'11px 16px 11px 16px', borderRadius: '4px', backgroundColor: '#004367', color: 'white', border: '1px', cursor: 'pointer' ,fontSize:'12px'}}>Search</button>
     </div> */}
-          <Search />
+          {/* <Box
+            style={{
+              display: "flex",
+              alignItems: "center",
+              flexDirection: "column", // Added to align items vertically
+            }}
+          >
+            <TextField
+              label="Search for a user..."
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+              style={{
+                width: "100%",
+                marginBottom: "1rem",
+              }}
+            />
+            <Button
+              style={{
+                padding: "11px 9px",
+                borderRadius: "4px",
+                backgroundColor: "#004367",
+                color: "white",
+                border: "1px",
+                cursor: "pointer",
+                fontSize: "12px",
+              }}
+              onClick={handleSearch}
+            >
+              Search
+            </Button>
+            {!isLoading && !error && (
+              <List>
+                {filteredUsers &&
+                  filteredUsers.map((user, index) => (
+                    <React.Fragment key={index}>
+                      <ListItem>
+                        <ListItemText
+                          primary={`Name Surname: ${user.firstName} ${user.lastName}`}
+                          secondary={`Designation: ${user.designation}`}
+                        />
+                      </ListItem>
+                      <Divider />
+                    </React.Fragment>
+                  ))}
+              </List>
+            )}
+            {isLoading && <Typography>Loading...</Typography>}
+            {error && <Typography>Error: {error}</Typography>}
+          </Box> */}
           <TabContext value={value}>
             <Box sx={{ borderBottom: 1, borderColor: "divider" }}>
               <TabList
@@ -734,10 +896,28 @@ const AddConnections = () => {
                     </ListItem>
                     <TriggerButton
                       type="button"
-                      onClick={handleAcceptedChatOpen}
+                      variant="contained"
+                      color="primary"
+                      onClick={() => handleAcceptedChatOpen(item.userId)}
+                      style={{ marginLeft: "90%" }}
                     >
                       Open chat
                     </TriggerButton>
+                    <Modal open={isModalOpen} onClose={handleCloseModal}>
+                      {/* Content of your modal */}
+                      {/* Example content */}
+                      <div>
+                        <h2>Chat Modal</h2>
+                        <p>This is the chat modal content.</p>
+                        <button onClick={handleCloseModal}>Close</button>
+                      </div>
+                    </Modal>
+                    {/* <TriggerButton
+                      type="button"
+                      onClick={() => handleAcceptedChatOpen(item.userId)}
+                    >
+                      Open chat
+                    </TriggerButton> */}
                     <Divider />
 
                     {/* <ListItem>
@@ -765,20 +945,71 @@ const AddConnections = () => {
                     <List sx={{}} style={{ color: "red" }}>
                       <ListItem>
                         <ListItemText
-                          primary={"" + item.firstName + item.lastName}
+                          primary={`${item.firstName}${
+                            item.lastName ? ` ${item.lastName}` : ""
+                          }`}
                           secondary="Designation"
                         />
                       </ListItem>
-                      <TriggerButton
-                        type="button"
-                        onClick={handleNotAcceptedChatOpen}
-                      >
-                        Open chat
-                      </TriggerButton>
+
                       <Divider />
                     </List>
                   )
                 )}
+              {/* <TriggerButton type="button" onClick={handleOpen}>
+                Open chat
+              </TriggerButton> */}
+
+              {invitationReceiverByUser &&
+                invitationReceiverByUser.result &&
+                invitationReceiverByUser.result.response &&
+                invitationReceiverByUser.result.response.content.map((item) => (
+                  <List sx={{}} style={{ color: "gray" }}>
+                    <ListItem>
+                      <ListItemText
+                        primary={`${item.firstName}${
+                          item.lastName ? ` ${item.lastName}` : ""
+                        }`}
+                        secondary="Designation"
+                      />
+                    </ListItem>
+                    <div
+                      style={{
+                        display: "flex",
+                        justifyContent: "flex-end",
+                        marginTop: "10px",
+                      }}
+                    >
+                      <TriggerButton
+                        type="button"
+                        variant="contained"
+                        color="primary"
+                        onClick={() => acceptChat(item.userId)}
+                        // onClick={acceptChatInvitation(item.userId)}
+                        style={{ marginRight: "10px" }}
+                      >
+                        Accept
+                      </TriggerButton>
+                      <TriggerButton
+                        type="button"
+                        variant="contained"
+                        color="secondary"
+                        onClick={() => blockChat(item.userId)}
+                        // onClick={blockChatInvitation(item.userId)}
+                      >
+                        Decline
+                      </TriggerButton>
+                    </div>
+
+                    {/* <TriggerButton
+                        type="button"
+                        onClick={handleNotAcceptedChatOpen}
+                      >
+                        Open chat
+                      </TriggerButton> */}
+                    <Divider />
+                  </List>
+                ))}
               {/* <TriggerButton type="button" onClick={handleOpen}>
                 Open chat
               </TriggerButton> */}
@@ -797,9 +1028,9 @@ const AddConnections = () => {
               ))} */}
             </List>
 
-            <TabPanel value="2">
-              <filter />
-              {/* <Autocomplete
+            {/* <TabPanel value="2"> */}
+            {/* <Filter /> */}
+            {/* <Autocomplete
                 disablePortal
                 id="combo-box-demo"
                 sx={{ width: "100%", background: "#fff" }}
@@ -809,7 +1040,7 @@ const AddConnections = () => {
                   <TextField {...params} label="Filter by Name" />
                 )}
               /> */}
-              {!isLoading && !error && (
+            {/* {!isLoading && !error && (
                 <div className="button" onClick={handleOpen}>
                   {userData.map((item) => (
                     <div key={item.id} onClick={() => handleUserClick(item)}>
@@ -825,12 +1056,12 @@ const AddConnections = () => {
                   ))}
                   <div className="pagination">{pagination}</div>
                 </div>
-              )}
+              )} */}
 
-              {/* <div>  */}
+            {/* <div>  */}
 
-              {/* <TabPanel value="2">
-              <Autocomplete
+            <TabPanel value="2">
+              {/* <Autocomplete
                 disablePortal
                 id="combo-box-demo"
                 sx={{ width: "100%", background: "#fff" }}
@@ -838,24 +1069,35 @@ const AddConnections = () => {
                   <TextField {...params} label="Filter by Designation" />
                 )}
               /> */}
-              {/* {userData &&
-                userData.result &&
-                userData.result.response.content &&
-                userData.result.response.content.map((item) => (
-                  <List sx={{}} style={{ color: "blue" }}>
+
+              {userSearchData &&
+                userSearchData.result &&
+                userSearchData.result.response.content &&
+                userSearchData.result.response.content.map((item) => (
+                  <List
+                    key={item.id} // Add key prop to each List element
+                    sx={{}} // Add styling here if needed
+                    style={{ color: "blue" }}
+                    onClick={() => handleUserClick(item)}
+                  >
                     <ListItem>
                       <ListItemText
-                        primary={"" + item.firstName + item.lastName}
+                        primary={`${item.firstName}${
+                          item.lastName ? ` ${item.lastName}` : ""
+                        }`}
                         secondary="Designation"
+                        onClick={handleOpen}
                       />
                     </ListItem>
                     <Divider />
-
-                    { <TriggerButton type="button" onClick={handleOpen}>
-                  Open chat
-                </TriggerButton> }
+                    <div className="pagination">{pagination}</div>
+                    {/* {
+                      <TriggerButton type="button" onClick={handleOpen}>
+                        Open chat
+                      </TriggerButton>
+                    } */}
                   </List>
-                ))} */}
+                ))}
               <div>
                 <Modal
                   aria-labelledby="modal-title"
@@ -886,12 +1128,10 @@ const AddConnections = () => {
                     >
                       {selectedUser && (
                         <div style={{ fontSize: "14px", lineHeight: "1.6" }}>
-                          {/* Use selectedUser instead of item */}
                           Name Surname: {selectedUser?.firstName}
                           {selectedUser?.lastName}
                         </div>
                       )}
-                      {/* Designation should be inside the conditional rendering block */}
                       {selectedUser && (
                         <div
                           style={{ fontSize: "12px", paddingBottom: "10px" }}
@@ -918,12 +1158,11 @@ const AddConnections = () => {
                             paddingBottom: "15px",
                           }}
                         >
-                          Name Surname: {selectedUser.firstName}{" "}
-                          {selectedUser.lastName} is a manager with the
-                          department of Revenue and taxes and has actively
-                          contributed to the growth and authenticity of the
-                          knowledge curated for the betterment of the
-                          department.
+                          {selectedUser.firstName} {selectedUser.lastName} is a
+                          manager with the department of Revenue and taxes and
+                          has actively contributed to the growth and
+                          authenticity of the knowledge curated for the
+                          betterment of the department.
                         </Box>
                         <Box>
                           Connect with them to get insights on what they do or
