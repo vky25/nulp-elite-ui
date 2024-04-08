@@ -40,6 +40,7 @@ import Registrationnew from "pages/registration/Registration";
 import Registrationold from "pages/registration/Registrationold";
 import ContentList from "pages/search/ContentList";
 import LearningHistory from "pages/profile/learningHistory";
+import JoinCourse from "pages/content/joinCourse";
 
 function App() {
   // const [t] = useTranslation();
@@ -114,6 +115,11 @@ function App() {
       moduleName: "nulp_elite",
       path: "search/contentList",
       component: ContentList,
+    },
+    {
+      moduleName: "nulp_elite",
+      path: "content/joinCourse",
+      component: JoinCourse,
     },
     {
       moduleName: "nulp_elite",
