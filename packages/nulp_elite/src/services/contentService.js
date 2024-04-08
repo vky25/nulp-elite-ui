@@ -12,7 +12,7 @@ export const getAllContents = async (url, filters = {}, header = {}) => {
 };
 // Get  one content
 
-export const getOne = async (url, header = {}) => {
+const getOne = async (url, header = {}) => {
   const result = await get(url, {
     header,
   });
@@ -34,3 +34,6 @@ export const update = async (data = {}, headers = {}) => {
     return {};
   }
 };
+
+export default update;
+

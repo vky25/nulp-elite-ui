@@ -1,0 +1,161 @@
+{
+    "id": "api.certs.registry.search",
+    "ver": "v2",
+    "ts": "1712038526548",
+    "params": null,
+    "responseCode": "OK",
+    "result": {
+        "response": {
+            "content": [
+                {
+                    "_index": "certs",
+                    "_type": "_doc",
+                    "_source": {
+                        "pdfUrl": null,
+                        "data": {
+                            "badge": {
+                                "name": "Certificate issue testing course",
+                                "issuer": {
+                                    "name": "NULP"
+                                }
+                            },
+                            "issuedOn": "2023-01-18T00:00:00Z"
+                        },
+                        "related": {
+                            "courseId": "do_1137137750457548801150"
+                        }
+                    },
+                    "_id": "eefef573-34c2-4e5d-bb4f-3ef899d1bf5b",
+                    "_score": 22.232826
+                },
+                {
+                    "_index": "certs",
+                    "_type": "_doc",
+                    "_source": {
+                        "pdfUrl": null,
+                        "data": {
+                            "badge": {
+                                "name": "Dummy Course NIUA1 Dummy Course NIUA2 Dummy Course NIUA3 Dummy Course NIUA4",
+                                "issuer": {
+                                    "name": "NULP"
+                                }
+                            },
+                            "issuedOn": "2022-12-19T00:00:00Z"
+                        },
+                        "related": {
+                            "courseId": "do_11368261608669184011095"
+                        }
+                    },
+                    "_id": "becdaffa-f234-4518-b0e7-c5f2266237fa",
+                    "_score": 20.667828
+                },
+                {
+                    "_index": "certs",
+                    "_type": "_doc",
+                    "_source": {
+                        "pdfUrl": null,
+                        "data": {
+                            "badge": {
+                                "name": "e-Certificate Course on Mainstreaming Urban Climate Action",
+                                "issuer": {
+                                    "name": "NULP"
+                                }
+                            },
+                            "issuedOn": "2021-10-19T00:00:00Z"
+                        },
+                        "related": {
+                            "courseId": "do_1133739238734151681829"
+                        }
+                    },
+                    "_id": "dc98e3dc-f55c-4024-94db-f120ce751495",
+                    "_score": 20.667828
+                },
+                {
+                    "_index": "certs",
+                    "_type": "_doc",
+                    "_source": {
+                        "pdfUrl": null,
+                        "data": {
+                            "badge": {
+                                "name": "merit certificate Course",
+                                "issuer": {
+                                    "name": "NULP"
+                                }
+                            },
+                            "issuedOn": "2022-11-18T00:00:00Z"
+                        },
+                        "related": {
+                            "courseId": "do_1136704044642140161924"
+                        }
+                    },
+                    "_id": "854e1257-226b-41fc-8222-e064158ed78a",
+                    "_score": 19.94492
+                },
+                {
+                    "_index": "certs",
+                    "_type": "_doc",
+                    "_source": {
+                        "pdfUrl": null,
+                        "data": {
+                            "badge": {
+                                "name": "e-Certificate Course on Mainstreaming Urban Climate Action",
+                                "issuer": {
+                                    "name": "NULP"
+                                }
+                            },
+                            "issuedOn": "2021-10-19T00:00:00Z"
+                        },
+                        "related": {
+                            "courseId": "do_1133739238734151681829"
+                        }
+                    },
+                    "_id": "b1b9e350-575b-4b73-902f-a3b51a8787f3",
+                    "_score": 19.94492
+                },
+                {
+                    "_index": "certs",
+                    "_type": "_doc",
+                    "_source": {
+                        "pdfUrl": null,
+                        "data": {
+                            "badge": {
+                                "name": "Dummy Course",
+                                "issuer": {
+                                    "name": "NULP"
+                                }
+                            },
+                            "issuedOn": "2022-11-18T00:00:00Z"
+                        },
+                        "related": {
+                            "courseId": "do_1136676259731537921868"
+                        }
+                    },
+                    "_id": "6e830690-d1ae-43cb-bf70-db44cf0f98d6",
+                    "_score": 19.229416
+                },
+                {
+                    "_index": "certs",
+                    "_type": "_doc",
+                    "_source": {
+                        "pdfUrl": null,
+                        "data": {
+                            "badge": {
+                                "name": "Introduction to NUDM Platforms, Program Governance and Implementation",
+                                "issuer": {
+                                    "name": "NULP"
+                                }
+                            },
+                            "issuedOn": "2022-12-29T00:00:00Z"
+                        },
+                        "related": {
+                            "courseId": "do_1136598919702609921643"
+                        }
+                    },
+                    "_id": "0a1ad0ba-866c-4567-aedd-6d4158344aa5",
+                    "_score": 19.229416
+                }
+            ],
+            "count": 7
+        }
+    }
+}
