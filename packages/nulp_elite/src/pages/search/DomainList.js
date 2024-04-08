@@ -2,7 +2,6 @@
 
 import React, { useState, useEffect } from "react";
 // import { Box, Heading, Text, Button } from '@chakra-ui/react';
-
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import Typography from '@mui/material/Typography';
 import Grid from '@mui/material/Grid';
@@ -10,7 +9,7 @@ import { styled } from '@mui/material/styles';
 import Paper from '@mui/material/Paper';
 import Container from '@mui/material/Container';
 import Box from '@mui/material/Box';
-
+import domainWithImage from "../../assets/domainImgForm.json"
 import Search from "../../components/search";
 import frameworkHardCodedData from "../../assets/framework.json"
 import Header from "../../components/header";
@@ -52,7 +51,7 @@ const DomainList = () => {
    // Example of API Call   
    useEffect(() => {  
     fetchDataFramework();
-   
+    console.log("domainWithImage--",domainWithImage)
   }, []);
 
   const getCookieValue = (name) => {
@@ -109,7 +108,7 @@ const DomainList = () => {
 
   const loadContents = async (term) => {
     console.log(term);
-    navigate('/search/contentList', { state: { domain: term.code } }); 
+    navigate('/search/contentList', { state: { domain:term.code, page:"1"}}); 
   }
   return (
 <div>
@@ -127,7 +126,7 @@ const DomainList = () => {
    <Typography variant="h3" sx={{ marginTop: '30px' }}>Filter by popular domain</Typography>
    </ThemeProvider> 
    <Box sx={{paddingTop:'30px'}}>
-            {data && data.framework && data.framework.categories && data.framework.categories.map((faqIndex) => (
+             {data && data.framework && data.framework.categories && data.framework.categories.map((faqIndex) => (
             // {frameworkHardCodedData.result.framework.categories.map((faqIndex) => (
                 <Grid container spacing={2} style={{margin:'20px 0',marginBottom:'10px'}}  key={faqIndex}>
                 {faqIndex.terms.map(term => (
