@@ -42,6 +42,7 @@ import ContentList from "pages/search/ContentList";
 import AllContent from "pages/content/AllContent";
 import CategoryPage from "pages/content/CategoryPage";
 import LearningHistory from "pages/profile/learningHistory";
+import JoinCourse from "pages/content/joinCourse";
 
 function App() {
   // const [t] = useTranslation();
@@ -116,6 +117,11 @@ function App() {
       moduleName: "nulp_elite",
       path: "search/contentList",
       component: ContentList,
+    },
+    {
+      moduleName: "nulp_elite",
+      path: "content/joinCourse",
+      component: JoinCourse,
     },
     {
       moduleName: "nulp_elite",

@@ -133,7 +133,7 @@ const ContentList = (props) => {
             margin: "0",
           }}
         >
-          Explore content related to your domain. Learn from well curated
+          Explore content related to your domain.Learn from well curated
           courses and content.
         </p>
         <p
