@@ -109,6 +109,7 @@ body{
     max-height: inherit !important;
     top: 0 !important;
  }
+ 
  }
  @media(min-width:769px) {
   .lg-hide{
@@ -117,6 +118,10 @@ body{
   .chatIcon{
     bottom: 173px;
   }
+  .react-multiple-carousel{
+    background: #004367 !important;
+    border-radius: none !important;
+   }
  }
 
  .language fieldset{
@@ -139,4 +144,38 @@ body{
 }
 .circular .MuiCircularProgress-colorPrimary{
   color: #f0bdf5;
+}
+.custom-button-group {
+  display: flex;
+  justify-content: space-between;
+}
+
+.custom-button {
+  background-color: rgba(255, 255, 255, 0.5); /* Adjust opacity here (0 is fully transparent, 1 is fully opaque) */
+  border: none;
+  outline: none;
+  cursor: pointer;
+  font-size: 20px;
+  padding: 5px; /* Adjust padding as needed */
+  border-radius: 5px; /* Optional: Add some rounding to the button */
+  transition: background-color 0.3s; /* Optional: Add transition for smooth hover effect */
+}
+
+.custom-button:hover {
+  background-color: rgba(255, 255, 255, 0.7); /* Adjust opacity on hover if needed */
+}
+.leftshade{
+  position: absolute;
+  top: -11px;
+  width: 270px;
+  height: 88px;
+  background: linear-gradient(269deg, rgba(255, 255, 255, 0) 2.05%, #FFFFFF 99.68%)
+}
+.rightshade{
+  position: absolute;
+  top: -11px;
+  width: 160px;
+  height: 88px;
+  right:0;
+  background: linear-gradient(269deg, rgba(255, 255, 255, 0) 2.05%, #FFFFFF 99.68%)
 }

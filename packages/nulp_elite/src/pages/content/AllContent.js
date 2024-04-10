@@ -6,9 +6,11 @@ import Header from "components/header";
 import Footer from "components/Footer";
 import { Link } from "react-router-dom";
 import URLSConfig from "../../configs/urlConfig.json";
+import data from "../../assets/contentSerach.json";
+
 
 const AllContent = () => {
-  const [data, setData] = useState([]);
+  // const [data, setData] = useState([]);
   const [error, setError] = useState(null);
   const [expandedCategory, setExpandedCategory] = useState(null);
 
@@ -120,7 +122,7 @@ const AllContent = () => {
     <>
       <Header />
       {Object.entries(
-        data.reduce((acc, item) => {
+        data?.reduce((acc, item) => {
           if (!acc[item.primaryCategory]) {
             acc[item.primaryCategory] = [];
           }
