@@ -29,6 +29,8 @@ import DialogActions from "@material-ui/core/DialogActions";
 import Header from "components/header";
 import Footer from "components/Footer";
 import Filter from "components/filter";
+import CheckCircleOutlineIcon from "@mui/icons-material/CheckCircleOutline";
+import CancelOutlinedIcon from "@mui/icons-material/CancelOutlined";
 
 // Define modal styles
 const useStyles = makeStyles((theme) => ({
@@ -118,6 +120,12 @@ const AddConnections = () => {
 
     fetchData();
   }, [filters]);
+
+  const [userChatData, setUserChatData] = useState({});
+
+  useEffect(() => {
+    onMyConnection();
+  }, [userChatData]);
 
   const fetchData = async () => {
     setIsLoading(true);
@@ -566,7 +574,7 @@ const AddConnections = () => {
   };
 
   const blockChat = (userId) => {
-    blockChatInvitation(userId);
+    rejectChatInvitation(userId);
   };
 
   const acceptChatInvitation = async (userId) => {
@@ -594,7 +602,41 @@ const AddConnections = () => {
 
       const responseData = await response.json();
       console.log("acceptChatInvitation", responseData.result);
+      setUserChatData(responseData.result);
       onMyConnection();
+    } catch (error) {
+      setError(error.message);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  const rejectChatInvitation = async (userId) => {
+    setIsLoading(true);
+    setError(null);
+    const requestBody = {
+      sender_id: userId,
+      receiver_id: loggedInUserId,
+    };
+
+    const url = `http://localhost:3000/directConnect/reject-invitation`;
+
+    try {
+      const response = await fetch(url, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(requestBody),
+      });
+      if (!response.ok) {
+        throw new Error("Failed to block chat");
+      }
+
+      const responseData = await response.json();
+      console.log("rejectChatInvitation", responseData.result);
+      onMyConnection();
+      // getConnections();
     } catch (error) {
       setError(error.message);
     } finally {
@@ -799,30 +841,104 @@ const AddConnections = () => {
               </TabList>
             </Box>
             <TabPanel value="1" style={{ padding: "0" }}>
+              {invitationReceiverByUser &&
+                invitationReceiverByUser?.map((item) => (
+                  <List sx={{}} style={{ color: "gray" }}>
+                    <ListItem>
+                      <ListItemText
+                        primary={`${item.firstName}${
+                          item.lastName ? ` ${item.lastName}` : ""
+                        }`}
+                        secondary="Designation"
+                      />
+                    </ListItem>
+                    <div
+                      style={{
+                        display: "flex",
+                        justifyContent: "flex-end",
+                        marginTop: "10px",
+                      }}
+                    >
+                      <Link
+                        href="#"
+                        underline="none"
+                        color="primary"
+                        onClick={() => acceptChat(item.userId)}
+                        style={{ marginLeft: "10px" }}
+                      >
+                        <CheckCircleOutlineIcon />
+                      </Link>
+                      {/* <TriggerButton
+                        type="button"
+                        variant="contained"
+                        color="secondary"
+                        onClick={() => blockChat(item.userId)}
+                        // onClick={rejectChatInvitation(item.userId)}
+                      >
+                        Decline
+                      </TriggerButton> */}
+                      <Link
+                        href="#"
+                        underline="none"
+                        color="secondary"
+                        onClick={() => blockChat(item.userId)}
+                      >
+                        <CancelOutlinedIcon />
+                      </Link>
+                      {/* <TriggerButton
+                        type="button"
+                        variant="contained"
+                        color="primary"
+                        onClick={() => acceptChat(item.userId)}
+                        // onClick={acceptChatInvitation(item.userId)}
+                        style={{ marginRight: "10px" }}
+                      >
+                        Accept
+                      </TriggerButton>
+                      <TriggerButton
+                        type="button"
+                        variant="contained"
+                        color="secondary"
+                        onClick={() => blockChat(item.userId)}
+                        // onClick={rejectChatInvitation(item.userId)}
+                      >
+                        Decline
+                      </TriggerButton> */}
+                    </div>
+
+                    {/* <TriggerButton
+                        type="button"
+                        onClick={handleNotAcceptedChatOpen}
+                      >
+                        Open chat
+                      </TriggerButton> */}
+                    <Divider />
+                  </List>
+                ))}
+              {/* <TriggerButton type="button" onClick={handleOpen}>
+                Open chat
+              </TriggerButton> */}
+
               {invitationAcceptedUsers &&
                 invitationAcceptedUsers?.map((item) => (
                   <List sx={{}} style={{ color: "green" }}>
                     <ListItem>
                       <ListItemText
-                        primary={"" + item.firstName + item.lastName}
+                        primary={`${item.firstName}${
+                          item.lastName ? ` ${item.lastName}` : ""
+                        }`}
                         secondary="Designation"
+                        onClick={() =>
+                          handleAcceptedChatOpen(
+                            item.userId,
+                            `${item.firstName}${
+                              item.lastName ? ` ${item.lastName}` : ""
+                            }`
+                          )
+                        }
                       />
                     </ListItem>
-                    {/* <TriggerButton
-                      type="button"
-                      variant="contained"
-                      color="primary"
-                      onClick={() =>
-                        handleAcceptedChatOpen(
-                          item.userId,
-                          "" + item.firstName + item.lastName
-                        )
-                      }
-                      style={{ marginLeft: "90%" }}
-                    >
-                      Open chat
-                    </TriggerButton> */}
-                    <Link
+                    {/* <Link
                       href="#"
                       underline="none"
                       color="primary"
@@ -835,10 +951,20 @@ const AddConnections = () => {
                       style={{ marginLeft: "90%" }}
                     >
                       Open chat
-                    </Link>
+                    </Link> */}
                     <div>
                       <Dialog open={open} onClick={handleCloseModal}>
                         <DialogTitle>{selectedUserName}</DialogTitle>
+                        <TriggerButton
+                          type="button"
+                          variant="contained"
+                          color="primary"
+                          onClick={blockChatInvitation}
+                          style={{ marginLeft: "10px" }}
+                        >
+                          Block User
+                        </TriggerButton>
+
                         <DialogContent dividers>
                           {userChat?.map((msg, index) => (
                             <div
@@ -937,7 +1063,7 @@ const AddConnections = () => {
                   >
                     <ModalContent sx={{ width: 400 }} style={{}}>
                       <div>
-                        <h2>Chat request has not accepted.</h2>
+                        <h2>Invitation not accepted.</h2>
                         <Button
                           onClick={(e) => {
                             setShowChatModal(false);
@@ -962,58 +1088,6 @@ const AddConnections = () => {
               {/* <TriggerButton type="button" onClick={handleOpen}>
                 Open chat
               </TriggerButton> */}
-
-              {invitationReceiverByUser &&
-                invitationReceiverByUser?.map((item) => (
-                  <List sx={{}} style={{ color: "gray" }}>
-                    <ListItem>
-                      <ListItemText
-                        primary={`${item.firstName}${
-                          item.lastName ? ` ${item.lastName}` : ""
-                        }`}
-                        secondary="Designation"
-                      />
-                    </ListItem>
-                    <div
-                      style={{
-                        display: "flex",
-                        justifyContent: "flex-end",
-                        marginTop: "10px",
-                      }}
-                    >
-                      <TriggerButton
-                        type="button"
-                        variant="contained"
-                        color="primary"
-                        onClick={() => acceptChat(item.userId)}
-                        // onClick={acceptChatInvitation(item.userId)}
-                        style={{ marginRight: "10px" }}
-                      >
-                        Accept
-                      </TriggerButton>
-                      <TriggerButton
-                        type="button"
-                        variant="contained"
-                        color="secondary"
-                        onClick={() => blockChat(item.userId)}
-                        // onClick={blockChatInvitation(item.userId)}
-                      >
-                        Decline
-                      </TriggerButton>
-                    </div>
-
-                    {/* <TriggerButton
-                        type="button"
-                        onClick={handleNotAcceptedChatOpen}
-                      >
-                        Open chat
-                      </TriggerButton> */}
-                    <Divider />
-                  </List>
-                ))}
-              {/* <TriggerButton type="button" onClick={handleOpen}>
-                Open chat
-              </TriggerButton> */}
             </TabPanel>
             <List>
               {/* {userData.map((user, index) => (
@@ -1030,7 +1104,7 @@ const AddConnections = () => {
             </List>
 
             {/* <TabPanel value="2"> */}
-            {/* <Filter /> */}
+            <Filter />
             {/* <Autocomplete
                 disablePortal
                 id="combo-box-demo"
