@@ -38,7 +38,7 @@ import DomainList from "pages/search/DomainList";
 import Registrationnew from "pages/registration/Registration";
 import Registrationold from "pages/registration/Registrationold";
 import ContentList from "pages/search/ContentList";
-
+import SendOtp from "pages/SendOtp";
 function App() {
   // const [t] = useTranslation();
   const [search, setSearch] = React.useState(true);
@@ -70,8 +70,18 @@ function App() {
     },
     {
       moduleName: "nulp_elite",
-      path: "/profile",
+      path: "/profile/profile",
       component: Profile,
+    },
+    {
+      moduleName: "nulp_elite",
+      path: "/profile/certificate",
+      component: Certificate,
+    },
+    {
+      moduleName: "nulp_elite",
+      path: "/profile/learningHistory",
+      component: LearningHistory,
     },
     {
       moduleName: "nulp_elite",
@@ -95,12 +105,12 @@ function App() {
     },
     {
       moduleName: "nulp_elite",
-      path: "search/domainList",
+      path: "/search/domainList",
       component: DomainList,
     },
     {
       moduleName: "nulp_elite",
-      path: "search/contentList",
+      path: "/search/contentList",
       component: ContentList,
     },
     {
@@ -137,6 +147,20 @@ function App() {
       moduleName: "nulp_elite",
       path: "/registrationold",
       component: Registrationold,
+    },
+    {
+      moduleName: "nulp_elite",
+      path: "/view-all/:category",
+      component: CategoryPage,
+    },
+    {
+      path: "*",
+      component: Profile,
+    },
+    {
+      moduleName: "nulp_elite",
+      path: "/otp",
+      component: SendOtp,
     },
   ];
   // public_url="http://localhost:5000"

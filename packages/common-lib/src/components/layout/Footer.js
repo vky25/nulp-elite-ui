@@ -1,99 +1,67 @@
-import React, { useEffect } from 'react'
-import {
-  Box,
-  Text,
-  HStack,
-  Center,
-  Stack,
-  Pressable,
-  VStack
-} from 'native-base'
-import IconByName from '../IconByName'
-import { useTranslation } from 'react-i18next'
-import { generatePath, useNavigate } from 'react-router-dom'
-import { useWindowSize } from '../helper'
+import * as React from 'react'
+import Box from '@mui/material/Box'
+import BottomNavigation from '@mui/material/BottomNavigation'
+import BottomNavigationAction from '@mui/material/BottomNavigationAction'
+import FavoriteIcon from '@mui/icons-material/Favorite'
+import SearchSharpIcon from '@mui/icons-material/SearchSharp'
+import GroupsOutlinedIcon from '@mui/icons-material/GroupsOutlined'
+import AccountCircleOutlinedIcon from '@mui/icons-material/AccountCircleOutlined'
+import EditNoteOutlinedIcon from '@mui/icons-material/EditNoteOutlined'
 
-export default function Footer({ menues, routeDynamics, ...props }) {
-  const path = window?.location?.pathname.toString()
-  const { t } = useTranslation()
-  const navigate = useNavigate()
-
-  const [width, Height] = useWindowSize()
-  const footerMenus = menues
-
-  const PressableNew = ({ item, children, ...prop }) => {
-    return item?.route ? (
-      <Pressable
-        {...prop}
-        onPress={() => {
-          navigate(
-            routeDynamics
-              ? generatePath(item.route, { ...{ id: item.id } })
-              : item.route
-          )
-        }}
-      >
-        {children}
-      </Pressable>
-    ) : (
-      <Box {...prop}>{children}</Box>
-    )
+const styles = {
+  BottomNavigation: {
+    width: '100%',
+    position: 'fixed',
+    bottom: 0
   }
+}
+
+export default function Footer() {
+  const [value, setValue] = React.useState(0)
 
   return (
-    <Stack>
-      <Box width={width} flex={1} safeAreaTop position='fixed' bottom='0'>
-        <Center flex={1}></Center>
-        <HStack
-          pl={'20px'}
-          pr={'20px'}
-          bg='white'
-          alignItems='center'
-          safeAreaBottom
-          shadow={6}
-        >
-          {footerMenus?.map((item, index) => (
-            <PressableNew
-              item={item}
-              key={index}
-              cursor='pointer'
-              py='3'
-              flex={1}
-              alignItems='center'
-            >
-              {Array.isArray(item?.selected) &&
-              (item?.selected?.find((e) => path.startsWith(e) && e !== '/') ||
-                item.selected.includes(path)) ? (
-                <VStack alignItems='center'>
-                  <IconByName
-                    name={item.icon}
-                    isDisabled
-                    p='2'
-                    pb='1'
-                    color={'primary'}
-                  />
-                  <Text fontSize='12' color={'primary'}>
-                    {t(item.title)}
-                  </Text>
-                </VStack>
-              ) : (
-                <VStack alignItems={'center'}>
-                  <IconByName
-                    name={item.icon}
-                    isDisabled
-                    p='2'
-                    pb='1'
-                    color={'lightGray1'}
-                  />
-                  <Text fontSize='12' color={'lightGray1'}>
-                    {t(item.title)}
-                  </Text>
-                </VStack>
-              )}
-            </PressableNew>
-          ))}
-        </HStack>
-      </Box>
-    </Stack>
+    <Box
+      sx={{
+        width: 500,
+        position: 'fixed',
+        height: '67px',
+        bottom: 0,
+        background: '#fff',
+        width: '100%',
+        boxShadow: '0px -1px 4px 0px #00000040'
+      }}
+    >
+      <BottomNavigation
+        sx={{
+          width: '100%',
+          display: 'flex',
+          position: 'relative',
+          padding: '4px 0'
+        }}
+        showLabels
+        value={value}
+        onChange={(event, newValue) => {
+          setValue(newValue)
+        }}
+      >
+        <BottomNavigationAction
+          className='navigateActive'
+          label='Search'
+          icon={<SearchSharpIcon />}
+        />
+        <BottomNavigationAction
+          label='Content'
+          icon={<EditNoteOutlinedIcon />}
+        />
+        <BottomNavigationAction
+          label='Connections'
+          icon={<GroupsOutlinedIcon />}
+        />
+        <BottomNavigationAction
+          label='Profile'
+          icon={<AccountCircleOutlinedIcon />}
+        />
+      </BottomNavigation>
+    </Box>
   )
 }

@@ -26,13 +26,10 @@ import {
   Image,
 } from "native-base";
 import { Link, useParams } from "react-router-dom";
-import Tab from '@mui/material/Tab';
-import TabContext from '@material-ui/lab/TabContext';
-import TabList from '@material-ui/lab/TabList';
-import TabPanel from '@material-ui/lab/TabPanel';
-
-
-
+import Tab from "@mui/material/Tab";
+import TabContext from "@material-ui/lab/TabContext";
+import TabList from "@material-ui/lab/TabList";
+import TabPanel from "@material-ui/lab/TabPanel";
 
 const MyConnections = (props) => {
   const [search, setSearch] = React.useState(true);
@@ -162,7 +159,7 @@ const MyConnections = (props) => {
           {
             title: "Connections",
             icon: "TeamLineIcon",
-            route: "/home",
+            route: "/addConnections",
           },
           {
             title: "Profie",
@@ -171,11 +168,10 @@ const MyConnections = (props) => {
           },
         ],
       }}
-      
     >
-     
-     <Box textAlign="center" padding="10">hh
-     {/* <Box sx={{ width: '100%', typography: 'body1' }}>
+      <Box textAlign="center" padding="10">
+        hh
+        {/* <Box sx={{ width: '100%', typography: 'body1' }}>
       <TabContext value={value}>
         <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
           <TabList onChange={handleChange} aria-label="lab API tabs example">
