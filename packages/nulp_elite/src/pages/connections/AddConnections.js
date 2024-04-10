@@ -22,13 +22,6 @@ import Typography from "@mui/material/Typography";
 import Search from "components/search";
 import { useLocation } from "react-router-dom";
 import * as util from "../../services/utilService";
-import Dialog from "@material-ui/core/Dialog";
-import DialogTitle from "@material-ui/core/DialogTitle";
-import DialogContent from "@material-ui/core/DialogContent";
-import DialogActions from "@material-ui/core/DialogActions";
-import Header from "components/header";
-import Footer from "components/Footer";
-import Filter from "components/filter";
 
 // Define modal styles
 const useStyles = makeStyles((theme) => ({
@@ -51,7 +44,7 @@ const useStyles = makeStyles((theme) => ({
 
 const AddConnections = () => {
   const [value, setValue] = React.useState("1");
-  console.log("Hello");
+
   const handleChange = (event, newValue) => {
     setValue(newValue);
   };
@@ -71,16 +64,19 @@ const AddConnections = () => {
   const [error, setError] = useState(null);
   const [selectedUser, setSelectedUser] = useState("");
   const [openModal, setOpenModal] = useState(false);
-  const [userSearchData, setUserSearchData] = useState();
+  const [userSearchData, setUserSearchData] = useState({});
   const [userdata, setUserData] = useState([]);
   const [searchQuery, setSearchQuery] = useState("");
   const [textValue, setTextValue] = useState(
     "Hello ..., I would like to connect with you regarding some queries i had in your course."
   );
+  const [showModal, setShowModal] = useState(false);
   const [modalMessage, setModalMessage] = useState("");
-  const [invitationAcceptedUsers, setInvitationAcceptedUsers] = useState();
-  const [invitationNotAcceptedUsers, setInvitationNotAcceptedUsers] =
-    useState();
+
+  const [invitationAcceptedUsers, setInvitationAcceptedUsers] = useState({});
+  const [invitationNotAcceptedUsers, setInvitationNotAcceptedUsers] = useState(
+    {}
+  );
   const [loggedInUserId, setLoggedInUserId] = useState();
 
   const toggleChat = () => {
@@ -92,12 +88,11 @@ const AddConnections = () => {
   const location = useLocation();
   const { domain } = location.state || {};
   const [receivedUserChat, setReceivedUserchat] = useState("");
-  const [invitationReceiverByUser, setInvitationReceivedUserByIds] = useState();
-  const [userChat, setUserChat] = useState();
+  const [invitationReceiverByUser, setInvitationReceivedUserByIds] = useState(
+    {}
+  );
+  const [userChat, setUserChat] = useState("");
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [showModal, setShowModal] = useState(false);
-  const [showChatModal, setShowChatModal] = useState(false);
-  const [selectedUserName, setSelectedUserName] = useState(false);
 
   // const handleFilterChange = (selectedOptions) => {
   //   const selectedValues = selectedOptions.map((option) => option.value);
@@ -110,7 +105,6 @@ const AddConnections = () => {
 
   useEffect(() => {
     const _userId = util.userId();
-    setLoggedInUserId(_userId);
     console.log("_userId", _userId);
     if (sessionStorage.length > 0) {
       setLoggedInUserId(sessionStorage.getItem("loggedInUserId"));
@@ -229,29 +223,14 @@ const AddConnections = () => {
       }
 
       let responseData = await response.json();
-      console.log("responseData", responseData);
-      console.log(
-        "user list of all type user",
-        invitationAcceptedUsers,
-        invitationNotAcceptedUsers,
-        invitationReceiverByUser
-      );
-      const allTypeOfUsers = [
-        ...(invitationAcceptedUsers || []),
-        ...(invitationNotAcceptedUsers || []),
-        ...(invitationReceiverByUser || []),
-      ]
-        .filter((e) => e.userId)
-        .map((e) => e.userId);
-      console.log("allTypeOfUsers", allTypeOfUsers);
-      const responseUserData = responseData?.result?.response?.content?.filter(
-        function (el) {
-          return !allTypeOfUsers.includes(el.userId);
-        }
-      );
+      // const usedUsers = invitationAcceptedUsers
+      //   .concat(invitationNotAcceptedUsers)
+      //   .concat(invitationReceiverByUser);
+      // responseData = responseData.result.response.content.filter(function (el) {
+      //   return usedUsers.indexOf(el.userId) >= 0;
+      // });
 
-      console.log("responseUserData", responseUserData);
-      setUserSearchData(responseUserData);
+      setUserSearchData(responseData);
       console.log("responseSearchData", responseData);
     } catch (error) {
       console.error("Error fetching data:", error);
@@ -260,10 +239,6 @@ const AddConnections = () => {
       setIsLoading(false);
     }
   };
-
-  console.log("invitationAcceptedUsers:", invitationAcceptedUsers);
-  console.log("invitationNotAcceptedUsers:", invitationNotAcceptedUsers);
-  console.log("invitationReceiverByUser:", invitationReceiverByUser);
 
   const handleUserClick = (selectedUser) => {
     setSelectedUser(selectedUser);
@@ -274,14 +249,10 @@ const AddConnections = () => {
 
   const handleSendClick = () => {
     sendChatRequestToUser(selectedUser.userId); // Call sendChat function to send the chat message
-    handleClose();
-    setShowModal(true);
+    setShowChat(false);
+    toggleChat();
   };
 
-  const userClick = (selectedUser) => {
-    setSelectedUser(selectedUser);
-    setShowChatModal(true);
-  };
   const getConnections = async () => {
     setIsLoading(true);
     setError(null);
@@ -339,6 +310,8 @@ const AddConnections = () => {
         getInvitationNotAcceptedUserByIds(invitationNotAcceptedUserIds);
       invitationAcceptedUserIds.length > 0 &&
         getInvitationAcceptedUserByIds(invitationAcceptedUserIds);
+
+      // setData(responseData.result.response.content);
     } catch (error) {
       setError(error.message);
     } finally {
@@ -379,12 +352,9 @@ const AddConnections = () => {
       }
 
       const responseData = await response.json();
-      setInvitationNotAcceptedUsers(
-        responseData?.result?.response?.content || []
-      );
-      handleOpen();
+      setInvitationNotAcceptedUsers(responseData);
+      handleOpen(); // Open modal after successful API response
       handleClose();
-
       console.log(
         "InvitationNotAcceptedUsers",
         responseData.result.response.content
@@ -395,7 +365,6 @@ const AddConnections = () => {
     } finally {
       setIsLoading(false);
     }
-    console.log("invitationNotAcceptedUsers", invitationNotAcceptedUsers);
   };
 
   const getInvitationAcceptedUserByIds = async (userIds) => {
@@ -431,8 +400,7 @@ const AddConnections = () => {
       }
 
       const responseData = await response.json();
-      console.log(responseData);
-      setInvitationAcceptedUsers(responseData?.result?.response?.content || []);
+      setInvitationAcceptedUsers(responseData);
       console.log(
         "InvitationAcceptedUsers",
         responseData.result.response.content
@@ -478,9 +446,7 @@ const AddConnections = () => {
       }
 
       const responseData = await response.json();
-      setInvitationReceivedUserByIds(
-        responseData?.result?.response?.content || []
-      );
+      setInvitationReceivedUserByIds(responseData);
       handleOpen(); // Open modal after successful API response
       handleClose();
       console.log(
@@ -538,7 +504,6 @@ const AddConnections = () => {
     } finally {
       setIsLoading(false);
     }
-    console.log("invitationReceiverByUser", invitationReceiverByUser);
   };
 
   const onMyConnection = () => {
@@ -546,15 +511,10 @@ const AddConnections = () => {
     //getInvitations();
   };
 
-  const handleAcceptedChatOpen = (userId, name) => {
-    setSelectedUserName(name);
+  const handleAcceptedChatOpen = (userId) => {
     getUserChat(userId);
     setIsModalOpen(true);
     setOpen(true);
-  };
-
-  const handleCloseChatHistoryModal = () => {
-    setOpen(false);
   };
 
   const handleNotAcceptedChatOpen = () => {
@@ -626,8 +586,8 @@ const AddConnections = () => {
 
       const responseData = await response.json();
       console.log("blockChatInvitation", responseData.result);
-      onMyConnection();
-      // getConnections();
+      // onMyConnection();
+      getConnections();
     } catch (error) {
       setError(error.message);
     } finally {
@@ -663,13 +623,7 @@ const AddConnections = () => {
 
       const responseData = await response.json();
       console.log("getUserChat", responseData.result);
-      const userChats = responseData.result.filter(
-        (res) =>
-          (res.sender_id === loggedInUserId && res.receiver_id === userId) ||
-          (res.sender_id === userId && res.receiver_id === loggedInUserId)
-      );
-      setUserChat(userChats);
-      // const userChat = responseData.result;
+      const userChat = responseData.result;
     } catch (error) {
       setError(error.message);
     } finally {
@@ -710,12 +664,142 @@ const AddConnections = () => {
       setIsLoading(false);
     }
   };
-
   return (
-    <Box>
-      <Header />
+    <Layout
+      isDisabledAppBar={true}
+      _header={{
+        rightIcon: (
+          <HStack paddingBottom={"25px"}>
+            <IconByName name="CloseCircleFillIcon" />
+          </HStack>
+        ),
+        customeComponent: (
+          <Box flex={1} minH={"40px"}>
+            <HStack>
+              <VStack position={"relative"} padding="10px" top={"10px"}>
+                <Menu
+                  w="160"
+                  trigger={(triggerProps) => {
+                    return (
+                      <Button
+                        alignSelf="center"
+                        variant="solid"
+                        {...triggerProps}
+                      >
+                        <IconByName size="20px" name="MenuFillIcon" />
+                      </Button>
+                    );
+                  }}
+                >
+                  <Menu.Item onPress={(item) => navigate("/help")}>
+                    Help
+                  </Menu.Item>
+                  <Menu.Item onPress={(item) => navigate("/logoff")}>
+                    Logout
+                  </Menu.Item>
+                </Menu>
+              </VStack>
+              <VStack>
+                <Image
+                  source={require("../../assets/nulp_logo.jpeg")}
+                  alt=""
+                  size="sm"
+                />
+              </VStack>
+            </HStack>
+
+            <Box position={"absolute"} right={"20px"} top={"10px"}>
+              <Menu
+                w="160"
+                trigger={(triggerProps) => {
+                  return (
+                    <Button
+                      alignSelf="center"
+                      variant="solid"
+                      {...triggerProps}
+                    >
+                      Language
+                    </Button>
+                  );
+                }}
+              >
+                <Menu.Item>English</Menu.Item>
+                <Menu.Item> Hindi</Menu.Item>
+              </Menu>
+            </Box>
+          </Box>
+        ),
+      }}
+      // subHeader={
+      //   <Link
+      //     to="/"
+      //     style={{ color: "rgb(63, 63, 70)", textDecoration: "none" }}
+      //   >
+      //     <HStack space="4" justifyContent="space-between">
+      //       <VStack>
+      //         <SearchLayout
+      //           {...{
+      //             search,
+      //             setSearch,
+      //             // minStringLenght: 3,
+      //             notFoundMessage: "TYPE_TO_START_SEARCHING_LEARNING",
+      //             onCloseSearch: setSearchState,
+      //           }}
+      //         ></SearchLayout>
+      //       </VStack>
+      //     </HStack>
+      //   </Link>
+      // }
+      _subHeader={{ bg: "rgb(248, 117, 88)" }}
+      _footer={{
+        menues: [
+          {
+            title: "Search",
+            icon: "SearchLineIcon",
+            route: "/contents",
+          },
+          {
+            title: "Contents",
+            icon: "BookOpenLineIcon",
+            route: "/all",
+          },
+          {
+            title: "Connections",
+            icon: "TeamLineIcon",
+            route: "/addConnections",
+          },
+          {
+            title: "Profie",
+            icon: "AccountCircleLineIcon",
+            route: "/profile",
+          },
+        ],
+      }}
+    >
       <Box textAlign="center" padding="10">
         <Box sx={{ width: "100%", typography: "body1" }}>
+          <div role="presentation" onClick={handleClick}>
+            <Breadcrumbs
+              aria-label="breadcrumb"
+              style={{
+                padding: "10px 10px 20px 0",
+                fontSize: "16px",
+                fontWeight: "600",
+              }}
+            >
+              <Link underline="hover" color="#004367" href="/">
+                Direct Connect
+              </Link>
+              <Link
+                underline="hover"
+                href=""
+                aria-current="page"
+                color="#484848"
+              >
+                My Connections
+              </Link>
+            </Breadcrumbs>
+          </div>
           {/* <div style={{ display: 'flex', alignItems: 'center', marginBottom: '1rem' }}>
       <input type="text" placeholder="Search..." style={{ flex: 1, marginRight: '0.5rem', padding: '0.5rem', borderRadius: '4px', border: '1px solid #CACACA' }} />
       <button style={{ padding:'11px 16px 11px 16px', borderRadius: '4px', backgroundColor: '#004367', color: 'white', border: '1px', cursor: 'pointer' ,fontSize:'12px'}}>Search</button>
@@ -800,7 +884,9 @@ const AddConnections = () => {
             </Box>
             <TabPanel value="1" style={{ padding: "0" }}>
               {invitationAcceptedUsers &&
-                invitationAcceptedUsers?.map((item) => (
+                invitationAcceptedUsers.result &&
+                invitationAcceptedUsers.result.response.content &&
+                invitationAcceptedUsers.result.response.content.map((item) => (
                   <List sx={{}} style={{ color: "green" }}>
                     <ListItem>
                       <ListItemText
@@ -808,80 +894,30 @@ const AddConnections = () => {
                         secondary="Designation"
                       />
                     </ListItem>
-                    {/* <TriggerButton
+                    <TriggerButton
                       type="button"
                       variant="contained"
                       color="primary"
-                      onClick={() =>
-                        handleAcceptedChatOpen(
-                          item.userId,
-                          "" + item.firstName + item.lastName
-                        )
-                      }
+                      onClick={() => handleAcceptedChatOpen(item.userId)}
                       style={{ marginLeft: "90%" }}
+                    >
+                      Open chat
+                    </TriggerButton>
+                    <Modal open={isModalOpen} onClose={handleCloseModal}>
+                      {/* Content of your modal */}
+                      {/* Example content */}
+                      <div>
+                        <h2>Chat Modal</h2>
+                        <p>This is the chat modal content.</p>
+                        <button onClick={handleCloseModal}>Close</button>
+                      </div>
+                    </Modal>
+                    {/* <TriggerButton
+                      type="button"
+                      onClick={() => handleAcceptedChatOpen(item.userId)}
                     >
                       Open chat
                     </TriggerButton> */}
-                    <Link
-                      href="#"
-                      underline="none"
-                      color="primary"
-                      onClick={() =>
-                        handleAcceptedChatOpen(
-                          item.userId,
-                          "" + item.firstName + item.lastName
-                        )
-                      }
-                      style={{ marginLeft: "90%" }}
-                    >
-                      Open chat
-                    </Link>
-                    <div>
-                      <Dialog open={open} onClick={handleCloseModal}>
-                        <DialogTitle>{selectedUserName}</DialogTitle>
-                        <DialogContent dividers>
-                          {userChat?.map((msg, index) => (
-                            <div
-                              style={{ maxHeight: "300px", overflowY: "auto" }}
-                            >
-                              <p
-                                style={{
-                                  marginLeft:
-                                    msg.sender_id === loggedInUserId && "30px",
-                                }}
-                              >
-                                <Typography
-                                  key={index}
-                                  variant="body1"
-                                  style={{ marginBottom: "8px" }}
-                                >
-                                  <strong>{msg?.message}</strong>{" "}
-                                  <span style={{ fontSize: "x-small" }}>
-                                    {new Intl.DateTimeFormat("en-US", {
-                                      year: "numeric",
-                                      month: "2-digit",
-                                      day: "2-digit",
-                                      hour: "numeric",
-                                      minute: "numeric",
-                                      second: "numeric",
-                                      timeZone: "UTC", // Set the time zone if necessary
-                                    }).format(new Date(msg?.timestamp))}
-                                  </span>
-                                </Typography>
-                              </p>
-                            </div>
-                          ))}
-                        </DialogContent>
-                        <DialogActions>
-                          <Button
-                            onClick={handleCloseChatHistoryModal}
-                            color="primary"
-                          >
-                            Close
-                          </Button>
-                        </DialogActions>
-                      </Dialog>
-                    </div>
                     <Divider />
 
                     {/* <ListItem>
@@ -902,69 +938,32 @@ const AddConnections = () => {
                 ))}
 
               {invitationNotAcceptedUsers &&
-                invitationNotAcceptedUsers?.map((item) => (
-                  <List
-                    sx={{}}
-                    style={{ color: "red" }}
-                    onClick={() => userClick(item)}
-                  >
-                    <ListItem>
-                      <ListItemText
-                        primary={`${item.firstName}${
-                          item.lastName ? ` ${item.lastName}` : ""
-                        }`}
-                        secondary="Designation"
-                      />
-                    </ListItem>
+                invitationNotAcceptedUsers.result &&
+                invitationNotAcceptedUsers.result.response &&
+                invitationNotAcceptedUsers.result.response.content.map(
+                  (item) => (
+                    <List sx={{}} style={{ color: "red" }}>
+                      <ListItem>
+                        <ListItemText
+                          primary={`${item.firstName}${
+                            item.lastName ? ` ${item.lastName}` : ""
+                          }`}
+                          secondary="Designation"
+                        />
+                      </ListItem>
 
-                    <Divider />
-                  </List>
-                ))}
-              <div>
-                {showChatModal && (
-                  <Modal
-                    open={showChatModal}
-                    onClose={handleCloseModal}
-                    aria-labelledby="modal-title"
-                    aria-describedby="modal-desc"
-                    sx={{
-                      display: "flex",
-                      justifyContent: "center",
-                      alignItems: "flex-end",
-                      pt: "10vh",
-                      p: "0",
-                    }}
-                  >
-                    <ModalContent sx={{ width: 400 }} style={{}}>
-                      <div>
-                        <h2>Chat request has not accepted.</h2>
-                        <Button
-                          onClick={(e) => {
-                            setShowChatModal(false);
-                          }}
-                          style={{
-                            background: "#004367",
-                            borderRadius: "10px",
-                            color: "#fff",
-                            padding: "10px 12px",
-                            margin: "0 10px",
-                            fontWeight: "500",
-                            fontSize: "12px",
-                          }}
-                        >
-                          Close
-                        </Button>
-                      </div>
-                    </ModalContent>
-                  </Modal>
+                      <Divider />
+                    </List>
+                  )
                 )}
-              </div>
               {/* <TriggerButton type="button" onClick={handleOpen}>
                 Open chat
               </TriggerButton> */}
 
               {invitationReceiverByUser &&
-                invitationReceiverByUser?.map((item) => (
+                invitationReceiverByUser.result &&
+                invitationReceiverByUser.result.response &&
+                invitationReceiverByUser.result.response.content.map((item) => (
                   <List sx={{}} style={{ color: "gray" }}>
                     <ListItem>
                       <ListItemText
@@ -1068,9 +1067,13 @@ const AddConnections = () => {
                 sx={{ width: "100%", background: "#fff" }}
                 renderInput={(params) => (
                   <TextField {...params} label="Filter by Designation" />
-                )}*/}
+                )}
+              /> */}
+
               {userSearchData &&
-                userSearchData?.map((item) => (
+                userSearchData.result &&
+                userSearchData.result.response.content &&
+                userSearchData.result.response.content.map((item) => (
                   <List
                     key={item.id} // Add key prop to each List element
                     sx={{}} // Add styling here if needed
@@ -1216,7 +1219,7 @@ const AddConnections = () => {
                             fontWeight: "500",
                             fontSize: "12px",
                           }}
-                          onClick={showChat ? handleSendClick : toggleChat}
+                          onClick={showChat ? handleSendClick : toggleChat} // Call handleSendClick or toggleChat based on showChat state
                         >
                           {buttonText}
                         </Button>
@@ -1224,51 +1227,12 @@ const AddConnections = () => {
                     </Box>
                   </ModalContent>
                 </Modal>
-
-                {showModal && (
-                  <Modal
-                    open={showModal}
-                    onClose={handleCloseModal}
-                    aria-labelledby="modal-title"
-                    aria-describedby="modal-desc"
-                    sx={{
-                      display: "flex",
-                      justifyContent: "center",
-                      alignItems: "flex-end",
-                      pt: "10vh",
-                      p: "0",
-                    }}
-                  >
-                    <ModalContent sx={{ width: 400 }} style={{}}>
-                      <div>
-                        <h2>Chat Sent Successfully</h2>
-                        <Button
-                          onClick={(e) => {
-                            setShowModal(false);
-                          }}
-                          style={{
-                            background: "#004367",
-                            borderRadius: "10px",
-                            color: "#fff",
-                            padding: "10px 12px",
-                            margin: "0 10px",
-                            fontWeight: "500",
-                            fontSize: "12px",
-                          }}
-                        >
-                          Close
-                        </Button>
-                      </div>
-                    </ModalContent>
-                  </Modal>
-                )}
               </div>
             </TabPanel>
           </TabContext>
         </Box>
       </Box>
-      <Footer />
-    </Box>
+    </Layout>
   );
 };
 

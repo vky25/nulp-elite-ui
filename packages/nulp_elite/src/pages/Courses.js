@@ -1,5 +1,5 @@
 // Courses.js
-import React, { useState, useEffect } from "react";
+import React,{useState, useEffect} from "react";
 import {
   Box,
   VStack,
@@ -63,51 +63,51 @@ const Courses = () => {
         "Practice Resource",
         "TVLesson",
         "Course Unit",
-        "Exam Question",
-      ],
-    },
+        "Exam Question"
+    ]},
     offset: 0,
     pageNumber: 1,
     facets: [
-      "se_boards",
-      "se_gradeLevels",
-      "se_subjects",
-      "se_mediums",
-      "primaryCategory",
-    ],
+  "se_boards",
+  "se_gradeLevels",
+  "se_subjects",
+  "se_mediums",
+  "primaryCategory"
+],
     limit: 10,
     sort_by: {
-      lastPublishedOn: "desc",
-    },
+      "lastPublishedOn": "desc"
+    }
     // Add other properties with default values if needed
   });
 
   const navigate = useNavigate();
-  useEffect(() => {
-    courseSearchPage();
+  useEffect(() => { 
+    courseSearchPage();   
     batchSearchPage();
   }, []);
   const headers = {
     "content-type": "Application/json",
   };
   const courseSearchPage = async () => {
-    try {
-      const url =
-        "http://localhost:3000/learner/" + URLSConfig.URLS.COURSE.SEARCH;
+   try {
+      const url = "http://localhost:3000/learner/" + URLSConfig.URLS.COURSE.SEARCH;
       const request = {
-        filters: { primaryCategory: requestParam.filters.primaryCategory },
-        fields: requestParam.fields || [],
-        offset: (requestParam.pageNumber - 1) * requestParam.limit,
-        limit: requestParam.limit,
-        query: requestParam.query,
-        sort_by: requestParam.sort_by,
-        facets: requestParam.facets,
+       
+          filters: { primaryCategory: requestParam.filters.primaryCategory},
+          fields: requestParam.fields || [],
+          offset: (requestParam.pageNumber - 1) * requestParam.limit,
+          limit: requestParam.limit,
+          query: requestParam.query,
+          sort_by: requestParam.sort_by,
+          facets: requestParam.facets
+        
       };
       const response = await courseSearch(url, request, headers);
-      console.log("courseSearch---", response);
+      console.log("courseSearch---",response);
       setData(response);
     } catch (error) {
-      console.log("courseSearch error---", error);
+      console.log("courseSearch error---",error);
 
       setError(error.message);
     } finally {
@@ -115,6 +115,7 @@ const Courses = () => {
     }
   };
   const batchSearchPage = async () => {
+   
     try {
       const offset =
         requestParam.offset === 0 || requestParam.offset
@@ -122,17 +123,17 @@ const Courses = () => {
           : (requestParam.pageNumber - 1) * requestParam.limit;
       const url =
         "http://localhost:3000/learner/" + URLSConfig.URLS.BATCH.GET_BATCHS;
-      const request = {
-        filters: requestParam.filters,
-        offset,
-        limit: requestParam.limit,
-        sort_by: requestParam.sort_by,
+      const request = {       
+          filters: requestParam.filters,
+          offset,
+          limit: requestParam.limit,
+          sort_by: requestParam.sort_by,     
       };
       const response = await batchSearch(url, request, headers);
       console.log("batchSearchPage--", response);
       setData(response);
     } catch (error) {
-      console.log("batch error---", error);
+      console.log("batch error---",error);
       setError(error.message);
     } finally {
       // setIsLoading(false);
@@ -240,7 +241,7 @@ const Courses = () => {
           {
             title: "Connections",
             icon: "TeamLineIcon",
-            route: "/addConnections",
+            route: "/home",
           },
           {
             title: "Profie",
@@ -262,7 +263,7 @@ const Courses = () => {
           Explore Courses
         </Button>
       </Box>
-    </Layout>
+      </Layout> 
   );
 };
 
