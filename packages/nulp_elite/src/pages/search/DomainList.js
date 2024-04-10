@@ -32,6 +32,8 @@ const theme = createTheme();
 
 theme.typography.h3 = {
   fontSize: "0.938rem",
+  background:"#fff",
+  display:"block",
   "@media (min-width:600px)": {
     fontSize: "1.1rem",
   },
@@ -146,10 +148,15 @@ const DomainList = () => {
 
 
 <Container maxWidth="xxl" role="main" className="container-pb">
+  <Box sx={{background:'#fff',padding:'20px 10px 30px 10px', margin:'25px 0'}}>
    <ThemeProvider theme={theme}>
-   <Typography variant="h3" sx={{ marginTop: '30px' }}>Filter by popular domain</Typography>
+   <Typography variant="h3" sx={{ margin: '10px 0 10px 0' }}>Filter by popular domain</Typography>
+   <Box sx={{boxShadow:'0px 4px 4px 0px #00000040',padding:'10px 10px',background:'#F4FBFF'}}>
+   <DomainCarousel  domain={frameworkHardCodedData.result.framework.categories[0].terms}></DomainCarousel>
+   </Box>
+
    </ThemeProvider> 
-   {/* <DomainCarousel domain={frameworkHardCodedData.result.framework.categories[0].terms}></DomainCarousel> */}
+   </Box>
    {/* <DomainCarousel data={data.framework.categories[0].terms}></DomainCarousel> */}
 
     <Box sx={{paddingTop:'30px'}}>

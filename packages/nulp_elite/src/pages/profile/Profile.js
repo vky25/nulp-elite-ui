@@ -16,8 +16,8 @@ import LibraryAddCheckOutlinedIcon from "@mui/icons-material/LibraryAddCheckOutl
 import ReceiptLongOutlinedIcon from "@mui/icons-material/ReceiptLongOutlined";
 import FloatingChatIcon from "../../components/FloatingChatIcon";
 import CircularProgressWithLabel from "../../components/CircularProgressWithLabel";
-import RestoreOutlinedIcon from '@mui/icons-material/RestoreOutlined';
-import SettingsOutlinedIcon from '@mui/icons-material/SettingsOutlined';
+import RestoreOutlinedIcon from "@mui/icons-material/RestoreOutlined";
+import SettingsOutlinedIcon from "@mui/icons-material/SettingsOutlined";
 import * as util from "../../services/utilService";
 
 const Profile = () => {
@@ -402,4 +402,3 @@ const Profile = () => {
 };
 
 export default Profile;
-

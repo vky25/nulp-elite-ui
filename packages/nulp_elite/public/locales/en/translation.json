@@ -79,5 +79,21 @@
   "SEARCH": "Search",
   "CONTENTS":"Contents",
   "CONNECTION":"Connections",
-  "PROFILE":"Profile"
+  "PROFILE":"Profile",
+
+  "JOIN_COURSE":"Join Course",
+  "DESCRIPTION":"Description",
+  "BATCH_DETAILS":"Batch Details",
+  "BATCH_START_DATE":"Batch start date",
+  "BATCH_END_DATE":"Batch end date",
+  "LAST_DATE_FOR_ENROLLMENT":"Last date for enrollment",
+  "RELEVANT_FOR":"Relevant for",
+  "CREATED_ON":"Created on",
+  "UPDATED_ON":"Updated on",
+  "CREDITS":"Credits",
+  "LICENSE_TERMS":"License terms",
+  "CERTIFICATION_CRITERIA":"Certification Criteria",
+  "OTHER_DETAILS":"Other Details",
+  "FOR_DETAILS":" For details",
+  "COURSES_MODULE":" Courses Module"
 }
