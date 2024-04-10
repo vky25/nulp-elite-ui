@@ -295,7 +295,7 @@ function Header() {
                 Content
               </Link>
               <Link
-                href="/addConnections"
+                href="#"
                 underline="none"
                 style={{
                   my: 2,

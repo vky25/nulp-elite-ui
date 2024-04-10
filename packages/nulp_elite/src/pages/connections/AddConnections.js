@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { Layout, IconByName } from "@shiksha/common-lib";
-import { Box, VStack, HStack, Menu } from "native-base";
+import { VStack, HStack, Menu, Image } from "native-base";
 import Tab from "@mui/material/Tab";
 import TabContext from "@material-ui/lab/TabContext";
 import TabList from "@material-ui/lab/TabList";
@@ -17,7 +17,8 @@ import Link from "@mui/material/Link";
 import Autocomplete from "@mui/material/Autocomplete";
 import TextField from "@mui/material/TextField";
 import Divider from "@mui/material/Divider";
-
+import Box from "@mui/material/Box";
+import Typography from "@mui/material/Typography";
 import Search from "components/search";
 import { useLocation } from "react-router-dom";
 import * as util from "../../services/utilService";
@@ -77,7 +78,6 @@ const AddConnections = () => {
     "Hello ..., I would like to connect with you regarding some queries i had in your course."
   );
   const [modalMessage, setModalMessage] = useState("");
-
   const [invitationAcceptedUsers, setInvitationAcceptedUsers] = useState();
   const [invitationNotAcceptedUsers, setInvitationNotAcceptedUsers] =
     useState();
@@ -306,9 +306,9 @@ const AddConnections = () => {
       if (!response.ok) {
         throw new Error("Failed to get connected user chat");
       }
-      // setInvitationReceivedUserByIds([]);
-      // setInvitationAcceptedUsers([]);
-      // setInvitationNotAcceptedUsers([]);
+      setInvitationReceivedUserByIds([]);
+      setInvitationAcceptedUsers([]);
+      setInvitationNotAcceptedUsers([]);
       const responseData = await response.json();
       console.log("getConnections", responseData.result);
 
@@ -349,7 +349,7 @@ const AddConnections = () => {
   const getInvitationNotAcceptedUserByIds = async (userIds) => {
     setIsLoading(true);
     setError(null);
-    // setInvitationNotAcceptedUsers([]);
+    setInvitationNotAcceptedUsers([]);
 
     const url = `http://localhost:3000/learner/user/v3/search`;
     const requestBody = {
@@ -401,7 +401,7 @@ const AddConnections = () => {
   const getInvitationAcceptedUserByIds = async (userIds) => {
     setIsLoading(true);
     setError(null);
-    // setInvitationAcceptedUsers([]);
+    setInvitationAcceptedUsers([]);
 
     const url = `http://localhost:3000/learner/user/v3/search`;
     const requestBody = {
@@ -448,7 +448,7 @@ const AddConnections = () => {
   const getInvitationReceivedUserByIds = async (userIds) => {
     setIsLoading(true);
     setError(null);
-    // setInvitationReceivedUserByIds([]);
+    setInvitationReceivedUserByIds([]);
 
     const url = `http://localhost:3000/learner/user/v3/search`;
     const requestBody = {
@@ -493,7 +493,6 @@ const AddConnections = () => {
     } finally {
       setIsLoading(false);
     }
-    console.log("");
   };
 
   const getInvitations = async () => {
@@ -516,7 +515,7 @@ const AddConnections = () => {
           "Content-Type": "application/json",
         },
       });
-      // setInvitationReceivedUserByIds([]);
+      setInvitationReceivedUserByIds([]);
       if (!response.ok) {
         throw new Error("Failed to get invited user");
       }
@@ -721,7 +720,55 @@ const AddConnections = () => {
       <input type="text" placeholder="Search..." style={{ flex: 1, marginRight: '0.5rem', padding: '0.5rem', borderRadius: '4px', border: '1px solid #CACACA' }} />
       <button style={{ padding:'11px 16px 11px 16px', borderRadius: '4px', backgroundColor: '#004367', color: 'white', border: '1px', cursor: 'pointer' ,fontSize:'12px'}}>Search</button>
     </div> */}
-          <Search />
+          {/* <Box
+            style={{
+              display: "flex",
+              alignItems: "center",
+              flexDirection: "column", // Added to align items vertically
+            }}
+          >
+            <TextField
+              label="Search for a user..."
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+              style={{
+                width: "100%",
+                marginBottom: "1rem",
+              }}
+            />
+            <Button
+              style={{
+                padding: "11px 9px",
+                borderRadius: "4px",
+                backgroundColor: "#004367",
+                color: "white",
+                border: "1px",
+                cursor: "pointer",
+                fontSize: "12px",
+              }}
+              onClick={handleSearch}
+            >
+              Search
+            </Button>
+            {!isLoading && !error && (
+              <List>
+                {filteredUsers &&
+                  filteredUsers.map((user, index) => (
+                    <React.Fragment key={index}>
+                      <ListItem>
+                        <ListItemText
+                          primary={`Name Surname: ${user.firstName} ${user.lastName}`}
+                          secondary={`Designation: ${user.designation}`}
+                        />
+                      </ListItem>
+                      <Divider />
+                    </React.Fragment>
+                  ))}
+              </List>
+            )}
+            {isLoading && <Typography>Loading...</Typography>}
+            {error && <Typography>Error: {error}</Typography>}
+          </Box> */}
           <TabContext value={value}>
             <Box sx={{ borderBottom: 1, borderColor: "divider" }}>
               <TabList
@@ -732,11 +779,22 @@ const AddConnections = () => {
                   label="My Connections"
                   value="1"
                   style={{ fontSize: "12px", color: "#484848" }}
+                  onClick={() => {
+                    handleTabClick("Tab1");
+                    setCurrentPage(1);
+                    onMyConnection();
+                  }}
                 />
                 <Tab
                   label="Add New"
                   value="2"
                   style={{ fontSize: "12px", color: "#484848" }}
+                  onClick={() => {
+                    handleTabClick("Tab2");
+                    setCurrentPage(1);
+                    // onNewAdd();
+                    handleSearch();
+                  }}
                 />
               </TabList>
             </Box>
@@ -972,7 +1030,7 @@ const AddConnections = () => {
             </List>
 
             {/* <TabPanel value="2"> */}
-            <Filter />
+            {/* <Filter /> */}
             {/* <Autocomplete
                 disablePortal
                 id="combo-box-demo"
@@ -1004,15 +1062,13 @@ const AddConnections = () => {
             {/* <div>  */}
 
             <TabPanel value="2">
-              <Autocomplete
+              {/* <Autocomplete
                 disablePortal
                 id="combo-box-demo"
                 sx={{ width: "100%", background: "#fff" }}
                 renderInput={(params) => (
                   <TextField {...params} label="Filter by Designation" />
-                )}
-              />
-
+                )}*/}
               {userSearchData &&
                 userSearchData?.map((item) => (
                   <List
@@ -1061,19 +1117,27 @@ const AddConnections = () => {
                         paddingTop: "10px",
                         paddingRight: "10px",
                         paddingLeft: "10px",
-                        paddingRight: "10px",
+                        paddingBottom: "10px", // Changed to paddingBottom to avoid duplication
                         backgroundColor: "#004367",
                         color: "white",
-                        borderRadius: "md",
+                        borderRadius: "4px", // Changed to "4px" from "md" for borderRadius
                       }}
                     >
-                      <div style={{ fontSize: "14px", lineHeight: "1.6" }}>
-                        Manisha Kapdanis
-                      </div>
-                      <div style={{ fontSize: "12px", paddingBottom: "10px" }}>
-                        Designation
-                      </div>
+                      {selectedUser && (
+                        <div style={{ fontSize: "14px", lineHeight: "1.6" }}>
+                          Name Surname: {selectedUser?.firstName}
+                          {selectedUser?.lastName}
+                        </div>
+                      )}
+                      {selectedUser && (
+                        <div
+                          style={{ fontSize: "12px", paddingBottom: "10px" }}
+                        >
+                          Designation:
+                        </div>
+                      )}
                     </h2>
+
                     {!showChat && (
                       <p
                         style={{
@@ -1091,10 +1155,11 @@ const AddConnections = () => {
                             paddingBottom: "15px",
                           }}
                         >
-                          Name Surname is a manager with the department of
-                          Revenue and taxes and has actively contributed to the
-                          growth and authenticity of the knowledge curated for
-                          the betterment of the department.
+                          {selectedUser.firstName} {selectedUser.lastName} is a
+                          manager with the department of Revenue and taxes and
+                          has actively contributed to the growth and
+                          authenticity of the knowledge curated for the
+                          betterment of the department.
                         </Box>
                         <Box>
                           Connect with them to get insights on what they do or
@@ -1105,17 +1170,14 @@ const AddConnections = () => {
                     {showChat && (
                       <div>
                         {/* Your chat UI components go here */}
-                        <p
-                          style={{
-                            fontSize: "12px",
-                            paddingLeft: "10px",
-                            paddingRight: "10px",
-                            color: "#484848",
-                          }}
-                        >
-                          Hello Manisha K, I would like to connect with you
-                          regarding some queries i had in your course.
-                        </p>
+                        <TextField
+                          multiline
+                          rows={4} // You can adjust the number of rows as needed
+                          value={textValue}
+                          onChange={handleTextareaChange}
+                          placeholder="Enter your text here..."
+                          fullWidth
+                        />
                       </div>
                     )}
                     <Box
@@ -1138,6 +1200,7 @@ const AddConnections = () => {
                             fontSize: "12px",
                             border: "solid 1px #004367",
                           }}
+                          onClick={handleClose}
                         >
                           Cancel
                         </Button>
@@ -1311,7 +1374,7 @@ const TriggerButton = styled(Button)(
     border-radius: 8px;
     transition: all 150ms ease;
     cursor: pointer;
-    
+
     }
   `
 );

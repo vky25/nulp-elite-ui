@@ -2,25 +2,24 @@
 
 import React, { useState, useEffect } from "react";
 // import { Box, Heading, Text, Button } from '@chakra-ui/react';
-import { Layout, IconByName } from "@shiksha/common-lib";
-import {
-  NativeBaseProvider,
-  Stack,
-  VStack,
-  Text,
-  HStack,
-  Button,
-  Menu,
-  Image,
-} from "native-base";
-import { createTheme, ThemeProvider } from "@mui/material/styles";
-import Typography from "@mui/material/Typography";
-import Grid from "@mui/material/Grid";
-import { styled } from "@mui/material/styles";
-import Paper from "@mui/material/Paper";
-import Container from "@mui/material/Container";
-import BoxCard from "components/Card";
-import Box from "@mui/material/Box";
+
+import { createTheme, ThemeProvider } from '@mui/material/styles';
+import Typography from '@mui/material/Typography';
+import Grid from '@mui/material/Grid';
+import { styled } from '@mui/material/styles';
+import Paper from '@mui/material/Paper';
+import Container from '@mui/material/Container';
+import Box from '@mui/material/Box';
+
+import Search from "../../components/search";
+import frameworkHardCodedData from "../../assets/framework.json"
+import Header from "../../components/header";
+import { frameworkService } from "@shiksha/common-lib";
+import { generatePath, useNavigate ,useLocation} from "react-router-dom";
+import Footer from "../../components/Footer";
+import { contentService } from "@shiksha/common-lib";
+import DomainCarousel from "components/domainCarousel";
+
 
 const Item = styled(Paper)(({ theme }) => ({
   backgroundColor: theme.palette.mode === "dark" ? "#1A2027" : "#fff",
@@ -45,272 +44,115 @@ const DomainList = () => {
   // console.log(data.result.categories.terms.category);
   const [search, setSearch] = React.useState(true);
   const [searchState, setSearchState] = React.useState(false);
+  const [data, setData] = React.useState(true);
+  const [channelData, setChannelData] = React.useState(true);
+  const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState(null);
+  const navigate = useNavigate()
 
+   // Example of API Call   
+   useEffect(() => {  
+    fetchDataFramework();
+   
+  }, []);
+
+  const getCookieValue = (name) => {
+    const cookies = document.cookie.split("; ");
+    for (let i = 0; i < cookies.length; i++) {
+      const cookie = cookies[i];
+      const [cookieName, cookieValue] = cookie.split("=");
+      if (cookieName === name) {
+        return cookieValue;
+      }
+    }
+    return "";
+  };
+
+  const fetchDataFramework = async () => {
+    setIsLoading(true);
+    setError(null);
+
+    // Headers
+    const headers = {
+      "Content-Type": "application/json",
+      Cookie: `connect.sid=${getCookieValue("connect.sid")}`,
+    };
+    const url = `http://localhost:3000/api/channel/v1/read/0130701891041689600`;
+    try {
+      const response = await frameworkService.getChannel(url, headers);
+      // console.log("channel---",response.data.result);
+      setChannelData(response.data.result);
+    } catch (error) {
+      console.log("error---",error);
+      setError(error.message);
+    } finally {
+      setIsLoading(false);
+    }
+    try {
+      const url = `http://localhost:3000/api/framework/v1/read/nulp?categories=board,gradeLevel,medium,class,subject`;
+
+      const response = await frameworkService.getSelectedFrameworkCategories(
+        url,
+        headers
+      );
+      console.log("nulp---",response.data.result);
+      setData(response.data.result);
+    } catch (error) {
+      console.log("nulp--  error-",error);
+
+      setError(error.message);
+    } finally {
+      console.log("nulp finally---",  );
+
+      setIsLoading(false);
+    }
+  }
+
+  const loadContents = async (term) => {
+    console.log(term);
+    navigate('/search/contentList', { state: { domain: term.code } }); 
+  }
+  console.log(frameworkHardCodedData.result.framework.categories[0].terms);
   return (
-    <Layout
-      isDisabledAppBar={true}
-      _header={{
-        rightIcon: (
-          <HStack paddingBottom={"25px"}>
-            <IconByName name="CloseCircleFillIcon" />
-          </HStack>
-        ),
-        customeComponent: (
-          <Box flex={1} minH={"40px"}>
-            <HStack>
-              <VStack position={"relative"} padding="10px" top={"10px"}>
-                <Menu
-                  w="160"
-                  trigger={(triggerProps) => {
-                    return (
-                      <Button
-                        alignSelf="center"
-                        variant="solid"
-                        {...triggerProps}
-                      >
-                        <IconByName size="20px" name="MenuFillIcon" />
-                      </Button>
-                    );
-                  }}
-                >
-                  <Menu.Item>Help</Menu.Item>
-                  <Menu.Item>Logout</Menu.Item>
-                </Menu>
-              </VStack>
+<div>
+<Header/>
 
-              <VStack>
-                {/* <Image
-                  source={require("./assets/logo.png")}
-                  alt=""
-                  size="sm"
-                /> */}
-              </VStack>
-            </HStack>
+    <Box sx={{background:'#2D2D2D',padding:'20px'}}>
+   <p style={{fontSize:'20px',fontWeight:'700',color:'#fff',paddingBottom:'5px',margin:'0'}}>Explore content related to your domain.Learn from well curated courses and content.</p>
+   <p style={{fontSize:'16px',fontWeight:'700',color:'#C1C1C1',margin:'0',paddingBottom:'30px'}}>Learn from well curated courses and content.</p>
+   <Search></Search>
+ </Box>
 
-            {/* <Right> */}
-            <Box position={"absolute"} right={"20px"} top={"10px"}>
-              <Menu
-                w="160"
-                trigger={(triggerProps) => {
-                  return (
-                    <Button
-                      alignSelf="center"
-                      variant="solid"
-                      {...triggerProps}
-                    >
-                      Language
-                    </Button>
-                  );
-                  // }}>
-                }}
-              >
-                <Menu.Item>English</Menu.Item>
-                <Menu.Item> Hindi</Menu.Item>
-              </Menu>
-            </Box>
-            {/* </Right> */}
 
-            {/* <Avatar
-           size="48px"
-           borderRadius=""
-              source={require("../assets/nulp_logo.jpeg")}
-          /> */}
+<Container maxWidth="xxl" role="main" className="container-pb">
+   <ThemeProvider theme={theme}>
+   <Typography variant="h3" sx={{ marginTop: '30px' }}>Filter by popular domain</Typography>
+   </ThemeProvider> 
+   {/* <DomainCarousel domain={frameworkHardCodedData.result.framework.categories[0].terms}></DomainCarousel> */}
+   {/* <DomainCarousel data={data.framework.categories[0].terms}></DomainCarousel> */}
 
-            {/* <VStack>
-          <Avatar
-            size="37px"
-            borderRadius="md"
-            source={{
-              uri: "https://via.placeholder.com/50x50.png",
-            }}
-          />
-          </VStack> */}
-          </Box>
-        ),
-        // title: "User Name",
-        // // isEnableSearchBtn: true,
-        // subHeading: "Hello",
-        // iconComponent: (
+   <Box sx={{paddingTop:'30px'}}>
+            {/* {data && data.framework && data.framework.categories && data.framework.categories.map((faqIndex) => ( */}
+             {frameworkHardCodedData.result.framework.categories.map((faqIndex) => (
+                <Grid container spacing={2} style={{margin:'20px 0',marginBottom:'10px'}}  key={faqIndex}>
+                {faqIndex.terms.map(term => (
 
-        // ),
-      }}
-      _subHeader={{ bg: "rgb(248, 117, 88)" }}
-      _footer={{
-        menues: [
-          {
-            title: "Search",
-            icon: "SearchLineIcon",
-            route: "/contents",
-          },
-          {
-            title: "Contents",
-            icon: "BookOpenLineIcon",
-            route: "/all",
-          },
-          {
-            title: "Connections",
-            icon: "TeamLineIcon",
-            route: "/home",
-          },
-          {
-            title: "Profie",
-            icon: "AccountCircleLineIcon",
-            route: "/profile",
-          },
-        ],
-      }}
-    >
-      <Container>
-        <BoxCard></BoxCard>
-        <ThemeProvider theme={theme}>
-          <Typography variant="h3" sx={{ marginTop: "30px" }}>
-            Filter by popular domain
-          </Typography>
-        </ThemeProvider>
-        <Grid container spacing={2} style={{ margin: "20px 0" }}>
-          <Grid item xs={12} md={6} lg={3}>
-            <Box
-              style={{
-                display: "flex",
-                justifyContent: "space-between",
-                flexDirection: "row",
-              }}
-            >
-              <Box
-                style={{
-                  background: "#fff",
-                  padding: "10px",
-                  borderRadius: "10px",
-                  height: "60px",
-                  width: "90px",
-                  border: "solid 1px #E1E1E1",
-                }}
-              >
-                <img
-                  src={require("../../assets/logo.png")}
-                  style={{ width: "100%" }}
-                />
-              </Box>
-              <h5
-                style={{
-                  fontSize: "16px",
-                  fontWeight: "500",
-                  paddingLeft: "10px",
-                  margin: "0",
-                }}
-              >
-                Solid Waste Managment
-              </h5>
+                    <Grid item xs={12} md={6} lg={3}  style={{marginBottom:'10px'}}>
+
+                    <Box onClick={() => loadContents(term)} style={{display:'flex', flexDirection:'row', alignItems:'center'}} key={faqIndex.id}>
+                    <Box style={{background:'#fff',padding:'10px',borderRadius:'10px',height:'48px',width:'48px',border:'solid 1px #E1E1E1'}}><img src={require("../../assets/swm.png")} style={{width:'100%'}} /></Box>
+                    <h5 style={{fontSize:'14px',fontWeight:'500',paddingLeft:'10px',margin:'0'}}>{term.name}</h5>
+                    </Box>
+                    </Grid>
+
+                ))}
+                </Grid>
+                
+            ))}
             </Box>
-          </Grid>
-          <Grid item xs={12} md={6} lg={3}>
-            <Box
-              style={{
-                display: "flex",
-                justifyContent: "space-between",
-                flexDirection: "row",
-              }}
-            >
-              <Box
-                style={{
-                  background: "#fff",
-                  padding: "10px",
-                  borderRadius: "10px",
-                  height: "60px",
-                  width: "90px",
-                  border: "solid 1px #E1E1E1",
-                }}
-              >
-                <img
-                  src={require("../../assets/logo.png")}
-                  style={{ width: "100%" }}
-                />
-              </Box>
-              <h5
-                style={{
-                  fontSize: "16px",
-                  fontWeight: "500",
-                  paddingLeft: "10px",
-                  margin: "0",
-                }}
-              >
-                Solid Waste Managment
-              </h5>
-            </Box>
-          </Grid>
-          <Grid item xs={12} md={6} lg={3}>
-            <Box
-              style={{
-                display: "flex",
-                justifyContent: "space-between",
-                flexDirection: "row",
-              }}
-            >
-              <Box
-                style={{
-                  background: "#fff",
-                  padding: "10px",
-                  borderRadius: "10px",
-                  height: "60px",
-                  width: "90px",
-                  border: "solid 1px #E1E1E1",
-                }}
-              >
-                <img
-                  src={require("../../assets/logo.png")}
-                  style={{ width: "100%" }}
-                />
-              </Box>
-              <h5
-                style={{
-                  fontSize: "16px",
-                  fontWeight: "500",
-                  paddingLeft: "10px",
-                  margin: "0",
-                }}
-              >
-                Solid Waste Managment
-              </h5>
-            </Box>
-          </Grid>
-          <Grid item xs={12} md={6} lg={3}>
-            <Box
-              style={{
-                display: "flex",
-                justifyContent: "space-between",
-                flexDirection: "row",
-              }}
-            >
-              <Box
-                style={{
-                  background: "#fff",
-                  padding: "10px",
-                  borderRadius: "10px",
-                  height: "60px",
-                  width: "90px",
-                  border: "solid 1px #E1E1E1",
-                }}
-              >
-                <img
-                  src={require("../../assets/logo.png")}
-                  style={{ width: "100%" }}
-                />
-              </Box>
-              <h5
-                style={{
-                  fontSize: "16px",
-                  fontWeight: "500",
-                  paddingLeft: "10px",
-                  margin: "0",
-                }}
-              >
-                Solid Waste Managment
-              </h5>
-            </Box>
-          </Grid>
-        </Grid>
-      </Container>
-    </Layout>
+</Container>
+<Footer/>
+</div>
   );
 };
 

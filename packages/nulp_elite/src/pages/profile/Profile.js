@@ -38,7 +38,6 @@ const Profile = () => {
         });
         const data = await response.json();
         setUserData(data);
-        sessionStorage.setItem("loggedInUserId", data.result.response.userId);
       } catch (error) {
         console.error("Error fetching user data:", error);
       }

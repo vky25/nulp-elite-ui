@@ -1,99 +1,93 @@
-import React, { useEffect } from "react";
-import {
-  Box,
-  Text,
-  HStack,
-  Center,
-  Stack,
-  Pressable,
-  VStack,
-} from "native-base";
-// import IconByName from '../IconByName'
-// import { useTranslation } from 'react-i18next'
-import { generatePath, useNavigate } from "react-router-dom";
-// import { useWindowSize } from '../helper'
+import * as React from 'react';
+import Box from '@mui/material/Box';
+import BottomNavigation from '@mui/material/BottomNavigation';
+import BottomNavigationAction from '@mui/material/BottomNavigationAction';
+import SearchSharpIcon from '@mui/icons-material/SearchSharp';
+import GroupsOutlinedIcon from '@mui/icons-material/GroupsOutlined';
+import AccountCircleOutlinedIcon from '@mui/icons-material/AccountCircleOutlined';
+import EditNoteOutlinedIcon from '@mui/icons-material/EditNoteOutlined';
+import Container from '@mui/material/Container';
+import Link from '@mui/material/Link';
+import Grid from '@mui/material/Grid';
 
-export default function Footer({ menues, routeDynamics, ...props }) {
-  const path = window?.location?.pathname.toString();
-  // const { t } = useTranslation()
-  // const navigate = useNavigate()
 
-  // const [width, Height] = useWindowSize()
-  const footerMenus = menues;
 
-  const PressableNew = ({ item, children, ...prop }) => {
-    return item?.route ? (
-      <Pressable
-        {...prop}
-        onPress={() => {
-          // navigate(
-          //   routeDynamics
-          //     ? generatePath(item.route, { ...{ id: item.id } })
-          //     : item.route
-          // )
-        }}
-      >
-        {children}
-      </Pressable>
-    ) : (
-      <Box {...prop}>{children}</Box>
-    );
+// const styles = {
+//   BottomNavigation: {
+//     width: '100%',
+//     position: 'fixed',
+//     bottom: 0,
+//   },
+// };
+
+export default function Footer() {
+  const [value, setValue] = React.useState(0);
+  const pages = ['Content', 'Connections', 'Profile'];
+  const [anchorEl, setAnchorEl] = React.useState(null);
+
+  const handleClick = (event) => {
+    setAnchorEl(event.currentTarget);
   };
 
+  const handleClose = () => {
+    setAnchorEl(null);
+  };
+
+ 
+
   return (
-    <Stack>
-      <Box flex={1} safeAreaTop position="fixed" bottom="0">
-        <Center flex={1}></Center>
-        <HStack
-          pl={"20px"}
-          pr={"20px"}
-          bg="white"
-          alignItems="center"
-          safeAreaBottom
-          shadow={6}
-        >
-          {footerMenus?.map((item, index) => (
-            <PressableNew
-              item={item}
-              key={index}
-              cursor="pointer"
-              py="3"
-              flex={1}
-              alignItems="center"
-            >
-              {Array.isArray(item?.selected) &&
-              (item?.selected?.find((e) => path.startsWith(e) && e !== "/") ||
-                item.selected.includes(path)) ? (
-                <VStack alignItems="center">
-                  {/* <IconByName
-                    name={item.icon}
-                    isDisabled
-                    p='2'
-                    pb='1'
-                    color={'primary'}
-                  /> */}
-                  <Text fontSize="12" color={"primary"}>
-                    {t(item.title)}
-                  </Text>
-                </VStack>
-              ) : (
-                <VStack alignItems={"center"}>
-                  {/* <IconByName
-                    name={item.icon}
-                    isDisabled
-                    p='2'
-                    pb='1'
-                    color={'lightGray1'}
-                  /> */}
-                  <Text fontSize="12" color={"lightGray1"}>
-                    {t(item.title)}
-                  </Text>
-                </VStack>
-              )}
-            </PressableNew>
-          ))}
-        </HStack>
-      </Box>
-    </Stack>
+    <>
+    <Container maxWidth="xl" className='lg-hide'>
+    <Box sx={{  position: 'fixed', bottom: 0, left: 0, right: 0 ,width:'100%',zIndex:'9999' }}>
+  <BottomNavigation
+    sx={{ width: '100%', display: 'flex', position: 'relative',paddingTop:'10px' }}
+    showLabels
+    value={value}
+    onChange={(event, newValue) => {
+      setValue(newValue);
+    }}
+  >
+    <BottomNavigationAction label="Recents" className='navigateActive' icon={<SearchSharpIcon />} />
+    <BottomNavigationAction label="Favorites" icon={<EditNoteOutlinedIcon />} />
+    <BottomNavigationAction label="Nearby" icon={<GroupsOutlinedIcon />} />
+    <BottomNavigationAction label="Account" icon={<AccountCircleOutlinedIcon />} />
+  </BottomNavigation>
+</Box>
+
+</Container>
+<Container className='xs-hide' maxWidth="xl" style={{background:'#2D2D2D', color:'#fff',padding:'30px 15px 20px 15px'}}>
+  {/* <Box>dfgdfgsg */}
+  
+
+<Grid container spacing={2} className='footer'>
+  <Grid item xs={8} md={3} style={{fontSize:'14px', lineHeight:'2.4',fontWeight:'400'}}>
+  <Link underline="none"  href="#" style={{padding:'10px 0 2px',color:'#fff',margin:'0 8px'}}>NIUA</Link>
+    <Link underline="none" href="#" style={{padding:'10px 0 2px',color:'#fff',margin:'0 8px'}}>MoHUA</Link><br/>
+    <Link  underline="none"  href="#" style={{padding:'10px 0 2px',color:'#fff',margin:'0 8px'}}>About Us</Link>
+    <Link underline="none"  href="#" style={{padding:'10px 0 2px',color:'#fff',margin:'0 8px'}}>Contact Us</Link>
+    <Link underline="none"  href="#" style={{padding:'10px 0 2px',color:'#fff',margin:'0 8px'}}>FAQs</Link>
+    <Link underline="none"  href="#" style={{padding:'10px 0 2px',color:'#fff',margin:'0 8px'}}>Log Out</Link>
+
+  </Grid>
+  <Grid item xs={4} md={3} style={{fontSize:'14px', lineHeight:'2.4',fontWeight:'400'}}>
+  <Link underline="none"  href="#" style={{padding:'10px 0 2px',color:'#fff', fontSize:'14px'}}>Center for Digital Governance</Link><br/>
+    <Link  underline="none" href="#" style={{padding:'10px 0 2px',color:'#fff', fontSize:'14px'}}>National Urban Digital Mission</Link>
+</Grid>
+  <Grid item xs={4} md={3} style={{fontSize:'14px', lineHeight:'1.5', fontWeight:'400'}}>
+  <Box style={{fontSize:'14px',fontWeight:'700'}}>Nodal Ministry:</Box>
+  Ministry of Housing and Urban Affairs, Government of India<br/>
+  Nirman Bhawan, New Delhi- 110001, INDIA
+</Grid>
+      <Grid item xs={8} md={3} style={{fontSize:'14px', lineHeight:'1.5',fontWeight:'400'}}>
+         <Box style={{fontSize:'14px',fontWeight:'700'}}> Anchor Institute:</Box>
+        National Institute of Urban Affairs<br/>
+        1st Floor, Core 4B, India Habitat Centre, Lodhi Road, New Delhi - 110003, INDIA<br/>
+
+        Phone: (+91 11) 24617517, 24617543, 24617595
+    </Grid>
+</Grid>
+</Container>
+
+</>
   );
 }

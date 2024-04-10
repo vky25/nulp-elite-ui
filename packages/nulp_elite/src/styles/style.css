@@ -16,3 +16,127 @@ body{
     padding: 3px;
     border-radius: 8px;
 }
+.cardCourses{
+  background:#FFE459;
+  border-radius:24px 0px 0px 24px;
+  color:#484848;
+  border:solid 2px #fff;
+  padding:1px 10px;
+   font-size:13px;
+   
+ }
+ .cardTitle{
+  z-index:9999;
+  position:absolute;
+  color:#fff;
+  font-weight:500 !important;
+  font-size:16px !important;
+   top:76px;
+   overflow: hidden;
+   text-overflow: ellipsis;
+   display: -webkit-box;
+   -webkit-line-clamp: 2;
+   -webkit-box-orient: vertical;
+   width: 59%;
+   text-align: left;
+ }
+ .twoLineEllipsis{
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  text-align: left;
+  max-height: 41px;
+}
+ 
+ .MuiBottomNavigation-root svg{
+  width: 1.4em !important;
+  height: 1.4em !important;
+  color: #484848;
+ }
+ .MuiBottomNavigation-root span{
+  color:#484848;
+  font-size:12px;
+  padding-top: 5px;
+ }
+ .css-1fd8bcr{
+  width: 73% !important;
+ }
+ .MuiBottomNavigation-root{
+  justify-content: space-around !important;
+ }
+ .navigateActive{
+  background: #004367 !important;
+  margin: -10px 0 !important;
+ }
+ .navigateActive svg, .navigateActive span{
+  color:#fff !important;
+ }
+ .css-hip9hq-MuiPaper-root-MuiAppBar-root{
+  background: #fff !important;
+ }
+ .css-1pz7awu-MuiButtonBase-root-MuiIconButton-root{
+  color: #484848 !important;
+ }
+ .MuiIconButton-sizeMedium{
+  color: #484848 !important;
+  font-size:14px !important;
+ }
+@media(min-width:320px){
+  .chatIcon{
+    bottom: 71px;
+    width: 60px;
+    height: 60px;
+    background: #004367;
+    border-radius: 30px;
+    color: #fff;
+    right: 31px;
+    display: block;
+    text-align: center;
+    position: absolute;
+    box-shadow: 4px 4px 2.5999999046325684px 0px #00000054;
+  }
+}
+ @media(max-width:768px) {
+  .xs-hide{
+    display: none !important;
+  }
+  #menu-appbar .css-3dzjca-MuiPaper-root-MuiPopover-paper-MuiMenu-paper{
+    width: 300px;
+    height: 363px;
+    left: 0 !important;
+    max-height: inherit !important;
+    top: 0 !important;
+ }
+ }
+ @media(min-width:769px) {
+  .lg-hide{
+    display: none !important;
+  }
+  .chatIcon{
+    bottom: 173px;
+  }
+ }
+
+ .language fieldset{
+  border: none !important;
+ }
+ header{
+  box-shadow: none !important;
+ }
+/* mobile menu */
+ 
+ .container-pb{
+  padding-bottom: 50px !important;
+ }
+ .footer a{
+    border-bottom: solid 1px #fff;
+  }
+.MuiCircularProgress-colorPrimary{
+  width: 80px !important;
+  height: 80px !important;
+}
+.circular .MuiCircularProgress-colorPrimary{
+  color: #f0bdf5;
+}
