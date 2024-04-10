@@ -4,7 +4,7 @@
   "workspaces": {
     "packages": [
       "packages/common-lib",
-     "packages/core",
+      "packages/core",
       "packages/nulp_elite"
     ]
   },
@@ -50,6 +50,8 @@
     "react-google-recaptcha": "^3.1.0",
     "react-hook-form": "^7.45.4",
     "react-modal": "^3.16.1",
+    "react-multi-carousel": "^2.8.5",
+    "react-scripts": "5.0.0",
     "rxjs": "^7.8.1",
     "styled-components": "^6.1.8",
     "uuid": "^9.0.1",
