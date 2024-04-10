@@ -34,7 +34,6 @@ import Certificate from "pages/profile/certificate";
 
 import FAQPage from "pages/FAQPage";
 import AddConnections from "pages/connections/AddConnections";
-import MyConnections from "pages/connections/MyConnections";
 import DomainList from "pages/search/DomainList";
 import Registrationnew from "pages/registration/Registration";
 import Registrationold from "pages/registration/Registrationold";
@@ -101,11 +100,6 @@ function App() {
       moduleName: "nulp_elite",
       path: "/addConnections",
       component: AddConnections,
-    },
-    {
-      moduleName: "nulp_elite",
-      path: "/connections/myConnections",
-      component: MyConnections,
     },
     {
       moduleName: "nulp_elite",
