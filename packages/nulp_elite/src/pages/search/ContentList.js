@@ -4,7 +4,7 @@ import { Link, useParams, useNavigate, useLocation } from "react-router-dom";
 import BoxCard from "components/Card";
 import Box from "@mui/material/Box";
 import Search from "components/search";
-<<<<<<< HEAD
+
 import Filter from "components/filter"; 
 import contentData from "../../assets/contentSerach.json"
 import RandomImage from "../../assets/cardRandomImgs.json"
@@ -15,15 +15,6 @@ import Container from '@mui/material/Container';
 import { contentService } from "@shiksha/common-lib";
 import queryString from 'query-string';
 import Pagination from '@mui/material/Pagination';
-=======
-import Filter from "components/filter";
-import contentData from "../../assets/contentSerach.json";
-import Grid from "@mui/material/Grid";
-import Footer from "components/Footer";
-import Header from "components/header";
-import Container from "@mui/material/Container";
-import { contentService } from "@shiksha/common-lib";
->>>>>>> d9b27b0661204aedff8538a142da33f67bdf0d15
 
 const ContentList = (props) => {
   const [search, setSearch] = React.useState(true);
@@ -32,6 +23,7 @@ const ContentList = (props) => {
   const colors = "";
   const [sortArray, setSortArray] = React.useState([]);
   const location = useLocation();
+  const { pageNumber } = useParams();
 
   const [currentPage, setCurrentPage] = useState( location.search || 1);
   const [totalPages, setTotalPages] = useState(1);
@@ -42,24 +34,15 @@ const ContentList = (props) => {
   const [gradeLevels, setGradeLevels] = useState([]);
   const navigate = useNavigate();
   const { domain } = location.state || {};
-<<<<<<< HEAD
   const [page, setPage] = React.useState(1);
-  console.log("state----",location.state)
+  console.log("pageNumber----",pageNumber)
   // console.log("page----",page)
   // Example of API Call   
   useEffect(() => { 
      fetchData();
+    fetchGradeLevels(); // Fetch grade levels when component mounts
      const random = getRandomValue();
   }, [currentPage]);
-=======
-
-  // Example of API Call
-  useEffect(() => {
-    fetchData();
-    fetchGradeLevels(); // Fetch grade levels when component mounts
-  }, [filters]);
->>>>>>> d9b27b0661204aedff8538a142da33f67bdf0d15
-
   const handleFilterChange = (selectedOptions) => {
     const selectedValues = selectedOptions.map((option) => option.value);
     setFilters({ ...filters, se_gradeleverl: selectedValues });
@@ -91,7 +74,7 @@ const ContentList = (props) => {
           se_gradeLevels: filters.se_gradeleverl, // Access selected grade levels from filters state
         },
         limit:20,
-        offset: (20*(page-1)),
+        offset: (20*(pageNumber-1)),
         sort_by: {
           lastUpdatedOn: "desc",
         },
@@ -141,8 +124,8 @@ const ContentList = (props) => {
 // Assuming 'data' is your JSON array
 const randomItem = getRandomValue(data);
   const handleChange = (event: React.ChangeEvent<unknown>, value: number) => {
-    setPage(value);
-    console.log(page);
+
+    navigate('/search/contentList/'+value)
     fetchData();
   };
 
@@ -214,18 +197,7 @@ const randomItem = getRandomValue(data);
         </Box>
 
         <Box textAlign="center" padding="10">
-<<<<<<< HEAD
-          <Box sx={{paddingTop:'30px'}}>
-            <Grid container spacing={2} style={{margin:'20px 0', marginBottom:'10px'}}>
-              
-              {/* {contentData.result && contentData.result.content && contentData.result.content.map((items) => ( */}
-               {data && data.content && data.content.map((items) => (
-                <Grid item xs={12} md={6} lg={3}  style={{marginBottom:'10px'}}>
-                  
-                  <BoxCard items ={items} image = {getRandomValue()}></BoxCard>
-                </Grid>
-              ))}
-=======
+
           <Box sx={{ paddingTop: "30px" }}>
             <Grid
               container
@@ -245,20 +217,14 @@ const randomItem = getRandomValue(data);
                     <BoxCard items={items}></BoxCard>
                   </Grid>
                 ))}
->>>>>>> d9b27b0661204aedff8538a142da33f67bdf0d15
             </Grid>
           </Box>
         </Box>
         
-        <Pagination count={totalPages} page={page} onChange={handleChange} />
+        <Pagination count={totalPages} page={pageNumber} onChange={handleChange} />
 
       </Container>
-<<<<<<< HEAD
-     
       <Footer/>
-=======
-      <Footer />
->>>>>>> d9b27b0661204aedff8538a142da33f67bdf0d15
     </div>
   );
 };

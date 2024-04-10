@@ -9,8 +9,8 @@ import EditNoteOutlinedIcon from '@mui/icons-material/EditNoteOutlined';
 import Container from '@mui/material/Container';
 import Link from '@mui/material/Link';
 import Grid from '@mui/material/Grid';
-
-
+import { useTranslation } from "react-i18next";
+import { useParams,useNavigate } from "react-router-dom";
 
 // const styles = {
 //   BottomNavigation: {
@@ -21,9 +21,11 @@ import Grid from '@mui/material/Grid';
 // };
 
 export default function Footer() {
+  const { t } = useTranslation();
   const [value, setValue] = React.useState(0);
   const pages = ['Content', 'Connections', 'Profile'];
   const [anchorEl, setAnchorEl] = React.useState(null);
+  const navigate = useNavigate();
 
   const handleClick = (event) => {
     setAnchorEl(event.currentTarget);
@@ -47,10 +49,10 @@ export default function Footer() {
       setValue(newValue);
     }}
   >
-    <BottomNavigationAction label="Recents" className='navigateActive' icon={<SearchSharpIcon />} />
-    <BottomNavigationAction label="Favorites" icon={<EditNoteOutlinedIcon />} />
-    <BottomNavigationAction label="Nearby" icon={<GroupsOutlinedIcon />} />
-    <BottomNavigationAction label="Account" icon={<AccountCircleOutlinedIcon />} />
+ <BottomNavigationAction onPress={() => { alert("EEEE"); navigate('/search/domainList') }} label={t("SEARCH")} className='navigateActive' icon={<SearchSharpIcon />} />
+    <BottomNavigationAction onPress={() => { navigate('/view-all/:category') }} label={t("CONTENTS")} icon={<EditNoteOutlinedIcon />} />
+    <BottomNavigationAction onPress={() => { navigate('/connections/myConnections') }} label={t("CONNECTION")} icon={<GroupsOutlinedIcon />} />
+    <BottomNavigationAction onPress={() => { navigate('/profile/profile') }} label={t("PROFILE")} icon={<AccountCircleOutlinedIcon />} />
   </BottomNavigation>
 </Box>
 
