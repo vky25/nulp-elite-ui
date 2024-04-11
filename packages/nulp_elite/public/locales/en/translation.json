@@ -90,5 +90,16 @@
   "CERTIFICATION_CRITERIA":"Certification Criteria",
   "OTHER_DETAILS":"Other Details",
   "FOR_DETAILS":" For details",
-  "COURSES_MODULE":" Courses Module"
+  "COURSES_MODULE":" Courses Module",
+  "RESET_PASSWORD":"Reset Password",
+  "RESEND_CODE":"Resend code",
+  "SUBMIT": "Submit",
+  "REGISTER_HERE":"Register here",
+  "DONT_HAVE_AN_ACCOUNT":"Don't have an account",
+  "VERIFICATION_CODE":"Verification Code",
+  "PLEASE_ENTER_THE_VERFICATION_CODE_RECEIVED":"Please enter the verification code received on your registered e-mail ID.",
+  "REGISTER":"Register",
+  "ALREADY_HAVE_AN_ACCOUNT":"Already have an account?",
+  "LOG_IN":"Log In",
+  "CONTINUE":"Continue"
 }
