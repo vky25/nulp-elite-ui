@@ -28,8 +28,6 @@
     "@emotion/styled": "^11.6.0",
     "@mui/icons-material": "^5.2.4",
     "@mui/material": "^5.4.0",
-    "@project-sunbird/client-services": "^5.1.2",
-    "@project-sunbird/telemetry-sdk": "0.0.26",
     "@react-navigation/drawer": "^6.1.8",
     "@testing-library/jest-dom": "^5.16.2",
     "@testing-library/react": "^11.2.7",
@@ -41,7 +39,6 @@
     "i18next": "^21.6.14",
     "i18next-http-backend": "^1.4.0",
     "i18next-react": "^0.2.2",
-    "jquery": "^3.5.1",
     "moment": "^2.29.1",
     "native-base": "^3.2.2",
     "postal": "^2.0.6",
@@ -56,7 +53,10 @@
     "react-router-dom": "^6.1.1",
     "remixicon-react": "^1.0.0",
     "styled-components": "^5.3.3",
-    "styled-system": "^5.1.5"
+    "styled-system": "^5.1.5",
+    "@project-sunbird/client-services": "^5.1.2",
+    "@project-sunbird/telemetry-sdk": "0.0.26",
+    "jquery": "^3.5.1"
   },
   "peerDependencies": {
     "react": "17.0.2"

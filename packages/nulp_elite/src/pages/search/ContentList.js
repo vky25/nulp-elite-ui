@@ -4,17 +4,13 @@ import { Link, useParams, useNavigate, useLocation } from "react-router-dom";
 import BoxCard from "components/Card";
 import Box from "@mui/material/Box";
 import Search from "components/search";
-
-import Filter from "components/filter"; 
-import contentData from "../../assets/contentSerach.json"
-import RandomImage from "../../assets/cardRandomImgs.json"
-import Grid from '@mui/material/Grid';
-import Footer from "components/Footer"; 
-import Header from "components/header"; 
-import Container from '@mui/material/Container';
+import Filter from "components/filter";
+import contentData from "../../assets/contentSerach.json";
+import Grid from "@mui/material/Grid";
+import Footer from "components/Footer";
+import Header from "components/header";
+import Container from "@mui/material/Container";
 import { contentService } from "@shiksha/common-lib";
-import queryString from 'query-string';
-import Pagination from '@mui/material/Pagination';
 
 const ContentList = (props) => {
   const [search, setSearch] = React.useState(true);
@@ -22,27 +18,22 @@ const ContentList = (props) => {
   // const theme = extendTheme(DEFAULT_THEME);
   const colors = "";
   const [sortArray, setSortArray] = React.useState([]);
-  const location = useLocation();
-  const { pageNumber } = useParams();
 
-  const [currentPage, setCurrentPage] = useState( location.search || 1);
-  const [totalPages, setTotalPages] = useState(1);
   const [data, setData] = useState([]);
   const [filters, setFilters] = useState({});
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState(null);
   const [gradeLevels, setGradeLevels] = useState([]);
   const navigate = useNavigate();
+  const location = useLocation();
   const { domain } = location.state || {};
-  const [page, setPage] = React.useState(1);
-  console.log("pageNumber----",pageNumber)
-  // console.log("page----",page)
-  // Example of API Call   
-  useEffect(() => { 
-     fetchData();
+
+  // Example of API Call
+  useEffect(() => {
+    fetchData();
     fetchGradeLevels(); // Fetch grade levels when component mounts
-     const random = getRandomValue();
-  }, [currentPage]);
+  }, [filters]);
+
   const handleFilterChange = (selectedOptions) => {
     const selectedValues = selectedOptions.map((option) => option.value);
     setFilters({ ...filters, se_gradeleverl: selectedValues });
@@ -73,8 +64,7 @@ const ContentList = (props) => {
           se_boards: [domain],
           se_gradeLevels: filters.se_gradeleverl, // Access selected grade levels from filters state
         },
-        limit:20,
-        offset: (20*(pageNumber-1)),
+        offset: null,
         sort_by: {
           lastUpdatedOn: "desc",
         },
@@ -91,16 +81,8 @@ const ContentList = (props) => {
 
     const url = `http://localhost:3000/content/${URLSConfig.URLS.CONTENT.SEARCH}?orgdetails=orgName,email`;
     try {
-      const response = await contentService.getAllContents(
-        url,
-        data,
-        headers
-      );
-
-      // console.log("total pages------",Math.ceil(response.data.result.count / 20)+1);
-      console.log("total pages------",Math.ceil(response.data.result.count / 20));
-      setTotalPages(Math.ceil(response.data.result.count / 20)+1);
-
+      const response = await contentService.getAllContents(url, data, headers);
+      console.log(response.data.result);
       setData(response.data.result);
     } catch (error) {
       console.log("error---", error);
@@ -110,6 +92,7 @@ const ContentList = (props) => {
       setIsLoading(false);
     }
   };
+
  // Function to select a random value from an array
  const getRandomValue = (array) => {
   console.log("RandomImage   --  ",RandomImage.ImagePaths )
@@ -197,7 +180,6 @@ const randomItem = getRandomValue(data);
         </Box>
 
         <Box textAlign="center" padding="10">
-
           <Box sx={{ paddingTop: "30px" }}>
             <Grid
               container
@@ -220,11 +202,8 @@ const randomItem = getRandomValue(data);
             </Grid>
           </Box>
         </Box>
-        
-        <Pagination count={totalPages} page={pageNumber} onChange={handleChange} />
-
       </Container>
-      <Footer/>
+      <Footer />
     </div>
   );
 };

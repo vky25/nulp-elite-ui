@@ -179,34 +179,3 @@ body{
   right:0;
   background: linear-gradient(269deg, rgba(255, 255, 255, 0) 2.05%, #FFFFFF 99.68%)
 }
-.base-Input-input{
-  width: 50px;
-  padding: 15px 5px;
-  border-radius: 10px;
-  border: solid 1px #004367;
-}
-
-Link{
-  cursor: pointer !important;
-}
-
-.MuiInputBase-input{
-    padding: 15px !important;
-}
-.register .MuiInputBase-colorPrimary fieldset {
-  /* background: #fff !important; */
-  padding: 15px !important;
-  border-radius:10px !important;
-  border: solid 1px #004367 !important;
-  text-align: left !important;
-} 
-.register input{
-  background: #fff !important;
-}
-.register .css-11u53oe-MuiSelect-select-MuiInputBase-input-MuiOutlinedInput-input.css-11u53oe-MuiSelect-select-MuiInputBase-input-MuiOutlinedInput-input.css-11u53oe-MuiSelect-select-MuiInputBase-input-MuiOutlinedInput-input{
-  background: #fff !important;
-  text-align: left !important;
-}
-.register .css-132u4s-MuiFormControl-root-MuiTextField-root .MuiOutlinedInput-root fieldset{
-  width: 94.6% !important;
-}
