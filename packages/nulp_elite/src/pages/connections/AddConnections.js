@@ -1049,7 +1049,7 @@ const AddConnections = () => {
             </List>
 
             {/* <TabPanel value="2"> */}
-            <Filter />
+            {/* <Filter /> */}
             {/* <Autocomplete
                 disablePortal
                 id="combo-box-demo"
@@ -1060,24 +1060,6 @@ const AddConnections = () => {
                   <TextField {...params} label="Filter by Name" />
                 )}
               /> */}
-            {/* {!isLoading && !error && (
-                <div className="button" onClick={handleOpen}>
-                  {userData.map((item) => (
-                    <div key={item.id} onClick={() => handleUserClick(item)}>
-                      <Box
-                        sx={{ border: "1px solid", borderRadius: "lg", p: 4 }}
-                      >
-                        <Typography variant="body2" fontSize="small">
-                          Name Surname: {item.firstName} {item.lastName}
-                        </Typography>
-                        <Typography variant="body2">Designation: </Typography>
-                      </Box>
-                    </div>
-                  ))}
-                  <div className="pagination">{pagination}</div>
-                </div>
-              )} */}
-
             {/* <div>  */}
 
             <TabPanel value="2">
@@ -1107,11 +1089,6 @@ const AddConnections = () => {
                     </ListItem>
                     <Divider />
                     <div className="pagination">{pagination}</div>
-                    {/* {
-                      <TriggerButton type="button" onClick={handleOpen}>
-                        Open chat
-                      </TriggerButton>
-                    } */}
                   </List>
                 ))}
               <div>
@@ -1188,7 +1165,6 @@ const AddConnections = () => {
                     )}
                     {showChat && (
                       <div>
-                        {/* Your chat UI components go here */}
                         <TextField
                           multiline
                           rows={4} // You can adjust the number of rows as needed
