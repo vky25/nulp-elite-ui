@@ -81,7 +81,7 @@ const Home = () => {
           {
             title: "Connections",
             icon: "TeamLineIcon",
-            route: "/home",
+            route: "/addConnections",
           },
           {
             title: "Profie",
