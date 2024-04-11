@@ -23,16 +23,20 @@ import Select from "@mui/material/Select";
 import LanguageIcon from "@mui/icons-material/Language";
 import { useTranslation } from "react-i18next";
 import { changeLanguage } from "i18next";
+import  { useState } from 'react';
 
-const pages = ["Content", "Connections", "Profile"];
-const settings = ["Profile", "Help", "Logout"];
 
 function Header() {
   const [age, setAge] = React.useState("");
   const { t } = useTranslation();
 
+  // const handleChange = (event) => {
+  //   setAge(event.target.value);
+  // };
+  const [language, setLanguage] = useState('');
+
   const handleChange = (event) => {
-    setAge(event.target.value);
+    setLanguage(event.target.value);
   };
 
   const [anchorElNav, setAnchorElNav] = React.useState(null);
@@ -82,7 +86,7 @@ function Header() {
               paddingRight: "10px",
             }}
           >
-            Main Content{" "}
+           {t("MAIN_CONTENT")}{" "}
           </Link>
         </Box>
         <Box
@@ -130,43 +134,28 @@ function Header() {
             underline="none"
             style={{ color: "#424242", fontSize: "16px" }}
           >
-            Screen Reader{" "}
+            {t("SCREEN_READER")}{" "}
           </Link>
         </Box>
-        <Box style={{ padding: "0 10px", color: "#424242", fontSize: "16px" }}>
-          <FormControl sx={{ m: 1, minWidth: 120 }} size="small">
-            <InputLabel id="language-select-label"> {t("LANGUAGE")}</InputLabel>
-            <Select
-              labelId="language-select-label"
-              id="language-select"
-              className="language"
-              style={{ border: "none" }}
-              startIcon={<LanguageIcon />}
-              trigger={(triggerProps) => {
-                return (
-                  <Button alignSelf="center" variant="solid" {...triggerProps}>
-                    {t("LANGUAGE")}
-                  </Button>
-                );
-                // }}>
-              }}
-            >
-              {/* <MenuItem value="">
-          <em>None</em>
-        </MenuItem> */}
-              <MenuItem
-                onPress={(item) => changeLanguage("en")}
-                value="English"
-              >
-                {t("ENGLISH")}
-              </MenuItem>
-              <MenuItem onPress={(item) => changeLanguage("hi")} value="Hindi">
-                {t("HINDI")}
-              </MenuItem>
-            </Select>
-          </FormControl>
+      
+              <FormControl sx={{ m: 1, minWidth: 120 }} size="small">
+              <Select
+  labelId="language-select-label"
+  id="language-select"
+  className="language"
+  style={{ border: "none" }}
+  startIcon={<LanguageIcon />}
+  onChange={(event) => changeLanguage(event.target.value)}
+>
+  <MenuItem value="en"> {/* Changed value to language code */}
+    {t("ENGLISH")}
+  </MenuItem>
+  <MenuItem value="hi">
+    {t("HINDI")}
+  </MenuItem>
+</Select>
+    </FormControl>
         </Box>
-      </Box>
 
       <AppBar position="sticky" style={{ background: "#fff" }}>
         <Container
@@ -193,64 +182,56 @@ function Header() {
             </Box>
 
             <Box sx={{ flexGrow: 2, display: { xs: "flex", md: "none" } }}>
-              <Menu
-                id="menu-appbar"
-                anchorEl={anchorElNav}
-                anchorOrigin={{
-                  vertical: "bottom",
-                  horizontal: "left",
-                }}
-                keepMounted
-                transformOrigin={{
-                  vertical: "top",
-                  horizontal: "left",
-                }}
-                open={Boolean(anchorElNav)}
-                onClose={handleCloseNavMenu}
-                sx={{
-                  display: { xs: "block", md: "none" },
-                }}
-              >
-                {pages.map((page) => (
-                  <MenuItem key={page} onClick={handleCloseNavMenu}>
-                    <Typography textAlign="center">{page}</Typography>
-                  </MenuItem>
-                ))}
-              </Menu>
+                <Menu
+                  id="menu-appbar"
+                  anchorEl={anchorElNav}
+                  anchorOrigin={{
+                    vertical: "bottom",
+                    horizontal: "left",
+                  }}
+                  keepMounted
+                  transformOrigin={{
+                    vertical: "top",
+                    horizontal: "left",
+                  }}
+                  open={Boolean(anchorElNav)}
+                  onClose={handleCloseNavMenu}
+                  sx={{
+                    display: { xs: "block", md: "none" },
+                  }}
+                >
+                    <MenuItem>
+                      <Link href="/all" textAlign="center">{t('CONTENT')}</Link>
+                    </MenuItem>
+                    <MenuItem>
+                      <Link href="/addConnections" textAlign="center">{t('CONNECTIONS')}</Link>
+                    </MenuItem>
+                    <MenuItem>
+                      <Link href="/profile" textAlign="center">{t('PROFILE')}</Link>
+                    </MenuItem>
+                </Menu>
             </Box>
-            <InputLabel className="lg-hide" id="language-select-label">
+            <InputLabel  id="language-select-label">
               {" "}
               {t("LANGUAGE")}
             </InputLabel>
 
             <Select
-              labelId="language-select-label"
-              id="language-select"
-              className="language lg-hide"
-              style={{ border: "none" }}
-              startIcon={<LanguageIcon />}
-              trigger={(triggerProps) => {
-                return (
-                  <Button alignSelf="center" variant="solid" {...triggerProps}>
-                    {t("LANGUAGE")}
-                  </Button>
-                );
-                // }}>
-              }}
-            >
-              {/* <MenuItem value="">
-          <em>None</em>
-        </MenuItem> */}
-              <MenuItem
-                onPress={(item) => changeLanguage("en")}
-                value="English"
-              >
-                {t("ENGLISH")}
-              </MenuItem>
-              <MenuItem onPress={(item) => changeLanguage("hi")} value="Hindi">
-                {t("HINDI")}
-              </MenuItem>
-            </Select>
+  labelId="language-select-label"
+  id="language-select"
+  className="language"
+  style={{ border: "none" }}
+  startIcon={<LanguageIcon />}
+  onChange={(event) => changeLanguage(event.target.value)}
+>
+             
+  <MenuItem value="en"> {/* Changed value to language code */}
+    {t("ENGLISH")}
+  </MenuItem>
+  <MenuItem value="hi">
+    {t("HINDI")}
+  </MenuItem>
+</Select>
             <Box
               className="xs-hide"
               style={{
@@ -280,7 +261,7 @@ function Header() {
               sx={{ flexGrow: 1, display: "flex", justifyContent: "flex-end" }}
             >
               <Link
-                href="#"
+                href="/all"
                 underline="none"
                 style={{
                   my: 2,
@@ -292,10 +273,10 @@ function Header() {
                 <EditNoteOutlinedIcon
                   style={{ padding: "0 10px", verticalAlign: "middle" }}
                 />
-                Content
+                {t('CONTENT')}
               </Link>
               <Link
-                href="#"
+                href="/addConnections"
                 underline="none"
                 style={{
                   my: 2,
@@ -307,7 +288,7 @@ function Header() {
                 <GroupsOutlinedIcon
                   style={{ padding: "0 10px", verticalAlign: "middle" }}
                 />
-                Connections
+                {t('CONNECTIONS')}
               </Link>
               {/* <Link href="#" style={{ my: 2, color: 'black', display: 'block' }}> <AccountCircleOutlinedIcon />Profile</Link> */}
 
@@ -316,7 +297,7 @@ function Header() {
                   <AccountCircleOutlinedIcon
                     style={{ padding: "0 10px", verticalAlign: "middle" }}
                   />{" "}
-                  Profile
+                  {t('PROFILE')}
                 </IconButton>
               </Tooltip>
               <Menu
@@ -335,11 +316,15 @@ function Header() {
                 open={Boolean(anchorElUser)}
                 onClose={handleCloseUserMenu}
               >
-                {settings.map((setting) => (
-                  <MenuItem key={setting} onClick={handleCloseUserMenu}>
-                    <Typography textAlign="center">{setting}</Typography>
+                  <MenuItem>
+                    <Link href="/profile" textAlign="center">{t('PROFILE')}</Link>
                   </MenuItem>
-                ))}
+                  <MenuItem>
+                    <Link href="/help" textAlign="center">{t('HELP')}</Link>
+                  </MenuItem>
+                  <MenuItem>
+                    <Link href="/logoff" textAlign="center">{t('LOGOUT')}</Link>
+                  </MenuItem>
               </Menu>
             </Box>
           </Toolbar>
