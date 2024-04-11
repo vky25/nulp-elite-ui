@@ -106,5 +106,9 @@
   "REGISTER":"Register",
   "ALREADY_HAVE_AN_ACCOUNT":"Already have an account?",
   "LOG_IN":"Log In",
-  "CONTINUE":"Continue"
+  "CONTINUE":"Continue",
+  "MAIN_CONTENT":" Main Content",
+  "SCREEN_READER":"Screen Reader",
+  "CONTENT":"Content",
+  "CONNECTIONS":"Connections"
 }
