@@ -49,10 +49,10 @@ export default function Footer() {
       setValue(newValue);
     }}
   >
- <BottomNavigationAction onPress={() => { alert("EEEE"); navigate('/search/domainList') }} label={t("SEARCH")} className='navigateActive' icon={<SearchSharpIcon />} />
+ <BottomNavigationAction onPress={() => { navigate('/domainList') }} label={t("SEARCH")} className='navigateActive' icon={<SearchSharpIcon />} />
     <BottomNavigationAction onPress={() => { navigate('/view-all/:category') }} label={t("CONTENTS")} icon={<EditNoteOutlinedIcon />} />
-    <BottomNavigationAction onPress={() => { navigate('/connections/myConnections') }} label={t("CONNECTION")} icon={<GroupsOutlinedIcon />} />
-    <BottomNavigationAction onPress={() => { navigate('/profile/profile') }} label={t("PROFILE")} icon={<AccountCircleOutlinedIcon />} />
+    <BottomNavigationAction onPress={() => { navigate('/myConnections') }} label={t("CONNECTION")} icon={<GroupsOutlinedIcon />} />
+    <BottomNavigationAction onPress={() => { navigate('/profile') }} label={t("PROFILE")} icon={<AccountCircleOutlinedIcon />} />
   </BottomNavigation>
 </Box>
 
