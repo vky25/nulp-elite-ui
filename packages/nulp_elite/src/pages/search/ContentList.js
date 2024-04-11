@@ -125,7 +125,7 @@ const ContentList = (props) => {
 const randomItem = getRandomValue(data);
   const handleChange = (event: React.ChangeEvent<unknown>, value: number) => {
 
-    navigate('/search/contentList/'+value)
+    navigate('/contentList/'+value, { state: { domain:domain }})
     fetchData();
   };
 
