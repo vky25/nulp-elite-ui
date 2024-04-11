@@ -93,6 +93,25 @@ const ContentList = (props) => {
     }
   };
 
+ // Function to select a random value from an array
+ const getRandomValue = (array) => {
+  console.log("RandomImage   --  ",RandomImage.ImagePaths )
+  const randomIndex= RandomImage;
+  // const randomIndex = Math.floor(Math.random() * RandomImage..length);
+  console.log("randomIndex",randomIndex)
+
+  // return array[randomIndex];
+  return randomIndex;
+};
+
+// Assuming 'data' is your JSON array
+const randomItem = getRandomValue(data);
+  const handleChange = (event: React.ChangeEvent<unknown>, value: number) => {
+
+    navigate('/contentList/'+value, { state: { domain:domain }})
+    fetchData();
+  };
+
   const fetchGradeLevels = async () => {
     try {
       const response = await fetch(
@@ -169,7 +188,7 @@ const ContentList = (props) => {
             >
               {data &&
                 data.content &&
-                data.content.map((items) => (
+                data.content.map((items,index) => (
                   <Grid
                     item
                     xs={12}
@@ -177,7 +196,7 @@ const ContentList = (props) => {
                     lg={3}
                     style={{ marginBottom: "10px" }}
                   >
-                    <BoxCard items={items}></BoxCard>
+                    <BoxCard items={items} index= {index}></BoxCard>
                   </Grid>
                 ))}
             </Grid>

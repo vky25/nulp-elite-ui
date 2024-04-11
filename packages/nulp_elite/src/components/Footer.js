@@ -22,7 +22,6 @@ import Grid from '@mui/material/Grid';
 
 export default function Footer() {
   const [value, setValue] = React.useState(0);
-  const pages = ['Content', 'Connections', 'Profile'];
   const [anchorEl, setAnchorEl] = React.useState(null);
 
   const handleClick = (event) => {
@@ -39,19 +38,35 @@ export default function Footer() {
     <>
     <Container maxWidth="xl" className='lg-hide'>
     <Box sx={{  position: 'fixed', bottom: 0, left: 0, right: 0 ,width:'100%',zIndex:'9999' }}>
-  <BottomNavigation
-    sx={{ width: '100%', display: 'flex', position: 'relative',paddingTop:'10px' }}
-    showLabels
-    value={value}
-    onChange={(event, newValue) => {
-      setValue(newValue);
-    }}
-  >
-    <BottomNavigationAction label="Recents" className='navigateActive' icon={<SearchSharpIcon />} />
-    <BottomNavigationAction label="Favorites" icon={<EditNoteOutlinedIcon />} />
-    <BottomNavigationAction label="Nearby" icon={<GroupsOutlinedIcon />} />
-    <BottomNavigationAction label="Account" icon={<AccountCircleOutlinedIcon />} />
-  </BottomNavigation>
+    <BottomNavigation
+            sx={{ width: '100%', display: 'flex', position: 'relative', paddingTop: '10px' }}
+            showLabels
+            value={value}
+            onChange={(event, newValue) => setValue(newValue)}
+          >
+            <BottomNavigationAction
+              onClick={() => navigate('/domainList')}
+              label={t("SEARCH")}
+              className='navigateActive'
+              icon={<SearchSharpIcon />}
+            />
+            <BottomNavigationAction
+              onClick={() => navigate('/all')}
+              label={t("CONTENTS")}
+              icon={<EditNoteOutlinedIcon />}
+            />
+            <BottomNavigationAction
+              onClick={() => navigate('/addConnections')}
+              label={t("CONNECTION")}
+              icon={<GroupsOutlinedIcon />}
+            />
+            <BottomNavigationAction
+              onClick={() => navigate('/profile')}
+              label={t("PROFILE")}
+              icon={<AccountCircleOutlinedIcon />}
+            />
+          </BottomNavigation>
+
 </Box>
 
 </Container>
@@ -61,17 +76,17 @@ export default function Footer() {
 
 <Grid container spacing={2} className='footer'>
   <Grid item xs={8} md={3} style={{fontSize:'14px', lineHeight:'2.4',fontWeight:'400'}}>
-  <Link underline="none"  href="#" style={{padding:'10px 0 2px',color:'#fff',margin:'0 8px'}}>NIUA</Link>
-    <Link underline="none" href="#" style={{padding:'10px 0 2px',color:'#fff',margin:'0 8px'}}>MoHUA</Link><br/>
-    <Link  underline="none"  href="#" style={{padding:'10px 0 2px',color:'#fff',margin:'0 8px'}}>About Us</Link>
-    <Link underline="none"  href="#" style={{padding:'10px 0 2px',color:'#fff',margin:'0 8px'}}>Contact Us</Link>
-    <Link underline="none"  href="#" style={{padding:'10px 0 2px',color:'#fff',margin:'0 8px'}}>FAQs</Link>
-    <Link underline="none"  href="#" style={{padding:'10px 0 2px',color:'#fff',margin:'0 8px'}}>Log Out</Link>
+  <Link underline="none" target="_blank" href="https://niua.in/" style={{padding:'10px 0 2px',color:'#fff',margin:'0 8px'}}>NIUA</Link>
+    <Link underline="none" target="_blank" href="https://mohua.gov.in/" style={{padding:'10px 0 2px',color:'#fff',margin:'0 8px'}}>MoHUA</Link><br/>
+    <Link  underline="none" target="_blank"  href="/aboutus.html" style={{padding:'10px 0 2px',color:'#fff',margin:'0 8px'}}>About Us</Link>
+    <Link underline="none" target="_blank"  href="#" style={{padding:'10px 0 2px',color:'#fff',margin:'0 8px'}}>Contact Us</Link>
+    <Link underline="none" target="_blank"  href="#" style={{padding:'10px 0 2px',color:'#fff',margin:'0 8px'}}>FAQs</Link>
+    <Link underline="none" target="_blank"  href="/logout" style={{padding:'10px 0 2px',color:'#fff',margin:'0 8px'}}>Log Out</Link>
 
   </Grid>
   <Grid item xs={4} md={3} style={{fontSize:'14px', lineHeight:'2.4',fontWeight:'400'}}>
-  <Link underline="none"  href="#" style={{padding:'10px 0 2px',color:'#fff', fontSize:'14px'}}>Center for Digital Governance</Link><br/>
-    <Link  underline="none" href="#" style={{padding:'10px 0 2px',color:'#fff', fontSize:'14px'}}>National Urban Digital Mission</Link>
+  <Link underline="none" target="_blank" href="https://niua.org/cdg/" style={{padding:'10px 0 2px',color:'#fff', fontSize:'14px'}}>Center for Digital Governance</Link><br/>
+    <Link  underline="none" target="_blank" href="https://nudm.mohua.gov.in/" style={{padding:'10px 0 2px',color:'#fff', fontSize:'14px'}}>National Urban Digital Mission</Link>
 </Grid>
   <Grid item xs={4} md={3} style={{fontSize:'14px', lineHeight:'1.5', fontWeight:'400'}}>
   <Box style={{fontSize:'14px',fontWeight:'700'}}>Nodal Ministry:</Box>

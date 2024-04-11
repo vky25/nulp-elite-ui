@@ -109,7 +109,7 @@ function App() {
     },
     {
       moduleName: "nulp_elite",
-      path: "/search/contentList",
+      path: "/contentList/:pageNumber",
       component: ContentList,
     },
     {

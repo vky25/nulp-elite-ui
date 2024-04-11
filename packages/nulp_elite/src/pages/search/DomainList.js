@@ -111,8 +111,9 @@ const DomainList = () => {
   }
 
   const loadContents = async (term) => {
-    console.log(term);
-    navigate('/search/contentList', { state: { domain: term.code } }); 
+
+    // console.log(term);
+    navigate('/contentList/1', { state: { domain:term.code }}); 
   }
   console.log(frameworkHardCodedData.result.framework.categories[0].terms);
   return (

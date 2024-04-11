@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState, useEffect }  from "react";
 import Card from "@mui/material/Card";
 import CardActions from "@mui/material/CardActions";
 import CardContent from "@mui/material/CardContent";
@@ -7,12 +7,35 @@ import Button from "@mui/material/Button";
 import Typography from "@mui/material/Typography";
 import Box from "@mui/material/Box";
 import { Divider } from "native-base";
+import RandomImage from "../assets/cardRandomImgs.json"
 
 
+export default function BoxCard({ items, index }) {
+  const [imgUrl, setImgUrl] = React.useState(true);
+  useEffect(() => { 
+    // const random = getRandomValue();
+    randomImg(index);
+ }, []);
+const randomImg = (i) => {
+console.log("RandomImage--- ",i,"   ", i % 10 || 10); 
+setImgUrl(RandomImage.ImagePaths[i % 10 || 10]);
+console.log("imgUrl--- ", RandomImage.ImagePaths[i % 10 || 10]);
+}
+// // Assuming 'data' is your JSON array
+// const randomItem = getRandomValue(data);
+//   // console.log(items.appIcon)
+//    // Function to select a random value from an array
+//  const getRandomValue = (array) => {
+//   console.log("RandomImage   --  ",RandomImage.ImagePaths )
+//   const randomIndex= RandomImage;
+//   // const randomIndex = Math.floor(Math.random() * RandomImage..length);
+//   console.log("randomIndex",randomIndex)
 
-export default function BoxCard({ items }) {
-  // console.log(items.appIcon)
-  
+//   // return array[randomIndex];
+//   return randomIndex;
+// };
+
+
   return (
     <Card sx={{  position: "relative" }}>
       <CardMedia
