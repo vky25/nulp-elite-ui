@@ -206,7 +206,7 @@ const randomItem = getRandomValue(data);
             >
               {data &&
                 data.content &&
-                data.content.map((items) => (
+                data.content.map((items,index) => (
                   <Grid
                     item
                     xs={12}
@@ -214,7 +214,7 @@ const randomItem = getRandomValue(data);
                     lg={3}
                     style={{ marginBottom: "10px" }}
                   >
-                    <BoxCard items={items}></BoxCard>
+                    <BoxCard items={items} index= {index}></BoxCard>
                   </Grid>
                 ))}
             </Grid>
