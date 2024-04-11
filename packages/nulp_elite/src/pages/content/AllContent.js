@@ -6,6 +6,7 @@ import Header from "components/header";
 import Footer from "components/Footer";
 import { Link } from "react-router-dom";
 import URLSConfig from "../../configs/urlConfig.json";
+// import hardcodedData from "../../assets/contentSerach.json";
 
 const AllContent = () => {
   const [data, setData] = useState([]);
