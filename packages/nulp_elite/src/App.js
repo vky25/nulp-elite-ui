@@ -105,11 +105,6 @@ function App() {
     },
     {
       moduleName: "nulp_elite",
-      path: "/myConnections",
-      component: MyConnections,
-    },
-    {
-      moduleName: "nulp_elite",
       path: "/domainList",
       component: DomainList,
     },
