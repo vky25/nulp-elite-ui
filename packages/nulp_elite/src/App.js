@@ -36,13 +36,14 @@ import FAQPage from "pages/FAQPage";
 import AddConnections from "pages/connections/AddConnections";
 import MyConnections from "pages/connections/MyConnections";
 import DomainList from "pages/search/DomainList";
-import Registrationnew from "pages/registration/Registration";
+import Registration from "pages/registration/Registration";
 import Registrationold from "pages/registration/Registrationold";
 import ContentList from "pages/search/ContentList";
 import AllContent from "pages/content/AllContent";
 import CategoryPage from "pages/content/CategoryPage";
 import LearningHistory from "pages/profile/learningHistory";
 import JoinCourse from "pages/content/joinCourse";
+import Otp from "pages/registration/Otp";
 
 function App() {
   // const [t] = useTranslation();
@@ -123,6 +124,7 @@ function App() {
       path: "content/joinCourse",
       component: JoinCourse,
     },
+   
     {
       moduleName: "nulp_elite",
       path: "/userPrefData",
@@ -150,8 +152,13 @@ function App() {
     },
     {
       moduleName: "nulp_elite",
-      path: "/registrationnew",
-      component: Registrationnew,
+      path: "/registration",
+      component: Registration,
+    },
+    {
+      moduleName: "nulp_elite",
+      path: "/otp",
+      component: Otp,
     },
     {
       moduleName: "nulp_elite",
