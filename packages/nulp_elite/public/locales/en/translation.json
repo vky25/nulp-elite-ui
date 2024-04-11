@@ -76,6 +76,11 @@
   "CERTIFICATIONS_RECEIVED":"Certifications Received",
   "COURSES_THAN_LAST_MONTH":"Courses than last month",
   "CHANGE_PREFERENCES":"Change Preferences",
+  "SEARCH": "Search",
+  "CONTENTS":"Contents",
+  "CONNECTION":"Connections",
+  "PROFILE":"Profile",
+
   "JOIN_COURSE":"Join Course",
   "DESCRIPTION":"Description",
   "BATCH_DETAILS":"Batch Details",
@@ -90,7 +95,6 @@
   "CERTIFICATION_CRITERIA":"Certification Criteria",
   "OTHER_DETAILS":"Other Details",
   "FOR_DETAILS":" For details",
-
   "COURSES_MODULE":" Courses Module",
   "RESET_PASSWORD":"Reset Password",
   "RESEND_CODE":"Resend code",
@@ -107,5 +111,4 @@
   "SCREEN_READER":"Screen Reader",
   "CONTENT":"Content",
   "CONNECTIONS":"Connections"
-
 }
