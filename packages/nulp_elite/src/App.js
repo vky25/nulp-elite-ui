@@ -35,13 +35,14 @@ import Certificate from "pages/profile/certificate";
 import FAQPage from "pages/FAQPage";
 import AddConnections from "pages/connections/AddConnections";
 import DomainList from "pages/search/DomainList";
-import Registrationnew from "pages/registration/Registration";
+import Registration from "pages/registration/Registration";
 import Registrationold from "pages/registration/Registrationold";
 import ContentList from "pages/search/ContentList";
 import AllContent from "pages/content/AllContent";
 import CategoryPage from "pages/content/CategoryPage";
 import LearningHistory from "pages/profile/learningHistory";
 import JoinCourse from "pages/content/joinCourse";
+import Otp from "pages/registration/Otp";
 
 function App() {
   // const [t] = useTranslation();
@@ -74,17 +75,17 @@ function App() {
     },
     {
       moduleName: "nulp_elite",
-      path: "profile/profile",
+      path: "/profile",
       component: Profile,
     },
     {
       moduleName: "nulp_elite",
-      path: "profile/certificate",
+      path: "/certificate",
       component: Certificate,
     },
     {
       moduleName: "nulp_elite",
-      path: "profile/learningHistory",
+      path: "/learningHistory",
       component: LearningHistory,
     },
     {
@@ -104,9 +105,14 @@ function App() {
     },
     {
       moduleName: "nulp_elite",
-      path: "/search/domainList",
+      path: "/domainList",
       component: DomainList,
     },
+    // {
+    //   moduleName: "nulp_elite",
+    //   path: "contentList",
+    //   component: ContentList,
+    // },
     {
       moduleName: "nulp_elite",
       path: "/contentList/:pageNumber",
@@ -114,9 +120,11 @@ function App() {
     },
     {
       moduleName: "nulp_elite",
-      path: "content/joinCourse",
+      path: "/joinCourse",
       component: JoinCourse,
+
     },
+   
     {
       moduleName: "nulp_elite",
       path: "/userPrefData",
@@ -139,13 +147,18 @@ function App() {
     },
     {
       moduleName: "nulp_elite",
-      path: "/certificate",
+      path: "/certificateOld",
       component: Certificate,
     },
     {
       moduleName: "nulp_elite",
-      path: "/registrationnew",
-      component: Registrationnew,
+      path: "/registration",
+      component: Registration,
+    },
+    {
+      moduleName: "nulp_elite",
+      path: "/otp",
+      component: Otp,
     },
     {
       moduleName: "nulp_elite",
@@ -170,42 +183,7 @@ function App() {
     `${process.env.PUBLIC_URL}/locales/{{lng}}/{{ns}}.json`
   );
 
-  // const resources = {
-  //   en: {
-  //     translation: {
-  //       enTranslation
-  //     }
-  //   },
-  //   hi: {
-  //     translation: {
-  //       hiTranslation
-  //     }
-  //   }
-  // };
-  // console.log(hiTranslation)
-
-  // i18n.use(initReactI18next).init({
-  //   resources,
-  //   lng: 'en',
-
-  //   interpolation: {
-  //     escapeValue: false
-  //   }
-  // });
-
-  // return(
-  //   // <Box></Box>
-  //   <NativeBaseProvider >
-  //    <Router routes={routes}>
-
-  //   </Router>
-  //    </NativeBaseProvider>
-  // // <NativeBaseProvider ><Router><Sample /></Router> </NativeBaseProvider>
-
-  // );
-  // <NativeBaseProvider > <Sample /></NativeBaseProvider>;
-
-  // <AppShell routes={routes} AuthComponent={LoginComponent} />;
+ 
   return (
     <NativeBaseProvider>
       {/* <ChakraProvider> */}

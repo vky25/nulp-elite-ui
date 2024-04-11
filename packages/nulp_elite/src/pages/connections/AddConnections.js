@@ -29,8 +29,6 @@ import DialogActions from "@material-ui/core/DialogActions";
 import Header from "components/header";
 import Footer from "components/Footer";
 import Filter from "components/filter";
-import CheckCircleOutlineIcon from "@mui/icons-material/CheckCircleOutline";
-import CancelOutlinedIcon from "@mui/icons-material/CancelOutlined";
 
 // Define modal styles
 const useStyles = makeStyles((theme) => ({
@@ -120,12 +118,6 @@ const AddConnections = () => {
 
     fetchData();
   }, [filters]);
-
-  const [userChatData, setUserChatData] = useState({});
-
-  useEffect(() => {
-    onMyConnection();
-  }, [userChatData]);
 
   const fetchData = async () => {
     setIsLoading(true);
@@ -293,6 +285,7 @@ const AddConnections = () => {
   const getConnections = async () => {
     setIsLoading(true);
     setError(null);
+    // setData([]);
 
     const params = new URLSearchParams({
       sender_id: loggedInUserId,
@@ -313,9 +306,9 @@ const AddConnections = () => {
       if (!response.ok) {
         throw new Error("Failed to get connected user chat");
       }
-      // setInvitationReceivedUserByIds([]);
-      // setInvitationAcceptedUsers([]);
-      // setInvitationNotAcceptedUsers([]);
+      setInvitationReceivedUserByIds([]);
+      setInvitationAcceptedUsers([]);
+      setInvitationNotAcceptedUsers([]);
       const responseData = await response.json();
       console.log("getConnections", responseData.result);
 
@@ -356,7 +349,7 @@ const AddConnections = () => {
   const getInvitationNotAcceptedUserByIds = async (userIds) => {
     setIsLoading(true);
     setError(null);
-    // setInvitationNotAcceptedUsers([]);
+    setInvitationNotAcceptedUsers([]);
 
     const url = `http://localhost:3000/learner/user/v3/search`;
     const requestBody = {
@@ -408,7 +401,7 @@ const AddConnections = () => {
   const getInvitationAcceptedUserByIds = async (userIds) => {
     setIsLoading(true);
     setError(null);
-    // setInvitationAcceptedUsers([]);
+    setInvitationAcceptedUsers([]);
 
     const url = `http://localhost:3000/learner/user/v3/search`;
     const requestBody = {
@@ -455,7 +448,7 @@ const AddConnections = () => {
   const getInvitationReceivedUserByIds = async (userIds) => {
     setIsLoading(true);
     setError(null);
-    // setInvitationReceivedUserByIds([]);
+    setInvitationReceivedUserByIds([]);
 
     const url = `http://localhost:3000/learner/user/v3/search`;
     const requestBody = {
@@ -522,7 +515,7 @@ const AddConnections = () => {
           "Content-Type": "application/json",
         },
       });
-      // setInvitationReceivedUserByIds([]);
+      setInvitationReceivedUserByIds([]);
       if (!response.ok) {
         throw new Error("Failed to get invited user");
       }
@@ -573,7 +566,7 @@ const AddConnections = () => {
   };
 
   const blockChat = (userId) => {
-    rejectChatInvitation(userId);
+    blockChatInvitation(userId);
   };
 
   const acceptChatInvitation = async (userId) => {
@@ -601,41 +594,7 @@ const AddConnections = () => {
 
       const responseData = await response.json();
       console.log("acceptChatInvitation", responseData.result);
-      setUserChatData(responseData.result);
       onMyConnection();
-    } catch (error) {
-      setError(error.message);
-    } finally {
-      setIsLoading(false);
-    }
-  };
-
-  const rejectChatInvitation = async (userId) => {
-    setIsLoading(true);
-    setError(null);
-    const requestBody = {
-      sender_id: userId,
-      receiver_id: loggedInUserId,
-    };
-
-    const url = `http://localhost:3000/directConnect/reject-invitation`;
-
-    try {
-      const response = await fetch(url, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(requestBody),
-      });
-      if (!response.ok) {
-        throw new Error("Failed to block chat");
-      }
-
-      const responseData = await response.json();
-      console.log("rejectChatInvitation", responseData.result);
-      onMyConnection();
-      // getConnections();
     } catch (error) {
       setError(error.message);
     } finally {
@@ -840,68 +799,30 @@ const AddConnections = () => {
               </TabList>
             </Box>
             <TabPanel value="1" style={{ padding: "0" }}>
-              {invitationReceiverByUser &&
-                invitationReceiverByUser?.map((item) => (
-                  <List sx={{}} style={{ color: "gray" }}>
-                    <ListItem>
-                      <ListItemText
-                        primary={`${item.firstName}${
-                          item.lastName ? ` ${item.lastName}` : ""
-                        }`}
-                        secondary="Designation"
-                      />
-                    </ListItem>
-                    <div
-                      style={{
-                        display: "flex",
-                        justifyContent: "flex-end",
-                        marginTop: "10px",
-                      }}
-                    >
-                      <Link
-                        href="#"
-                        underline="none"
-                        color="primary"
-                        onClick={() => acceptChat(item.userId)}
-                        style={{ marginLeft: "10px" }}
-                      >
-                        <CheckCircleOutlineIcon />
-                      </Link>
-
-                      <Link
-                        href="#"
-                        underline="none"
-                        color="secondary"
-                        onClick={() => blockChat(item.userId)}
-                      >
-                        <CancelOutlinedIcon />
-                      </Link>
-                    </div>
-
-                    <Divider />
-                  </List>
-                ))}
-
               {invitationAcceptedUsers &&
                 invitationAcceptedUsers?.map((item) => (
                   <List sx={{}} style={{ color: "green" }}>
                     <ListItem>
                       <ListItemText
-                        primary={`${item.firstName}${
-                          item.lastName ? ` ${item.lastName}` : ""
-                        }`}
+                        primary={"" + item.firstName + item.lastName}
                         secondary="Designation"
-                        onClick={() =>
-                          handleAcceptedChatOpen(
-                            item.userId,
-                            `${item.firstName}${
-                              item.lastName ? ` ${item.lastName}` : ""
-                            }`
-                          )
-                        }
                       />
                     </ListItem>
-                    {/* <Link
+                    {/* <TriggerButton
+                      type="button"
+                      variant="contained"
+                      color="primary"
+                      onClick={() =>
+                        handleAcceptedChatOpen(
+                          item.userId,
+                          "" + item.firstName + item.lastName
+                        )
+                      }
+                      style={{ marginLeft: "90%" }}
+                    >
+                      Open chat
+                    </TriggerButton> */}
+                    <Link
                       href="#"
                       underline="none"
                       color="primary"
@@ -914,20 +835,10 @@ const AddConnections = () => {
                       style={{ marginLeft: "90%" }}
                     >
                       Open chat
-                    </Link> */}
+                    </Link>
                     <div>
                       <Dialog open={open} onClick={handleCloseModal}>
                         <DialogTitle>{selectedUserName}</DialogTitle>
-                        <TriggerButton
-                          type="button"
-                          variant="contained"
-                          color="primary"
-                          onClick={blockChatInvitation}
-                          style={{ marginLeft: "10px" }}
-                        >
-                          Block User
-                        </TriggerButton>
-
                         <DialogContent dividers>
                           {userChat?.map((msg, index) => (
                             <div
@@ -972,6 +883,21 @@ const AddConnections = () => {
                       </Dialog>
                     </div>
                     <Divider />
+
+                    {/* <ListItem>
+                    <ListItemText
+                      primary="Manisha Kapadnis"
+                      secondary="Learner"
+                    />
+                  </ListItem>
+                  <Divider />
+
+                  <ListItem>
+                    <ListItemText
+                      primary="Charvi Upadhyay"
+                      secondary="Commissioner"
+                    />
+                  </ListItem> */}
                   </List>
                 ))}
 
@@ -1011,7 +937,7 @@ const AddConnections = () => {
                   >
                     <ModalContent sx={{ width: 400 }} style={{}}>
                       <div>
-                        <h2>Invitation not accepted.</h2>
+                        <h2>Chat request has not accepted.</h2>
                         <Button
                           onClick={(e) => {
                             setShowChatModal(false);
@@ -1033,6 +959,61 @@ const AddConnections = () => {
                   </Modal>
                 )}
               </div>
+              {/* <TriggerButton type="button" onClick={handleOpen}>
+                Open chat
+              </TriggerButton> */}
+
+              {invitationReceiverByUser &&
+                invitationReceiverByUser?.map((item) => (
+                  <List sx={{}} style={{ color: "gray" }}>
+                    <ListItem>
+                      <ListItemText
+                        primary={`${item.firstName}${
+                          item.lastName ? ` ${item.lastName}` : ""
+                        }`}
+                        secondary="Designation"
+                      />
+                    </ListItem>
+                    <div
+                      style={{
+                        display: "flex",
+                        justifyContent: "flex-end",
+                        marginTop: "10px",
+                      }}
+                    >
+                      <TriggerButton
+                        type="button"
+                        variant="contained"
+                        color="primary"
+                        onClick={() => acceptChat(item.userId)}
+                        // onClick={acceptChatInvitation(item.userId)}
+                        style={{ marginRight: "10px" }}
+                      >
+                        Accept
+                      </TriggerButton>
+                      <TriggerButton
+                        type="button"
+                        variant="contained"
+                        color="secondary"
+                        onClick={() => blockChat(item.userId)}
+                        // onClick={blockChatInvitation(item.userId)}
+                      >
+                        Decline
+                      </TriggerButton>
+                    </div>
+
+                    {/* <TriggerButton
+                        type="button"
+                        onClick={handleNotAcceptedChatOpen}
+                      >
+                        Open chat
+                      </TriggerButton> */}
+                    <Divider />
+                  </List>
+                ))}
+              {/* <TriggerButton type="button" onClick={handleOpen}>
+                Open chat
+              </TriggerButton> */}
             </TabPanel>
             <List>
               {/* {userData.map((user, index) => (
@@ -1060,6 +1041,24 @@ const AddConnections = () => {
                   <TextField {...params} label="Filter by Name" />
                 )}
               /> */}
+            {/* {!isLoading && !error && (
+                <div className="button" onClick={handleOpen}>
+                  {userData.map((item) => (
+                    <div key={item.id} onClick={() => handleUserClick(item)}>
+                      <Box
+                        sx={{ border: "1px solid", borderRadius: "lg", p: 4 }}
+                      >
+                        <Typography variant="body2" fontSize="small">
+                          Name Surname: {item.firstName} {item.lastName}
+                        </Typography>
+                        <Typography variant="body2">Designation: </Typography>
+                      </Box>
+                    </div>
+                  ))}
+                  <div className="pagination">{pagination}</div>
+                </div>
+              )} */}
+
             {/* <div>  */}
 
             <TabPanel value="2">
@@ -1089,6 +1088,11 @@ const AddConnections = () => {
                     </ListItem>
                     <Divider />
                     <div className="pagination">{pagination}</div>
+                    {/* {
+                      <TriggerButton type="button" onClick={handleOpen}>
+                        Open chat
+                      </TriggerButton>
+                    } */}
                   </List>
                 ))}
               <div>
@@ -1165,6 +1169,7 @@ const AddConnections = () => {
                     )}
                     {showChat && (
                       <div>
+                        {/* Your chat UI components go here */}
                         <TextField
                           multiline
                           rows={4} // You can adjust the number of rows as needed

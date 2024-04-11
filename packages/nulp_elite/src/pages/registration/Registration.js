@@ -8,7 +8,12 @@ import Container from "@mui/material/Container";
 import image from "../../assets/bg.png";
 import Typography from "@mui/material/Typography";
 import Link from "@mui/material/Link";
-import { alpha, styled } from "@mui/material/styles";
+import { styled } from "@mui/material/styles";
+import { useTranslation } from "react-i18next";
+import Select from '@mui/material/Select';
+import MenuItem from '@mui/material/MenuItem';
+import FormControl from '@mui/material/FormControl';
+import InputLabel from '@mui/material/InputLabel';
 
 const CssTextField = styled(TextField)({
   "& label.Mui-focused": {
@@ -34,11 +39,19 @@ const CssTextField = styled(TextField)({
   },
 });
 
+
 const Registration = () => {
+const { t } = useTranslation();
+const [age, setAge] = React.useState('');
+const handleChange = (event) => {
+  setAge(event.target.value);
+};
+
   return (
     <>
       <Container
         maxWidth="sm"
+        className="register"
         style={{
           textAlign: "center",
           backgroundPosition: "2px 426px",
@@ -51,6 +64,9 @@ const Registration = () => {
         <Box my={4}>
           <img src={require("../../assets/logo.png")} />
         </Box>
+        <Typography style={{fontWeight:'600',fontSize:'16px',marginBottom:'20px'}}>{t('REGISTER')}</Typography>
+
+
         <Box py={1}>
           <CssTextField
             id="outlined-basic"
@@ -59,6 +75,20 @@ const Registration = () => {
             size="small"
           />
         </Box>
+        <FormControl fullWidth style={{marginTop:'10px'}}>
+        <InputLabel id="demo-simple-select-label">Age</InputLabel>
+        <Select
+          labelId="demo-simple-select-label"
+          id="demo-simple-select"
+          value={age}
+          label="Age"
+          onChange={handleChange}
+        >
+          <MenuItem value={10}>Ten</MenuItem>
+          <MenuItem value={20}>Twenty</MenuItem>
+          <MenuItem value={30}>Thirty</MenuItem>
+        </Select>
+      </FormControl>
         <Box py={2}>
           <CssTextField
             id="outlined-basic"
@@ -96,7 +126,7 @@ const Registration = () => {
               fontSize: "14px",
             }}
           >
-            Submit
+            {t('CONTINUE')}
           </Button>
         </Box>
         <Box py={1}>
@@ -105,9 +135,10 @@ const Registration = () => {
             style={{
               fontWeight: "400",
               fontSize: "12px",
+              marginTop:"10px"
             }}
           >
-            Already have an account? <Link href="">Log In</Link>
+            {t('ALREADY_HAVE_AN_ACCOUNT')} <Link href="">{t('LOG_IN')}</Link>
           </Typography>
         </Box>
       </Container>

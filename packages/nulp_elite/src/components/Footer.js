@@ -9,8 +9,8 @@ import EditNoteOutlinedIcon from '@mui/icons-material/EditNoteOutlined';
 import Container from '@mui/material/Container';
 import Link from '@mui/material/Link';
 import Grid from '@mui/material/Grid';
-
-
+import { useTranslation } from "react-i18next";
+import { useParams,useNavigate } from "react-router-dom";
 
 // const styles = {
 //   BottomNavigation: {
@@ -21,8 +21,10 @@ import Grid from '@mui/material/Grid';
 // };
 
 export default function Footer() {
+  const { t } = useTranslation();
   const [value, setValue] = React.useState(0);
   const [anchorEl, setAnchorEl] = React.useState(null);
+  const navigate = useNavigate();
 
   const handleClick = (event) => {
     setAnchorEl(event.currentTarget);
@@ -66,7 +68,6 @@ export default function Footer() {
               icon={<AccountCircleOutlinedIcon />}
             />
           </BottomNavigation>
-
 </Box>
 
 </Container>
