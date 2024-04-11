@@ -1,0 +1,244 @@
+{
+    "id": "api.form.read",
+    "params": {
+        "resmsgid": "154b200d-8602-4188-adda-883df413eec9",
+        "msgid": "c1b0b165-5819-4ba5-ac91-7c3944c51bf2",
+        "status": "successful"
+    },
+    "responseCode": "OK",
+    "result": {
+        "form": {
+            "type": "ImgConfig",
+            "subtype": "global",
+            "action": "read",
+            "component": "*",
+            "framework": "*",
+            "data": {
+                "action": "list",
+                "fields": [
+                        {
+                          "identifier": "nulp_board_nulp",
+                          "code": "nulp",
+                          "name": "Nulp",
+                          "index": 1,
+                          "status": "Live",
+                          "image": "../../assets/swm.png"
+                        },
+                        {
+                          "identifier": "nulp_board_finance",
+                          "code": "finance",
+                          "name": "Municipal Finance",
+                          "index": 2,
+                          "status": "Live",
+                          "image": "../../assets/swm.png"
+                        },
+                        {
+                          "identifier": "nulp_board_leadershippillar",
+                          "code": "leadershippillar",
+                          "name": "Community Leadership",
+                          "index": 3,
+                          "status": "Live",
+                          "image": "../../assets/leadershippillar.png"
+                        },
+                        {
+                          "identifier": "nulp_board_mobilitybrts",
+                          "code": "mobility/brts",
+                          "name": "Mobility/BRTS",
+                          "index": 4,
+                          "status": "Live",
+                          "image": "../../assets/mobility/brts.png"
+                        },
+                        {
+                          "identifier": "nulp_board_water",
+                          "code": "water",
+                          "name": "Water",
+                          "index": 5,
+                          "status": "Live",
+                          "image": "../../assets/water.png"
+                        },
+                        {
+                          "identifier": "nulp_board_medical",
+                          "code": "medical",
+                          "name": "Medical",
+                          "index": 6,
+                          "status": "Live",
+                          "image": "../../assets/medical.png"
+                        },
+                        {
+                          "identifier": "nulp_board_environment_swm",
+                          "code": "environment_swm",
+                          "name": "Environment/SWM",
+                          "index": 7,
+                          "status": "Live",
+                          "image": "../../assets/environment_swm.png"
+                        },
+                        {
+                          "identifier": "nulp_board_it",
+                          "code": "it",
+                          "name": "IT",
+                          "index": 8,
+                          "status": "Live",
+                          "image": "../../assets/it.png"
+                        },
+                        {
+                          "identifier": "nulp_board_health",
+                          "code": "health",
+                          "name": "Health",
+                          "index": 9,
+                          "status": "Live",
+                          "image": "../../assets/health.png"
+                        },
+                        {
+                          "identifier": "nulp_board_education",
+                          "code": "education",
+                          "name": "Education",
+                          "index": 10,
+                          "status": "Live",
+                          "image": "../../assets/education.png"
+                        },
+                        {
+                          "identifier": "nulp_board_sports",
+                          "code": "sports",
+                          "name": "Sports",
+                          "index": 11,
+                          "status": "Live",
+                          "image": "../../assets/sports.png"
+                        },
+                        {
+                          "identifier": "nulp_board_civil",
+                          "code": "civil",
+                          "name": "Civil",
+                          "index": 12,
+                          "status": "Live",
+                          "image": "../../assets/civil.png"
+                        },
+                        {
+                          "identifier": "nulp_board_electrical",
+                          "code": "electrical",
+                          "name": "Electrical",
+                          "index": 13,
+                          "status": "Live",
+                          "image": "../../assets/electrical.png"
+                        },
+                        {
+                          "identifier": "nulp_board_csrcell",
+                          "code": "csrcell",
+                          "name": "CSR Cell",
+                          "index": 14,
+                          "status": "Live",
+                          "image": "../../assets/csrcell.png"
+                        },
+                        {
+                          "identifier": "nulp_board_citytransformationoffice",
+                          "code": "citytransformationoffice",
+                          "name": "City Transformation  Office",
+                          "index": 15,
+                          "status": "Live",
+                          "image": "../../assets/citytransformationoffice.png"
+                        },
+                        {
+                          "identifier": "nulp_board_landandassets",
+                          "code": "landandassets",
+                          "name": "Land and Assets",
+                          "index": 16,
+                          "status": "Live",
+                          "image": "../../assets/citytransformationoffice.png"
+                        },
+                        {
+                          "identifier": "nulp_board_townplan",
+                          "code": "townplan",
+                          "name": "Town Plan",
+                          "index": 17,
+                          "status": "Live",
+                          "image": "../../assets/townplan.png"
+                        },
+                        {
+                          "identifier": "nulp_board_generaladministration",
+                          "code": "generaladministration",
+                          "name": "General Administration",
+                          "index": 18,
+                          "status": "Live",
+                          "image": "../../assets/generaladministration.png"
+                        },
+                        {
+                          "identifier": "nulp_board_audit",
+                          "code": "audit",
+                          "name": "Audit",
+                          "index": 19,
+                          "status": "Live",
+                          "image": "../../assets/audit.png"
+                        },
+                        {
+                          "identifier": "nulp_board_horticulture",
+                          "code": "horticulture",
+                          "name": "Horticulture",
+                          "index": 20,
+                          "status": "Live",
+                          "image": "../../assets/horticulture.png"
+                        },
+                        {
+                          "identifier": "nulp_board_ucd",
+                          "code": "ucd",
+                          "name": "UCD",
+                          "index": 21,
+                          "status": "Live",
+                          "image": "../../assets/ucd.png"
+                        },
+                        {
+                          "identifier": "nulp_board_mechanical",
+                          "code": "mechanical",
+                          "name": "Mechanical",
+                          "index": 22,
+                          "status": "Live",
+                          "image": "../../assets/mechanical.png"
+                        },
+                        {
+                          "identifier": "nulp_board_csection",
+                          "code": "csection",
+                          "name": "C Section",
+                          "index": 23,
+                          "status": "Live",
+                          "image": "../../assets/csection.png"
+                        },
+                        {
+                          "identifier": "nulp_board_eoa",
+                          "code": "eoa",
+                          "name": "EOA",
+                          "index": 24,
+                          "status": "Live",
+                          "image": "../../assets/eoa.png"
+                        },
+                        {
+                          "identifier": "nulp_board_accounts",
+                          "code": "accounts",
+                          "name": "Accounts",
+                          "index": 25,
+                          "status": "Live",
+                          "image": "../../assets/accounts.png"
+                        },
+                        {
+                          "identifier": "nulp_board_revenue",
+                          "code": "revenue",
+                          "name": "Revenue",
+                          "index": 26,
+                          "status": "Live",
+                          "image": "../../assets/revenue.png"
+                        },
+                        {
+                          "identifier": "nulp_board_accessibility",
+                          "code": "accessibility",
+                          "name": "Accessibility",
+                          "index": 27,
+                          "status": "Live",
+                          "image": "../../assets/accessibility.png"
+                        }
+                      ],
+                "templateName": "domainImgConfig"
+            },
+            
+            "rootOrgId": "*"
+        }
+    },
+    "ts": "2024-04-04T10:53:06.023Z",
+    "ver": "1.0"
+}

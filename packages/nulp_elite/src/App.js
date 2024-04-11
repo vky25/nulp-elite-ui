@@ -75,17 +75,17 @@ function App() {
     },
     {
       moduleName: "nulp_elite",
-      path: "profile/profile",
+      path: "/profile",
       component: Profile,
     },
     {
       moduleName: "nulp_elite",
-      path: "profile/certificate",
+      path: "/certificate",
       component: Certificate,
     },
     {
       moduleName: "nulp_elite",
-      path: "profile/learningHistory",
+      path: "/learningHistory",
       component: LearningHistory,
     },
     {
@@ -105,18 +105,29 @@ function App() {
     },
     {
       moduleName: "nulp_elite",
-      path: "/search/domainList",
-      component: DomainList,
+      path: "/myConnections",
+      component: MyConnections,
     },
     {
       moduleName: "nulp_elite",
-      path: "/search/contentList",
+      path: "/domainList",
+      component: DomainList,
+    },
+    // {
+    //   moduleName: "nulp_elite",
+    //   path: "contentList",
+    //   component: ContentList,
+    // },
+    {
+      moduleName: "nulp_elite",
+      path: "/contentList",
       component: ContentList,
     },
     {
       moduleName: "nulp_elite",
-      path: "content/joinCourse",
+      path: "/joinCourse",
       component: JoinCourse,
+
     },
    
     {
@@ -141,7 +152,7 @@ function App() {
     },
     {
       moduleName: "nulp_elite",
-      path: "/certificate",
+      path: "/certificateOld",
       component: Certificate,
     },
     {
@@ -177,42 +188,7 @@ function App() {
     `${process.env.PUBLIC_URL}/locales/{{lng}}/{{ns}}.json`
   );
 
-  // const resources = {
-  //   en: {
-  //     translation: {
-  //       enTranslation
-  //     }
-  //   },
-  //   hi: {
-  //     translation: {
-  //       hiTranslation
-  //     }
-  //   }
-  // };
-  // console.log(hiTranslation)
-
-  // i18n.use(initReactI18next).init({
-  //   resources,
-  //   lng: 'en',
-
-  //   interpolation: {
-  //     escapeValue: false
-  //   }
-  // });
-
-  // return(
-  //   // <Box></Box>
-  //   <NativeBaseProvider >
-  //    <Router routes={routes}>
-
-  //   </Router>
-  //    </NativeBaseProvider>
-  // // <NativeBaseProvider ><Router><Sample /></Router> </NativeBaseProvider>
-
-  // );
-  // <NativeBaseProvider > <Sample /></NativeBaseProvider>;
-
-  // <AppShell routes={routes} AuthComponent={LoginComponent} />;
+ 
   return (
     <NativeBaseProvider>
       {/* <ChakraProvider> */}
