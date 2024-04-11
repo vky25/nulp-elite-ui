@@ -293,7 +293,6 @@ const AddConnections = () => {
   const getConnections = async () => {
     setIsLoading(true);
     setError(null);
-    // setData([]);
 
     const params = new URLSearchParams({
       sender_id: loggedInUserId,
@@ -314,9 +313,9 @@ const AddConnections = () => {
       if (!response.ok) {
         throw new Error("Failed to get connected user chat");
       }
-      setInvitationReceivedUserByIds([]);
-      setInvitationAcceptedUsers([]);
-      setInvitationNotAcceptedUsers([]);
+      // setInvitationReceivedUserByIds([]);
+      // setInvitationAcceptedUsers([]);
+      // setInvitationNotAcceptedUsers([]);
       const responseData = await response.json();
       console.log("getConnections", responseData.result);
 
@@ -357,7 +356,7 @@ const AddConnections = () => {
   const getInvitationNotAcceptedUserByIds = async (userIds) => {
     setIsLoading(true);
     setError(null);
-    setInvitationNotAcceptedUsers([]);
+    // setInvitationNotAcceptedUsers([]);
 
     const url = `http://localhost:3000/learner/user/v3/search`;
     const requestBody = {
@@ -409,7 +408,7 @@ const AddConnections = () => {
   const getInvitationAcceptedUserByIds = async (userIds) => {
     setIsLoading(true);
     setError(null);
-    setInvitationAcceptedUsers([]);
+    // setInvitationAcceptedUsers([]);
 
     const url = `http://localhost:3000/learner/user/v3/search`;
     const requestBody = {
@@ -456,7 +455,7 @@ const AddConnections = () => {
   const getInvitationReceivedUserByIds = async (userIds) => {
     setIsLoading(true);
     setError(null);
-    setInvitationReceivedUserByIds([]);
+    // setInvitationReceivedUserByIds([]);
 
     const url = `http://localhost:3000/learner/user/v3/search`;
     const requestBody = {
@@ -523,7 +522,7 @@ const AddConnections = () => {
           "Content-Type": "application/json",
         },
       });
-      setInvitationReceivedUserByIds([]);
+      // setInvitationReceivedUserByIds([]);
       if (!response.ok) {
         throw new Error("Failed to get invited user");
       }
@@ -868,15 +867,7 @@ const AddConnections = () => {
                       >
                         <CheckCircleOutlineIcon />
                       </Link>
-                      {/* <TriggerButton
-                        type="button"
-                        variant="contained"
-                        color="secondary"
-                        onClick={() => blockChat(item.userId)}
-                        // onClick={rejectChatInvitation(item.userId)}
-                      >
-                        Decline
-                      </TriggerButton> */}
+
                       <Link
                         href="#"
                         underline="none"
@@ -885,39 +876,11 @@ const AddConnections = () => {
                       >
                         <CancelOutlinedIcon />
                       </Link>
-                      {/* <TriggerButton
-                        type="button"
-                        variant="contained"
-                        color="primary"
-                        onClick={() => acceptChat(item.userId)}
-                        // onClick={acceptChatInvitation(item.userId)}
-                        style={{ marginRight: "10px" }}
-                      >
-                        Accept
-                      </TriggerButton>
-                      <TriggerButton
-                        type="button"
-                        variant="contained"
-                        color="secondary"
-                        onClick={() => blockChat(item.userId)}
-                        // onClick={rejectChatInvitation(item.userId)}
-                      >
-                        Decline
-                      </TriggerButton> */}
                     </div>
 
-                    {/* <TriggerButton
-                        type="button"
-                        onClick={handleNotAcceptedChatOpen}
-                      >
-                        Open chat
-                      </TriggerButton> */}
                     <Divider />
                   </List>
                 ))}
-              {/* <TriggerButton type="button" onClick={handleOpen}>
-                Open chat
-              </TriggerButton> */}
 
               {invitationAcceptedUsers &&
                 invitationAcceptedUsers?.map((item) => (
@@ -1009,21 +972,6 @@ const AddConnections = () => {
                       </Dialog>
                     </div>
                     <Divider />
-
-                    {/* <ListItem>
-                    <ListItemText
-                      primary="Manisha Kapadnis"
-                      secondary="Learner"
-                    />
-                  </ListItem>
-                  <Divider />
-
-                  <ListItem>
-                    <ListItemText
-                      primary="Charvi Upadhyay"
-                      secondary="Commissioner"
-                    />
-                  </ListItem> */}
                   </List>
                 ))}
 
@@ -1085,9 +1033,6 @@ const AddConnections = () => {
                   </Modal>
                 )}
               </div>
-              {/* <TriggerButton type="button" onClick={handleOpen}>
-                Open chat
-              </TriggerButton> */}
             </TabPanel>
             <List>
               {/* {userData.map((user, index) => (
