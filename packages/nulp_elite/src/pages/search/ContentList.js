@@ -122,8 +122,8 @@ const ContentList = (props) => {
 
   // Assuming 'data' is your JSON array
   const randomItem = getRandomValue(data);
-  const handleChange = (event, value) => {
-    navigate("/search/contentList/" + value);
+  const handleChange = (event: React.ChangeEvent<unknown>, value: number) => {
+    navigate("/contentList/" + value, { state: { domain: domain } });
     fetchData();
   };
 
@@ -211,7 +211,7 @@ const ContentList = (props) => {
             >
               {data &&
                 data.content &&
-                data.content.map((items,index) => (
+                data.content.map((items, index) => (
                   <Grid
                     item
                     xs={12}
@@ -221,11 +221,11 @@ const ContentList = (props) => {
                   >
                     <BoxCard
                       items={items}
-                      index= {index}
+                      index={index}
                       onClick={() =>
                         handleCardClick(items.identifier, items.contentType)
                       }
-                    />
+                    ></BoxCard>
                   </Grid>
                 ))}
             </Grid>
