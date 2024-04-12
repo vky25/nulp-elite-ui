@@ -11,16 +11,18 @@ import RandomImage from "../assets/cardRandomImgs.json"
 
 
 export default function BoxCard({ items, index }) {
-  const [imgUrl, setImgUrl] = React.useState(true);
+  const [imgUrl, setImgUrl] = React.useState();
   useEffect(() => { 
     // const random = getRandomValue();
-    randomImg(index);
+    console.log("RandomImage--- ",RandomImage.ImagePaths[index % 10 || 10]); 
+    setImgUrl(RandomImage.ImagePaths[index % 10 || 10]);
+    console.log("imgUrl--- ",imgUrl);
  }, []);
-const randomImg = (i) => {
-console.log("RandomImage--- ",i,"   ", i % 10 || 10); 
-setImgUrl(RandomImage.ImagePaths[i % 10 || 10]);
-console.log("imgUrl--- ", RandomImage.ImagePaths[i % 10 || 10]);
-}
+// const randomImg = (i) => {
+// console.log("RandomImage--- ",RandomImage.ImagePaths[i % 10 || 10]); 
+// setImgUrl(RandomImage.ImagePaths[i % 10 || 10]);
+// console.log("imgUrl--- ",imgUrl);
+// }
 // // Assuming 'data' is your JSON array
 // const randomItem = getRandomValue(data);
 //   // console.log(items.appIcon)
@@ -48,7 +50,7 @@ console.log("imgUrl--- ", RandomImage.ImagePaths[i % 10 || 10]);
           background:
             "linear-gradient(45deg, RGBA(28, 25, 25, 0.46) 7%, RGBA(20, 18, 18, 0.57) 45%)",
         }}
-        image={require("../assets/card-bg.png")}
+        image={imgUrl? imgUrl: require("../assets/card-bg.png")}
         title="green iguana"
       />
       <div style={{
