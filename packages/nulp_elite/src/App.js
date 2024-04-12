@@ -42,6 +42,7 @@ import AllContent from "pages/content/AllContent";
 import CategoryPage from "pages/content/CategoryPage";
 import LearningHistory from "pages/profile/learningHistory";
 import JoinCourse from "pages/content/joinCourse";
+import Player from "pages/content/Player";
 import Otp from "pages/registration/Otp";
 
 function App() {
@@ -122,9 +123,13 @@ function App() {
       moduleName: "nulp_elite",
       path: "/joinCourse",
       component: JoinCourse,
-
     },
-   
+    {
+      moduleName: "nulp_elite",
+      path: "/player",
+      component: Player,
+    },
+
     {
       moduleName: "nulp_elite",
       path: "/userPrefData",
@@ -183,7 +188,6 @@ function App() {
     `${process.env.PUBLIC_URL}/locales/{{lng}}/{{ns}}.json`
   );
 
- 
   return (
     <NativeBaseProvider>
       {/* <ChakraProvider> */}

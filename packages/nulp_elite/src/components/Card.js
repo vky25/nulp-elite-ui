@@ -10,8 +10,9 @@ import { Divider } from "native-base";
 import RandomImage from "../assets/cardRandomImgs.json"
 
 
-export default function BoxCard({ items, index }) {
-  const [imgUrl, setImgUrl] = React.useState();
+
+export default function BoxCard({ items, index ,onClick}) {
+  const [imgUrl, setImgUrl] = React.useState(true);
   useEffect(() => { 
     // const random = getRandomValue();
     console.log("RandomImage--- ",RandomImage.ImagePaths[index % 10 || 10]); 
@@ -53,7 +54,9 @@ export default function BoxCard({ items, index }) {
         image={imgUrl? imgUrl: require("../assets/card-bg.png")}
         title="green iguana"
       />
-      <div style={{
+      <div 
+      onClick={onClick}
+      style={{
     position: 'absolute',
     top: 0,
     left: 0,

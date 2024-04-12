@@ -10,7 +10,7 @@ import Paper from '@mui/material/Paper';
 import Container from '@mui/material/Container';
 import Box from '@mui/material/Box';
 import domainWithImage from "../../assets/domainImgForm.json"
-import Search from "../../components/search";
+import SearchBox from "components/search";
 import frameworkHardCodedData from "../../assets/framework.json"
 import Header from "../../components/header";
 import { frameworkService } from "@shiksha/common-lib";
@@ -44,8 +44,8 @@ theme.typography.h3 = {
 
 const DomainList = () => {
   // console.log(data.result.categories.terms.category);
-  const [search, setSearch] = React.useState(true);
-  const [searchState, setSearchState] = React.useState(false);
+  // const [search, setSearch] = React.useState(true);
+  // const [searchState, setSearchState] = React.useState(false);
   const [data, setData] = React.useState();
   const [channelData, setChannelData] = React.useState(true);
   const [isLoading, setIsLoading] = useState(false);
@@ -141,12 +141,13 @@ const DomainList = () => {
     <Box sx={{background:'#2D2D2D',padding:'20px'}}>
    <p style={{fontSize:'20px',fontWeight:'700',color:'#fff',paddingBottom:'5px',margin:'0'}}>Explore content related to your domain.Learn from well curated courses and content.</p>
    <p style={{fontSize:'16px',fontWeight:'700',color:'#C1C1C1',margin:'0',paddingBottom:'30px'}}>Learn from well curated courses and content.</p>
-   <Search></Search>
+   <SearchBox/>
+
  </Box>
 
 
 <Container maxWidth="xxl" role="main" className="container-pb">
-  <Box sx={{background:'#fff',padding:'20px 10px 30px 10px', margin:'25px 0'}}>
+  {/* <Box sx={{background:'#fff',padding:'20px 10px 30px 10px', margin:'25px 0'}}>
    <ThemeProvider theme={theme}>
    <Typography variant="h3" sx={{ margin: '10px 0 10px 0' }}>Filter by popular domain</Typography>
    <Box sx={{boxShadow:'0px 4px 4px 0px #00000040',padding:'10px 10px',background:'#F4FBFF'}}>
@@ -154,7 +155,7 @@ const DomainList = () => {
    </Box>
 
    </ThemeProvider> 
-   </Box>
+   </Box> */}
    {/* <DomainCarousel data={data.framework.categories[0].terms}></DomainCarousel> */}
 
     <Box sx={{paddingTop:'30px'}}>
