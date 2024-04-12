@@ -6,13 +6,22 @@ import Header from "components/header";
 import Footer from "components/Footer";
 import { Link } from "react-router-dom";
 import URLSConfig from "../../configs/urlConfig.json";
+import Box from "@mui/material/Box";
 // import hardcodedData from "../../assets/contentSerach.json";
+import SearchBox from "components/search";
+import ArrowBackOutlinedIcon from '@mui/icons-material/ArrowBackOutlined';
+
+import Container from '@mui/material/Container';
+
 
 const AllContent = () => {
   const [data, setData] = useState([]);
   const [error, setError] = useState(null);
   const [expandedCategory, setExpandedCategory] = useState(null);
-
+  const handleSearch = (query) => {
+    // Implement your search logic here
+    console.log("Search query:", query);
+  };
   useEffect(() => {
     fetchData();
   }, []);
@@ -120,6 +129,14 @@ const AllContent = () => {
   return (
     <>
       <Header />
+      <Box sx={{background:'#2D2D2D',padding:'20px'}}>
+   <p style={{fontSize:'20px',fontWeight:'700',color:'#fff',paddingBottom:'5px',margin:'0'}}>Explore content related to your domain.Learn from well curated courses and content.</p>
+   <p style={{fontSize:'16px',fontWeight:'700',color:'#C1C1C1',margin:'0',paddingBottom:'30px'}}>Learn from well curated courses and content.</p>
+   <SearchBox onSearch={handleSearch} />
+
+ </Box>
+ <Container maxWidth="xxl" role="main" className="container-pb">
+  <Link style={{display:'block',display:'flex',fontSize:'16px',paddingTop:'30px',color:'rgb(0, 67, 103)'}}><ArrowBackOutlinedIcon/> Back</Link>
       {Object?.entries(
         data?.reduce((acc, item) => {
           if (!acc[item.primaryCategory]) {
@@ -148,6 +165,8 @@ const AllContent = () => {
           </Grid>
         </React.Fragment>
       ))}
+      </Container>
+
       <Footer />
     </>
   );

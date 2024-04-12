@@ -109,6 +109,9 @@ body{
     max-height: inherit !important;
     top: 0 !important;
  }
+ .MuiGrid-container.MuiGrid-spacing-xs-2 {
+  margin:0 -16px !important; 
+ }
  
  }
  @media(min-width:769px) {

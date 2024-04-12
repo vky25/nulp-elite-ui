@@ -38,7 +38,7 @@ export default function Footer() {
 
   return (
     <>
-    <Container maxWidth="xl" className='lg-hide'>
+    <Box maxWidth="xl" className='lg-hide'>
     <Box sx={{  position: 'fixed', bottom: 0, left: 0, right: 0 ,width:'100%',zIndex:'9999' }}>
     <BottomNavigation
             sx={{ width: '100%', display: 'flex', position: 'relative', paddingTop: '10px' }}
@@ -70,8 +70,8 @@ export default function Footer() {
           </BottomNavigation>
 </Box>
 
-</Container>
-<Container className='xs-hide' maxWidth="xl" style={{background:'#2D2D2D', color:'#fff',padding:'30px 15px 20px 15px'}}>
+</Box>
+<Box className='xs-hide' style={{background:'#2D2D2D', color:'#fff',padding:'30px 15px 20px 15px'}}>
   {/* <Box>dfgdfgsg */}
   
 
@@ -102,7 +102,7 @@ export default function Footer() {
         Phone: (+91 11) 24617517, 24617543, 24617595
     </Grid>
 </Grid>
-</Container>
+</Box>
 
 </>
   );
