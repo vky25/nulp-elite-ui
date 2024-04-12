@@ -44,7 +44,7 @@ import LearningHistory from "pages/profile/learningHistory";
 import JoinCourse from "pages/content/joinCourse";
 import Player from "pages/content/Player";
 import Otp from "pages/registration/Otp";
-
+import SendOtp from "pages/registration/SendOtp"
 function App() {
   // const [t] = useTranslation();
   const [search, setSearch] = React.useState(true);
@@ -161,6 +161,10 @@ function App() {
       component: Registration,
     },
     {
+      moduleName: "nulp_elite",
+      path: "/otp-old",
+      component: SendOtp,
+    }, {
       moduleName: "nulp_elite",
       path: "/otp",
       component: Otp,
