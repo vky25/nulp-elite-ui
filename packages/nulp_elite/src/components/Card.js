@@ -40,7 +40,6 @@ console.log("imgUrl--- ", RandomImage.ImagePaths[i % 10 || 10]);
     <Card sx={{  position: "relative" }}>
       <CardMedia
         sx={{
-          margin: "8px 3px 0 9px",
           height: 140,
           borderTopLeftRadius: "10px",
           borderTopRightRadius: "10px",
@@ -55,12 +54,12 @@ console.log("imgUrl--- ", RandomImage.ImagePaths[i % 10 || 10]);
     position: 'absolute',
     top: 0,
     left: 0,
-    right:'15px',
-    width: '96%',
+    right:'0',
+    width: '100%',
     height: '47%',
     background: 'linear-gradient(45deg, RGBA(28, 25, 25, 0.46) 7%, RGBA(20, 18, 18, 0.57) 45%)',
     zIndex: 999,
-    margin: '8px 10px 0 10px',
+    margin: '0',
     borderTopLeftRadius: '5px',
     borderTopRightRadius:'20px'
   }}></div>
@@ -68,7 +67,7 @@ console.log("imgUrl--- ", RandomImage.ImagePaths[i % 10 || 10]);
         <Typography gutterBottom variant="h5" component="div" className="cardTitle" style={{fontSize:'14px',fontWeight:'600'}}>
            {items.name}
         </Typography>
-        <Typography gutterBottom variant="h7" component="div" style={{zIndex:'0 ',fontSize:'14px',position:'absolute',top:'30px',right:'3px',color:'#fff',textAlign:'center'}}>
+        <Typography gutterBottom variant="h7" component="div" style={{zIndex:'999',fontSize:'14px',position:'absolute',top:'30px',right:'3px',color:'#fff',textAlign:'center'}}>
                   <Box className="cardCourses"> {items.primaryCategory}</Box>
                   </Typography>
         <Box style={{background:'#fff',padding:'10px',borderRadius:'150px',height:'50px',width:'50px',border:'solid 1px #E1E1E1',position:'absolute',top:'115px',right:'30px',textAlign:'center',zIndex:'999'}}>
