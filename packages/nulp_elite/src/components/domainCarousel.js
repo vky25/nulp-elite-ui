@@ -1,9 +1,6 @@
 import * as React from 'react';
-import AspectRatio from '@mui/joy/AspectRatio';
 import Box from '@mui/joy/Box';
 import Typography from '@mui/joy/Typography';
-import Button from '@mui/joy/Button';
-import { NavigateBefore, NavigateNext } from '@mui/icons-material';
 import Carousel from "react-multi-carousel";
 import "react-multi-carousel/lib/styles.css";
 
