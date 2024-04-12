@@ -27,17 +27,15 @@ import  { useState } from 'react';
 
 
 function Header() {
-  const [age, setAge] = React.useState("");
+  // const [age, setAge] = React.useState("");
   const { t } = useTranslation();
-
-  // const handleChange = (event) => {
-  //   setAge(event.target.value);
-  // };
   const [language, setLanguage] = useState('');
 
   const handleChange = (event) => {
-    setLanguage(event.target.value);
+    setAge(event.target.value);
   };
+
+  
 
   const [anchorElNav, setAnchorElNav] = React.useState(null);
   const [anchorElUser, setAnchorElUser] = React.useState(null);
@@ -56,6 +54,9 @@ function Header() {
   const handleCloseUserMenu = () => {
     setAnchorElUser(null);
   };
+
+ 
+  
 
   return (
     <>
@@ -137,23 +138,10 @@ function Header() {
             {t("SCREEN_READER")}{" "}
           </Link>
         </Box>
-      
+        
               <FormControl sx={{ m: 1, minWidth: 120 }} size="small">
-              <Select
-  labelId="language-select-label"
-  id="language-select"
-  className="language"
-  style={{ border: "none" }}
-  startIcon={<LanguageIcon />}
-  onChange={(event) => changeLanguage(event.target.value)}
->
-  <MenuItem value="en"> {/* Changed value to language code */}
-    {t("ENGLISH")}
-  </MenuItem>
-  <MenuItem value="hi">
-    {t("HINDI")}
-  </MenuItem>
-</Select>
+            
+            
     </FormControl>
         </Box>
 
@@ -211,19 +199,44 @@ function Header() {
                     </MenuItem>
                 </Menu>
             </Box>
-            <InputLabel  id="language-select-label">
+            {/* <InputLabel  id="language-select-label">
               {" "}
               {t("LANGUAGE")}
-            </InputLabel>
+            </InputLabel> */}
+ {/* <Box sx={{ minWidth: 120 }}>
+      <FormControl fullWidth>
+        <InputLabel id="demo-simple-select-label">Age</InputLabel>
+        <Select
+          labelId="demo-simple-select-label"
+          id="demo-simple-select"
+          value={age}
+          label="Age"
+          onChange={handleChange}
+        >
+          <MenuItem value={10}>Ten</MenuItem>
+          <MenuItem value={20}>Twenty</MenuItem>
+          <MenuItem value={30}>Thirty</MenuItem>
+        </Select>
+      </FormControl>
+    </Box> */}
+    <Box sx={{ minWidth: 120 }}>
+    <InputLabel id="language-select-label">Select language</InputLabel>
 
             <Select
   labelId="language-select-label"
   id="language-select"
   className="language"
   style={{ border: "none" }}
+  label="select language"
+  
+
   startIcon={<LanguageIcon />}
   onChange={(event) => changeLanguage(event.target.value)}
->
+  inputProps={{ 'aria-label': 'Select Language' }}
+
+><MenuItem value="" disabled>
+        Select Language
+      </MenuItem>
              
   <MenuItem value="en"> {/* Changed value to language code */}
     {t("ENGLISH")}
@@ -232,6 +245,9 @@ function Header() {
     {t("HINDI")}
   </MenuItem>
 </Select>
+</Box>
+
+
             <Box
               className="xs-hide"
               style={{
