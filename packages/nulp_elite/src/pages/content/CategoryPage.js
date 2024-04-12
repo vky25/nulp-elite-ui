@@ -7,6 +7,8 @@ import { getAllContents } from "services/contentService";
 import Header from "components/header";
 import Footer from "components/Footer";
 import URLSConfig from "../../configs/urlConfig.json";
+import ArrowBackOutlinedIcon from '@mui/icons-material/ArrowBackOutlined';
+import { Link } from "react-router-dom";
 
 const CategoryPage = () => {
   const { category } = useParams();
@@ -69,6 +71,8 @@ const CategoryPage = () => {
   return (
     <>
       <Header />
+      <Link style={{display:'block',display:'flex',fontSize:'16px',paddingTop:'30px',color:'rgb(0, 67, 103)'}}><ArrowBackOutlinedIcon/> Back</Link>
+
       <p>{category}</p>
       <Box textAlign="center" padding="10">
         <Box sx={{ paddingTop: "30px" }}>
