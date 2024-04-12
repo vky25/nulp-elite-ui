@@ -41,6 +41,8 @@ import ContentList from "pages/search/ContentList";
 import AllContent from "pages/content/AllContent";
 import CategoryPage from "pages/content/CategoryPage";
 import LearningHistory from "pages/profile/learningHistory";
+import continueLearning from "pages/profile/continueLearning";
+
 import JoinCourse from "pages/content/joinCourse";
 import Player from "pages/content/Player";
 import Otp from "pages/registration/Otp";
@@ -88,6 +90,11 @@ function App() {
       moduleName: "nulp_elite",
       path: "/learningHistory",
       component: LearningHistory,
+    },
+    {
+      moduleName: "nulp_elite",
+      path: "/continueLearning",
+      component: continueLearning,
     },
     {
       moduleName: "nulp_elite",
@@ -219,3 +226,4 @@ function App() {
 }
 
 export default App;
+

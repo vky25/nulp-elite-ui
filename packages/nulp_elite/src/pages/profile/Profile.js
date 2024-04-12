@@ -19,11 +19,13 @@ import CircularProgressWithLabel from "../../components/CircularProgressWithLabe
 import RestoreOutlinedIcon from "@mui/icons-material/RestoreOutlined";
 import SettingsOutlinedIcon from "@mui/icons-material/SettingsOutlined";
 import * as util from "../../services/utilService";
+import { useNavigate } from "react-router-dom";
 
 const Profile = () => {
   const { t } = useTranslation();
   const [userData, setUserData] = useState(null);
   const progressValue = 60; // Example value, you can set this dynamically based on your progress
+  const navigate = useNavigate();
 
   useEffect(() => {
     const fetchData = async () => {
@@ -45,6 +47,18 @@ const Profile = () => {
 
     fetchData();
   }, []);
+
+  const handleLearningHistoryClick = () => {
+    navigate("/learningHistory");
+  };
+
+  const handleContinueLearningClick = () => {
+    navigate("/continueLearning");
+  };
+
+  const handleDownloadCertificateClick = () => {
+    navigate("/certificate");
+  };
 
   return (
     <div>
@@ -136,7 +150,7 @@ const Profile = () => {
                       }}
                     >
                       <Box style={{ fontWeight: "600", paddingRight: "10px" }}>
-                        {t("CATEGORIES")}:{" "}
+                        {t("Domain")}:{" "}
                       </Box>{" "}
                       {userData.result.response.framework.board}
                     </Typography>
@@ -156,6 +170,7 @@ const Profile = () => {
                   display: "flex",
                   alignItems: "baseline",
                 }}
+                onClick={handleContinueLearningClick}
               >
                 <Box
                   style={{
@@ -184,6 +199,7 @@ const Profile = () => {
                   display: "flex",
                   alignItems: "baseline",
                 }}
+                onClick={handleDownloadCertificateClick}
               >
                 <Box
                   style={{
@@ -211,6 +227,7 @@ const Profile = () => {
                   display: "flex",
                   alignItems: "baseline",
                 }}
+                onClick={handleLearningHistoryClick}
               >
                 <Box
                   style={{
