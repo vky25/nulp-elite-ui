@@ -35,6 +35,12 @@ const LearningHistory = () => {
     fetchData();
   }, []);
 
+  // Function to convert Unix timestamp to human-readable date
+  const unixTimestampToHumanDate = (unixTimestamp) => {
+    const dateObject = new Date(unixTimestamp * 1000); // Multiply by 1000 to convert from seconds to milliseconds
+    return dateObject.toLocaleString(); // Convert to human-readable date format
+  };
+
   return (
     <div>
       <Header />
@@ -63,7 +69,7 @@ const LearningHistory = () => {
               style={{ textAlign: "left", paddingTop: "10px" }}
             >
               {courseData?.result?.courses?.map((course) => (
-                <Grid item xs={12} md={4} key={course.identifier}>
+                <Grid item xs={12} md={4} key={course.courseName}>
                   <Card
                     sx={{
                       marginTop: "10px",
@@ -86,7 +92,7 @@ const LearningHistory = () => {
                         fontWeight: "600",
                       }}
                     >
-                      {course.name}
+                      {course.courseName}
                     </Typography>
                     <Typography
                       variant="subtitle1"
@@ -102,7 +108,8 @@ const LearningHistory = () => {
                       component="div"
                       style={{ fontSize: "12px" }}
                     >
-                      {t("CERTIFICATE_ISSUE_DATE")}: {course.completedOn}
+                      {t("CERTIFICATE_ISSUE_DATE")}:{" "}
+                      {unixTimestampToHumanDate(course.completedOn)}
                     </Typography>
                     <Typography
                       style={{

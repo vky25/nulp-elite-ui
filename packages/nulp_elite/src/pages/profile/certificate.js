@@ -63,6 +63,7 @@ const Certificate = () => {
           },
         };
         const url = `http://localhost:3000/learner/rc/certificate/v1/search`;
+        // const header = "application/json";
         const response = await axios.post(url, request);
         const data = response.data;
         console.log(data);
