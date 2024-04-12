@@ -5,16 +5,16 @@ import BoxCard from "components/Card";
 import Box from "@mui/material/Box";
 import Search from "components/search";
 
-import Filter from "components/filter"; 
-import contentData from "../../assets/contentSerach.json"
-import RandomImage from "../../assets/cardRandomImgs.json"
-import Grid from '@mui/material/Grid';
-import Footer from "components/Footer"; 
-import Header from "components/header"; 
-import Container from '@mui/material/Container';
+import Filter from "components/filter";
+import contentData from "../../assets/contentSerach.json";
+import RandomImage from "../../assets/cardRandomImgs.json";
+import Grid from "@mui/material/Grid";
+import Footer from "components/Footer";
+import Header from "components/header";
+import Container from "@mui/material/Container";
 import { contentService } from "@shiksha/common-lib";
-import queryString from 'query-string';
-import Pagination from '@mui/material/Pagination';
+import queryString from "query-string";
+import Pagination from "@mui/material/Pagination";
 
 const ContentList = (props) => {
   const [search, setSearch] = React.useState(true);
@@ -25,7 +25,7 @@ const ContentList = (props) => {
   const location = useLocation();
   const { pageNumber } = useParams();
 
-  const [currentPage, setCurrentPage] = useState( location.search || 1);
+  const [currentPage, setCurrentPage] = useState(location.search || 1);
   const [totalPages, setTotalPages] = useState(1);
   const [data, setData] = useState([]);
   const [filters, setFilters] = useState({});
@@ -35,13 +35,13 @@ const ContentList = (props) => {
   const navigate = useNavigate();
   const { domain } = location.state || {};
   const [page, setPage] = React.useState(1);
-  console.log("pageNumber----",pageNumber)
+  console.log("pageNumber----", pageNumber);
   // console.log("page----",page)
-  // Example of API Call   
-  useEffect(() => { 
-     fetchData();
+  // Example of API Call
+  useEffect(() => {
+    fetchData();
     fetchGradeLevels(); // Fetch grade levels when component mounts
-     const random = getRandomValue();
+    const random = getRandomValue();
   }, [currentPage]);
   const handleFilterChange = (selectedOptions) => {
     const selectedValues = selectedOptions.map((option) => option.value);
@@ -73,8 +73,8 @@ const ContentList = (props) => {
           se_boards: [domain],
           se_gradeLevels: filters.se_gradeleverl, // Access selected grade levels from filters state
         },
-        limit:20,
-        offset: (20*(pageNumber-1)),
+        limit: 20,
+        offset: 20 * (pageNumber - 1),
         sort_by: {
           lastUpdatedOn: "desc",
         },
@@ -91,15 +91,14 @@ const ContentList = (props) => {
 
     const url = `http://localhost:3000/content/${URLSConfig.URLS.CONTENT.SEARCH}?orgdetails=orgName,email`;
     try {
-      const response = await contentService.getAllContents(
-        url,
-        data,
-        headers
-      );
+      const response = await contentService.getAllContents(url, data, headers);
 
       // console.log("total pages------",Math.ceil(response.data.result.count / 20)+1);
-      console.log("total pages------",Math.ceil(response.data.result.count / 20));
-      setTotalPages(Math.ceil(response.data.result.count / 20)+1);
+      console.log(
+        "total pages------",
+        Math.ceil(response.data.result.count / 20)
+      );
+      setTotalPages(Math.ceil(response.data.result.count / 20) + 1);
 
       setData(response.data.result);
     } catch (error) {
@@ -110,22 +109,21 @@ const ContentList = (props) => {
       setIsLoading(false);
     }
   };
- // Function to select a random value from an array
- const getRandomValue = (array) => {
-  console.log("RandomImage   --  ",RandomImage.ImagePaths )
-  const randomIndex= RandomImage;
-  // const randomIndex = Math.floor(Math.random() * RandomImage..length);
-  console.log("randomIndex",randomIndex)
+  // Function to select a random value from an array
+  const getRandomValue = (array) => {
+    console.log("RandomImage   --  ", RandomImage.ImagePaths);
+    const randomIndex = RandomImage;
+    // const randomIndex = Math.floor(Math.random() * RandomImage..length);
+    console.log("randomIndex", randomIndex);
 
-  // return array[randomIndex];
-  return randomIndex;
-};
+    // return array[randomIndex];
+    return randomIndex;
+  };
 
-// Assuming 'data' is your JSON array
-const randomItem = getRandomValue(data);
-  const handleChange = (event: React.ChangeEvent<unknown>, value: number) => {
-
-    navigate('/contentList/'+value, { state: { domain:domain }})
+  // Assuming 'data' is your JSON array
+  const randomItem = getRandomValue(data);
+  const handleChange = (event, value) => {
+    navigate("/search/contentList/" + value);
     fetchData();
   };
 
@@ -156,6 +154,14 @@ const randomItem = getRandomValue(data);
     }
   };
 
+  const handleCardClick = (contentId, courseType) => {
+    if (courseType === "Course") {
+      navigate("/joinCourse", { state: { contentId } });
+    } else {
+      navigate("/player");
+    }
+  };
+
   return (
     <div>
       <Header />
@@ -169,8 +175,8 @@ const randomItem = getRandomValue(data);
             margin: "0",
           }}
         >
-          Explore content related to your domain.Learn from well curated
-          courses and content.
+          Explore content related to your domain.Learn from well curated courses
+          and content.
         </p>
         <p
           style={{
@@ -188,7 +194,7 @@ const randomItem = getRandomValue(data);
 
       <Container maxWidth="xxl" role="main" className="container-pb">
         <Box style={{ margin: "20px 0" }}>
-           <domainCarousel></domainCarousel>
+          <domainCarousel></domainCarousel>
           <Filter
             options={gradeLevels}
             label="Filter by Grade Level"
@@ -197,7 +203,6 @@ const randomItem = getRandomValue(data);
         </Box>
 
         <Box textAlign="center" padding="10">
-
           <Box sx={{ paddingTop: "30px" }}>
             <Grid
               container
@@ -214,19 +219,27 @@ const randomItem = getRandomValue(data);
                     lg={3}
                     style={{ marginBottom: "10px" }}
                   >
-                    <BoxCard items={items} index= {index}></BoxCard>
+                    <BoxCard
+                      items={items}
+                      index= {index}
+                      onClick={() =>
+                        handleCardClick(items.identifier, items.contentType)
+                      }
+                    />
                   </Grid>
                 ))}
             </Grid>
           </Box>
         </Box>
-        
-        <Pagination count={totalPages} page={pageNumber} onChange={handleChange} />
 
+        <Pagination
+          count={totalPages}
+          page={pageNumber}
+          onChange={handleChange}
+        />
       </Container>
-      <Footer/>
+      <Footer />
     </div>
   );
 };
 export default ContentList;
-
