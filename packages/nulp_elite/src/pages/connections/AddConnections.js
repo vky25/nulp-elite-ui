@@ -919,7 +919,7 @@ const AddConnections = () => {
                     <div>
                       <Dialog open={open} onClick={handleCloseModal}>
                         <DialogTitle>{selectedUserName}</DialogTitle>
-                        <TriggerButton
+                        {/* <TriggerButton
                           type="button"
                           variant="contained"
                           color="primary"
@@ -927,7 +927,7 @@ const AddConnections = () => {
                           style={{ marginLeft: "10px" }}
                         >
                           Block User
-                        </TriggerButton>
+                        </TriggerButton> */}
                         <DialogContent dividers>
                           {userChat?.map((msg, index) => (
                             <div
