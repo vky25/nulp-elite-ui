@@ -29,6 +29,8 @@ import DialogActions from "@material-ui/core/DialogActions";
 import Header from "components/header";
 import Footer from "components/Footer";
 import Filter from "components/filter";
+import CheckCircleOutlineIcon from "@mui/icons-material/CheckCircleOutline";
+import CancelOutlinedIcon from "@mui/icons-material/CancelOutlined";
 
 // Define modal styles
 const useStyles = makeStyles((theme) => ({
@@ -51,13 +53,11 @@ const useStyles = makeStyles((theme) => ({
 
 const AddConnections = () => {
   const [value, setValue] = React.useState("1");
-  console.log("Hello");
   const handleChange = (event, newValue) => {
     setValue(newValue);
   };
   const [search, setSearch] = React.useState(true);
   const [searchState, setSearchState] = React.useState(false);
-
   const classes = useStyles();
   const [open, setOpen] = React.useState(false);
   const handleOpen = () => setOpen(true);
@@ -82,11 +82,6 @@ const AddConnections = () => {
   const [invitationNotAcceptedUsers, setInvitationNotAcceptedUsers] =
     useState();
   const [loggedInUserId, setLoggedInUserId] = useState();
-
-  const toggleChat = () => {
-    setShowChat(!showChat);
-    setButtonText(showChat ? "Start Chat" : "Send");
-  };
   const [filters, setFilters] = useState({});
   const [gradeLevels, setGradeLevels] = useState([]);
   const location = useLocation();
@@ -98,6 +93,7 @@ const AddConnections = () => {
   const [showModal, setShowModal] = useState(false);
   const [showChatModal, setShowChatModal] = useState(false);
   const [selectedUserName, setSelectedUserName] = useState(false);
+  const [userChatData, setUserChatData] = useState({});
 
   // const handleFilterChange = (selectedOptions) => {
   //   const selectedValues = selectedOptions.map((option) => option.value);
@@ -111,13 +107,17 @@ const AddConnections = () => {
   useEffect(() => {
     const _userId = util.userId();
     setLoggedInUserId(_userId);
-    console.log("_userId", _userId);
-    if (sessionStorage.length > 0) {
-      setLoggedInUserId(sessionStorage.getItem("loggedInUserId"));
-    }
-
     fetchData();
   }, [filters]);
+
+  const toggleChat = () => {
+    setShowChat(!showChat);
+    setButtonText(showChat ? "Start Chat" : "Send");
+  };
+
+  useEffect(() => {
+    onMyConnection();
+  }, [userChatData]);
 
   const fetchData = async () => {
     setIsLoading(true);
@@ -260,10 +260,6 @@ const AddConnections = () => {
       setIsLoading(false);
     }
   };
-
-  console.log("invitationAcceptedUsers:", invitationAcceptedUsers);
-  console.log("invitationNotAcceptedUsers:", invitationNotAcceptedUsers);
-  console.log("invitationReceiverByUser:", invitationReceiverByUser);
 
   const handleUserClick = (selectedUser) => {
     setSelectedUser(selectedUser);
@@ -565,8 +561,8 @@ const AddConnections = () => {
     acceptChatInvitation(userId);
   };
 
-  const blockChat = (userId) => {
-    blockChatInvitation(userId);
+  const rejectChat = (userId) => {
+    rejectChatInvitation(userId);
   };
 
   const acceptChatInvitation = async (userId) => {
@@ -594,6 +590,7 @@ const AddConnections = () => {
 
       const responseData = await response.json();
       console.log("acceptChatInvitation", responseData.result);
+      setUserChatData(responseData.result);
       onMyConnection();
     } catch (error) {
       setError(error.message);
@@ -601,16 +598,16 @@ const AddConnections = () => {
       setIsLoading(false);
     }
   };
-  const blockChatInvitation = async (userId) => {
+
+  const rejectChatInvitation = async (userId) => {
     setIsLoading(true);
     setError(null);
     const requestBody = {
       sender_id: userId,
       receiver_id: loggedInUserId,
-      reason: "block reason",
     };
 
-    const url = `http://localhost:3000/directConnect/block-user`;
+    const url = `http://localhost:3000/directConnect/reject-invitation`;
 
     try {
       const response = await fetch(url, {
@@ -625,15 +622,47 @@ const AddConnections = () => {
       }
 
       const responseData = await response.json();
-      console.log("blockChatInvitation", responseData.result);
+      console.log("rejectChatInvitation", responseData.result);
       onMyConnection();
-      // getConnections();
     } catch (error) {
       setError(error.message);
     } finally {
       setIsLoading(false);
     }
   };
+  // const blockChatInvitation = async (userId) => {
+  //   setIsLoading(true);
+  //   setError(null);
+  //   const requestBody = {
+  //     sender_id: userId,
+  //     receiver_id: loggedInUserId,
+  //     reason: "block reason",
+  //   };
+
+  //   const url = `http://localhost:3000/directConnect/block-user`;
+
+  //   try {
+  //     const response = await fetch(url, {
+  //       method: "POST",
+  //       headers: {
+  //         "Content-Type": "application/json",
+  //       },
+  //       body: JSON.stringify(requestBody),
+  //     });
+  //     if (!response.ok) {
+  //       throw new Error("Failed to block chat");
+  //     }
+
+  //     const responseData = await response.json();
+  //     console.log("blockChatInvitation", responseData.result);
+  //     onMyConnection();
+  //     // getConnections();
+  //   } catch (error) {
+  //     setError(error.message);
+  //   } finally {
+  //     setIsLoading(false);
+  //   }
+  // };
 
   const getUserChat = async (userId) => {
     setIsLoading(true);
@@ -799,13 +828,64 @@ const AddConnections = () => {
               </TabList>
             </Box>
             <TabPanel value="1" style={{ padding: "0" }}>
+              {invitationReceiverByUser &&
+                invitationReceiverByUser?.map((item) => (
+                  <List sx={{}} style={{ color: "gray" }}>
+                    <ListItem>
+                      <ListItemText
+                        primary={`${item.firstName}${
+                          item.lastName ? ` ${item.lastName}` : ""
+                        }`}
+                        secondary="Designation"
+                      />
+                    </ListItem>
+                    <div
+                      style={{
+                        display: "flex",
+                        justifyContent: "flex-end",
+                        marginTop: "10px",
+                      }}
+                    >
+                      <Link
+                        href="#"
+                        underline="none"
+                        color="primary"
+                        onClick={() => acceptChat(item.userId)}
+                        style={{ marginLeft: "10px" }}
+                      >
+                        <CheckCircleOutlineIcon />
+                      </Link>
+
+                      <Link
+                        href="#"
+                        underline="none"
+                        color="secondary"
+                        onClick={() => rejectChat(item.userId)}
+                      >
+                        <CancelOutlinedIcon />
+                      </Link>
+                    </div>
+
+                    <Divider />
+                  </List>
+                ))}
               {invitationAcceptedUsers &&
                 invitationAcceptedUsers?.map((item) => (
                   <List sx={{}} style={{ color: "green" }}>
                     <ListItem>
                       <ListItemText
-                        primary={"" + item.firstName + item.lastName}
+                        primary={`${item.firstName}${
+                          item.lastName ? ` ${item.lastName}` : ""
+                        }`}
                         secondary="Designation"
+                        onClick={() =>
+                          handleAcceptedChatOpen(
+                            item.userId,
+                            `${item.firstName}${
+                              item.lastName ? ` ${item.lastName}` : ""
+                            }`
+                          )
+                        }
                       />
                     </ListItem>
                     {/* <TriggerButton
@@ -839,6 +919,15 @@ const AddConnections = () => {
                     <div>
                       <Dialog open={open} onClick={handleCloseModal}>
                         <DialogTitle>{selectedUserName}</DialogTitle>
+                        <TriggerButton
+                          type="button"
+                          variant="contained"
+                          color="primary"
+                          onClick={blockChatInvitation}
+                          style={{ marginLeft: "10px" }}
+                        >
+                          Block User
+                        </TriggerButton>
                         <DialogContent dividers>
                           {userChat?.map((msg, index) => (
                             <div
@@ -937,7 +1026,7 @@ const AddConnections = () => {
                   >
                     <ModalContent sx={{ width: 400 }} style={{}}>
                       <div>
-                        <h2>Chat request has not accepted.</h2>
+                        <h2>Invitation not accepted.</h2>
                         <Button
                           onClick={(e) => {
                             setShowChatModal(false);
@@ -959,61 +1048,6 @@ const AddConnections = () => {
                   </Modal>
                 )}
               </div>
-              {/* <TriggerButton type="button" onClick={handleOpen}>
-                Open chat
-              </TriggerButton> */}
-
-              {invitationReceiverByUser &&
-                invitationReceiverByUser?.map((item) => (
-                  <List sx={{}} style={{ color: "gray" }}>
-                    <ListItem>
-                      <ListItemText
-                        primary={`${item.firstName}${
-                          item.lastName ? ` ${item.lastName}` : ""
-                        }`}
-                        secondary="Designation"
-                      />
-                    </ListItem>
-                    <div
-                      style={{
-                        display: "flex",
-                        justifyContent: "flex-end",
-                        marginTop: "10px",
-                      }}
-                    >
-                      <TriggerButton
-                        type="button"
-                        variant="contained"
-                        color="primary"
-                        onClick={() => acceptChat(item.userId)}
-                        // onClick={acceptChatInvitation(item.userId)}
-                        style={{ marginRight: "10px" }}
-                      >
-                        Accept
-                      </TriggerButton>
-                      <TriggerButton
-                        type="button"
-                        variant="contained"
-                        color="secondary"
-                        onClick={() => blockChat(item.userId)}
-                        // onClick={blockChatInvitation(item.userId)}
-                      >
-                        Decline
-                      </TriggerButton>
-                    </div>
-
-                    {/* <TriggerButton
-                        type="button"
-                        onClick={handleNotAcceptedChatOpen}
-                      >
-                        Open chat
-                      </TriggerButton> */}
-                    <Divider />
-                  </List>
-                ))}
-              {/* <TriggerButton type="button" onClick={handleOpen}>
-                Open chat
-              </TriggerButton> */}
             </TabPanel>
             <List>
               {/* {userData.map((user, index) => (
@@ -1041,25 +1075,6 @@ const AddConnections = () => {
                   <TextField {...params} label="Filter by Name" />
                 )}
               /> */}
-            {/* {!isLoading && !error && (
-                <div className="button" onClick={handleOpen}>
-                  {userData.map((item) => (
-                    <div key={item.id} onClick={() => handleUserClick(item)}>
-                      <Box
-                        sx={{ border: "1px solid", borderRadius: "lg", p: 4 }}
-                      >
-                        <Typography variant="body2" fontSize="small">
-                          Name Surname: {item.firstName} {item.lastName}
-                        </Typography>
-                        <Typography variant="body2">Designation: </Typography>
-                      </Box>
-                    </div>
-                  ))}
-                  <div className="pagination">{pagination}</div>
-                </div>
-              )} */}
-
-            {/* <div>  */}
 
             <TabPanel value="2">
               {/* <Autocomplete
@@ -1088,11 +1103,6 @@ const AddConnections = () => {
                     </ListItem>
                     <Divider />
                     <div className="pagination">{pagination}</div>
-                    {/* {
-                      <TriggerButton type="button" onClick={handleOpen}>
-                        Open chat
-                      </TriggerButton>
-                    } */}
                   </List>
                 ))}
               <div>
