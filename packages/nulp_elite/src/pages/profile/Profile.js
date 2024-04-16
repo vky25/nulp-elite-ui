@@ -20,6 +20,9 @@ import RestoreOutlinedIcon from "@mui/icons-material/RestoreOutlined";
 import SettingsOutlinedIcon from "@mui/icons-material/SettingsOutlined";
 import * as util from "../../services/utilService";
 import { useNavigate } from "react-router-dom";
+import SearchBox from "components/search";
+import ContinueLearning from "./continueLearning";
+
 
 const Profile = () => {
   const { t } = useTranslation();
@@ -59,13 +62,25 @@ const Profile = () => {
   const handleDownloadCertificateClick = () => {
     navigate("/certificate");
   };
+  const handleSearch = (query) => {
+    // Implement your search logic here
+    console.log("Search query:", query);
+  };
 
   return (
     <div>
       <Header />
+      <Box sx={{background:'#2D2D2D',padding:'20px'}} className="xs-hide">
+   <p style={{fontSize:'20px',fontWeight:'700',color:'#fff',paddingBottom:'5px',margin:'0'}}>Explore content related to your domain.Learn from well curated courses and content.</p>
+   <p style={{fontSize:'16px',fontWeight:'700',color:'#C1C1C1',margin:'0',paddingBottom:'30px'}}>Learn from well curated courses and content.</p>
+   <SearchBox onSearch={handleSearch} />
+ </Box>
+      <Container maxWidth="xxl" role="main" className="container-pb" sx={{margin:'20px 0'}}>
+      <Grid container spacing={2}>
+        <Grid item xs={12} md={4}  lg={4} sx={{paddingRight:'20px'}}>
+        <Box sx={{fontSize:'18px',color:'#484848'}}>{t('MY_PROFILE')}</Box>
 
-      <Container maxWidth="md" role="main" className="container-pb">
-        <Box textAlign="center" padding="10">
+        <Box textAlign="center" padding="10" sx={{marginTop:'22px'}}>
           <Card
             sx={{
               marginTop: "10px",
@@ -168,7 +183,7 @@ const Profile = () => {
                   padding: "10px",
                   boxShadow: "0px 4px 4px 0px #00000040",
                   display: "flex",
-                  alignItems: "baseline",
+                  alignItems: "center",
                 }}
                 onClick={handleContinueLearningClick}
               >
@@ -298,6 +313,7 @@ const Profile = () => {
                   padding: "20px 10px",
                   fontSize: "14px",
                   color: "#484848",
+                  justifyContent:'space-between'
                 }}
               >
                 <Box
@@ -411,6 +427,13 @@ const Profile = () => {
             </Box>
           </Card>
         </Box>
+        </Grid>
+        <Grid item xs={8} className="xs-hide" style={{borderLeft:'solid 1px #898989'}}>
+          <ContinueLearning/>
+        </Grid>
+       
+      </Grid>
+        
       </Container>
       <FloatingChatIcon />
       <Footer />

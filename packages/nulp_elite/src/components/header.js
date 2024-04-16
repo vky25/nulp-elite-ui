@@ -24,7 +24,8 @@ import LanguageIcon from "@mui/icons-material/Language";
 import { useTranslation } from "react-i18next";
 import { changeLanguage } from "i18next";
 import  { useState } from 'react';
-
+import LiveHelpOutlinedIcon from '@mui/icons-material/LiveHelpOutlined';
+import LogoutOutlinedIcon from '@mui/icons-material/LogoutOutlined';
 
 function Header() {
   // const [age, setAge] = React.useState("");
@@ -189,14 +190,20 @@ function Header() {
                   }}
                 >
                     <MenuItem>
-                      <Link href="/all" textAlign="center">{t('CONTENT')}</Link>
+                      <Link href="/all" textAlign="center" underline="none"><EditNoteOutlinedIcon style={{verticalAlign:'bottom',color:'#000'}} /> {t('CONTENT')}</Link>
                     </MenuItem>
                     <MenuItem>
-                      <Link href="/addConnections" textAlign="center">{t('CONNECTIONS')}</Link>
+                      <Link href="/addConnections" textAlign="center" underline="none"><GroupsOutlinedIcon   style={{verticalAlign:'bottom',color:'#000'}}/> {t('CONNECTIONS')}</Link>
                     </MenuItem>
                     <MenuItem>
-                      <Link href="/profile" textAlign="center">{t('PROFILE')}</Link>
+                      <Link href="/profile" textAlign="center" underline="none"><AccountCircleOutlinedIcon  style={{verticalAlign:'bottom',color:'#000'}} /> {t('PROFILE')}</Link>
                     </MenuItem>
+                    <MenuItem>
+                    <Link href="/help" textAlign="center" underline="none"><LiveHelpOutlinedIcon  style={{verticalAlign:'bottom',color:'#000'}}/> {t('HELP')}</Link>
+                  </MenuItem>
+                  <MenuItem>
+                    <Link href="/logoff" textAlign="center" underline="none"><LogoutOutlinedIcon  style={{verticalAlign:'bottom',color:'#000'}}/> {t('LOGOUT')}</Link>
+                  </MenuItem>
                 </Menu>
             </Box>
             {/* <InputLabel  id="language-select-label">
@@ -219,7 +226,7 @@ function Header() {
         </Select>
       </FormControl>
     </Box> */}
-    <Box sx={{ minWidth: 120 }}>
+    {/* <Box sx={{ minWidth: 120 }}>
     <InputLabel id="language-select-label">Select language</InputLabel>
 
             <Select
@@ -238,14 +245,14 @@ function Header() {
         Select Language
       </MenuItem>
              
-  <MenuItem value="en"> {/* Changed value to language code */}
+  <MenuItem value="en">
     {t("ENGLISH")}
   </MenuItem>
   <MenuItem value="hi">
     {t("HINDI")}
   </MenuItem>
 </Select>
-</Box>
+</Box> */}
 
 
             <Box
