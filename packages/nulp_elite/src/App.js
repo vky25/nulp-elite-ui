@@ -122,9 +122,8 @@ function App() {
       moduleName: "nulp_elite",
       path: "/joinCourse",
       component: JoinCourse,
-
     },
-   
+
     {
       moduleName: "nulp_elite",
       path: "/userPrefData",
@@ -152,7 +151,7 @@ function App() {
     },
     {
       moduleName: "nulp_elite",
-      path: "/registration",
+      path: "/signup",
       component: Registration,
     },
     {
@@ -183,7 +182,6 @@ function App() {
     `${process.env.PUBLIC_URL}/locales/{{lng}}/{{ns}}.json`
   );
 
- 
   return (
     <NativeBaseProvider>
       {/* <ChakraProvider> */}
