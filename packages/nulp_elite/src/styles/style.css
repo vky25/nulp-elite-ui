@@ -8,8 +8,15 @@ body{
 }
 
 /* Registration */
-.css-132u4s-MuiFormControl-root-MuiTextField-root{
+/* .css-132u4s-MuiFormControl-root-MuiTextField-root{
   width: 100%;
+} */
+.MuiFormControl-root.MuiTextField-root{
+  width: 100% !important;
+}
+ .css-qiwgdb.MuiSelect-select{
+  background: #fff !important;
+  text-align: left !important;
 }
 .domain-active{
   background: #95cee6;
@@ -109,7 +116,20 @@ body{
     max-height: inherit !important;
     top: 0 !important;
  }
- 
+ .MuiGrid-container.MuiGrid-spacing-xs-2 {
+  margin:0 -16px !important; 
+ }
+ .react-multi-carousel-list{
+  height: 342px !important;
+ }
+ .css-1l1167e{
+  color:#000 !important;
+ }
+ .MuiPopover-paper.MuiMenu-paper{
+  width: 100% !important;
+  height: 100vh !important;
+  left: 0 !important;
+ }
  }
  @media(min-width:769px) {
   .lg-hide{
@@ -190,8 +210,13 @@ Link{
   cursor: pointer !important;
 }
 
-.MuiInputBase-input{
+.register .MuiInputBase-input{
     padding: 15px !important;
+    background: #fff !important;
+    text-align: left !important;
+}
+.css-6h24qf .MuiOutlinedInput-root fieldset{
+  width: inherit !important;
 }
 .register .MuiInputBase-colorPrimary fieldset {
   /* background: #fff !important; */

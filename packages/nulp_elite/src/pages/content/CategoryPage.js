@@ -7,11 +7,20 @@ import { getAllContents } from "services/contentService";
 import Header from "components/header";
 import Footer from "components/Footer";
 import URLSConfig from "../../configs/urlConfig.json";
+import ArrowBackOutlinedIcon from '@mui/icons-material/ArrowBackOutlined';
+import { Link } from "react-router-dom";
+import Container from '@mui/material/Container';
+import Pagination from "@mui/material/Pagination";
+
 
 const CategoryPage = () => {
   const { category } = useParams();
   const [data, setData] = useState([]);
   const [error, setError] = useState(null);
+  const { pageNumber } = useParams();
+
+  const [currentPage, setCurrentPage] = useState(location.search || 1);
+  const [totalPages, setTotalPages] = useState(1);
 
   const fetchMoreItems = async (category) => {
     setError(null);
@@ -69,9 +78,12 @@ const CategoryPage = () => {
   return (
     <>
       <Header />
-      <p>{category}</p>
-      <Box textAlign="center" padding="10">
-        <Box sx={{ paddingTop: "30px" }}>
+      <Container maxWidth="xxl" role="main" className="container-pb">
+      <Link style={{display:'block',display:'flex',fontSize:'16px',paddingTop:'30px',color:'rgb(0, 67, 103)'}}><ArrowBackOutlinedIcon/> Back</Link>
+
+      <p style={{display:'block',borderBottom:'solid 2px #000',fontSize:'14px',color:'#1E1E1E'}}>{category}</p>
+      <Box textAlign="center">
+        <Box>
           <Grid
             container
             spacing={2}
@@ -92,6 +104,12 @@ const CategoryPage = () => {
           </Grid>
         </Box>
       </Box>
+      </Container>
+      {/* <Pagination
+          count={totalPages}
+          page={pageNumber}
+          onChange={handleChange}
+        /> */}
       <Footer />
     </>
   );

@@ -41,8 +41,13 @@ import ContentList from "pages/search/ContentList";
 import AllContent from "pages/content/AllContent";
 import CategoryPage from "pages/content/CategoryPage";
 import LearningHistory from "pages/profile/learningHistory";
+import continueLearning from "pages/profile/continueLearning";
+
 import JoinCourse from "pages/content/joinCourse";
+import Player from "pages/content/Player";
 import Otp from "pages/registration/Otp";
+import PDFContent from "pages/content/pdf";
+import NoResult from "pages/content/noResultFound";
 
 function App() {
   // const [t] = useTranslation();
@@ -90,6 +95,11 @@ function App() {
     },
     {
       moduleName: "nulp_elite",
+      path: "/continueLearning",
+      component: continueLearning,
+    },
+    {
+      moduleName: "nulp_elite",
       path: "/help",
       component: FAQPage,
     },
@@ -124,6 +134,21 @@ function App() {
       component: JoinCourse,
     },
 
+    {
+      moduleName: "nulp_elite",
+      path: "/player",
+      component: Player,
+    },
+    {
+      moduleName: "nulp_elite",
+      path: "/pdf",
+      component: PDFContent,
+    },
+    {
+      moduleName: "nulp_elite",
+      path: "/noresult",
+      component: NoResult,
+    },
     {
       moduleName: "nulp_elite",
       path: "/userPrefData",
