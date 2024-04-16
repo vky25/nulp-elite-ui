@@ -22,6 +22,11 @@ import {
 const axios = require("axios");
 import { Navigate } from "react-router-dom";
 import { useStore } from "configs/zustandStore";
+import IconButton from "@mui/material/IconButton";
+import InputAdornment from "@mui/material/InputAdornment";
+import Visibility from "@mui/icons-material/Visibility";
+import VisibilityOff from "@mui/icons-material/VisibilityOff";
+
 const DELAY = 1500;
 const CssTextField = styled(TextField)({
   "& label.Mui-focused": {
@@ -53,8 +58,7 @@ const Registration = () => {
   const [error, setError] = useState(null);
   const [load, setLoad] = useState(false);
   const [goToOtp, setGoToOtp] = useState(false);
-  const [showPassword, setShowPassword] = useState(false);
-  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+  const [showPassword, setShowPassword] = React.useState(false);
   const setData = useStore((state) => state.setData);
   const formik = useFormik({
     initialValues: {
@@ -174,14 +178,6 @@ const Registration = () => {
   if (goToOtp) {
     return <Navigate to={`/otp${window.location.search}`} />;
   }
-
-  const togglePasswordVisibility = () => {
-    setShowPassword(!showPassword);
-  };
-
-  const toggleConfirmPasswordVisibility = () => {
-    setShowConfirmPassword(!showConfirmPassword);
-  };
 
   const onChange = (value) => {
     setCaptchaResponse(value);
@@ -315,12 +311,25 @@ const Registration = () => {
                   New Password <span className="required">*</span>
                 </span>
               }
-              type="password"
+              type={showPassword ? "text" : "password"}
               autoComplete="current-password"
               size="small"
               value={formik.values.password}
               onChange={formik.handleChange}
               onBlur={formik.handleBlur}
+              InputProps={{
+                endAdornment: (
+                  <InputAdornment position="end">
+                    <IconButton
+                      aria-label="toggle password visibility"
+                      onClick={() => setShowPassword(!showPassword)}
+                      onMouseDown={(e) => e.preventDefault()}
+                    >
+                      {showPassword ? <Visibility /> : <VisibilityOff />}
+                    </IconButton>
+                  </InputAdornment>
+                ),
+              }}
             />
             {formik.touched.password && formik.errors.password && (
               <p className="form-error">{formik.errors.password}</p>
