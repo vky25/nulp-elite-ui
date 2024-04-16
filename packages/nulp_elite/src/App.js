@@ -46,6 +46,8 @@ import continueLearning from "pages/profile/continueLearning";
 import JoinCourse from "pages/content/joinCourse";
 import Player from "pages/content/Player";
 import Otp from "pages/registration/Otp";
+import PDFContent from "pages/content/pdf"; 
+import NoResult from "pages/content/noResultFound";
 
 function App() {
   // const [t] = useTranslation();
@@ -136,7 +138,16 @@ function App() {
       path: "/player",
       component: Player,
     },
-
+    {
+      moduleName: "nulp_elite",
+      path: "/pdf",
+      component: PDFContent,
+    },
+    {
+      moduleName: "nulp_elite",
+      path: "/noresult",
+      component: NoResult,
+    },
     {
       moduleName: "nulp_elite",
       path: "/userPrefData",

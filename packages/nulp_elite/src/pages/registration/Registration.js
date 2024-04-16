@@ -27,7 +27,6 @@ const CssTextField = styled(TextField)({
       borderColor: "#E0E3E7",
       border: "1px solid #004367",
       borderRadius: "12px",
-      width: "100%",
     },
     "&:hover fieldset": {
       borderColor: "#B2BAC2",
