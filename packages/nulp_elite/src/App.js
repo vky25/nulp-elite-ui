@@ -46,7 +46,7 @@ import continueLearning from "pages/profile/continueLearning";
 import JoinCourse from "pages/content/joinCourse";
 import Player from "pages/content/Player";
 import Otp from "pages/registration/Otp";
-import PDFContent from "pages/content/pdf"; 
+import PDFContent from "pages/content/pdf";
 import NoResult from "pages/content/noResultFound";
 
 function App() {
@@ -133,6 +133,7 @@ function App() {
       path: "/joinCourse",
       component: JoinCourse,
     },
+
     {
       moduleName: "nulp_elite",
       path: "/player",
@@ -175,7 +176,7 @@ function App() {
     },
     {
       moduleName: "nulp_elite",
-      path: "/registration",
+      path: "/signup",
       component: Registration,
     },
     {
@@ -233,4 +234,3 @@ function App() {
 }
 
 export default App;
-
