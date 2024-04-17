@@ -1,5 +1,4 @@
-import React, { useEffect, useState, useRef } from "react";
-
+import React, { useEffect, useState } from "react";
 import {
   Container,
   Typography,
@@ -14,62 +13,79 @@ import { useNavigate, Navigate } from "react-router-dom";
 import image from "../../assets/bg.png";
 import { useStore } from "configs/zustandStore";
 const axios = require("axios");
+
 const Otp = () => {
   const { t } = useTranslation();
-  const [otp, setOtp] = useState(["", "", "", "", "", ""]); // State to store OTP values
+  const [otp, setOtp] = useState(""); // State to store OTP value
   const [error, setError] = useState("");
-  const [credentials, setCredentials] = useState();
-  const [errors, setErrors] = React.useState({});
-  const [isLoading, setIsLoading] = React.useState({});
+  const [isLoading, setIsLoading] = useState(false);
+  const [resendDisabled, setResendDisabled] = useState(true); // State to manage resend button disabled state
+  const [remainingTime, setRemainingTime] = useState(60); // State to hold the remaining time
   const navigate = useNavigate();
-  const [userData, setuserData] = useState({});
-  const [checked, setChecked] = useState(false);
+  const [userData, setUserData] = useState({});
   const [goToOtp, setGoToOtp] = useState(false);
   const dataStore = useStore((state) => state.data);
   const captchaResponse = dataStore.captchaResponse;
 
-  // Handle OTP form changes
-  const inputRefs = Array.from({ length: 6 }).map(() => useRef(null));
-  const handleOtpChange = (index, value) => {
-    // Handle backspace
-    if (value === "" && index > 0) {
-      // Move focus to the previous input field
-      inputRefs[index - 1].current.focus();
-    }
-
-    // Update the otp array
-    const newOtp = [...otp];
-    newOtp[index] = value;
-    setOtp(newOtp);
-
-    // Move to the next input field
-    if (value && index < 5) {
-      inputRefs[index + 1].current.focus();
-    }
-  };
-
   useEffect(() => {
     const storedUserData = dataStore.userData;
     if (storedUserData) {
-      const userData = storedUserData;
-      setuserData(userData);
+      setUserData(storedUserData);
     }
+  });
+
+  useEffect(() => {
+    let timer;
+    if (!resendDisabled) {
+      timer = setInterval(() => {
+        setRemainingTime((prevTime) => {
+          if (prevTime === 1) {
+            setResendDisabled(true); // Disable resend button when timer expires
+            clearInterval(timer); // Clear the timer
+          }
+          return prevTime - 1;
+        });
+      }, 1000);
+    }
+
+    return () => {
+      clearInterval(timer);
+    };
+  }, [resendDisabled]);
+
+  useEffect(() => {
+    setResendDisabled(false); // Enable resend button
   }, []);
+
+  useEffect(() => {
+    if (remainingTime === 0) {
+      setResendDisabled(true);
+      setRemainingTime(60);
+    }
+  }, [remainingTime]);
+
   const handleLogin = () => {
-    const enteredOtp = otp.join(""); // Combine OTP array into a single string
-    verifyUser();
+    if (otp.length === 6) {
+      verifyUser();
+    }
+  };
+
+  const handleOtpChange = (value) => {
+    if (/^\d{0,6}$/.test(value)) {
+      setOtp(value);
+    }
   };
 
   const verifyUser = async () => {
     setIsLoading(true);
     setError(null);
-    let eotp = otp.join("");
+
     const url = `https://nulp.niua.org/learner/otp/v1/verify`;
     const requestBody = {
       request: {
         key: userData && userData.email,
         type: "email",
-        otp: eotp,
+        otp: otp,
       },
     };
     try {
@@ -87,7 +103,7 @@ const Otp = () => {
 
       const data = await response.json();
       signupUser(data.reqData);
-      acceptTermsAndConditions();
+      // acceptTermsAndConditions();
     } catch (error) {
       setError(error.message);
     } finally {
@@ -135,34 +151,31 @@ const Otp = () => {
       setIsLoading(false);
     }
   };
+
   if (goToOtp) {
     return <Navigate to="/all" />;
   }
+
   const acceptTermsAndConditions = async () => {
     setIsLoading(true);
     setError(null);
 
-    const url = `http://localhost:3000/user/v2/accept/tnc`;
-    const requestBody = {
-      request: {
-        version: "v12",
-        identifier: userData.email,
-      },
-    };
     try {
-      const response = await fetch(url, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(requestBody),
-      });
+      const response = await axios.post(
+        "http://localhost:3000/user/v2/accept/tnc",
+        {
+          request: {
+            version: "v12",
+            identifier: userData.email,
+          },
+        }
+      );
 
       if (!response.ok) {
         throw new Error("Failed to verify terms&condition");
       }
 
-      const data = await response.json();
+      const data = response.data;
       console.log("acceptTermsAndConditionsresponse:", data.result);
     } catch (error) {
       setError(error.message);
@@ -171,13 +184,6 @@ const Otp = () => {
     }
   };
 
-  const setCredentialForText = (e, item) => {
-    const data = {
-      ...credentials,
-      [item]: e.target.value,
-    };
-    setCredentials(data);
-  };
   const generateOtp = async (email) => {
     const url = `http://localhost:3000/learner/anonymous/otp/v1/generate?captchaResponse=${captchaResponse}`;
     const requestBody = {
@@ -205,9 +211,12 @@ const Otp = () => {
       setIsLoading(false);
     }
   };
+
   const resendOtp = () => {
     generateOtp(userData.email);
+    setResendDisabled(false); // Enable resend button
   };
+
   return (
     <>
       <Container
@@ -244,22 +253,22 @@ const Otp = () => {
           {t("VERIFICATION_CODE")}
         </Typography>
 
-        <Box sx={{ display: "flex", justifyContent: "space-around" }}>
-          {[...Array(6)].map((_, index) => (
-            <div className="base-Input-root" key={index}>
-              <input
-                ref={inputRefs[index]}
-                className="base-Input-input"
-                maxLength={1}
-                style={{ textAlign: "center" }}
-                value={otp[index]}
-                onChange={(e) => handleOtpChange(index, e.target.value)}
-              />
-            </div>
-          ))}
-        </Box>
-        <Link
+        <TextField
+          variant="outlined"
+          margin="normal"
+          fullWidth
+          id="otp"
+          label="OTP"
+          name="otp"
+          value={otp}
+          onChange={(e) => handleOtpChange(e.target.value)}
+          autoFocus
+          inputProps={{ maxLength: 6 }}
+        />
+
+        <Button
           onClick={resendOtp}
+          disabled={!resendDisabled}
           style={{
             textAlign: "right",
             fontSize: "10px",
@@ -267,13 +276,17 @@ const Otp = () => {
             marginTop: "10px",
           }}
         >
-          {t("RESEND_CODE")}
-        </Link>
+          {resendDisabled
+            ? t("RESEND_CODE")
+            : `Resend OTP in ${remainingTime}s`}
+        </Button>
         <Box pt={4}>
           <Button
             onClick={handleLogin}
+            disabled={otp.length !== 6}
             style={{
-              background: "#004367",
+              background:
+                otp.length !== 6 ? "rgba(0, 67, 103, 0.5)" : "#004367",
               borderRadius: "10px",
               color: "#fff",
               padding: "10px 71px",
