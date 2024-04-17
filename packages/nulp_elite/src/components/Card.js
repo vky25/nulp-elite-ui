@@ -69,10 +69,10 @@ export default function BoxCard({ items, index ,onClick}) {
     borderTopRightRadius:'20px'
   }}></div>
       <CardContent>
-        <Typography gutterBottom variant="h5" component="div" className="cardTitle" style={{fontSize:'14px',fontWeight:'600'}}>
+        <Typography gutterBottom variant="h5" component="div" className="cardTitle" style={{fontSize:'14px',fontWeight:'600',zIndex:'9'}}>
            {items.name}
         </Typography>
-        <Typography gutterBottom variant="h7" component="div" style={{zIndex:'999',fontSize:'14px',position:'absolute',top:'30px',right:'3px',color:'#fff',textAlign:'center'}}>
+        <Typography gutterBottom variant="h7" component="div" style={{zIndex:'999',fontSize:'14px',position:'absolute',top:'30px',right:'0',color:'#fff',textAlign:'center'}}>
                   <Box className="cardCourses"> {items.primaryCategory}</Box>
                   </Typography>
         <Box style={{background:'#fff',padding:'10px',borderRadius:'150px',height:'50px',width:'50px',border:'solid 1px #E1E1E1',position:'absolute',top:'115px',right:'30px',textAlign:'center',zIndex:'999'}}>

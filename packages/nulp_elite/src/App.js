@@ -47,6 +47,9 @@ import JoinCourse from "pages/content/joinCourse";
 import Player from "pages/content/Player";
 import Otp from "pages/registration/Otp";
 import SendOtp from "pages/registration/SendOtp"
+import PDFContent from "pages/content/pdf";
+import NoResult from "pages/content/noResultFound";
+
 function App() {
   // const [t] = useTranslation();
   const [search, setSearch] = React.useState(true);
@@ -131,12 +134,22 @@ function App() {
       path: "/joinCourse",
       component: JoinCourse,
     },
+
     {
       moduleName: "nulp_elite",
       path: "/player",
       component: Player,
     },
-
+    {
+      moduleName: "nulp_elite",
+      path: "/pdf",
+      component: PDFContent,
+    },
+    {
+      moduleName: "nulp_elite",
+      path: "/noresult",
+      component: NoResult,
+    },
     {
       moduleName: "nulp_elite",
       path: "/userPrefData",
@@ -164,7 +177,7 @@ function App() {
     },
     {
       moduleName: "nulp_elite",
-      path: "/registration",
+      path: "/signup",
       component: Registration,
     },
     {
@@ -226,4 +239,3 @@ function App() {
 }
 
 export default App;
-

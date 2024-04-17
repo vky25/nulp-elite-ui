@@ -11,8 +11,9 @@ import Grid from "@mui/material/Grid";
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
 import Typography from "@mui/material/Typography";
-const Player = () => {
-  // const { contentId } = useParams();
+
+const PDFContent = () => {
+//   const { contentId } = useParams();
   const { t } = useTranslation();
 
   // Now contentId contains the value from the URL parameter
@@ -100,4 +101,4 @@ const Player = () => {
   )
 };
 
-export default Player;
+export default PDFContent;

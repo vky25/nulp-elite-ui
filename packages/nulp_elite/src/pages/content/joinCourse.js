@@ -80,7 +80,9 @@ const JoinCourse = () => {
       <Header />
 
       <Container maxWidth="xxl" role="main" className="container-pb">
-        <Grid container spacing={2}>
+      <Grid container spacing={2}>
+      <Grid item xs={12} md={4}  lg={4} sx={{paddingRight:'20px'}}>
+      <Grid container spacing={2}>
           <Grid item xs={8}>
             <Breadcrumbs
               aria-label="breadcrumb"
@@ -112,7 +114,6 @@ const JoinCourse = () => {
                 display: "block",
               }}
             >
-              <ShareOutlinedIcon />
             </Link>
           </Grid>
         </Grid>
@@ -384,11 +385,24 @@ const JoinCourse = () => {
             </Typography>
           </AccordionDetails>
         </Accordion>
+        </Grid>
+        <Grid item xs={8} className="xs-hide" style={{borderLeft:'solid 1px #898989'}}>
+        {/* <Link href="" underline="none" className="xs-hide" style="textAlign:'right'"> <ShareOutlinedIcon /> Share Course</Link>
+        <Link href="" underline="none" className="lg-hide" style="textAlign:'right'"> <ShareOutlinedIcon /></Link> */}
+
+          <Box sx={{background:'#EEEEEE',textAlign:'center', color:'#464665',fontSize:'18px',height:'600px'}}>
+            <Box sx={{transform:'translate(0%, 550%)'}}>
+            Start learning !
+            <Box style={{fontSize:'14px'}}>Join the course and select any module to start viewing content!</Box>
+
+            </Box>
+          </Box>
+          </Grid>
+        </Grid>
       </Container>
       <FloatingChatIcon />
       <Footer />
     </div>
-    // <div></div>
   );
 };
 

@@ -25,7 +25,7 @@ import {
 } from "@shiksha/common-lib";
 const colors = overrideColorTheme();
 
-export default function OTP({ swPath }) {
+export default function sendOtp({ swPath }) {
   const [credentials, setCredentials] = useState();
   const [errors, setErrors] = React.useState({});
   const [error, setError] = useState(null);
