@@ -15,7 +15,6 @@ import {
 } from "native-base";
 import { useTranslation } from "react-i18next";
 import { useNavigate } from "react-router-dom";
-import manifest from "../manifest";
 import {
   useWindowSize,
   BodyMedium,
@@ -161,7 +160,8 @@ export default function OTP({ swPath }) {
       const data = await response.json();
 
       console.log("signupUserresponse:", data.result);
-      setGoToOtp(true);
+      navigate('/domainList')
+      // setGoToOtp(true);
     } catch (error) {
       setError(error.message);
     } finally {
@@ -219,7 +219,6 @@ export default function OTP({ swPath }) {
   return (
     <Layout
       _appBar={{
-        languages: manifest.languages,
         isBackButtonShow: false,
         isHideMenuButton: true,
         // imageUrl: "../../src/assets/SubjectBg.png",

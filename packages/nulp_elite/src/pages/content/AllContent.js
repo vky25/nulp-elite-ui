@@ -136,7 +136,7 @@ const AllContent = () => {
 
  </Box>
  <Container maxWidth="xxl" role="main" className="container-pb">
-  <Link style={{display:'block',display:'flex',fontSize:'16px',paddingTop:'30px',color:'rgb(0, 67, 103)'}}><ArrowBackOutlinedIcon/> Back</Link>
+  {/* <Link style={{display:'block',display:'flex',fontSize:'16px',paddingTop:'30px',color:'rgb(0, 67, 103)'}}><ArrowBackOutlinedIcon/> Back</Link> */}
       {Object?.entries(
         data?.reduce((acc, item) => {
           if (!acc[item.primaryCategory]) {

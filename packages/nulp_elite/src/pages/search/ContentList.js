@@ -42,7 +42,7 @@ const ContentList = (props) => {
     fetchData();
     fetchGradeLevels(); // Fetch grade levels when component mounts
     const random = getRandomValue();
-  }, [currentPage]);
+  }, [currentPage, filters]);
   const handleFilterChange = (selectedOptions) => {
     const selectedValues = selectedOptions.map((option) => option.value);
     setFilters({ ...filters, se_gradeleverl: selectedValues });

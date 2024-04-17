@@ -8,10 +8,13 @@ import { SITE_KEY } from "./Keys";
 import { Navigate } from "react-router-dom";
 import * as Yup from "yup";
 import { ViewIcon, ViewOffIcon } from "@chakra-ui/icons";
+import { useNavigate } from 'react-router-dom'
+
 
 const DELAY = 1500;
 
 function Registrationold() {
+  const navigate = useNavigate()
   const [load, setLoad] = useState(false);
   const [goToOtp, setGoToOtp] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
@@ -100,7 +103,6 @@ function Registrationold() {
       };
 
       isEmailExist();
-
       const generateOtp = async (email) => {
         setIsLoading(true);
         setError(null);
@@ -142,7 +144,7 @@ function Registrationold() {
     }
   };
   if (goToOtp) {
-    return <Navigate to="/otp" />;
+    return <Navigate to="/otp-old" />;
   }
 
   const togglePasswordVisibility = () => {

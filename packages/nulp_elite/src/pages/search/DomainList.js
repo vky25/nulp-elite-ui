@@ -151,7 +151,7 @@ const DomainList = () => {
    <ThemeProvider theme={theme}>
    <Typography variant="h3" sx={{ margin: '10px 0 10px 0' }}>Filter by popular domain</Typography>
    <Box sx={{boxShadow:'0px 4px 4px 0px #00000040',padding:'10px 10px',background:'#F4FBFF'}}>
-   {/* <DomainCarousel  domain={frameworkHardCodedData.result.framework.categories[0].terms}></DomainCarousel> */}
+   {/* <DomainCarousel  domain={frameworkHardCodedData.result.framework.categories[0].terms}></DomainCarousel> 
    </Box>
 
    </ThemeProvider> 
