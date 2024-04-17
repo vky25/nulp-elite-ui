@@ -10,6 +10,7 @@ import Grid from "@mui/material/Grid";
 import Breadcrumbs from "@mui/material/Breadcrumbs";
 import Filter from "components/filter";
 import BoxCard from "components/Card";
+import FloatingChatIcon from "../../components/FloatingChatIcon";
 import { useParams, useNavigate, useLocation } from "react-router-dom";
 import { contentService } from "@shiksha/common-lib";
 import URLSConfig from "../../configs/urlConfig.json";
@@ -128,7 +129,8 @@ const ContinueLearning = () => {
           </Box>
         </Box>
       </Container>
-        {/* <Footer /> */}
+      <FloatingChatIcon />
+      {/* <Footer /> */}
     </div>
   );
 };
