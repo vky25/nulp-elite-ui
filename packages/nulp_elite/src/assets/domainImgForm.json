@@ -22,7 +22,7 @@
                           "name": "Nulp",
                           "index": 1,
                           "status": "Live",
-                          "image": "../../assets/swm.png"
+                          "image": "assets/swm.png"
                         },
                         {
                           "identifier": "nulp_board_finance",
@@ -30,7 +30,7 @@
                           "name": "Municipal Finance",
                           "index": 2,
                           "status": "Live",
-                          "image": "../../assets/swm.png"
+                          "image": "assets/swm.png"
                         },
                         {
                           "identifier": "nulp_board_leadershippillar",
@@ -38,7 +38,7 @@
                           "name": "Community Leadership",
                           "index": 3,
                           "status": "Live",
-                          "image": "../../assets/leadershippillar.png"
+                          "image": "assets/leadershippillar.png"
                         },
                         {
                           "identifier": "nulp_board_mobilitybrts",
@@ -46,7 +46,7 @@
                           "name": "Mobility/BRTS",
                           "index": 4,
                           "status": "Live",
-                          "image": "../../assets/mobility/brts.png"
+                          "image": "assets/mobility/brts.png"
                         },
                         {
                           "identifier": "nulp_board_water",
@@ -54,7 +54,7 @@
                           "name": "Water",
                           "index": 5,
                           "status": "Live",
-                          "image": "../../assets/water.png"
+                          "image": "assets/water.png"
                         },
                         {
                           "identifier": "nulp_board_medical",
@@ -62,7 +62,7 @@
                           "name": "Medical",
                           "index": 6,
                           "status": "Live",
-                          "image": "../../assets/medical.png"
+                          "image": "assets/medical.png"
                         },
                         {
                           "identifier": "nulp_board_environment_swm",
@@ -70,7 +70,7 @@
                           "name": "Environment/SWM",
                           "index": 7,
                           "status": "Live",
-                          "image": "../../assets/environment_swm.png"
+                          "image": "assets/environment_swm.png"
                         },
                         {
                           "identifier": "nulp_board_it",
@@ -78,7 +78,7 @@
                           "name": "IT",
                           "index": 8,
                           "status": "Live",
-                          "image": "../../assets/it.png"
+                          "image": "assets/it.png"
                         },
                         {
                           "identifier": "nulp_board_health",
@@ -86,7 +86,7 @@
                           "name": "Health",
                           "index": 9,
                           "status": "Live",
-                          "image": "../../assets/health.png"
+                          "image": "assets/health.png"
                         },
                         {
                           "identifier": "nulp_board_education",
@@ -94,7 +94,7 @@
                           "name": "Education",
                           "index": 10,
                           "status": "Live",
-                          "image": "../../assets/education.png"
+                          "image": "assets/education.png"
                         },
                         {
                           "identifier": "nulp_board_sports",
@@ -102,7 +102,7 @@
                           "name": "Sports",
                           "index": 11,
                           "status": "Live",
-                          "image": "../../assets/sports.png"
+                          "image": "assets/sports.png"
                         },
                         {
                           "identifier": "nulp_board_civil",
@@ -110,7 +110,7 @@
                           "name": "Civil",
                           "index": 12,
                           "status": "Live",
-                          "image": "../../assets/civil.png"
+                          "image": "assets/civil.png"
                         },
                         {
                           "identifier": "nulp_board_electrical",
@@ -118,7 +118,7 @@
                           "name": "Electrical",
                           "index": 13,
                           "status": "Live",
-                          "image": "../../assets/electrical.png"
+                          "image": "assets/electrical.png"
                         },
                         {
                           "identifier": "nulp_board_csrcell",
@@ -126,7 +126,7 @@
                           "name": "CSR Cell",
                           "index": 14,
                           "status": "Live",
-                          "image": "../../assets/csrcell.png"
+                          "image": "assets/csrcell.png"
                         },
                         {
                           "identifier": "nulp_board_citytransformationoffice",
@@ -134,7 +134,7 @@
                           "name": "City Transformation  Office",
                           "index": 15,
                           "status": "Live",
-                          "image": "../../assets/citytransformationoffice.png"
+                          "image": "assets/citytransformationoffice.png"
                         },
                         {
                           "identifier": "nulp_board_landandassets",
@@ -142,7 +142,7 @@
                           "name": "Land and Assets",
                           "index": 16,
                           "status": "Live",
-                          "image": "../../assets/citytransformationoffice.png"
+                          "image": "assets/citytransformationoffice.png"
                         },
                         {
                           "identifier": "nulp_board_townplan",
@@ -150,7 +150,7 @@
                           "name": "Town Plan",
                           "index": 17,
                           "status": "Live",
-                          "image": "../../assets/townplan.png"
+                          "image": "assets/townplan.png"
                         },
                         {
                           "identifier": "nulp_board_generaladministration",
@@ -158,7 +158,7 @@
                           "name": "General Administration",
                           "index": 18,
                           "status": "Live",
-                          "image": "../../assets/generaladministration.png"
+                          "image": "assets/generaladministration.png"
                         },
                         {
                           "identifier": "nulp_board_audit",
@@ -166,7 +166,7 @@
                           "name": "Audit",
                           "index": 19,
                           "status": "Live",
-                          "image": "../../assets/audit.png"
+                          "image": "assets/audit.png"
                         },
                         {
                           "identifier": "nulp_board_horticulture",
@@ -174,7 +174,7 @@
                           "name": "Horticulture",
                           "index": 20,
                           "status": "Live",
-                          "image": "../../assets/horticulture.png"
+                          "image": "assets/horticulture.png"
                         },
                         {
                           "identifier": "nulp_board_ucd",
@@ -182,7 +182,7 @@
                           "name": "UCD",
                           "index": 21,
                           "status": "Live",
-                          "image": "../../assets/ucd.png"
+                          "image": "assets/ucd.png"
                         },
                         {
                           "identifier": "nulp_board_mechanical",
@@ -190,7 +190,7 @@
                           "name": "Mechanical",
                           "index": 22,
                           "status": "Live",
-                          "image": "../../assets/mechanical.png"
+                          "image": "assets/mechanical.png"
                         },
                         {
                           "identifier": "nulp_board_csection",
@@ -198,7 +198,7 @@
                           "name": "C Section",
                           "index": 23,
                           "status": "Live",
-                          "image": "../../assets/csection.png"
+                          "image": "assets/csection.png"
                         },
                         {
                           "identifier": "nulp_board_eoa",
@@ -206,7 +206,7 @@
                           "name": "EOA",
                           "index": 24,
                           "status": "Live",
-                          "image": "../../assets/eoa.png"
+                          "image": "assets/eoa.png"
                         },
                         {
                           "identifier": "nulp_board_accounts",
@@ -214,7 +214,7 @@
                           "name": "Accounts",
                           "index": 25,
                           "status": "Live",
-                          "image": "../../assets/accounts.png"
+                          "image": "assets/accounts.png"
                         },
                         {
                           "identifier": "nulp_board_revenue",
@@ -222,7 +222,7 @@
                           "name": "Revenue",
                           "index": 26,
                           "status": "Live",
-                          "image": "../../assets/revenue.png"
+                          "image": "assets/revenue.png"
                         },
                         {
                           "identifier": "nulp_board_accessibility",
@@ -230,7 +230,7 @@
                           "name": "Accessibility",
                           "index": 27,
                           "status": "Live",
-                          "image": "../../assets/accessibility.png"
+                          "image": "assets/accessibility.png"
                         }
                       ],
                 "templateName": "domainImgConfig"
