@@ -857,7 +857,7 @@ const AddConnections = () => {
                       >
                         <CheckCircleOutlineIcon />
                       </Link>
-
+                      <span style={{ margin: "0 5px" }}></span>
                       <Link
                         href="#"
                         underline="none"
@@ -893,6 +893,15 @@ const AddConnections = () => {
                     <div>
                       <Dialog open={open} onClick={handleCloseModal}>
                         <DialogTitle>{selectedUserName}</DialogTitle>
+                        {/* <TriggerButton
+                          type="button"
+                          variant="contained"
+                          color="primary"
+                          onClick={blockChatInvitation}
+                          style={{ marginLeft: "10px" }}
+                        >
+                          Block User
+                        </TriggerButton> */}
                         <DialogContent dividers>
                           {userChat?.map((msg, index) => (
                             <div
