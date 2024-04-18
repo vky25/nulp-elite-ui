@@ -5,6 +5,7 @@ import Header from "components/header";
 import Container from "@mui/material/Container";
 import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
+import FloatingChatIcon from "../../components/FloatingChatIcon";
 import Link from "@mui/material/Link";
 import Grid from "@mui/material/Grid";
 import Breadcrumbs from "@mui/material/Breadcrumbs";
@@ -136,6 +137,7 @@ const LearningHistory = () => {
           </Card>
         </Box>
       </Container>
+      <FloatingChatIcon />
       <Footer />
     </div>
   );

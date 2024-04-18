@@ -14,6 +14,7 @@ import data from "../../assets/certificates.json";
 import DescriptionOutlinedIcon from "@mui/icons-material/DescriptionOutlined";
 import Breadcrumbs from "@mui/material/Breadcrumbs";
 import Card from "@mui/material/Card";
+import FloatingChatIcon from "../../components/FloatingChatIcon";
 import * as util from "../../services/utilService";
 import axios from "axios";
 
@@ -244,6 +245,7 @@ const Certificate = () => {
           </Card>
         </Box>
       </Container>
+      <FloatingChatIcon />
       <Footer />
     </div>
   );

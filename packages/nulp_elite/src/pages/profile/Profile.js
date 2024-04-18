@@ -368,7 +368,7 @@ const Profile = () => {
                   display: "flex",
                   flexDirection: "row",
                   justifyContent: "space-between",
-                  padding: "0 0 30px 0",
+                  padding: "0 0 12px 0",
                 }}
               >
                 <Box style={{ display: "flex", alignItems: "center" }}>
@@ -380,7 +380,7 @@ const Profile = () => {
               <Grid container spacing={2}>
                 <Grid
                   item
-                  xs={6}
+                  xs={3}
                   md={3}
                   className="circular"
                   style={{ paddingRight: "0", textAlign: "right" }}
@@ -391,7 +391,7 @@ const Profile = () => {
                     style={{ width: "80px", height: "80px" }}
                   />
                 </Grid>
-                <Grid item xs={6} md={3} className="circular">
+                <Grid item xs={3} md={3} className="circular">
                   <Typography
                     variant="h7"
                     style={{
@@ -405,13 +405,13 @@ const Profile = () => {
                 </Grid>
                 <Grid
                   item
-                  xs={6}
+                  xs={3}
                   md={3}
                   style={{ paddingRight: "0", textAlign: "right" }}
                 >
                   <CircularProgressWithLabel value={progressValue} />
                 </Grid>
-                <Grid item xs={6} md={3}>
+                <Grid item xs={3} md={3}>
                   <Typography
                     variant="h7"
                     style={{
