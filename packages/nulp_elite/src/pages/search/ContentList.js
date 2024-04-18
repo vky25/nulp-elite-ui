@@ -36,6 +36,9 @@ const ContentList = (props) => {
   const [gradeLevels, setGradeLevels] = useState([]);
   const navigate = useNavigate();
   const { domain } = location.state || {};
+  const { domainquery } = location.state || {};
+
+  // const { query } = location.state || {};
   const [page, setPage] = React.useState(1);
   console.log("pageNumber----", pageNumber);
   // console.log("page----",page)
@@ -81,7 +84,7 @@ const ContentList = (props) => {
           se_gradeLevels: filters.se_gradeleverl, // Access selected grade levels from filters state
         },
         limit: 20,
-        query: search.query,
+        query: search.query || domainquery,
         offset: 20 * (pageNumber - 1),
         sort_by: {
           lastUpdatedOn: "desc",
