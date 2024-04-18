@@ -270,10 +270,15 @@ const AddConnections = () => {
     setTextValue(event.target.value);
   };
 
-  const handleSendClick = () => {
-    sendChatRequestToUser(selectedUser.userId); // Call sendChat function to send the chat message
-    handleClose();
-    setShowModal(true);
+  const handleSendClick = async () => {
+    try {
+      await sendChatRequestToUser(selectedUser.userId); // Call sendChat function to send the chat message
+      handleClose();
+      setShowModal(true);
+    } catch (error) {
+      // Handle errors, such as displaying an error message to the user
+      console.error("Error sending chat request:", error);
+    }
   };
 
   const userClick = (selectedUser) => {
