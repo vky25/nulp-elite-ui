@@ -31,6 +31,7 @@ import Footer from "components/Footer";
 import Filter from "components/filter";
 import CheckCircleOutlineIcon from "@mui/icons-material/CheckCircleOutline";
 import CancelOutlinedIcon from "@mui/icons-material/CancelOutlined";
+import { useTranslation } from "react-i18next";
 
 // Define modal styles
 const useStyles = makeStyles((theme) => ({
@@ -63,7 +64,7 @@ const AddConnections = () => {
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
   const [showChat, setShowChat] = useState(false);
-  const [buttonText, setButtonText] = useState("Start Chat");
+  const [buttonText, setButtonText] = useState("Invite");
   const [currentPage, setCurrentPage] = useState(1);
   const [pageSize, setPageSize] = useState(10);
   const [activeTab, setActiveTab] = useState("Tab1");
@@ -94,6 +95,7 @@ const AddConnections = () => {
   const [showChatModal, setShowChatModal] = useState(false);
   const [selectedUserName, setSelectedUserName] = useState(false);
   const [userChatData, setUserChatData] = useState({});
+  const { t } = useTranslation();
 
   // const handleFilterChange = (selectedOptions) => {
   //   const selectedValues = selectedOptions.map((option) => option.value);
@@ -112,7 +114,7 @@ const AddConnections = () => {
 
   const toggleChat = () => {
     setShowChat(!showChat);
-    setButtonText(showChat ? "Start Chat" : "Send");
+    setButtonText(showChat ? t("INVITE") : t("SEND_CHAT"));
   };
 
   useEffect(() => {
@@ -940,7 +942,7 @@ const AddConnections = () => {
                             onClick={handleCloseChatHistoryModal}
                             color="primary"
                           >
-                            Close
+                            {t("CLOSE")}
                           </Button>
                         </DialogActions>
                       </Dialog>
@@ -985,7 +987,7 @@ const AddConnections = () => {
                   >
                     <ModalContent sx={{ width: 400 }} style={{}}>
                       <div>
-                        <h2>Invitation not accepted.</h2>
+                        <h2>{t("INVITATION_NOT_ACCEPTED")}</h2>
                         <Button
                           onClick={(e) => {
                             setShowChatModal(false);
@@ -1000,7 +1002,7 @@ const AddConnections = () => {
                             fontSize: "12px",
                           }}
                         >
-                          Close
+                          {t("CLOSE")}
                         </Button>
                       </div>
                     </ModalContent>
@@ -1210,7 +1212,7 @@ const AddConnections = () => {
                   >
                     <ModalContent sx={{ width: 400 }} style={{}}>
                       <div>
-                        <h2>Chat Sent Successfully</h2>
+                        <h2>{t("INVITATION_SEND_SUCCESSFULLY")}</h2>
                         <Button
                           onClick={(e) => {
                             setShowModal(false);
@@ -1225,7 +1227,7 @@ const AddConnections = () => {
                             fontSize: "12px",
                           }}
                         >
-                          Close
+                          {t("CLOSE")}
                         </Button>
                       </div>
                     </ModalContent>
