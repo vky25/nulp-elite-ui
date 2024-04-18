@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { useParams } from "react-router-dom";
+import { useParams,Link, useHistory } from "react-router-dom";
 import BoxCard from "components/Card";
 import Box from "@mui/material/Box";
 import Grid from "@mui/material/Grid";
@@ -8,12 +8,12 @@ import Header from "components/header";
 import Footer from "components/Footer";
 import URLSConfig from "../../configs/urlConfig.json";
 import ArrowBackOutlinedIcon from '@mui/icons-material/ArrowBackOutlined';
-import { Link } from "react-router-dom";
 import Container from '@mui/material/Container';
 import Pagination from "@mui/material/Pagination";
 
 
 const CategoryPage = () => {
+  const history = useHistory();
   const { category } = useParams();
   const [data, setData] = useState([]);
   const [error, setError] = useState(null);
@@ -21,7 +21,9 @@ const CategoryPage = () => {
 
   const [currentPage, setCurrentPage] = useState(location.search || 1);
   const [totalPages, setTotalPages] = useState(1);
-
+  const goBack = () => {
+    history.goBack();
+  };
   const fetchMoreItems = async (category) => {
     setError(null);
     // Filters for API
@@ -79,7 +81,7 @@ const CategoryPage = () => {
     <>
       <Header />
       <Container maxWidth="xxl" role="main" className="container-pb">
-      <Link style={{display:'block',display:'flex',fontSize:'16px',paddingTop:'30px',color:'rgb(0, 67, 103)'}}><ArrowBackOutlinedIcon/> Back</Link>
+      <Link style={{display:'block',display:'flex',fontSize:'16px',paddingTop:'30px',color:'rgb(0, 67, 103)'}} onClick={goBack}><ArrowBackOutlinedIcon/> Back</Link>
 
       <p style={{display:'block',borderBottom:'solid 2px #000',fontSize:'14px',color:'#1E1E1E'}}>{category}</p>
       <Box textAlign="center">

@@ -10,6 +10,7 @@ import {
   AccordionPanel,
   AccordionIcon,
 } from "native-base";
+import { CompressOutlined } from "@mui/icons-material";
 var data= {};
  fetch('https://nulpstorage1.blob.core.windows.net/public/portal-faq/resources/res/faq-en.json')
   .then(response => {
@@ -20,13 +21,14 @@ var data= {};
   })
   .then(result => {
      data=  result;
+     console.log("result----",result);
   })
 
 const FAQPage = () => {
   return (
     <View>
       {/* Loop through categories */}
-      {data.categories.map((category, index) => (
+      {data && data.categories.map((category, index) => (
         <View key={index}>
           <Box>
             {/* Render category name */}
