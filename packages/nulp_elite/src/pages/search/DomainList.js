@@ -112,6 +112,7 @@ const DomainList = () => {
             {            
               if((term && term.code) === (imgItem && imgItem.code)){
                 term['image'] = imgItem.image ? imgItem.image : ''; 
+                console.log(term['image'])
                 pushData(term);
                 itemsArray.push(term);            
               }
@@ -164,6 +165,9 @@ const DomainList = () => {
             <Grid item xs={12} md={6} lg={3}  style={{marginBottom:'10px'}}>
             <Box onClick={() => loadContents(term)} style={{display:'flex', flexDirection:'row', alignItems:'center'}}>
             <Box style={{background:'#fff',padding:'10px',borderRadius:'10px',height:'48px',width:'48px',border:'solid 1px #E1E1E1'}}><img src={term.image} style={{width:'100%'}} /></Box>
+            {/* <Box style={{background:'#fff',padding:'10px',borderRadius:'10px',height:'48px',width:'48px',border:'solid 1px #E1E1E1'}}><img src={require(`${ term.image }`)} style={{width:'100%'}} /></Box>
+            <Box style={{background:'#fff',padding:'10px',borderRadius:'10px',height:'48px',width:'48px',border:'solid 1px #E1E1E1'}}><img src={require( "" +term.image)} style={{width:'100%'}} /></Box> */}
+          
             <h5 style={{fontSize:'14px',fontWeight:'500',paddingLeft:'10px',margin:'0'}}>{term.name}</h5>
             </Box>
             </Grid>
