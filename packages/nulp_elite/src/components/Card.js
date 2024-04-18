@@ -87,21 +87,21 @@ export default function BoxCard({ items, index ,onClick}) {
         >
           Engineering Staff College India
         </Typography>
-        <Divider></Divider>
       </CardContent>
-      <CardActions style={{paddingBottom:'20px', height:'30px'}}>
-      {items.board ? (
-
-
-        <Button size="small" style={{background: '#F4D46261',color:'#484848',fontSize:'10px'}}> {items.board}</Button>
-        ) : null}
-        {items.gradeLevel ? (
-
-
-        <Button size="small" style={{background: '#F4D46261',color:'#484848',fontSize:'10px'}}> {items.gradeLevel}</Button>
-        ) : null}
-
+      {items.board || items.gradeLevel ? (
+    <CardActions style={{paddingBottom:'20px', height:'30px'}}>
+    <Divider></Divider>
+        <Box>
+        {items.board && (
+          <Button size="small" style={{background: '#F4D46261',color:'#484848',fontSize:'10px'}}> {items.board}</Button>
+        )}
+        {items.gradeLevel && (
+          <Button size="small" style={{background: '#F4D46261',color:'#484848',fontSize:'10px'}}> {items.gradeLevel}</Button>
+        )}
+        </Box>
       </CardActions>
+) : null}
+
     </Card>
   );
 }

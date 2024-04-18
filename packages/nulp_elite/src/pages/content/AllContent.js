@@ -207,7 +207,7 @@ const AllContent = () => {
                 }}
               >
                 <SummarizeOutlinedIcon style={{ verticalAlign: "top" }} />{" "}
-                <Box style={{ borderBottom: "solid 2px #000" }}>
+                <Box style={{ borderBottom: "solid 2px #000",display:'inline-block' }}>
                   {category}{" "}
                 </Box>{" "}
               </Box>

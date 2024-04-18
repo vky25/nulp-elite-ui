@@ -8,6 +8,10 @@ import { useFormik } from "formik";
 import ReCAPTCHA from "react-google-recaptcha";
 import styled from "styled-components";
 import * as Yup from "yup";
+import FormControlLabel from '@mui/material/FormControlLabel';
+import Checkbox from '@mui/material/Checkbox';
+import FormGroup from '@mui/material/FormGroup';
+
 import {
   Box,
   Button,
@@ -292,6 +296,7 @@ const Registration = () => {
                 </span>
               }
               variant="outlined"
+              autoComplete="Email Id"
               size="small"
               value={formik.values.email}
               onChange={formik.handleChange}
@@ -356,6 +361,11 @@ const Registration = () => {
                 <p className="form-error">{formik.errors.confirmPassword}</p>
               )}
           </Box>
+          <Box>
+          <FormGroup>
+              <FormControlLabel required control={<Checkbox />} label="Terms and Conditions" />
+            </FormGroup>
+            </Box>
           <Box pt={4}>
             <Button
               style={{
