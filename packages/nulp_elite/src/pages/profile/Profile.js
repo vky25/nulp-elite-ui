@@ -176,7 +176,7 @@ const Profile = () => {
           </Card>
 
           <Grid container spacing={2} style={{ padding: "5px 0" }}>
-            <Grid item xs={12} md={6}>
+            <Grid item xs={6} md={6}>
               <Card
                 sx={{
                   marginTop: "10px",
@@ -188,10 +188,10 @@ const Profile = () => {
                 onClick={handleContinueLearningClick}
               >
                 <Box
+                  className="profileBox"
                   style={{
                     background: "#004367",
                     color: "#fff",
-                    padding: "40px",
                     margin: "-10px",
                     borderTopRightRadius: "250px",
                     borderBottomRightRadius: "250px",
@@ -205,22 +205,22 @@ const Profile = () => {
                 </Box>
               </Card>
             </Grid>
-            <Grid item xs={12} md={6}>
+            <Grid item xs={6} md={6}>
               <Card
                 sx={{
                   marginTop: "10px",
                   padding: "10px",
                   boxShadow: "0px 4px 4px 0px #00000040",
                   display: "flex",
-                  alignItems: "baseline",
+                  alignItems: "center",
                 }}
                 onClick={handleDownloadCertificateClick}
               >
                 <Box
+                  className="profileBox"
                   style={{
                     background: "#004367",
                     color: "#fff",
-                    padding: "40px",
                     margin: "-10px",
                     borderTopRightRadius: "250px",
                     borderBottomRightRadius: "250px",
@@ -234,21 +234,21 @@ const Profile = () => {
                 </Box>
               </Card>
             </Grid>
-            <Grid item xs={12} md={6}>
+            <Grid item xs={6} md={6}>
               <Card
                 sx={{
                   padding: "10px",
                   boxShadow: "0px 4px 4px 0px #00000040",
                   display: "flex",
-                  alignItems: "baseline",
+                  alignItems: "center",
                 }}
                 onClick={handleLearningHistoryClick}
               >
                 <Box
+                className="profileBox"
                   style={{
                     background: "#004367",
                     color: "#fff",
-                    padding: "40px",
                     margin: "-10px",
                     borderTopRightRadius: "250px",
                     borderBottomRightRadius: "250px",
@@ -262,20 +262,20 @@ const Profile = () => {
                 </Box>
               </Card>
             </Grid>
-            <Grid item xs={12} md={6}>
+            <Grid item xs={6} md={6}>
               <Card
                 sx={{
                   padding: "10px",
                   boxShadow: "0px 4px 4px 0px #00000040",
                   display: "flex",
-                  alignItems: "baseline",
+                  alignItems: "center",
                 }}
               >
                 <Box
+                className="profileBox"
                   style={{
                     background: "#004367",
                     color: "#fff",
-                    padding: "40px",
                     margin: "-10px",
                     borderTopRightRadius: "250px",
                     borderBottomRightRadius: "250px",
@@ -368,7 +368,7 @@ const Profile = () => {
                   display: "flex",
                   flexDirection: "row",
                   justifyContent: "space-between",
-                  padding: "0 0 30px 0",
+                  padding: "0 0 12px 0",
                 }}
               >
                 <Box style={{ display: "flex", alignItems: "center" }}>
@@ -380,7 +380,7 @@ const Profile = () => {
               <Grid container spacing={2}>
                 <Grid
                   item
-                  xs={6}
+                  xs={3}
                   md={3}
                   className="circular"
                   style={{ paddingRight: "0", textAlign: "right" }}
@@ -391,7 +391,7 @@ const Profile = () => {
                     style={{ width: "80px", height: "80px" }}
                   />
                 </Grid>
-                <Grid item xs={6} md={3} className="circular">
+                <Grid item xs={3} md={3} className="circular">
                   <Typography
                     variant="h7"
                     style={{
@@ -405,13 +405,13 @@ const Profile = () => {
                 </Grid>
                 <Grid
                   item
-                  xs={6}
+                  xs={3}
                   md={3}
                   style={{ paddingRight: "0", textAlign: "right" }}
                 >
                   <CircularProgressWithLabel value={progressValue} />
                 </Grid>
-                <Grid item xs={6} md={3}>
+                <Grid item xs={3} md={3}>
                   <Typography
                     variant="h7"
                     style={{

@@ -189,15 +189,7 @@ function Header() {
                     display: { xs: "block", md: "none" },
                   }}
                 >
-                    <MenuItem>
-                      <Link href="/all" textAlign="center" underline="none"><EditNoteOutlinedIcon style={{verticalAlign:'bottom',color:'#000'}} /> {t('CONTENT')}</Link>
-                    </MenuItem>
-                    <MenuItem>
-                      <Link href="/addConnections" textAlign="center" underline="none"><GroupsOutlinedIcon   style={{verticalAlign:'bottom',color:'#000'}}/> {t('CONNECTIONS')}</Link>
-                    </MenuItem>
-                    <MenuItem>
-                      <Link href="/profile" textAlign="center" underline="none"><AccountCircleOutlinedIcon  style={{verticalAlign:'bottom',color:'#000'}} /> {t('PROFILE')}</Link>
-                    </MenuItem>
+                   
                     <MenuItem>
                     <Link href="/help" textAlign="center" underline="none"><LiveHelpOutlinedIcon  style={{verticalAlign:'bottom',color:'#000'}}/> {t('HELP')}</Link>
                   </MenuItem>
