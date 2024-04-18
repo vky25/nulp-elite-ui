@@ -63,7 +63,7 @@ const AddConnections = () => {
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
   const [showChat, setShowChat] = useState(false);
-  const [buttonText, setButtonText] = useState("Start Chat");
+  const [buttonText, setButtonText] = useState("Invite");
   const [currentPage, setCurrentPage] = useState(1);
   const [pageSize, setPageSize] = useState(10);
   const [activeTab, setActiveTab] = useState("Tab1");
@@ -112,7 +112,7 @@ const AddConnections = () => {
 
   const toggleChat = () => {
     setShowChat(!showChat);
-    setButtonText(showChat ? "Start Chat" : "Send");
+    setButtonText(showChat ? "Invite" : "Send");
   };
 
   useEffect(() => {
@@ -268,10 +268,15 @@ const AddConnections = () => {
     setTextValue(event.target.value);
   };
 
-  const handleSendClick = () => {
-    sendChatRequestToUser(selectedUser.userId); // Call sendChat function to send the chat message
-    handleClose();
-    setShowModal(true);
+  const handleSendClick = async () => {
+    try {
+      await sendChatRequestToUser(selectedUser.userId); // Call sendChat function to send the chat message
+      handleClose();
+      setShowModal(true);
+    } catch (error) {
+      // Handle errors, such as displaying an error message to the user
+      console.error("Error sending chat request:", error);
+    }
   };
 
   const userClick = (selectedUser) => {
@@ -1210,7 +1215,7 @@ const AddConnections = () => {
                   >
                     <ModalContent sx={{ width: 400 }} style={{}}>
                       <div>
-                        <h2>Chat Sent Successfully</h2>
+                        <h2>Request Sent Successfully</h2>
                         <Button
                           onClick={(e) => {
                             setShowModal(false);
