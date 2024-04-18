@@ -37,6 +37,7 @@ const responsive = {
 };
 
 const AllContent = () => {
+
   const [data, setData] = useState([]);
   const [error, setError] = useState(null);
   const [expandedCategory, setExpandedCategory] = useState(null);
@@ -140,6 +141,7 @@ const AllContent = () => {
 
   const renderItems = (items, category) => {
     return items.map((item) => (
+     
       <Grid
         item
         xs={isMobile ? 12 : 12}
@@ -205,7 +207,7 @@ const AllContent = () => {
                 }}
               >
                 <SummarizeOutlinedIcon style={{ verticalAlign: "top" }} />{" "}
-                <Box style={{ borderBottom: "solid 2px #000" }}>
+                <Box style={{ borderBottom: "solid 2px #000",display:'inline-block' }}>
                   {category}{" "}
                 </Box>{" "}
               </Box>
