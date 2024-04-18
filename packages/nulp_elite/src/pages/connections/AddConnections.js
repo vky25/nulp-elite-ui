@@ -108,7 +108,7 @@ const AddConnections = () => {
     const _userId = util.userId();
     setLoggedInUserId(_userId);
     fetchData();
-  }, [filters]);
+  }, []);
 
   const toggleChat = () => {
     setShowChat(!showChat);
@@ -117,7 +117,7 @@ const AddConnections = () => {
 
   useEffect(() => {
     onMyConnection();
-  }, [userChatData]);
+  }, [loggedInUserId]);
 
   const fetchData = async () => {
     setIsLoading(true);
@@ -538,7 +538,9 @@ const AddConnections = () => {
   };
 
   const onMyConnection = () => {
-    getConnections();
+    if (loggedInUserId) {
+      getConnections();
+    }
     //getInvitations();
   };
 
@@ -590,7 +592,7 @@ const AddConnections = () => {
 
       const responseData = await response.json();
       console.log("acceptChatInvitation", responseData.result);
-      setUserChatData(responseData.result);
+      // setUserChatData(responseData.result);
       onMyConnection();
     } catch (error) {
       setError(error.message);
@@ -855,7 +857,7 @@ const AddConnections = () => {
                       >
                         <CheckCircleOutlineIcon />
                       </Link>
-
+                      <span style={{ margin: "0 5px" }}></span>
                       <Link
                         href="#"
                         underline="none"
@@ -888,34 +890,6 @@ const AddConnections = () => {
                         }
                       />
                     </ListItem>
-                    {/* <TriggerButton
-                      type="button"
-                      variant="contained"
-                      color="primary"
-                      onClick={() =>
-                        handleAcceptedChatOpen(
-                          item.userId,
-                          "" + item.firstName + item.lastName
-                        )
-                      }
-                      style={{ marginLeft: "90%" }}
-                    >
-                      Open chat
-                    </TriggerButton> */}
-                    <Link
-                      href="#"
-                      underline="none"
-                      color="primary"
-                      onClick={() =>
-                        handleAcceptedChatOpen(
-                          item.userId,
-                          "" + item.firstName + item.lastName
-                        )
-                      }
-                      style={{ marginLeft: "90%" }}
-                    >
-                      Open chat
-                    </Link>
                     <div>
                       <Dialog open={open} onClick={handleCloseModal}>
                         <DialogTitle>{selectedUserName}</DialogTitle>
@@ -972,21 +946,6 @@ const AddConnections = () => {
                       </Dialog>
                     </div>
                     <Divider />
-
-                    {/* <ListItem>
-                    <ListItemText
-                      primary="Manisha Kapadnis"
-                      secondary="Learner"
-                    />
-                  </ListItem>
-                  <Divider />
-
-                  <ListItem>
-                    <ListItemText
-                      primary="Charvi Upadhyay"
-                      secondary="Commissioner"
-                    />
-                  </ListItem> */}
                   </List>
                 ))}
 

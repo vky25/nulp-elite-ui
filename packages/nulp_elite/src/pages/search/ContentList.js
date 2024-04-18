@@ -4,7 +4,7 @@ import { Link, useParams, useNavigate, useLocation } from "react-router-dom";
 import BoxCard from "components/Card";
 import Box from "@mui/material/Box";
 import Search from "components/search";
-
+import SearchBox from "components/search";
 import Filter from "components/filter";
 import contentData from "../../assets/contentSerach.json";
 import RandomImage from "../../assets/cardRandomImgs.json";
@@ -29,6 +29,8 @@ const ContentList = (props) => {
   const [totalPages, setTotalPages] = useState(1);
   const [data, setData] = useState([]);
   const [filters, setFilters] = useState({});
+  const [query, setQuery] = useState({});
+
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState(null);
   const [gradeLevels, setGradeLevels] = useState([]);
@@ -42,10 +44,15 @@ const ContentList = (props) => {
     fetchData();
     fetchGradeLevels(); // Fetch grade levels when component mounts
     const random = getRandomValue();
-  }, [currentPage, filters]);
+  }, [currentPage, filters, search]);
   const handleFilterChange = (selectedOptions) => {
     const selectedValues = selectedOptions.map((option) => option.value);
     setFilters({ ...filters, se_gradeleverl: selectedValues });
+  };
+
+  const handleSearch = (query) => {
+    // Update the filters with the search query
+    setSearch({ ...search, query });
   };
 
   const fetchData = async () => {
@@ -74,6 +81,7 @@ const ContentList = (props) => {
           se_gradeLevels: filters.se_gradeleverl, // Access selected grade levels from filters state
         },
         limit: 20,
+        query: search.query,
         offset: 20 * (pageNumber - 1),
         sort_by: {
           lastUpdatedOn: "desc",
@@ -189,7 +197,7 @@ const ContentList = (props) => {
         >
           Learn from well curated courses and content.
         </p>
-        <Search></Search>
+        <SearchBox onSearch={handleSearch} />
       </Box>
 
       <Container maxWidth="xxl" role="main" className="container-pb">

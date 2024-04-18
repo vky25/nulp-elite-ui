@@ -85,9 +85,9 @@ const ContinueLearning = () => {
 
   return (
     <div>
-      {/* <Header /> */}
+      <Header />
       <Container maxWidth="xxl" role="main" className="container-pb">
-        {/* <Breadcrumbs
+        <Breadcrumbs
           aria-label="breadcrumb"
           style={{
             padding: "25px 0",
@@ -101,10 +101,10 @@ const ContinueLearning = () => {
           <Typography color="#484848" aria-current="page">
             {t("Continue Learning")}
           </Typography>
-        </Breadcrumbs> */}
-        <Box style={{ margin: "20px 0" }}>
+        </Breadcrumbs>
+        {/* <Box style={{ margin: "20px 0" }}>
           <Search></Search>
-        </Box>
+        </Box> */}
 
         <Box textAlign="center" padding="10">
           <Box sx={{ paddingTop: "30px" }}>
@@ -118,7 +118,7 @@ const ContinueLearning = () => {
                   item
                   xs={12}
                   md={6}
-                  lg={4}
+                  lg={3}
                   style={{ marginBottom: "10px" }}
                   key={items.contentId}
                 >
