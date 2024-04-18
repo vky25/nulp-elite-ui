@@ -21,6 +21,6 @@
   "SEND_CHAT": "चैट भेजें",
   "INVITATION_CHAT_ACCEPTED": "निमंत्रण चैट स्वीकार किया गया",
   "INVITATION_NOT_ACCEPTED": "निमंत्रण स्वीकार नहीं किया गया",
-  "INVITATION_SEND_SUCCESSFULLY": "अनुरोध सफलतापूर्वक भेजें",
+  "INVITATION_SEND_SUCCESSFULLY": "निमंत्रण सफलतापूर्वक भेजा गया",
   "CLOSE": "बंद करना"
 }
