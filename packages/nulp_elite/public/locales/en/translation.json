@@ -110,5 +110,10 @@
   "MAIN_CONTENT":" Main Content",
   "SCREEN_READER":"Screen Reader",
   "CONTENT":"Content",
-  "CONNECTIONS":"Connections"
+  "CONNECTIONS":"Connections",
+  "YEAR_OF_BIRTH":"Year of Birth",
+  "CONFIRM_NEW_PASSWORD":"Confirm New Password",
+  "NEW_PASSWORD":"New Password",
+  "TERMS_CONDITIONS":"Terms and conditions"
+
 }

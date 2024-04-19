@@ -53,7 +53,7 @@ const FloatingChatIcon = () => {
         <HeadsetIcon
           onClick={handleOpenPopover}
           style={{
-            paddingTop: "10px",
+            paddingTop: "13px",
             borderRadius: "50%",
             width: "30px", // Adjust the size as needed
             height: "3  2px", // Adjust the size as needed
