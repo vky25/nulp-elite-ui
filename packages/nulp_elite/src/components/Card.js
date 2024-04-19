@@ -12,12 +12,12 @@ import RandomImage from "../assets/cardRandomImgs.json"
 
 
 export default function BoxCard({ items, index ,onClick}) {
-  const [imgUrl, setImgUrl] = React.useState(true);
+
+  const [imgUrl, setImgUrl] = React.useState();
+
   useEffect(() => { 
     // const random = getRandomValue();
-    console.log("RandomImage--- ",RandomImage.ImagePaths[index % 10 || 10]); 
     setImgUrl(RandomImage.ImagePaths[index % 10 || 10]);
-    console.log("imgUrl--- ",imgUrl);
  }, []);
 // const randomImg = (i) => {
 // console.log("RandomImage--- ",RandomImage.ImagePaths[i % 10 || 10]); 

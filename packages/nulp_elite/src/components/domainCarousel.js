@@ -24,8 +24,10 @@ const responsive = {
   }
 };
 
-export default function DomainCarousel({ domain }) {
+export default function DomainCarousel({ domains }) {
+
   const dotsToShow = 4; // Number of dots to display
+  const baseImgUrl = "../assets";
 
   return (
    
@@ -34,7 +36,7 @@ export default function DomainCarousel({ domain }) {
       
           <Carousel swipeable={false}
           draggable={false}
-          showDots={dotsToShow === domain.length ? true : false} // Show dots only if there are more than 4 items
+          showDots={dotsToShow === domains.length ? true : false} // Show dots only if there are more than 4 items
           responsive={responsive}
           ssr={true} // means to render carousel on server-side.
           infinite={true}
@@ -46,10 +48,11 @@ export default function DomainCarousel({ domain }) {
           removeArrowOnDeviceType={["tablet", "mobile"]}
           dotListClass="custom-dot-list-style"
           itemClass="carousel-item-padding-40-px">
-                  {domain.map((domain, index) => (
-
+                  {domains && domains.map((domain, index) => (
           <Box key={index} orientation="horizontal" size="sm" variant="outlined" style={{display:'flex'}}>
               <Box style={{background:'#fff',padding:'10px',borderRadius:'10px',height:'45px',width:'45px',border:'solid 1px #E1E1E1'}}>
+              {/* {(domain.image != undefined) && <img src={require(baseImgUrl+domain.image)}  style={{width:'40px',objectFit:'contain'}} alt={domain.name} />}
+                {(domain.image == undefined)&& <img src={require("../assets/swm.png")}  style={{width:'40px',objectFit:'contain'}} alt={domain.name} />} */}
                 <img src={require("../assets/swm.png")}  style={{width:'40px',objectFit:'contain'}} alt={domain.name} />
                 </Box>
             <Box sx={{ alignSelf:'center',padding:'0 19px 0 5px' }} className="xs-hide">

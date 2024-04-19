@@ -122,7 +122,7 @@ const ContinueLearning = () => {
                   style={{ marginBottom: "10px" }}
                   key={items.contentId}
                 >
-                  <BoxCard items={items.content}></BoxCard>
+                  <BoxCard items={items.content} index={items.count}></BoxCard>
                 </Grid>
               ))}
             </Grid>
