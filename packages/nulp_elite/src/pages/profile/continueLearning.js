@@ -16,6 +16,7 @@ import { contentService } from "@shiksha/common-lib";
 import URLSConfig from "../../configs/urlConfig.json";
 import * as util from "../../services/utilService";
 import Search from "components/search";
+import NoResult from "pages/content/noResultFound";
 
 const ContinueLearning = () => {
   const { t } = useTranslation();
@@ -113,6 +114,7 @@ const ContinueLearning = () => {
               spacing={2}
               style={{ margin: "20px 0", marginBottom: "10px" }}
             >
+{/* 
               {filteredCourses.map((items) => (
                 <Grid
                   item
@@ -122,9 +124,27 @@ const ContinueLearning = () => {
                   style={{ marginBottom: "10px" }}
                   key={items.contentId}
                 >
-                  <BoxCard items={items.content} index={items.count}></BoxCard>
+                  <BoxCard items={items.content} index={filteredCourses.length}></BoxCard>
                 </Grid>
-              ))}
+              ))} */}
+
+              {filteredCourses.length === 0 ? (
+                <NoResult />
+              ) : (
+                filteredCourses.map((items) => (
+                  <Grid
+                    item
+                    xs={12}
+                    md={6}
+                    lg={3}
+                    style={{ marginBottom: "10px" }}
+                    key={items.contentId}
+                  >
+                    <BoxCard items={items.content}  index={filteredCourses.length}></BoxCard>
+                  </Grid>
+                ))
+              )}
+
             </Grid>
           </Box>
         </Box>

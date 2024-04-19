@@ -10,9 +10,14 @@ import URLSConfig from "../../configs/urlConfig.json";
 import ArrowBackOutlinedIcon from '@mui/icons-material/ArrowBackOutlined';
 import Container from '@mui/material/Container';
 import Pagination from "@mui/material/Pagination";
+
 import domainWithImage from "../../assets/domainImgForm.json";
 import DomainCarousel from "components/domainCarousel";
 import { frameworkService } from "@shiksha/common-lib";
+
+import SearchBox from "components/search";
+
+
 
 const CategoryPage = () => {
   // const history = useHistory();
@@ -25,7 +30,13 @@ const CategoryPage = () => {
   const navigate = useNavigate();
   const [currentPage, setCurrentPage] = useState(location.search || 1);
   const [totalPages, setTotalPages] = useState(1);
+
   const [itemsArray, setItemsArray] = useState([]);
+
+  const handleSearch = (query) => {
+    // Implement your search logic here
+    console.log("Search query:", query);
+  };
 
   // const goBack = () => {
   //   history.goBack();
@@ -151,13 +162,39 @@ const CategoryPage = () => {
   return (
     <>
       <Header />
+
       {domain &&  <DomainCarousel  domains={domain}/>}
-
+      <Box sx={{ background: "#2D2D2D", padding: "20px" }} className="xs-hide">
+        <p
+          style={{
+            fontSize: "20px",
+            fontWeight: "700",
+            color: "#fff",
+            paddingBottom: "5px",
+            margin: "0",
+          }}
+        >
+          Explore content related to your domain.Learn from well curated courses
+          and content.
+        </p>
+        <p
+          style={{
+            fontSize: "16px",
+            fontWeight: "700",
+            color: "#C1C1C1",
+            margin: "0",
+            paddingBottom: "30px",
+          }}
+        >
+          Learn from well curated courses and content.
+        </p>
+        <SearchBox onSearch={handleSearch} />
+      </Box>
       <Container maxWidth="xxl" role="main" className="container-pb">
-      {/* <Link style={{display:'block',display:'flex',fontSize:'16px',paddingTop:'30px',color:'rgb(0, 67, 103)'}} onClick={ navigate(-1)}><ArrowBackOutlinedIcon/> Back</Link> */}
-      <Link style={{display:'block',display:'flex',fontSize:'16px',paddingTop:'30px',color:'rgb(0, 67, 103)'}} ><ArrowBackOutlinedIcon/> Back</Link>
+       {/* <Link style={{display:'block',display:'flex',fontSize:'16px',paddingTop:'30px',color:'rgb(0, 67, 103)'}} onClick={ navigate(-1)}><ArrowBackOutlinedIcon/> Back</Link> */}
+       <Link style={{display:'block',display:'flex',fontSize:'16px',paddingTop:'30px',color:'rgb(0, 67, 103)'}} ><ArrowBackOutlinedIcon/> Back</Link>
 
-      <p style={{display:'block',borderBottom:'solid 2px #000',fontSize:'14px',color:'#1E1E1E'}}>{category}</p>
+      <p style={{display:'inline-block',borderBottom:'solid 2px #000',fontSize:'14px',color:'#1E1E1E'}}>{category}</p>
       <Box textAlign="center">
         <Box>
           <Grid

@@ -47,6 +47,7 @@ export default function BoxCard({ items, index ,onClick}) {
           borderTopLeftRadius: "10px",
           borderTopRightRadius: "10px",
           position: "relative",
+          backgroundRepeat:'no-repeat',
           background:
             "linear-gradient(45deg, RGBA(28, 25, 25, 0.46) 7%, RGBA(20, 18, 18, 0.57) 45%)",
         }}
@@ -61,7 +62,7 @@ export default function BoxCard({ items, index ,onClick}) {
     left: 0,
     right:'0',
     width: '100%',
-    height: '47%',
+    height: '49%',
     background: 'linear-gradient(45deg, RGBA(28, 25, 25, 0.46) 7%, RGBA(20, 18, 18, 0.57) 45%)',
     zIndex: 999,
     margin: '0',
@@ -69,7 +70,7 @@ export default function BoxCard({ items, index ,onClick}) {
     borderTopRightRadius:'20px'
   }}></div>
       <CardContent>
-        <Typography gutterBottom variant="h5" component="div" className="cardTitle" style={{fontSize:'14px',fontWeight:'600',zIndex:'9'}}>
+        <Typography gutterBottom variant="h5" component="div" className="cardTitle" style={{fontSize:'14px !important',fontWeight:'600 !important',zIndex:'999'}}>
            {items.name}
         </Typography>
         <Typography gutterBottom variant="h7" component="div" style={{zIndex:'999',fontSize:'14px',position:'absolute',top:'30px',right:'0',color:'#fff',textAlign:'center'}}>
@@ -85,22 +86,28 @@ export default function BoxCard({ items, index ,onClick}) {
           color="#5B5B5B"
           style={{ fontSize: "11px", padding: "20px 0", textAlign: "left" }}
         >
-          Engineering Staff College India
+          {items.organisation && (items.organisation.length=1)&&
+                    <Box>{items.organisation[0] } </Box>
+
+          }
+          {items.organisation && (items.organisation.length>1)&&
+                    <Box>{items.organisation[0]} + "+" + {(items.organisation.length-1)}</Box>
+          }
         </Typography>
       </CardContent>
-      {items.board || items.gradeLevel ? (
+      {/* {items.board || items.gradeLevel ? ( */}
     <CardActions style={{paddingBottom:'20px', height:'30px'}}>
     <Divider></Divider>
         <Box>
-        {items.board && (
-          <Button size="small" style={{background: '#F4D46261',color:'#484848',fontSize:'10px'}}> {items.board}</Button>
+        {items.se_boards && (
+          <Button size="small" style={{background: '#F4D46261',color:'#484848',fontSize:'10px'}}> {items.se_boards}</Button>
         )}
-        {items.gradeLevel && (
-          <Button size="small" style={{background: '#F4D46261',color:'#484848',fontSize:'10px'}}> {items.gradeLevel}</Button>
+        {items.se_gradeLevels && (
+          <Button size="small" style={{background: '#F4D46261',color:'#484848',fontSize:'10px'}}> {items.se_gradeLevels}</Button>
         )}
         </Box>
       </CardActions>
-) : null}
+{/* ) : null} */}
 
     </Card>
   );

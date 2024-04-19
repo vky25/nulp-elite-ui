@@ -244,3 +244,7 @@ Link{
 .register .css-132u4s-MuiFormControl-root-MuiTextField-root .MuiOutlinedInput-root fieldset{
   width: 94.6% !important;
 }
+.MuiCardMedia-root{
+  background-size: cover;
+  background-repeat: no-repeat;
+}
