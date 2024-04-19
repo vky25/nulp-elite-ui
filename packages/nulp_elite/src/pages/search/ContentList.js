@@ -15,6 +15,7 @@ import Container from "@mui/material/Container";
 import { contentService } from "@shiksha/common-lib";
 import queryString from "query-string";
 import Pagination from "@mui/material/Pagination";
+import ArrowBackOutlinedIcon from '@mui/icons-material/ArrowBackOutlined';
 import NoResult from "pages/content/noResultFound";
 
 const ContentList = (props) => {
@@ -183,7 +184,10 @@ const ContentList = (props) => {
             onChange={handleFilterChange}
           />
         </Box>
+        <Link style={{display:'block',display:'flex',fontSize:'14px',paddingTop:'30px',color:'rgb(0, 67, 103)'}}><ArrowBackOutlinedIcon style={{width:'0.65em',height:'0.65em'}}/> Back</Link>
 
+  <Box sx={{fontSize:'14px',marginTop:'10px'}}></Box>You are viewing courses for :
+  <Box  sx={{fontSize:'16px',fontWeight:'700'}}>{domain}</Box>
         <Box textAlign="center" padding="10">
           <Box sx={{ paddingTop: "30px" }}>
             {isLoading ? (

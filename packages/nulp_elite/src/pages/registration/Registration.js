@@ -8,9 +8,6 @@ import { useFormik } from "formik";
 import ReCAPTCHA from "react-google-recaptcha";
 import styled from "styled-components";
 import * as Yup from "yup";
-import FormControlLabel from '@mui/material/FormControlLabel';
-import Checkbox from '@mui/material/Checkbox';
-import FormGroup from '@mui/material/FormGroup';
 
 import {
   Box,
@@ -30,6 +27,7 @@ import IconButton from "@mui/material/IconButton";
 import InputAdornment from "@mui/material/InputAdornment";
 import Visibility from "@mui/icons-material/Visibility";
 import VisibilityOff from "@mui/icons-material/VisibilityOff";
+import { t } from "i18next";
 
 const DELAY = 1500;
 const CssTextField = styled(TextField)({
@@ -222,9 +220,9 @@ const Registration = () => {
           textAlign: "center",
           backgroundPosition: "2px 426px",
           height: "100vh",
-          backgroundImage: `url(${image})`,
-          backgroundRepeat: "no-repeat",
-          backgroundSize: "contain",
+          // backgroundImage: `url(${image})`,
+          // backgroundRepeat: "no-repeat",
+          // backgroundSize: "contain",
         }}
       >
         <Wrapper>
@@ -238,7 +236,7 @@ const Registration = () => {
               marginBottom: "20px",
             }}
           >
-            Register
+            {t('REGISTER')}
           </Typography>
 
           <Box py={1}>
@@ -247,7 +245,7 @@ const Registration = () => {
               name="name"
               label={
                 <span>
-                  Name <span className="required">*</span>
+                  {t('NAME')} <span className="required">*</span>
                 </span>
               }
               variant="outlined"
@@ -264,7 +262,7 @@ const Registration = () => {
             <FormControl fullWidth style={{ marginTop: "10px" }}>
               <InputLabel id="demo-simple-select-label">
                 {" "}
-                Year of Birth <span className="required">*</span>
+                {t('YEAR_OF_BIRTH')} <span className="required">*</span>
               </InputLabel>
               <Select
                 labelId="demo-simple-select-label"
@@ -292,7 +290,7 @@ const Registration = () => {
               name="email"
               label={
                 <span>
-                  Email ID <span className="required">*</span>
+                 {t('EMAILID')} <span className="required">*</span>
                 </span>
               }
               variant="outlined"
@@ -311,9 +309,10 @@ const Registration = () => {
             <CssTextField
               id="password"
               name="password"
+              style={{background:'#fff'}}
               label={
                 <span>
-                  New Password <span className="required">*</span>
+                  {t('NEW_PASSWORD')} <span className="required">*</span>
                 </span>
               }
               type={showPassword ? "text" : "password"}
@@ -346,7 +345,7 @@ const Registration = () => {
               name="confirmPassword"
               label={
                 <span>
-                  Confirm New Password <span className="required">*</span>
+                  {t('CONFIRM_NEW_PASSWORD')} <span className="required">*</span>
                 </span>
               }
               type="password"
@@ -361,11 +360,7 @@ const Registration = () => {
                 <p className="form-error">{formik.errors.confirmPassword}</p>
               )}
           </Box>
-          <Box>
-          <FormGroup>
-              <FormControlLabel required control={<Checkbox />} label="Terms and Conditions" />
-            </FormGroup>
-            </Box>
+         
           <Box pt={4}>
             <Button
               style={{
@@ -391,7 +386,7 @@ const Registration = () => {
                 marginTop: "10px",
               }}
             >
-              Already have an account?{" "}
+             {t('ALREADY_HAVE_AN_ACCOUNT')}{" "}
               <Link href="http://localhost:3000/all">Log in</Link>
             </Typography>
           </Box>
