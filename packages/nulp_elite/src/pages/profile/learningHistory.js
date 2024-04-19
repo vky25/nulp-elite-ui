@@ -12,6 +12,7 @@ import Breadcrumbs from "@mui/material/Breadcrumbs";
 import Card from "@mui/material/Card";
 import * as util from "../../services/utilService";
 import Filter from "components/filter";
+import NoResult from "pages/content/noResultFound";
 
 const LearningHistory = () => {
   const { t } = useTranslation();
@@ -88,82 +89,86 @@ const LearningHistory = () => {
               spacing={2}
               style={{ textAlign: "left", paddingTop: "10px" }}
             >
-              {courseData?.result?.courses
-                .filter((course) => {
-                  if (selectedStatus === 0) {
-                    return course.batch.status === 0; // Ongoing
-                  } else if (selectedStatus === 1) {
-                    return course.batch.status === 1; // Completed
-                  } else if (selectedStatus === 2) {
-                    return course.batch.status === 2; // Expired
-                  } else {
-                    return true; // Show all if no filter selected
-                  }
-                })
-                .map((course) => (
-                  <Grid item xs={12} md={4} key={course.courseName}>
-                    <Card
-                      sx={{
-                        marginTop: "10px",
-                        padding: "10px",
-                        borderRadius: "10px",
-                        border: "solid 1px #EFEFEF",
-                        boxShadow: "none",
-                        color: "#484848",
-                      }}
-                    >
-                      <Typography
-                        className="twoLineEllipsis"
-                        variant="subtitle1"
-                        color="textSecondary"
-                        component="div"
-                        style={{
-                          fontSize: "14px",
-                          paddingBottom: "15px",
-                          height: "42px",
-                          fontWeight: "600",
-                        }}
-                      >
-                        {course.courseName}
-                      </Typography>
-                      <Typography
-                        variant="subtitle1"
-                        color="textSecondary"
-                        component="div"
-                        style={{ fontSize: "12px" }}
-                      >
-                        {t("CERTIFICATE_GIVEN_BY")}: {course.batch.endDate}
-                      </Typography>
-                      <Typography
-                        variant="subtitle1"
-                        color="textSecondary"
-                        component="div"
-                        style={{ fontSize: "12px" }}
-                      >
-                        {t("CERTIFICATE_ISSUE_DATE")}:{" "}
-                        {unixTimestampToHumanDate(course.completedOn)}
-                      </Typography>
-                      <Typography
-                        style={{
+              {courseData?.result?.courses.length === 0 ? (
+                <NoResult />
+              ) : (
+                courseData?.result?.courses
+                  .filter((course) => {
+                    if (selectedStatus === 0) {
+                      return course.batch.status === 0; // Ongoing
+                    } else if (selectedStatus === 1) {
+                      return course.batch.status === 1; // Completed
+                    } else if (selectedStatus === 2) {
+                      return course.batch.status === 2; // Expired
+                    } else {
+                      return true; // Show all if no filter selected
+                    }
+                  })
+                  .map((course) => (
+                    <Grid item xs={12} md={4} key={course.courseName}>
+                      <Card
+                        sx={{
                           marginTop: "10px",
-                          color:
-                            course.status === 2
-                              ? "green"
-                              : course.status === 1
-                              ? "orange"
-                              : "red",
-                          fontSize: "12px",
+                          padding: "10px",
+                          borderRadius: "10px",
+                          border: "solid 1px #EFEFEF",
+                          boxShadow: "none",
+                          color: "#484848",
                         }}
                       >
-                        {course.status === 2
-                          ? t("COMPLETED")
-                          : course.status === 1
-                          ? t("ONGOING")
-                          : t("BATCH_EXPIRED")}
-                      </Typography>
-                    </Card>
-                  </Grid>
-                ))}
+                        <Typography
+                          className="twoLineEllipsis"
+                          variant="subtitle1"
+                          color="textSecondary"
+                          component="div"
+                          style={{
+                            fontSize: "14px",
+                            paddingBottom: "15px",
+                            height: "42px",
+                            fontWeight: "600",
+                          }}
+                        >
+                          {course.courseName}
+                        </Typography>
+                        <Typography
+                          variant="subtitle1"
+                          color="textSecondary"
+                          component="div"
+                          style={{ fontSize: "12px" }}
+                        >
+                          {t("CERTIFICATE_GIVEN_BY")}: {course.batch.endDate}
+                        </Typography>
+                        <Typography
+                          variant="subtitle1"
+                          color="textSecondary"
+                          component="div"
+                          style={{ fontSize: "12px" }}
+                        >
+                          {t("CERTIFICATE_ISSUE_DATE")}:{" "}
+                          {unixTimestampToHumanDate(course.completedOn)}
+                        </Typography>
+                        <Typography
+                          style={{
+                            marginTop: "10px",
+                            color:
+                              course.status === 2
+                                ? "green"
+                                : course.status === 1
+                                ? "orange"
+                                : "red",
+                            fontSize: "12px",
+                          }}
+                        >
+                          {course.status === 2
+                            ? t("COMPLETED")
+                            : course.status === 1
+                            ? t("ONGOING")
+                            : t("BATCH_EXPIRED")}
+                        </Typography>
+                      </Card>
+                    </Grid>
+                  ))
+              )}
             </Grid>
           </Card>
         </Box>

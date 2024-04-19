@@ -15,22 +15,16 @@ import Container from "@mui/material/Container";
 import { contentService } from "@shiksha/common-lib";
 import queryString from "query-string";
 import Pagination from "@mui/material/Pagination";
+import NoResult from "pages/content/noResultFound";
 
 const ContentList = (props) => {
-  const [search, setSearch] = React.useState(true);
-  const [searchState, setSearchState] = React.useState(false);
-  // const theme = extendTheme(DEFAULT_THEME);
-  const colors = "";
-  const [sortArray, setSortArray] = React.useState([]);
+  const [search, setSearch] = useState(true);
   const location = useLocation();
   const { pageNumber } = useParams();
-
   const [currentPage, setCurrentPage] = useState(location.search || 1);
   const [totalPages, setTotalPages] = useState(1);
   const [data, setData] = useState([]);
   const [filters, setFilters] = useState({});
-  const [query, setQuery] = useState({});
-
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState(null);
   const [gradeLevels, setGradeLevels] = useState([]);
@@ -38,30 +32,25 @@ const ContentList = (props) => {
   const { domain } = location.state || {};
   const { domainquery } = location.state || {};
 
-  // const { query } = location.state || {};
-  const [page, setPage] = React.useState(1);
-  console.log("pageNumber----", pageNumber);
-  // console.log("page----",page)
-  // Example of API Call
   useEffect(() => {
     fetchData();
-    fetchGradeLevels(); // Fetch grade levels when component mounts
+    fetchGradeLevels();
     const random = getRandomValue();
   }, [currentPage, filters, search]);
+
   const handleFilterChange = (selectedOptions) => {
     const selectedValues = selectedOptions.map((option) => option.value);
     setFilters({ ...filters, se_gradeleverl: selectedValues });
   };
 
   const handleSearch = (query) => {
-    // Update the filters with the search query
     setSearch({ ...search, query });
   };
 
   const fetchData = async () => {
     setIsLoading(true);
     setError(null);
-    // Filters for API
+
     let requestData = {
       request: {
         filters: {
@@ -81,7 +70,7 @@ const ContentList = (props) => {
             "TVLesson",
           ],
           se_boards: [domain],
-          se_gradeLevels: filters.se_gradeleverl, // Access selected grade levels from filters state
+          se_gradeLevels: filters.se_gradeleverl,
         },
         limit: 20,
         query: search.query || domainquery,
@@ -92,10 +81,8 @@ const ContentList = (props) => {
       },
     };
 
-    // Convert request data to JSON string
     let data = JSON.stringify(requestData);
 
-    // Headers
     const headers = {
       "Content-Type": "application/json",
     };
@@ -103,37 +90,21 @@ const ContentList = (props) => {
     const url = `http://localhost:3000/content/${URLSConfig.URLS.CONTENT.SEARCH}?orgdetails=orgName,email`;
     try {
       const response = await contentService.getAllContents(url, data, headers);
-
-      // console.log("total pages------",Math.ceil(response.data.result.count / 20)+1);
-      console.log(
-        "total pages------",
-        Math.ceil(response.data.result.count / 20)
-      );
       setTotalPages(Math.ceil(response.data.result.count / 20) + 1);
-
       setData(response.data.result);
     } catch (error) {
-      console.log("error---", error);
       setError(error.message);
     } finally {
-      console.log("finally---");
       setIsLoading(false);
     }
   };
-  // Function to select a random value from an array
-  const getRandomValue = (array) => {
-    console.log("RandomImage   --  ", RandomImage.ImagePaths);
-    const randomIndex = RandomImage;
-    // const randomIndex = Math.floor(Math.random() * RandomImage..length);
-    console.log("randomIndex", randomIndex);
 
-    // return array[randomIndex];
+  const getRandomValue = (array) => {
+    const randomIndex = RandomImage;
     return randomIndex;
   };
 
-  // Assuming 'data' is your JSON array
-  const randomItem = getRandomValue(data);
-  const handleChange = (event: React.ChangeEvent<unknown>, value: number) => {
+  const handleChange = (event, value) => {
     navigate("/contentList/" + value, { state: { domain: domain } });
     fetchData();
   };
@@ -215,20 +186,24 @@ const ContentList = (props) => {
 
         <Box textAlign="center" padding="10">
           <Box sx={{ paddingTop: "30px" }}>
-            <Grid
-              container
-              spacing={2}
-              style={{ margin: "20px 0", marginBottom: "10px" }}
-            >
-              {data &&
-                data.content &&
-                data.content.map((items, index) => (
+            {isLoading ? (
+              <p>Loading...</p>
+            ) : error ? (
+              <p>{error}</p>
+            ) : data && data.content && data.content.length > 0 ? (
+              <Grid
+                container
+                spacing={2}
+                style={{ margin: "20px 0", marginBottom: "10px" }}
+              >
+                {data.content.map((items, index) => (
                   <Grid
                     item
                     xs={12}
                     md={6}
                     lg={3}
                     style={{ marginBottom: "10px" }}
+                    key={items.identifier}
                   >
                     <BoxCard
                       items={items}
@@ -239,7 +214,10 @@ const ContentList = (props) => {
                     ></BoxCard>
                   </Grid>
                 ))}
-            </Grid>
+              </Grid>
+            ) : (
+              <NoResult /> // Render NoResult component when there are no search results
+            )}
           </Box>
         </Box>
 
@@ -253,4 +231,5 @@ const ContentList = (props) => {
     </div>
   );
 };
+
 export default ContentList;
