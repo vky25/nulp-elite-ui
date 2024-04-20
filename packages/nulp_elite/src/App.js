@@ -46,9 +46,10 @@ import continueLearning from "pages/profile/continueLearning";
 import JoinCourse from "pages/content/joinCourse";
 import Player from "pages/content/Player";
 import Otp from "pages/registration/Otp";
-import SendOtp from "pages/registration/SendOtp"
+import SendOtp from "pages/registration/SendOtp";
 import PDFContent from "pages/content/pdf";
 import NoResult from "pages/content/noResultFound";
+import Message from "pages/connections/message";
 
 function App() {
   // const [t] = useTranslation();
@@ -184,7 +185,8 @@ function App() {
       moduleName: "nulp_elite",
       path: "/otp-old",
       component: SendOtp,
-    }, {
+    },
+    {
       moduleName: "nulp_elite",
       path: "/otp",
       component: Otp,
@@ -198,6 +200,11 @@ function App() {
       moduleName: "nulp_elite",
       path: "/view-all/:category",
       component: CategoryPage,
+    },
+    {
+      moduleName: "nulp_elite",
+      path: "/message",
+      component: Message,
     },
   ];
   // public_url="http://localhost:5000"
