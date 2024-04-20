@@ -31,6 +31,7 @@ import Footer from "components/Footer";
 import Filter from "components/filter";
 import CheckCircleOutlineIcon from "@mui/icons-material/CheckCircleOutline";
 import CancelOutlinedIcon from "@mui/icons-material/CancelOutlined";
+import { useTranslation } from "react-i18next";
 
 // Define modal styles
 const useStyles = makeStyles((theme) => ({
@@ -63,7 +64,7 @@ const AddConnections = () => {
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
   const [showChat, setShowChat] = useState(false);
-  const [buttonText, setButtonText] = useState("Start Chat");
+  const [buttonText, setButtonText] = useState("Invite");
   const [currentPage, setCurrentPage] = useState(1);
   const [pageSize, setPageSize] = useState(10);
   const [activeTab, setActiveTab] = useState("Tab1");
@@ -94,6 +95,7 @@ const AddConnections = () => {
   const [showChatModal, setShowChatModal] = useState(false);
   const [selectedUserName, setSelectedUserName] = useState(false);
   const [userChatData, setUserChatData] = useState({});
+  const { t } = useTranslation();
 
   // const handleFilterChange = (selectedOptions) => {
   //   const selectedValues = selectedOptions.map((option) => option.value);
@@ -108,16 +110,16 @@ const AddConnections = () => {
     const _userId = util.userId();
     setLoggedInUserId(_userId);
     fetchData();
-  }, [filters]);
+  }, []);
 
   const toggleChat = () => {
     setShowChat(!showChat);
-    setButtonText(showChat ? "Start Chat" : "Send");
+    setButtonText(showChat ? t("INVITE") : t("SEND_CHAT"));
   };
 
   useEffect(() => {
     onMyConnection();
-  }, [userChatData]);
+  }, [loggedInUserId]);
 
   const fetchData = async () => {
     setIsLoading(true);
@@ -268,10 +270,15 @@ const AddConnections = () => {
     setTextValue(event.target.value);
   };
 
-  const handleSendClick = () => {
-    sendChatRequestToUser(selectedUser.userId); // Call sendChat function to send the chat message
-    handleClose();
-    setShowModal(true);
+  const handleSendClick = async () => {
+    try {
+      await sendChatRequestToUser(selectedUser.userId); // Call sendChat function to send the chat message
+      handleClose();
+      setShowModal(true);
+    } catch (error) {
+      // Handle errors, such as displaying an error message to the user
+      console.error("Error sending chat request:", error);
+    }
   };
 
   const userClick = (selectedUser) => {
@@ -538,7 +545,9 @@ const AddConnections = () => {
   };
 
   const onMyConnection = () => {
-    getConnections();
+    if (loggedInUserId) {
+      getConnections();
+    }
     //getInvitations();
   };
 
@@ -590,7 +599,7 @@ const AddConnections = () => {
 
       const responseData = await response.json();
       console.log("acceptChatInvitation", responseData.result);
-      setUserChatData(responseData.result);
+      // setUserChatData(responseData.result);
       onMyConnection();
     } catch (error) {
       setError(error.message);
@@ -855,7 +864,7 @@ const AddConnections = () => {
                       >
                         <CheckCircleOutlineIcon />
                       </Link>
-
+                      <span style={{ margin: "0 5px" }}></span>
                       <Link
                         href="#"
                         underline="none"
@@ -888,34 +897,6 @@ const AddConnections = () => {
                         }
                       />
                     </ListItem>
-                    {/* <TriggerButton
-                      type="button"
-                      variant="contained"
-                      color="primary"
-                      onClick={() =>
-                        handleAcceptedChatOpen(
-                          item.userId,
-                          "" + item.firstName + item.lastName
-                        )
-                      }
-                      style={{ marginLeft: "90%" }}
-                    >
-                      Open chat
-                    </TriggerButton> */}
-                    <Link
-                      href="#"
-                      underline="none"
-                      color="primary"
-                      onClick={() =>
-                        handleAcceptedChatOpen(
-                          item.userId,
-                          "" + item.firstName + item.lastName
-                        )
-                      }
-                      style={{ marginLeft: "90%" }}
-                    >
-                      Open chat
-                    </Link>
                     <div>
                       <Dialog open={open} onClick={handleCloseModal}>
                         <DialogTitle>{selectedUserName}</DialogTitle>
@@ -966,27 +947,12 @@ const AddConnections = () => {
                             onClick={handleCloseChatHistoryModal}
                             color="primary"
                           >
-                            Close
+                            {t("CLOSE")}
                           </Button>
                         </DialogActions>
                       </Dialog>
                     </div>
                     <Divider />
-
-                    {/* <ListItem>
-                    <ListItemText
-                      primary="Manisha Kapadnis"
-                      secondary="Learner"
-                    />
-                  </ListItem>
-                  <Divider />
-
-                  <ListItem>
-                    <ListItemText
-                      primary="Charvi Upadhyay"
-                      secondary="Commissioner"
-                    />
-                  </ListItem> */}
                   </List>
                 ))}
 
@@ -1026,7 +992,7 @@ const AddConnections = () => {
                   >
                     <ModalContent sx={{ width: 400 }} style={{}}>
                       <div>
-                        <h2>Invitation not accepted.</h2>
+                        <h2>{t("INVITATION_NOT_ACCEPTED")}</h2>
                         <Button
                           onClick={(e) => {
                             setShowChatModal(false);
@@ -1041,7 +1007,7 @@ const AddConnections = () => {
                             fontSize: "12px",
                           }}
                         >
-                          Close
+                          {t("CLOSE")}
                         </Button>
                       </div>
                     </ModalContent>
@@ -1251,7 +1217,7 @@ const AddConnections = () => {
                   >
                     <ModalContent sx={{ width: 400 }} style={{}}>
                       <div>
-                        <h2>Chat Sent Successfully</h2>
+                        <h2>{t("INVITATION_SEND_SUCCESSFULLY")}</h2>
                         <Button
                           onClick={(e) => {
                             setShowModal(false);
@@ -1266,7 +1232,7 @@ const AddConnections = () => {
                             fontSize: "12px",
                           }}
                         >
-                          Close
+                          {t("CLOSE")}
                         </Button>
                       </div>
                     </ModalContent>

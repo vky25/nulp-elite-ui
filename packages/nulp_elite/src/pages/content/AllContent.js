@@ -6,6 +6,7 @@ import Header from "components/header";
 import Footer from "components/Footer";
 import { Link } from "react-router-dom";
 import URLSConfig from "../../configs/urlConfig.json";
+import FloatingChatIcon from "../../components/FloatingChatIcon";
 import Box from "@mui/material/Box";
 import data from "../../assets/contentSerach.json";
 import SearchBox from "components/search";
@@ -117,6 +118,7 @@ const AllContent = () => {
     const headers = {
       "Content-Type": "application/json",
     };
+    // console.log(data.result.content)
 
     const url = `http://localhost:3000/api/${URLSConfig.URLS.CONTENT.SEARCH}?orgdetails=orgName,email&licenseDetails=name,description,url`;
     try {
@@ -207,7 +209,12 @@ const AllContent = () => {
                 }}
               >
                 <SummarizeOutlinedIcon style={{ verticalAlign: "top" }} />{" "}
-                <Box style={{ borderBottom: "solid 2px #000" }}>
+                <Box
+                  style={{
+                    borderBottom: "solid 2px #000",
+                    display: "inline-block",
+                  }}
+                >
                   {category}{" "}
                 </Box>{" "}
               </Box>
@@ -264,7 +271,7 @@ const AllContent = () => {
           </React.Fragment>
         ))}
       </Container>
-
+      <FloatingChatIcon />
       <Footer />
     </>
   );

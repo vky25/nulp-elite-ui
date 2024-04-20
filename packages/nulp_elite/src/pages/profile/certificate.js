@@ -14,8 +14,10 @@ import data from "../../assets/certificates.json";
 import DescriptionOutlinedIcon from "@mui/icons-material/DescriptionOutlined";
 import Breadcrumbs from "@mui/material/Breadcrumbs";
 import Card from "@mui/material/Card";
+import FloatingChatIcon from "../../components/FloatingChatIcon";
 import * as util from "../../services/utilService";
 import axios from "axios";
+import NoResult from "pages/content/noResultFound";
 
 const Certificate = () => {
   const { t } = useTranslation();
@@ -63,10 +65,8 @@ const Certificate = () => {
           },
         };
         const url = `http://localhost:3000/learner/rc/certificate/v1/search`;
-        // const header = "application/json";
         const response = await axios.post(url, request);
         const data = response.data;
-        console.log(data);
         setOtherCertData(data);
       } catch (error) {
         console.error("Error fetching user data:", error);
@@ -75,6 +75,7 @@ const Certificate = () => {
 
     fetchData();
   }, []);
+
   return (
     <div>
       <Header />
@@ -104,146 +105,155 @@ const Certificate = () => {
               spacing={2}
               style={{ textAlign: "left", paddingTop: "10px" }}
             >
-              {certData &&
-                certData.result.response.content &&
-                certData.result.response.content.map((certificate) => (
-                  <Grid item xs={12} md={4} key={certificate._id}>
-                    <Card
-                      sx={{
-                        marginTop: "10px",
-                        padding: "10px",
-                        borderRadius: "10px",
-                        border: "solid 1px #EFEFEF",
-                        boxShadow: "none",
-                        color: "#484848",
-                      }}
-                    >
-                      <Typography
-                        className="twoLineEllipsis"
-                        variant="subtitle1"
-                        color="text.secondary"
-                        component="div"
-                        style={{
-                          fontSize: "14px",
-                          paddingBottom: "15px",
-                          height: "42px",
-                          fontWeight: "600",
-                        }}
-                      >
-                        {certificate._source.data.badge.name}
-                      </Typography>
-                      <Typography
-                        variant="subtitle1"
-                        color="text.secondary"
-                        component="div"
-                        style={{ fontSize: "12px" }}
-                      >
-                        {t("CERTIFICATE_GIVEN_BY")}:{" "}
-                        {certificate._source.data.badge.issuer.name}
-                      </Typography>
-                      <Typography
-                        variant="subtitle1"
-                        color="text.secondary"
-                        component="div"
-                        style={{ fontSize: "12px" }}
-                      >
-                        {t("CERTIFICATE_ISSUE_DATE")}:{" "}
-                        {certificate._source.data.issuedOn}
-                      </Typography>
-                      <Box
-                        style={{
-                          display: "flex",
-                          alignItems: "end",
-                          color: "#1976d2",
-                        }}
-                      >
-                        <SimCardDownloadOutlinedIcon />
-                        <Link
-                          href={certificate._source.pdfUrl} // Corrected usage of pdfUrl
-                          underline="none"
-                          style={{
-                            fontSize: "12px",
-                            marginTop: "15px",
-                            display: "block",
+              {(!certData || certData.result.response.content.length === 0) &&
+              otherCertData.length === 0 ? (
+                <NoResult />
+              ) : (
+                <>
+                  {certData &&
+                    certData.result.response.content &&
+                    certData.result.response.content.map((certificate) => (
+                      <Grid item xs={12} md={4} key={certificate._id}>
+                        <Card
+                          sx={{
+                            marginTop: "10px",
+                            padding: "10px",
+                            borderRadius: "10px",
+                            border: "solid 1px #EFEFEF",
+                            boxShadow: "none",
+                            color: "#484848",
                           }}
-                          key={certificate._id} // Add key prop
                         >
-                          {t("CERTIFICATES")}
-                        </Link>
-                      </Box>
-                    </Card>
-                  </Grid>
-                ))}
-              {otherCertData.map((certificate) => (
-                <Grid item xs={12} md={4} key={certificate.osid}>
-                  <Card
-                    sx={{
-                      marginTop: "10px",
-                      padding: "10px",
-                      borderRadius: "10px",
-                      border: "solid 1px #EFEFEF",
-                      boxShadow: "none",
-                      color: "#484848",
-                    }}
-                  >
-                    <Typography
-                      className="twoLineEllipsis"
-                      variant="subtitle1"
-                      color="text.secondary"
-                      component="div"
-                      style={{
-                        fontSize: "14px",
-                        paddingBottom: "15px",
-                        height: "42px",
-                        fontWeight: "600",
-                      }}
-                    >
-                      {certificate.training.name}
-                    </Typography>
-                    <Typography
-                      variant="subtitle1"
-                      color="text.secondary"
-                      component="div"
-                      style={{ fontSize: "12px" }}
-                    >
-                      {t("CERTIFICATE_GIVEN_BY")}: {certificate.issuer.name}
-                    </Typography>
-                    <Typography
-                      variant="subtitle1"
-                      color="text.secondary"
-                      component="div"
-                      style={{ fontSize: "12px" }}
-                    >
-                      {t("CERTIFICATE_ISSUE_DATE")}: {certificate.osCreatedAt}
-                    </Typography>
-                    <Box
-                      style={{
-                        display: "flex",
-                        alignItems: "end",
-                        color: "#1976d2",
-                      }}
-                    >
-                      <SimCardDownloadOutlinedIcon />
-                      <Link
-                        href={certificate.pdfUrl} // Corrected usage of pdfUrl
-                        underline="none"
-                        style={{
-                          fontSize: "12px",
-                          marginTop: "15px",
-                          display: "block",
+                          <Typography
+                            className="twoLineEllipsis"
+                            variant="subtitle1"
+                            color="text.secondary"
+                            component="div"
+                            style={{
+                              fontSize: "14px",
+                              paddingBottom: "15px",
+                              height: "42px",
+                              fontWeight: "600",
+                            }}
+                          >
+                            {certificate._source.data.badge.name}
+                          </Typography>
+                          <Typography
+                            variant="subtitle1"
+                            color="text.secondary"
+                            component="div"
+                            style={{ fontSize: "12px" }}
+                          >
+                            {t("CERTIFICATE_GIVEN_BY")}:{" "}
+                            {certificate._source.data.badge.issuer.name}
+                          </Typography>
+                          <Typography
+                            variant="subtitle1"
+                            color="text.secondary"
+                            component="div"
+                            style={{ fontSize: "12px" }}
+                          >
+                            {t("CERTIFICATE_ISSUE_DATE")}:{" "}
+                            {certificate._source.data.issuedOn}
+                          </Typography>
+                          <Box
+                            style={{
+                              display: "flex",
+                              alignItems: "end",
+                              color: "#1976d2",
+                            }}
+                          >
+                            <SimCardDownloadOutlinedIcon />
+                            <Link
+                              href={certificate._source.pdfUrl} // Corrected usage of pdfUrl
+                              underline="none"
+                              style={{
+                                fontSize: "12px",
+                                marginTop: "15px",
+                                display: "block",
+                              }}
+                              key={certificate._id} // Add key prop
+                            >
+                              {t("CERTIFICATES")}
+                            </Link>
+                          </Box>
+                        </Card>
+                      </Grid>
+                    ))}
+                  {otherCertData.map((certificate) => (
+                    <Grid item xs={12} md={4} key={certificate.osid}>
+                      <Card
+                        sx={{
+                          marginTop: "10px",
+                          padding: "10px",
+                          borderRadius: "10px",
+                          border: "solid 1px #EFEFEF",
+                          boxShadow: "none",
+                          color: "#484848",
                         }}
-                        key={certificate.osid} // Add key prop
                       >
-                        {t("CERTIFICATES")}
-                      </Link>
-                    </Box>
-                  </Card>
-                </Grid>
-              ))}
+                        <Typography
+                          className="twoLineEllipsis"
+                          variant="subtitle1"
+                          color="text.secondary"
+                          component="div"
+                          style={{
+                            fontSize: "14px",
+                            paddingBottom: "15px",
+                            height: "42px",
+                            fontWeight: "600",
+                          }}
+                        >
+                          {certificate.training.name}
+                        </Typography>
+                        <Typography
+                          variant="subtitle1"
+                          color="text.secondary"
+                          component="div"
+                          style={{ fontSize: "12px" }}
+                        >
+                          {t("CERTIFICATE_GIVEN_BY")}: {certificate.issuer.name}
+                        </Typography>
+                        <Typography
+                          variant="subtitle1"
+                          color="text.secondary"
+                          component="div"
+                          style={{ fontSize: "12px" }}
+                        >
+                          {t("CERTIFICATE_ISSUE_DATE")}:{" "}
+                          {certificate.osCreatedAt}
+                        </Typography>
+                        <Box
+                          style={{
+                            display: "flex",
+                            alignItems: "end",
+                            color: "#1976d2",
+                          }}
+                        >
+                          <SimCardDownloadOutlinedIcon />
+                          <Link
+                            href={certificate.pdfUrl} // Corrected usage of pdfUrl
+                            underline="none"
+                            style={{
+                              fontSize: "12px",
+                              marginTop: "15px",
+                              display: "block",
+                            }}
+                            key={certificate.osid} // Add key prop
+                          >
+                            {t("CERTIFICATES")}
+                          </Link>
+                        </Box>
+                      </Card>
+                    </Grid>
+                  ))}
+                </>
+              )}
             </Grid>
           </Card>
         </Box>
       </Container>
+      <FloatingChatIcon />
       <Footer />
     </div>
   );

@@ -49,22 +49,28 @@ export default function Footer() {
             <BottomNavigationAction
               onClick={() => navigate('/domainList')}
               label={t("SEARCH")}
-              className='navigateActive'
               icon={<SearchSharpIcon />}
+              className={location.pathname === '/domainList' ? 'navigateActive' : ''}
+
             />
             <BottomNavigationAction
               onClick={() => navigate('/all')}
               label={t("CONTENTS")}
+              className={location.pathname === '/all' ? 'navigateActive' : ''}
+
               icon={<EditNoteOutlinedIcon />}
             />
             <BottomNavigationAction
               onClick={() => navigate('/addConnections')}
               label={t("CONNECTION")}
+              className={location.pathname === '/addConnections' ? 'navigateActive' : ''}
+
               icon={<GroupsOutlinedIcon />}
             />
             <BottomNavigationAction
               onClick={() => navigate('/profile')}
               label={t("PROFILE")}
+              className={location.pathname === '/profile' ? 'navigateActive' : ''}
               icon={<AccountCircleOutlinedIcon />}
             />
           </BottomNavigation>

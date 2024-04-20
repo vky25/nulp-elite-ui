@@ -13,6 +13,9 @@ import { useNavigate, Navigate } from "react-router-dom";
 import image from "../../assets/bg.png";
 import { useStore } from "configs/zustandStore";
 const axios = require("axios");
+import FormControlLabel from '@mui/material/FormControlLabel';
+import Checkbox from '@mui/material/Checkbox';
+import FormGroup from '@mui/material/FormGroup';
 
 const Otp = () => {
   const { t } = useTranslation();
@@ -225,9 +228,9 @@ const Otp = () => {
           textAlign: "center",
           backgroundPosition: "2px 426px",
           height: "100vh",
-          backgroundImage: `url(${image})`,
-          backgroundRepeat: "no-repeat",
-          backgroundSize: "contain",
+          // backgroundImage: `url(${image})`,
+          // backgroundRepeat: "no-repeat",
+          // backgroundSize: "contain",
         }}
       >
         <Box my={4}>
@@ -298,6 +301,12 @@ const Otp = () => {
             {t("SUBMIT")}
           </Button>
         </Box>
+        <Box style={{display:'flex', alignItems:'center'}}>
+
+<FormGroup style={{flexDirection:'row', alignItems:'center'}}>
+    <FormControlLabel  control={<Checkbox />} /> <Link href="../terms.html" target="_blank"> <span className="required">*</span>{t('TERMS_CONDITIONS')}</Link>
+  </FormGroup>
+  </Box>
         <Box py={1}>
           <Typography
             variant="h1"

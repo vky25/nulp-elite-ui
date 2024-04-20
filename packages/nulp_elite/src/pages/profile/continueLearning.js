@@ -10,11 +10,13 @@ import Grid from "@mui/material/Grid";
 import Breadcrumbs from "@mui/material/Breadcrumbs";
 import Filter from "components/filter";
 import BoxCard from "components/Card";
+import FloatingChatIcon from "../../components/FloatingChatIcon";
 import { useParams, useNavigate, useLocation } from "react-router-dom";
 import { contentService } from "@shiksha/common-lib";
 import URLSConfig from "../../configs/urlConfig.json";
 import * as util from "../../services/utilService";
 import Search from "components/search";
+import NoResult from "pages/content/noResultFound";
 
 const ContinueLearning = () => {
   const { t } = useTranslation();
@@ -84,9 +86,9 @@ const ContinueLearning = () => {
 
   return (
     <div>
-      {/* <Header /> */}
+      <Header />
       <Container maxWidth="xxl" role="main" className="container-pb">
-        {/* <Breadcrumbs
+        <Breadcrumbs
           aria-label="breadcrumb"
           style={{
             padding: "25px 0",
@@ -100,10 +102,10 @@ const ContinueLearning = () => {
           <Typography color="#484848" aria-current="page">
             {t("Continue Learning")}
           </Typography>
-        </Breadcrumbs> */}
-        <Box style={{ margin: "20px 0" }}>
+        </Breadcrumbs>
+        {/* <Box style={{ margin: "20px 0" }}>
           <Search></Search>
-        </Box>
+        </Box> */}
 
         <Box textAlign="center" padding="10">
           <Box sx={{ paddingTop: "30px" }}>
@@ -112,23 +114,28 @@ const ContinueLearning = () => {
               spacing={2}
               style={{ margin: "20px 0", marginBottom: "10px" }}
             >
-              {filteredCourses.map((items) => (
-                <Grid
-                  item
-                  xs={12}
-                  md={6}
-                  lg={4}
-                  style={{ marginBottom: "10px" }}
-                  key={items.contentId}
-                >
-                  <BoxCard items={items.content}></BoxCard>
-                </Grid>
-              ))}
+              {filteredCourses.length === 0 ? (
+                <NoResult />
+              ) : (
+                filteredCourses.map((items) => (
+                  <Grid
+                    item
+                    xs={12}
+                    md={6}
+                    lg={3}
+                    style={{ marginBottom: "10px" }}
+                    key={items.contentId}
+                  >
+                    <BoxCard items={items.content}></BoxCard>
+                  </Grid>
+                ))
+              )}
             </Grid>
           </Box>
         </Box>
       </Container>
-        {/* <Footer /> */}
+      <FloatingChatIcon />
+      {/* <Footer /> */}
     </div>
   );
 };

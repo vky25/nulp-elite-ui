@@ -10,17 +10,20 @@ import { Divider } from "native-base";
 import RandomImage from "../assets/cardRandomImgs.json"
 
 
+
 export default function BoxCard({ items, index ,onClick}) {
   const [imgUrl, setImgUrl] = React.useState(true);
   useEffect(() => { 
     // const random = getRandomValue();
-    randomImg(index);
+    console.log("RandomImage--- ",RandomImage.ImagePaths[index % 10 || 10]); 
+    setImgUrl(RandomImage.ImagePaths[index % 10 || 10]);
+    console.log("imgUrl--- ",imgUrl);
  }, []);
-const randomImg = (i) => {
-console.log("RandomImage--- ",i,"   ", i % 10 || 10); 
-setImgUrl(RandomImage.ImagePaths[i % 10 || 10]);
-console.log("imgUrl--- ", RandomImage.ImagePaths[i % 10 || 10]);
-}
+// const randomImg = (i) => {
+// console.log("RandomImage--- ",RandomImage.ImagePaths[i % 10 || 10]); 
+// setImgUrl(RandomImage.ImagePaths[i % 10 || 10]);
+// console.log("imgUrl--- ",imgUrl);
+// }
 // // Assuming 'data' is your JSON array
 // const randomItem = getRandomValue(data);
 //   // console.log(items.appIcon)
@@ -44,10 +47,11 @@ console.log("imgUrl--- ", RandomImage.ImagePaths[i % 10 || 10]);
           borderTopLeftRadius: "10px",
           borderTopRightRadius: "10px",
           position: "relative",
+          backgroundRepeat:'no-repeat',
           background:
             "linear-gradient(45deg, RGBA(28, 25, 25, 0.46) 7%, RGBA(20, 18, 18, 0.57) 45%)",
         }}
-        image={require("../assets/card-bg.png")}
+        image={imgUrl? imgUrl: require("../assets/card-bg.png")}
         title="green iguana"
       />
       <div 
@@ -58,7 +62,7 @@ console.log("imgUrl--- ", RandomImage.ImagePaths[i % 10 || 10]);
     left: 0,
     right:'0',
     width: '100%',
-    height: '47%',
+    height: '49%',
     background: 'linear-gradient(45deg, RGBA(28, 25, 25, 0.46) 7%, RGBA(20, 18, 18, 0.57) 45%)',
     zIndex: 999,
     margin: '0',
@@ -66,7 +70,7 @@ console.log("imgUrl--- ", RandomImage.ImagePaths[i % 10 || 10]);
     borderTopRightRadius:'20px'
   }}></div>
       <CardContent>
-        <Typography gutterBottom variant="h5" component="div" className="cardTitle" style={{fontSize:'14px',fontWeight:'600',zIndex:'9'}}>
+        <Typography gutterBottom variant="h5" component="div" className="cardTitle" style={{fontSize:'14px !important',fontWeight:'600 !important',zIndex:'999'}}>
            {items.name}
         </Typography>
         <Typography gutterBottom variant="h7" component="div" style={{zIndex:'999',fontSize:'14px',position:'absolute',top:'30px',right:'0',color:'#fff',textAlign:'center'}}>
@@ -82,23 +86,29 @@ console.log("imgUrl--- ", RandomImage.ImagePaths[i % 10 || 10]);
           color="#5B5B5B"
           style={{ fontSize: "11px", padding: "20px 0", textAlign: "left" }}
         >
-          Engineering Staff College India
+          {items.organisation && (items.organisation.length=1)&&
+                    <Box>{items.organisation[0] } </Box>
+
+          }
+          {items.organisation && (items.organisation.length>1)&&
+                    <Box>{items.organisation[0]} + "+" + {(items.organisation.length-1)}</Box>
+          }
         </Typography>
-        <Divider></Divider>
       </CardContent>
-      <CardActions style={{paddingBottom:'20px', height:'30px'}}>
-      {items.board ? (
-
-
-        <Button size="small" style={{background: '#F4D46261',color:'#484848',fontSize:'10px'}}> {items.board}</Button>
-        ) : null}
-        {items.gradeLevel ? (
-
-
-        <Button size="small" style={{background: '#F4D46261',color:'#484848',fontSize:'10px'}}> {items.gradeLevel}</Button>
-        ) : null}
-
+      {/* {items.board || items.gradeLevel ? ( */}
+    <CardActions style={{paddingBottom:'20px', height:'30px'}}>
+    <Divider></Divider>
+        <Box>
+        {items.se_boards && (
+          <Button size="small" style={{background: '#F4D46261',color:'#484848',fontSize:'10px'}}> {items.se_boards}</Button>
+        )}
+        {items.se_gradeLevels && (
+          <Button size="small" style={{background: '#F4D46261',color:'#484848',fontSize:'10px'}}> {items.se_gradeLevels}</Button>
+        )}
+        </Box>
       </CardActions>
+{/* ) : null} */}
+
     </Card>
   );
 }
