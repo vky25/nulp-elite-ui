@@ -24,6 +24,7 @@ const CategoryPage = () => {
   const { category } = useParams();
   const [domain, setDomain] = useState();
   const [channelData, setChannelData] = React.useState(true);
+  const [selectedDomain, setSelectedDomain] = useState();
   const [data, setData] = useState([]);
   const [error, setError] = useState(null);
   const { pageNumber } = useParams();
@@ -37,6 +38,12 @@ const CategoryPage = () => {
     // Implement your search logic here
     console.log("Search query:", query);
   };
+  const handleDomainFilter = (query) => {
+    // Implement your search logic here
+    setSelectedDomain(query);
+    console.log("Search query:", selectedDomain);
+    fetchMoreItems(category);
+  };
 
   // const goBack = () => {
   //   history.goBack();
@@ -49,6 +56,7 @@ const CategoryPage = () => {
         filters: {
           primaryCategory: [category],
           visibility: [],
+          se_boards: [selectedDomain],
         },
         limit: 20,
         sort_by: {
@@ -201,7 +209,7 @@ const CategoryPage = () => {
             spacing={2}
             style={{ margin: "20px 0", marginBottom: "10px" }}
           >
-            {data.map((item) => (
+            {data && data.map((item) => (
               <Grid
                 item
                 xs={12}

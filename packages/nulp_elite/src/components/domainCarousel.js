@@ -29,8 +29,10 @@ export default function DomainCarousel({ domains ,onSelectDomain}) {
 
   const dotsToShow = 4; // Number of dots to display
   const baseImgUrl = "../assets";
+  const [isActive, setIsActive] = useState(false);
   const handleDomainClick = (query) => {
     onSelectDomain(query);
+    setIsActive(!isActive);
   };
   return (
    
@@ -51,7 +53,8 @@ export default function DomainCarousel({ domains ,onSelectDomain}) {
           dotListClass="custom-dot-list-style"
           itemClass="carousel-item-padding-40-px">
                   {domains && domains.map((domain, index) => (
-          <Box onPress={(e)=>handleDomainClick(domain.code)} key={index} orientation="horizontal" size="sm" variant="outlined" style={{display:'flex'}}>
+
+          <Box  className={`my-class ${isActive ? 'active' : ''}`} onClick={(e) => handleDomainClick(domain.code)}  key={index} orientation="horizontal" size="sm" variant="outlined" style={{display:'flex'}}>
               <Box className="imgBorder" style={{background:'#fff',padding:'10px',borderRadius:'10px',height:'45px',width:'45px'}}>
               {/* {(domain.image != undefined) && <img src={require(baseImgUrl+domain.image)}  style={{width:'40px',objectFit:'contain'}} alt={domain.name} />}
                 {(domain.image == undefined)&& <img src={require("../assets/swm.png")}  style={{width:'40px',objectFit:'contain'}} alt={domain.name} />} */}
