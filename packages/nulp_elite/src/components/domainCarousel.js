@@ -1,4 +1,4 @@
-import * as React from 'react';
+import React, { useState } from 'react'
 import Box from '@mui/joy/Box';
 import Typography from '@mui/joy/Typography';
 import Carousel from "react-multi-carousel";
@@ -54,7 +54,7 @@ export default function DomainCarousel({ domains ,onSelectDomain}) {
           itemClass="carousel-item-padding-40-px">
                   {domains && domains.map((domain, index) => (
 
-          <Box  className={`my-class ${isActive ? 'active' : ''}`} onClick={(e) => handleDomainClick(domain.code)}  key={index} orientation="horizontal" size="sm" variant="outlined" style={{display:'flex'}}>
+          <Box  className={`my-class ${isActive ? 'carousel-active-ui' : ''}`} onClick={(e) => handleDomainClick(domain.code)}  key={index} orientation="horizontal" size="sm" variant="outlined" style={{display:'flex'}}>
               <Box className="imgBorder" style={{background:'#fff',padding:'10px',borderRadius:'10px',height:'45px',width:'45px'}}>
               {/* {(domain.image != undefined) && <img src={require(baseImgUrl+domain.image)}  style={{width:'40px',objectFit:'contain'}} alt={domain.name} />}
                 {(domain.image == undefined)&& <img src={require("../assets/swm.png")}  style={{width:'40px',objectFit:'contain'}} alt={domain.name} />} */}

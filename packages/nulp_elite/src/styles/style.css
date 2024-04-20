@@ -117,6 +117,13 @@ body{
     box-shadow: 0px 4px 4px 0px #00000040;
     margin-top: 10px;
   }
+  .carousel-active-ui{
+    background: #54A3CD;
+    justify-content: stretch;
+    border-radius: 5px;
+    padding: 7px;
+    width: 63%;
+  }
  
 }
  @media(max-width:768px) {
