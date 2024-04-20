@@ -20,6 +20,7 @@ import {
 import { useDisclosure } from "@chakra-ui/react";
 import { frameworkService } from "@shiksha/common-lib";
 import { ChevronDownIcon } from "@chakra-ui/icons";
+import * as util from "../services/utilService";
 
 const UserPrefPopup = () => {
   const { isOpen, onOpen, onClose } = useDisclosure();
@@ -36,13 +37,31 @@ const UserPrefPopup = () => {
   const [selectedCategory, setSelectedCategory] = useState(null);
   const [selectedSubCategory, setSelectedSubCategory] = useState(null);
   // const [selectedTopic, setSelectedTopic] = useState(null);
-
+  const _userId = util.userId();
   useEffect(() => {
     setCurrentPreference(JSON.parse(localStorage.getItem("preference")));
     setSelectedCategory(currentPreference?.board[0]);
     setSelectedSubCategory(currentPreference?.gradeLevel[0]);
     setSelectedLanguages(currentPreference?.medium);
     // setSelectedTopic(currentPreference?.topic[0]);
+    const fetchuserData = async () => {
+      try {
+        const url = `http://localhost:3000/learner/user/v5/read/${_userId}`;
+        const header = "application/json";
+        const response = await fetch(url, {
+          headers: {
+            "Content-Type": "application/json",
+          },
+        });
+        const data = await response.json();
+        console.log(data.result.response)
+       
+      } catch (error) {
+        console.error("Error fetching user data:", error);
+      }
+    };
+
+    fetchuserData();
     const fetchData = async () => {
       setIsLoading(true);
       setError(null);
@@ -109,7 +128,7 @@ const UserPrefPopup = () => {
           gradeLevel: [selectedSubCategory],
           id: "nulp",
         },
-        userId: "11a10742-7bbf-4117-909d-10a6ce5a9942",
+        userId:_userId,
       },
     };
     console.log("requestBody", requestBody);

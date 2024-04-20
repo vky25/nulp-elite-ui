@@ -1,4 +1,5 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
+
 import "./App.css";
 import "./styles/style.css";
 import Sample from "pages/Sample";
@@ -26,12 +27,12 @@ import { useTranslation, initReactI18next } from "react-i18next";
 import i18n from "i18next";
 import Framework from "pages/Frmework";
 import User from "pages/User";
+import * as util from "services/utilService";
 
 import UserPrefData from "pages/UserPrefData";
 import { ChakraProvider } from "@chakra-ui/react";
 import Profile from "pages/profile/Profile";
 import Certificate from "pages/profile/certificate";
-
 import FAQPage from "pages/FAQPage";
 import AddConnections from "pages/connections/AddConnections";
 import DomainList from "pages/search/DomainList";
@@ -42,13 +43,13 @@ import AllContent from "pages/content/AllContent";
 import CategoryPage from "pages/content/CategoryPage";
 import LearningHistory from "pages/profile/learningHistory";
 import continueLearning from "pages/profile/continueLearning";
-
 import JoinCourse from "pages/content/joinCourse";
 import Player from "pages/content/Player";
 import Otp from "pages/registration/Otp";
 import SendOtp from "pages/registration/SendOtp"
 import PDFContent from "pages/content/pdf";
 import NoResult from "pages/content/noResultFound";
+import UserPrefPopup from "pages/UserPrefPopup";
 
 function App() {
   // const [t] = useTranslation();
@@ -57,7 +58,8 @@ function App() {
   // const theme = extendTheme(DEFAULT_THEME);
   const colors = "";
   const [sortArray, setSortArray] = React.useState([]);
-
+  const [checkPref, setCheckPref] = React.useState(false);
+  const _userId = util.userId();
   const routes = [
     {
       moduleName: "nulp_elite",
@@ -211,6 +213,31 @@ function App() {
     ["translation"],
     `${process.env.PUBLIC_URL}/locales/{{lng}}/{{ns}}.json`
   );
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const url = `http://localhost:3000/learner/user/v5/read/${_userId}`;
+        const header = "application/json";
+        const response = await fetch(url, {
+          headers: {
+            "Content-Type": "application/json",
+          },
+        });
+        const data = await response.json();
+        console.log(data.result.response.framework.board)
+        if(data.result.response.framework.board){
+          setCheckPref(true);
+        }
+        else{
+          setCheckPref(false);
+        }
+      } catch (error) {
+        console.error("Error fetching user data:", error);
+      }
+    };
+
+    fetchData();
+  }, []);
 
   return (
     <NativeBaseProvider>
@@ -219,6 +246,10 @@ function App() {
       {/* <I18nextProvider i18n={i18n}> */}
       {/* <ChakraProvider> */}
       <React.Suspense>
+      { !checkPref &&
+        <UserPrefPopup />
+      }
+    
         <Router>
           <Routes>
             {routes.map((route, index) => (
