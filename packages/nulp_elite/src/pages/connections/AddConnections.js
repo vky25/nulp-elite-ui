@@ -127,7 +127,7 @@ const AddConnections = () => {
       request: {
         filters: {
           status: "1",
-          rootOrgId: "0130171255884513283",
+          rootOrgId: "0130701891041689600",
         },
         query: "",
       },
@@ -207,7 +207,7 @@ const AddConnections = () => {
       request: {
         filters: {
           status: "1",
-          rootOrgId: "0130171255884513283",
+          rootOrgId: "0130701891041689600",
         },
         query: searchQuery,
         pageNumber: currentPage,
@@ -355,7 +355,7 @@ const AddConnections = () => {
       request: {
         filters: {
           status: "1",
-          rootOrgId: "0130171255884513283",
+          rootOrgId: "0130701891041689600",
           userId: userIds,
         },
         query: searchQuery,
@@ -407,7 +407,7 @@ const AddConnections = () => {
       request: {
         filters: {
           status: "1",
-          rootOrgId: "0130171255884513283",
+          rootOrgId: "0130701891041689600",
           userId: userIds,
         },
         query: searchQuery,
@@ -454,7 +454,7 @@ const AddConnections = () => {
       request: {
         filters: {
           status: "1",
-          rootOrgId: "0130171255884513283",
+          rootOrgId: "0130701891041689600",
           userId: userIds,
         },
         query: searchQuery,
