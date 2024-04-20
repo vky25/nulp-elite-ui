@@ -54,6 +54,10 @@ const AllContent = () => {
     // Implement your search logic here
     console.log("Search query:", query);
   };
+  const handleDomainFilter = (query) => {
+    // Implement your search logic here
+    console.log("Search query:", query);
+  };
   useEffect(() => {
     fetchData();
     fetchDomains();
@@ -255,7 +259,7 @@ const AllContent = () => {
         </p>
         <SearchBox onSearch={handleSearch} />
       </Box>
-      {domain &&  <DomainCarousel  domains={domain}/>}
+      {domain &&  <DomainCarousel onSelectDomain={handleDomainFilter}  domains={domain}/>}
      
       <Container maxWidth="xxl" role="main" className="container-pb">
         {Object?.entries(
