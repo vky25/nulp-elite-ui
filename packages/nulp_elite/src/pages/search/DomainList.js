@@ -17,7 +17,6 @@ import { frameworkService } from "@shiksha/common-lib";
 import { generatePath, useNavigate, useLocation } from "react-router-dom";
 import Footer from "../../components/Footer";
 import { contentService } from "@shiksha/common-lib";
-import DomainCarousel from "components/domainCarousel";
 import { object } from "yup";
 
 const Item = styled(Paper)(({ theme }) => ({
@@ -103,6 +102,7 @@ const DomainList = () => {
         url,
         headers
       );
+
       response.data.result.framework.categories[0].terms.map((term) => {
         setCategory(term);
         if (domainWithImage) {
@@ -116,6 +116,7 @@ const DomainList = () => {
         }
       });
       console.log("kkkkk----", itemsArray);
+
       setData(itemsArray);
     } catch (error) {
       console.log("nulp--  error-", error);
@@ -232,6 +233,7 @@ const DomainList = () => {
       </Container>
       <Footer />
     </div>
+
   );
 };
 

@@ -1,23 +1,16 @@
 import React from "react";
 // import { post, get, update } from "../services/RestClient.ts";
-
-import Accordion from "@mui/material/Accordion";
-import AccordionSummary from "@mui/material/AccordionSummary";
-import AccordionDetails from "@mui/material/AccordionDetails";
-import Footer from "components/Footer";
-import Header from "components/header";
-import Container from "@mui/material/Container";
-import FloatingChatIcon from "components/FloatingChatIcon";
-import Box from "@mui/material/Box";
-import Button from "@mui/material/Button";
-import Typography from "@mui/material/Typography";
-import Breadcrumbs from "@mui/material/Breadcrumbs";
-import Link from "@mui/material/Link";
-import Grid from "@mui/material/Grid";
-import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
-import { useTranslation } from "react-i18next";
-
-
+import {
+  View,
+  Heading,
+  Text,
+  Box,
+  h6,
+  AccordionButton,
+  AccordionPanel,
+  AccordionIcon,
+} from "native-base";
+import { CompressOutlined } from "@mui/icons-material";
 var data= {};
  fetch('https://nulpstorage1.blob.core.windows.net/public/portal-faq/resources/res/faq-en.json')
   .then(response => {
@@ -29,7 +22,7 @@ var data= {};
 
   .then(result => {
      data=  result;
-     console.log(result,'ekta')
+     console.log("result----",result);
   })
 
 const FAQPage = () => {
