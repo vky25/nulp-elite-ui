@@ -140,6 +140,7 @@ const AllContent = () => {
         return 0;
       });
       setData(sortedData);
+      console.log("sorted----", data)
     } catch (error) {
       setError(error.message);
     }
@@ -196,7 +197,6 @@ const AllContent = () => {
         }
       });
       setDomain(response.data.result.framework.categories[0].terms);
-      setData(itemsArray);
     } catch (error) {
       console.log("nulp--  error-", error);
       setError(error.message);

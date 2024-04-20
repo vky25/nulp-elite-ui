@@ -24,11 +24,14 @@ const responsive = {
   }
 };
 
-export default function DomainCarousel({ domains }) {
+
+export default function DomainCarousel({ domains ,onSelectDomain}) {
 
   const dotsToShow = 4; // Number of dots to display
   const baseImgUrl = "../assets";
-
+  const handleSearchClick = () => {
+    onSelectDomain(query);
+  };
   return (
    
    <Box style={{position:'relative'}}>

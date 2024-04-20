@@ -119,7 +119,7 @@ const CategoryPage = () => {
         url,
         headers
       );
-      setDomain(response.data.result.framework.categories[0].terms);
+     
       response.data.result.framework.categories[0].terms.map((term) => {
         if (domainWithImage) {
           domainWithImage.result.form.data.fields.map((imgItem) => {
@@ -133,7 +133,7 @@ const CategoryPage = () => {
       });
       console.log("kkkkk----", itemsArray);
 
-      setData(itemsArray);
+      setDomain(response.data.result.framework.categories[0].terms);
     } catch (error) {
       console.log("nulp--  error-", error);
       setError(error.message);
@@ -162,8 +162,7 @@ const CategoryPage = () => {
   return (
     <>
       <Header />
-
-      {domain &&  <DomainCarousel  domains={domain}/>}
+      {domain &&  <DomainCarousel onSelectDomain={handleDomainFilter} domains={domain}/>}
       <Box sx={{ background: "#2D2D2D", padding: "20px" }} className="xs-hide">
         <p
           style={{
