@@ -473,7 +473,8 @@ const AddConnections = () => {
       receiver_id: loggedInUserId,
     };
 
-    const url = `http:/activeTab
+    const url = `http://localhost:3000/directConnect/accept-invitation`;
+
     try {
       const response = await fetch(url, {
         method: "POST",
