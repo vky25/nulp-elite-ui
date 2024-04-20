@@ -41,6 +41,8 @@ const AllContent = () => {
   const [data, setData] = useState([]);
   const [error, setError] = useState(null);
   const [domain, setDomain] = useState();
+  const [selectedDomain, setSelectedDomain] = useState();
+
   const [channelData, setChannelData] = React.useState(true);
   const [expandedCategory, setExpandedCategory] = useState(null);
   const [isMobile, setIsMobile] = useState(window.innerWidth <= 767);
@@ -51,11 +53,14 @@ const AllContent = () => {
   };
   const handleSearch = (query) => {
     // Implement your search logic here
+
     console.log("Search query:", query);
   };
   const handleDomainFilter = (query) => {
     // Implement your search logic here
-    console.log("Search query:", query);
+    setSelectedDomain(query);
+    console.log("Search query:", selectedDomain);
+    fetchData();
   };
   useEffect(() => {
     fetchData();
@@ -67,6 +72,7 @@ const AllContent = () => {
     let data = JSON.stringify({
       request: {
         filters: {
+          se_boards: [selectedDomain],
           primaryCategory: [
             "Collection",
             "Resource",
@@ -147,7 +153,6 @@ const AllContent = () => {
         }
       });
       setData(sortedData);
-      console.log("sorted----", data)
     } catch (error) {
       setError(error.message);
     }
@@ -264,7 +269,7 @@ const AllContent = () => {
       {domain &&  <DomainCarousel onSelectDomain={handleDomainFilter}  domains={domain}/>}
      
       <Container maxWidth="xxl" role="main" className="container-pb">
-        {Object?.entries(
+        { data && Object?.entries(
           data?.reduce((acc, item) => {
             if (!acc[item.primaryCategory]) {
               acc[item.primaryCategory] = [];

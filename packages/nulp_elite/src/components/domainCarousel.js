@@ -52,7 +52,7 @@ export default function DomainCarousel({ domains ,onSelectDomain}) {
           dotListClass="custom-dot-list-style"
           itemClass="carousel-item-padding-40-px">
                   {domains && domains.map((domain, index) => (
-          <Box onPress={(e)=>handleDomainClick(domain.code)} key={index} orientation="horizontal" size="sm" variant="outlined" style={{display:'flex'}}>
+          <Box   onClick={(e) => handleDomainClick(domain.code)}  key={index} orientation="horizontal" size="sm" variant="outlined" style={{display:'flex'}}>
               <Box style={{background:'#fff',padding:'10px',borderRadius:'10px',height:'45px',width:'45px',border:'solid 1px #E1E1E1'}}>
               {/* {(domain.image != undefined) && <img src={require(baseImgUrl+domain.image)}  style={{width:'40px',objectFit:'contain'}} alt={domain.name} />}
                 {(domain.image == undefined)&& <img src={require("../assets/swm.png")}  style={{width:'40px',objectFit:'contain'}} alt={domain.name} />} */}
