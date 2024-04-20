@@ -272,11 +272,10 @@ const AddConnections = () => {
 
   const handleSendClick = async () => {
     try {
-      await sendChatRequestToUser(selectedUser.userId); // Call sendChat function to send the chat message
+      await sendChatRequestToUser(selectedUser.userId);
       handleClose();
       setShowModal(true);
     } catch (error) {
-      // Handle errors, such as displaying an error message to the user
       console.error("Error sending chat request:", error);
     }
   };
@@ -288,7 +287,6 @@ const AddConnections = () => {
   const getConnections = async () => {
     setIsLoading(true);
     setError(null);
-    // setData([]);
 
     const params = new URLSearchParams({
       sender_id: loggedInUserId,
@@ -484,7 +482,7 @@ const AddConnections = () => {
       setInvitationReceivedUserByIds(
         responseData?.result?.response?.content || []
       );
-      handleOpen(); // Open modal after successful API response
+      handleOpen();
       handleClose();
       console.log(
         "getInvitationReceivedUserByIds",
@@ -501,7 +499,6 @@ const AddConnections = () => {
   const getInvitations = async () => {
     setIsLoading(true);
     setError(null);
-    // setData([]);
 
     const params = new URLSearchParams({
       sender_id: loggedInUserId,
@@ -676,7 +673,6 @@ const AddConnections = () => {
   const getUserChat = async (userId) => {
     setIsLoading(true);
     setError(null);
-    // setData([]);
 
     const params = new URLSearchParams({
       sender_id: loggedInUserId,
@@ -830,13 +826,23 @@ const AddConnections = () => {
                   onClick={() => {
                     handleTabClick("Tab2");
                     setCurrentPage(1);
-                    // onNewAdd();
                     handleSearch();
                   }}
                 />
               </TabList>
             </Box>
             <TabPanel value="1" style={{ padding: "0" }}>
+              {invitationReceiverByUser &&
+                invitationReceiverByUser.length === 0 &&
+                invitationAcceptedUsers &&
+                invitationAcceptedUsers.length === 0 &&
+                invitationNotAcceptedUsers &&
+                invitationNotAcceptedUsers.length === 0 && (
+                  <Box>
+                    <p>No users found</p>
+                  </Box>
+                )}
+
               {invitationReceiverByUser &&
                 invitationReceiverByUser?.map((item) => (
                   <List sx={{}} style={{ color: "gray" }}>
@@ -1015,19 +1021,6 @@ const AddConnections = () => {
                 )}
               </div>
             </TabPanel>
-            <List>
-              {/* {userData.map((user, index) => (
-                <React.Fragment key={index}>
-                  <ListItem button onClick={() => handleOpenModal(user)}>
-                    <ListItemText
-                      primary={user.name}
-                      secondary={user.designation}
-                    />
-                  </ListItem>
-                  <Divider />
-                </React.Fragment>
-              ))} */}
-            </List>
 
             {/* <TabPanel value="2"> */}
             {/* <Filter /> */}
@@ -1064,8 +1057,16 @@ const AddConnections = () => {
                           item.lastName ? ` ${item.lastName}` : ""
                         }`}
                         secondary="Designation"
-                        onClick={handleOpen}
                       />
+                      <Link
+                        href="#"
+                        underline="none"
+                        color="primary"
+                        onClick={handleOpen}
+                        style={{ marginLeft: "90%" }}
+                      >
+                        Invite
+                      </Link>
                     </ListItem>
                     <Divider />
                     <div className="pagination">{pagination}</div>
@@ -1145,7 +1146,6 @@ const AddConnections = () => {
                     )}
                     {showChat && (
                       <div>
-                        {/* Your chat UI components go here */}
                         <TextField
                           multiline
                           rows={4} // You can adjust the number of rows as needed

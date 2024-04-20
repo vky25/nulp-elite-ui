@@ -37,7 +37,6 @@ const responsive = {
 };
 
 const AllContent = () => {
-
   const [data, setData] = useState([]);
   const [error, setError] = useState(null);
   const [expandedCategory, setExpandedCategory] = useState(null);
@@ -125,13 +124,17 @@ const AllContent = () => {
     try {
       const response = await getAllContents(url, data, headers);
       const sortedData = response?.data?.result?.content?.sort((a, b) => {
-        if (a.primaryCategory < b.primaryCategory) {
-          return 1;
+        // Sort "Course" items first, then by primaryCategory
+        if (a.primaryCategory === "Course" && b.primaryCategory !== "Course") {
+          return -1; // "Course" comes before other categories
+        } else if (
+          a.primaryCategory !== "Course" &&
+          b.primaryCategory === "Course"
+        ) {
+          return 1; // Other categories come after "Course"
+        } else {
+          return a.primaryCategory.localeCompare(b.primaryCategory);
         }
-        if (a.primaryCategory > b.primaryCategory) {
-          return -1;
-        }
-        return 0;
       });
       setData(sortedData);
     } catch (error) {
@@ -141,7 +144,6 @@ const AllContent = () => {
 
   const renderItems = (items, category) => {
     return items.map((item) => (
-     
       <Grid
         item
         xs={isMobile ? 12 : 12}
@@ -207,7 +209,12 @@ const AllContent = () => {
                 }}
               >
                 <SummarizeOutlinedIcon style={{ verticalAlign: "top" }} />{" "}
-                <Box style={{ borderBottom: "solid 2px #000",display:'inline-block' }}>
+                <Box
+                  style={{
+                    borderBottom: "solid 2px #000",
+                    display: "inline-block",
+                  }}
+                >
                   {category}{" "}
                 </Box>{" "}
               </Box>
