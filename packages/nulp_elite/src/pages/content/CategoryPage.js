@@ -27,7 +27,7 @@ const CategoryPage = () => {
   const [selectedDomain, setSelectedDomain] = useState();
   const [data, setData] = useState([]);
   const [error, setError] = useState(null);
-  const { pageNumber } = useParams();
+  const { pageNumber } = useParams(1);
   const navigate = useNavigate();
   const [currentPage, setCurrentPage] = useState(location.search || 1);
   const [totalPages, setTotalPages] = useState(1);
@@ -45,9 +45,9 @@ const CategoryPage = () => {
     fetchMoreItems(category);
   };
 
-  // const goBack = () => {
-  //   history.goBack();
-  // };
+  const handleGoBack = () => {
+    navigate(-1); // Navigate back in history
+  };
   const fetchMoreItems = async (category) => {
     setError(null);
     // Filters for API
@@ -198,8 +198,7 @@ const CategoryPage = () => {
         <SearchBox onSearch={handleSearch} />
       </Box>
       <Container maxWidth="xxl" role="main" className="container-pb">
-       {/* <Link style={{display:'block',display:'flex',fontSize:'16px',paddingTop:'30px',color:'rgb(0, 67, 103)'}} onClick={ navigate(-1)}><ArrowBackOutlinedIcon/> Back</Link> */}
-       <Link style={{display:'block',display:'flex',fontSize:'16px',paddingTop:'30px',color:'rgb(0, 67, 103)'}} ><ArrowBackOutlinedIcon/> Back</Link>
+      <Link onClick={handleGoBack} style={{display:'block',display:'flex',fontSize:'16px',paddingTop:'30px',color:'rgb(0, 67, 103)'}} ><ArrowBackOutlinedIcon/> Back</Link>
 
       <p style={{display:'inline-block',borderBottom:'solid 2px #000',fontSize:'14px',color:'#1E1E1E'}}>{category}</p>
       <Box textAlign="center">
