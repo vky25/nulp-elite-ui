@@ -1,6 +1,4 @@
 import React, { useState, useEffect } from "react";
-import { Layout, IconByName } from "@shiksha/common-lib";
-import { VStack, HStack, Menu, Image } from "native-base";
 import Tab from "@mui/material/Tab";
 import TabContext from "@material-ui/lab/TabContext";
 import TabList from "@material-ui/lab/TabList";
@@ -12,9 +10,7 @@ import { Modal as BaseModal, makeStyles } from "@material-ui/core";
 import { styled, css } from "@mui/system";
 import PropTypes from "prop-types";
 import { Button } from "@mui/base/Button";
-import Breadcrumbs from "@mui/material/Breadcrumbs";
 import Link from "@mui/material/Link";
-import Autocomplete from "@mui/material/Autocomplete";
 import TextField from "@mui/material/TextField";
 import Divider from "@mui/material/Divider";
 import Box from "@mui/material/Box";
@@ -28,12 +24,13 @@ import DialogContent from "@material-ui/core/DialogContent";
 import DialogActions from "@material-ui/core/DialogActions";
 import Header from "components/header";
 import Footer from "components/Footer";
-import Filter from "components/filter";
 import CheckCircleOutlineIcon from "@mui/icons-material/CheckCircleOutline";
 import CancelOutlinedIcon from "@mui/icons-material/CancelOutlined";
 import { useTranslation } from "react-i18next";
 import { useStore } from "configs/zustandStore";
 import { Link as RouterLink } from "react-router-dom";
+import Pagination from "@mui/material/Pagination";
+
 // Define modal styles
 const useStyles = makeStyles((theme) => ({
   modal: {
@@ -58,9 +55,6 @@ const AddConnections = () => {
   const handleChange = (event, newValue) => {
     setValue(newValue);
   };
-  const [search, setSearch] = React.useState(true);
-  const [searchState, setSearchState] = React.useState(false);
-  const classes = useStyles();
   const [open, setOpen] = React.useState(false);
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
@@ -74,30 +68,24 @@ const AddConnections = () => {
   const [selectedUser, setSelectedUser] = useState("");
   const [openModal, setOpenModal] = useState(false);
   const [userSearchData, setUserSearchData] = useState();
-  const [userdata, setUserData] = useState([]);
   const [searchQuery, setSearchQuery] = useState("");
   const [textValue, setTextValue] = useState(
     "Hello ..., I would like to connect with you regarding some queries i had in your course."
   );
-  const [modalMessage, setModalMessage] = useState("");
   const [invitationAcceptedUsers, setInvitationAcceptedUsers] = useState();
   const [invitationNotAcceptedUsers, setInvitationNotAcceptedUsers] =
     useState();
   const [loggedInUserId, setLoggedInUserId] = useState();
-  const [filters, setFilters] = useState({});
-  const [gradeLevels, setGradeLevels] = useState([]);
   const location = useLocation();
-  const { domain } = location.state || {};
-  const [receivedUserChat, setReceivedUserchat] = useState("");
   const [invitationReceiverByUser, setInvitationReceivedUserByIds] = useState();
   const [userChat, setUserChat] = useState();
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [showModal, setShowModal] = useState(false);
   const [showChatModal, setShowChatModal] = useState(false);
   const [selectedUserName, setSelectedUserName] = useState(false);
-  const [userChatData, setUserChatData] = useState({});
   const { t } = useTranslation();
   const setData = useStore((state) => state.setData);
+  const [totalPages, setTotalPages] = useState(1);
 
   // const handleFilterChange = (selectedOptions) => {
   //   const selectedValues = selectedOptions.map((option) => option.value);
@@ -107,58 +95,29 @@ const AddConnections = () => {
   // const filteredUsers = userData?.filter(
   //   (user) => user.name && user.name.includes(searchQuery)
   // );
+  const handlePageChange = (event, newValue) => {
+    setCurrentPage(newValue);
+  };
+
+  useEffect(() => {
+    if (activeTab === "Tab2") {
+      handleSearch();
+    }
+  }, [currentPage]);
 
   useEffect(() => {
     const _userId = util.userId();
     setLoggedInUserId(_userId);
-    fetchData();
   }, []);
 
   const toggleChat = () => {
     setShowChat(!showChat);
-    setButtonText(showChat ? t("INVITE") : t("SEND_CHAT"));
+    setButtonText(showChat ? t('INVITE') : t('SEND_CHAT'));
   };
 
   useEffect(() => {
     onMyConnection();
   }, [loggedInUserId]);
-
-  const fetchData = async () => {
-    setIsLoading(true);
-    setError(null);
-
-    const requestData = {
-      request: {
-        filters: {
-          status: "1",
-          rootOrgId: "0130701891041689600",
-        },
-        query: "",
-      },
-    };
-
-    const url = `http://localhost:3000/learner/user/v3/search`;
-    try {
-      const response = await fetch(url, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(requestData),
-      });
-
-      if (!response.ok) {
-        throw new Error("Failed to fetch data");
-      }
-
-      const responseData = await response.json();
-      setGradeLevels(responseData.data.result);
-    } catch (error) {
-      setError(error.message);
-    } finally {
-      setIsLoading(false);
-    }
-  };
 
   function handleClick(event) {
     event.preventDefault();
@@ -168,28 +127,6 @@ const AddConnections = () => {
   const handleTabClick = (tab) => {
     setActiveTab(tab);
   };
-
-  const handlePageChange = (page) => {
-    setCurrentPage(page);
-  };
-
-  const totalPages = Math.ceil(userdata.length / pageSize);
-  const pagination = [];
-
-  for (let i = 1; i <= totalPages; i++) {
-    pagination.push(
-      <button
-        key={i}
-        onClick={() => handlePageChange(i)}
-        className={currentPage === i ? "active" : ""}
-      >
-        {i}
-      </button>
-    );
-  }
-
-  const startIndex = (currentPage - 1) * pageSize;
-  const userData = userdata.slice(startIndex, startIndex + pageSize);
 
   const handleOpenModal = (user) => {
     setSelectedUser(user);
@@ -214,8 +151,11 @@ const AddConnections = () => {
           rootOrgId: "0130701891041689600",
         },
         query: searchQuery,
-        pageNumber: currentPage,
-        pageSize: pageSize,
+        limit: 10,
+        offset: 10 * (currentPage - 1),
+        sort_by: {
+          lastUpdatedOn: "desc",
+        },
       },
     };
 
@@ -233,6 +173,7 @@ const AddConnections = () => {
       }
 
       let responseData = await response.json();
+      setTotalPages(Math.ceil(responseData?.result?.response?.count / 10) + 1);
       console.log("responseData", responseData);
       console.log(
         "user list of all type user",
@@ -362,9 +303,9 @@ const AddConnections = () => {
           rootOrgId: "0130701891041689600",
           userId: userIds,
         },
-        query: searchQuery,
-        pageNumber: currentPage,
-        pageSize: pageSize,
+        // query: searchQuery,
+        // pageNumber: currentPage,
+        // pageSize: pageSize,
       },
     };
 
@@ -414,9 +355,9 @@ const AddConnections = () => {
           rootOrgId: "0130701891041689600",
           userId: userIds,
         },
-        query: searchQuery,
-        pageNumber: currentPage,
-        pageSize: pageSize,
+        // query: searchQuery,
+        // pageNumber: currentPage,
+        // pageSize: pageSize,
       },
     };
 
@@ -461,9 +402,9 @@ const AddConnections = () => {
           rootOrgId: "0130701891041689600",
           userId: userIds,
         },
-        query: searchQuery,
-        pageNumber: currentPage,
-        pageSize: pageSize,
+        // query: searchQuery,
+        // pageNumber: currentPage,
+        // pageSize: pageSize,
       },
     };
 
@@ -498,56 +439,10 @@ const AddConnections = () => {
     }
   };
 
-  const getInvitations = async () => {
-    setIsLoading(true);
-    setError(null);
-
-    const params = new URLSearchParams({
-      sender_id: loggedInUserId,
-      receiver_id: loggedInUserId,
-      is_connection: true,
-    });
-
-    const url = `http://localhost:3000/directConnect/get-chats?${params.toString()}`;
-
-    try {
-      const response = await fetch(url, {
-        method: "GET",
-        headers: {
-          "Content-Type": "application/json",
-        },
-      });
-      setInvitationReceivedUserByIds([]);
-      if (!response.ok) {
-        throw new Error("Failed to get invited user");
-      }
-
-      const responseData = await response.json();
-      console.log("getInvitations", responseData.result);
-      const invitationReceivedUserIds = responseData.result
-        .filter(
-          (res) =>
-            !res.is_accepted &&
-            res.receiver_id == loggedInUserId &&
-            res.sender_id !== loggedInUserId
-        )
-        .map((res) => res.sender_id);
-
-      invitationReceivedUserIds.length > 0 &&
-        getInvitationReceivedUserByIds(invitationReceivedUserIds);
-    } catch (error) {
-      setError(error.message);
-    } finally {
-      setIsLoading(false);
-    }
-    console.log("invitationReceiverByUser", invitationReceiverByUser);
-  };
-
   const onMyConnection = () => {
     if (loggedInUserId) {
       getConnections();
     }
-    //getInvitations();
   };
 
   const handleAcceptedChatOpen = (userId, name) => {
@@ -606,7 +501,6 @@ const AddConnections = () => {
 
       const responseData = await response.json();
       console.log("acceptChatInvitation", responseData.result);
-      // setUserChatData(responseData.result);
       onMyConnection();
     } catch (error) {
       setError(error.message);
@@ -713,7 +607,6 @@ const AddConnections = () => {
           (res.sender_id === userId && res.receiver_id === loggedInUserId)
       );
       setUserChat(userChats);
-      // const userChat = responseData.result;
     } catch (error) {
       setError(error.message);
     } finally {
@@ -794,24 +687,6 @@ const AddConnections = () => {
             >
               Search
             </Button>
-            {!isLoading && !error && (
-              <List>
-                {filteredUsers &&
-                  filteredUsers.map((user, index) => (
-                    <React.Fragment key={index}>
-                      <ListItem>
-                        <ListItemText
-                          primary={`Name Surname: ${user.firstName} ${user.lastName}`}
-                          secondary={`Designation: ${user.designation}`}
-                        />
-                      </ListItem>
-                      <Divider />
-                    </React.Fragment>
-                  ))}
-              </List>
-            )}
-            {isLoading && <Typography>Loading...</Typography>}
-            {error && <Typography>Error: {error}</Typography>}
           </Box> */}
           <TabContext value={value}>
             <Box sx={{ borderBottom: 1, borderColor: "divider" }}>
@@ -822,7 +697,7 @@ const AddConnections = () => {
                 <Tab
                   label="My Connections"
                   value="1"
-                  style={{ fontSize: "12px", color: "#484848" }}
+                  style={{ fontSize: "12px", color: "#484848"}}
                   onClick={() => {
                     handleTabClick("Tab1");
                     setCurrentPage(1);
@@ -832,7 +707,7 @@ const AddConnections = () => {
                 <Tab
                   label="Add New"
                   value="2"
-                  style={{ fontSize: "12px", color: "#484848" }}
+                  style={{ fontSize: "12px", color: "#484848"}}
                   onClick={() => {
                     handleTabClick("Tab2");
                     setCurrentPage(1);
@@ -948,6 +823,7 @@ const AddConnections = () => {
                     onClose={handleCloseModal}
                     aria-labelledby="modal-title"
                     aria-describedby="modal-desc"
+                    className="sx-bottom"
                     sx={{
                       display: "flex",
                       justifyContent: "center",
@@ -957,20 +833,22 @@ const AddConnections = () => {
                     }}
                   >
                     <ModalContent sx={{ width: 400 }} style={{}}>
-                      <div>
-                        <h2>{t("INVITATION_NOT_ACCEPTED")}</h2>
+                      <div style={{textAlign:'center'}}>
+                        <h2 style={{fontSize:'14px',textAlign:'center',padding:'13px'}}>{t("INVITATION_NOT_ACCEPTED")}</h2>
                         <Button
                           onClick={(e) => {
                             setShowChatModal(false);
                           }}
                           style={{
                             background: "#004367",
+                            border: "solid 1px #004367",
                             borderRadius: "10px",
                             color: "#fff",
                             padding: "10px 12px",
                             margin: "0 10px",
                             fontWeight: "500",
                             fontSize: "12px",
+                            width:'50%'
                           }}
                         >
                           {t("CLOSE")}
@@ -981,34 +859,12 @@ const AddConnections = () => {
                 )}
               </div>
             </TabPanel>
-
-            {/* <TabPanel value="2"> */}
-            {/* <Filter /> */}
-            {/* <Autocomplete
-                disablePortal
-                id="combo-box-demo"
-                sx={{ width: "100%", background: "#fff" }}
-                options={gradeLevels}
-                onChange={handleFilterChange}
-                renderInput={(params) => (
-                  <TextField {...params} label="Filter by Name" />
-                )}
-              /> */}
-
             <TabPanel value="2">
-              {/* <Autocomplete
-                disablePortal
-                id="combo-box-demo"
-                sx={{ width: "100%", background: "#fff" }}
-                renderInput={(params) => (
-                  <TextField {...params} label="Filter by Designation" />
-                )}*/}
               {userSearchData &&
                 userSearchData?.map((item) => (
                   <List
                     key={item.id} // Add key prop to each List element
-                    sx={{}} // Add styling here if needed
-                    style={{ color: "blue" }}
+                    sx={{ fontSize:'14px'}} // Add styling here if needed
                     onClick={() => handleUserClick(item)}
                   >
                     <ListItem>
@@ -1023,20 +879,26 @@ const AddConnections = () => {
                         underline="none"
                         color="primary"
                         onClick={handleOpen}
-                        style={{ marginLeft: "90%" }}
+                        style={{fontSize:'14px',color:'#004367',fontWeight:'600' }}
                       >
                         Invite
                       </Link>
                     </ListItem>
                     <Divider />
-                    <div className="pagination">{pagination}</div>
                   </List>
                 ))}
+
+              <Pagination
+                count={totalPages}
+                page={currentPage}
+                onChange={handlePageChange}
+              />
               <div>
                 <Modal
                   aria-labelledby="modal-title"
                   aria-describedby="modal-desc"
                   open={open}
+                  className="sx-bottom"
                   onClose={() => setOpen(false)}
                   sx={{
                     display: "flex",
@@ -1061,14 +923,14 @@ const AddConnections = () => {
                       }}
                     >
                       {selectedUser && (
-                        <div style={{ fontSize: "14px", lineHeight: "1.6" }}>
-                          Name Surname: {selectedUser?.firstName}
+                        <div style={{ fontSize: "16px", lineHeight: "1.6",fontWeight:'500' }}>
+                           {selectedUser?.firstName}
                           {selectedUser?.lastName}
                         </div>
                       )}
                       {selectedUser && (
                         <div
-                          style={{ fontSize: "12px", paddingBottom: "10px" }}
+                          style={{ fontSize: "15px", paddingBottom: "10px",fontWeight:'400' }}
                         >
                           Designation:
                         </div>
@@ -1113,6 +975,7 @@ const AddConnections = () => {
                           onChange={handleTextareaChange}
                           placeholder="Enter your text here..."
                           fullWidth
+                          sx={{fontSize:'13px'}}
                         />
                       </div>
                     )}
@@ -1124,7 +987,6 @@ const AddConnections = () => {
                         flexDirection: "row",
                       }}
                     >
-                      <Box style={{ width: "50%" }}>
                         <Button
                           variant="outlined"
                           style={{
@@ -1134,14 +996,14 @@ const AddConnections = () => {
                             margin: "0 10px",
                             fontWeight: "500",
                             fontSize: "12px",
-                            border: "solid 1px #004367",
+                            border: "solid 1px #efefea00",
+                            width:'50%'
                           }}
                           onClick={handleClose}
                         >
                           Cancel
                         </Button>
-                      </Box>
-                      <Box style={{ width: "50%" }}>
+                      
                         <Button
                           style={{
                             background: "#004367",
@@ -1151,12 +1013,13 @@ const AddConnections = () => {
                             margin: "0 10px",
                             fontWeight: "500",
                             fontSize: "12px",
+                            border: "solid 1px #004367",
+                            width:'50%'
                           }}
                           onClick={showChat ? handleSendClick : toggleChat}
                         >
                           {buttonText}
                         </Button>
-                      </Box>
                     </Box>
                   </ModalContent>
                 </Modal>
@@ -1167,17 +1030,19 @@ const AddConnections = () => {
                     onClose={handleCloseModal}
                     aria-labelledby="modal-title"
                     aria-describedby="modal-desc"
+                    className="sx-bottom"
                     sx={{
                       display: "flex",
                       justifyContent: "center",
                       alignItems: "flex-end",
                       pt: "10vh",
                       p: "0",
+                     
                     }}
                   >
-                    <ModalContent sx={{ width: 400 }} style={{}}>
-                      <div>
-                        <h2>{t("INVITATION_SEND_SUCCESSFULLY")}</h2>
+                    <ModalContent sx={{ width: 400,bottom:'30px' }} style={{}}>
+                      <div style={{padding:'10px',textAlign:'center'}}>
+                        <h2 style={{fontSize:'14px',textAlign:'center',padding:'13px'}}>{t('INVITATION_SEND_SUCCESSFULLY')}</h2>
                         <Button
                           onClick={(e) => {
                             setShowModal(false);
@@ -1190,9 +1055,10 @@ const AddConnections = () => {
                             margin: "0 10px",
                             fontWeight: "500",
                             fontSize: "12px",
+                            width:'40%'
                           }}
                         >
-                          {t("CLOSE")}
+                          {t('CLOSE')}
                         </Button>
                       </div>
                     </ModalContent>

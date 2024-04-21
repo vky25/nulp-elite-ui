@@ -10,12 +10,13 @@ import FloatingChatIcon from "../../components/FloatingChatIcon";
 import Box from "@mui/material/Box";
 import data from "../../assets/contentSerach.json";
 import SearchBox from "components/search";
-
+import { frameworkService } from "@shiksha/common-lib";
 import Container from "@mui/material/Container";
 import Carousel from "react-multi-carousel";
 import "react-multi-carousel/lib/styles.css";
 import DomainCarousel from "components/domainCarousel";
 import SummarizeOutlinedIcon from "@mui/icons-material/SummarizeOutlined";
+import domainWithImage from "../../assets/domainImgForm.json";
 
 const responsive = {
   superLargeDesktop: {
@@ -39,17 +40,31 @@ const responsive = {
 const AllContent = () => {
   const [data, setData] = useState([]);
   const [error, setError] = useState(null);
+  const [domain, setDomain] = useState();
+  const [selectedDomain, setSelectedDomain] = useState();
+
+  const [channelData, setChannelData] = React.useState(true);
   const [expandedCategory, setExpandedCategory] = useState(null);
   const [isMobile, setIsMobile] = useState(window.innerWidth <= 767);
+  const [itemsArray, setItemsArray] = useState([]);
+
   const handleResize = () => {
     setIsMobile(window.innerWidth <= 767);
   };
   const handleSearch = (query) => {
     // Implement your search logic here
+
     console.log("Search query:", query);
+  };
+  const handleDomainFilter = (query) => {
+    // Implement your search logic here
+    setSelectedDomain(query);
+    console.log("Search query:", selectedDomain);
+    fetchData();
   };
   useEffect(() => {
     fetchData();
+    fetchDomains();
   }, []);
 
   const fetchData = async () => {
@@ -57,6 +72,7 @@ const AllContent = () => {
     let data = JSON.stringify({
       request: {
         filters: {
+          se_boards: [selectedDomain],
           primaryCategory: [
             "Collection",
             "Resource",
@@ -141,6 +157,70 @@ const AllContent = () => {
       setError(error.message);
     }
   };
+  const getCookieValue = (name) => {
+    const cookies = document.cookie.split("; ");
+    for (let i = 0; i < cookies.length; i++) {
+      const cookie = cookies[i];
+      const [cookieName, cookieValue] = cookie.split("=");
+      if (cookieName === name) {
+        return cookieValue;
+      }
+    }
+    return "";
+  };
+
+  const fetchDomains = async () => {
+
+    setError(null);
+    // Headers
+    const headers = {
+      "Content-Type": "application/json",
+      Cookie: `connect.sid=${getCookieValue("connect.sid")}`,
+    };
+    try {
+      const url = `http://localhost:3000/api/channel/v1/read/0130701891041689600`;
+      const response = await frameworkService.getChannel(url, headers);
+      // console.log("channel---",response.data.result);
+      setChannelData(response.data.result);
+    } catch (error) {
+      console.log("error---", error);
+      setError(error.message);
+    } finally {
+
+    }
+    try {
+      const url = `http://localhost:3000/api/framework/v1/read/nulp?categories=board,gradeLevel,medium,class,subject`;
+      const response = await frameworkService.getSelectedFrameworkCategories(
+        url,
+        headers
+      );
+
+     
+      response.data.result.framework.categories[0].terms.map((term) => {
+
+        if (domainWithImage) {
+          domainWithImage.result.form.data.fields.map((imgItem) => {
+            if ((term && term.code) === (imgItem && imgItem.code)) {
+              term["image"] = imgItem.image ? imgItem.image : "";
+              pushData(term)
+              itemsArray.push(term);
+            }
+          });
+        }
+      });
+      setDomain(response.data.result.framework.categories[0].terms);
+    } catch (error) {
+      console.log("nulp--  error-", error);
+      setError(error.message);
+    } finally {
+      console.log("nulp finally---");
+
+    }
+  };
+    // Function to push data to the array
+    const pushData = (term) => {
+      setItemsArray((prevData) => [...prevData, term]);
+    };
 
   const renderItems = (items, category) => {
     return items.map((item) => (
@@ -186,9 +266,11 @@ const AllContent = () => {
         </p>
         <SearchBox onSearch={handleSearch} />
       </Box>
-      {/* <DomainCarousel  domain={data.result.content}/> */}
+      <Box sx={{fontWeight:'600',fontSize:'16px',padding:'10px'}}>Filter by popular domain:</Box>
+      {domain &&  <DomainCarousel onSelectDomain={handleDomainFilter}  domains={domain}/>}
+     
       <Container maxWidth="xxl" role="main" className="container-pb">
-        {Object?.entries(
+        { data && Object?.entries(
           data?.reduce((acc, item) => {
             if (!acc[item.primaryCategory]) {
               acc[item.primaryCategory] = [];

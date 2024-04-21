@@ -114,6 +114,20 @@ const ContinueLearning = () => {
               spacing={2}
               style={{ margin: "20px 0", marginBottom: "10px" }}
             >
+{/* 
+              {filteredCourses.map((items) => (
+                <Grid
+                  item
+                  xs={12}
+                  md={6}
+                  lg={3}
+                  style={{ marginBottom: "10px" }}
+                  key={items.contentId}
+                >
+                  <BoxCard items={items.content} index={filteredCourses.length}></BoxCard>
+                </Grid>
+              ))} */}
+
               {filteredCourses.length === 0 ? (
                 <NoResult />
               ) : (
@@ -126,10 +140,11 @@ const ContinueLearning = () => {
                     style={{ marginBottom: "10px" }}
                     key={items.contentId}
                   >
-                    <BoxCard items={items.content}></BoxCard>
+                    <BoxCard items={items.content}  index={filteredCourses.length}></BoxCard>
                   </Grid>
                 ))
               )}
+
             </Grid>
           </Box>
         </Box>
