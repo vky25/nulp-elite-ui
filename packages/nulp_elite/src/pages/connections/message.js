@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { makeStyles } from "@mui/styles";
-import { TextField, Button, Alert } from "@mui/material";
+import { TextField, Button, Alert,ArrowBack } from "@mui/material";
 import io from "socket.io-client";
 import * as util from "../../services/utilService";
 const axios = require("axios");
@@ -59,7 +59,8 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const socket = io("http://localhost:3000");
+
+// const socket = io("http://localhost:3000");
 
 const Message = (props) => {
   const classes = useStyles();
@@ -76,18 +77,64 @@ const Message = (props) => {
     setLoggedInUserId(_userId);
   }, []);
 
+  // useEffect(() => {
+  //   if (loggedInUserId) {
+  //     socket.on("message", (message) => {
+  //       console.log("Received message:", message);
+  //       setMessages((prevMessages) => [...prevMessages, message]);
+  //     });
+  //     fetchChats();
+  //   }
+  
+  //   return () => {
+  //     socket.disconnect();
+  //   };
+  // }, [loggedInUserId]);
+
   useEffect(() => {
     if (loggedInUserId) {
-      socket.on("message", (message) => {
-        setMessages((prevMessages) => [...prevMessages, message]);
-      });
       fetchChats();
+      // Fetch messages at regular intervals (e.g., every 5 seconds)
+      const intervalId = setInterval(fetchChats, 5000);
+      return () => clearInterval(intervalId);
     }
-
-    return () => {
-      socket.disconnect();
-    };
   }, [loggedInUserId]);
+
+  // useEffect(() => {
+  //   const _userId = util.userId();
+  //   setLoggedInUserId(_userId);
+  
+  //   // Log socket connection status
+  //   console.log("Socket connected:", socket.connected);
+  
+  //   return () => {
+  //     socket.disconnect();
+  //   };
+  // }, []);
+  
+  // const fetchChats = async () => {
+  //   try {
+  //     const response = await axios.get(
+  //       `http://localhost:3000/directConnect/get-chats?sender_id=${loggedInUserId}&receiver_id=${receiverUserId}&is_accepted=true`,
+  //       {
+  //         withCredentials: true,
+  //       }
+  //     );
+  //     // getUserDetails([loggedInUserId, response?.data?.result[0]?.receiver_id]);
+  //     setMessages(response.data.result || []);
+  //     // // console.log("getUserChat", responseData.result);
+  //     // const userChats = response.data.result.filter(
+  //     //   (res) =>
+  //     //     (res.sender_id === loggedInUserId &&
+  //     //       res.receiver_id === receiverUserId) ||
+  //     //     (res.sender_id === receiverUserId &&
+  //     //       res.receiver_id === loggedInUserId)
+  //     // );
+  //     // setUserChat(userChats);
+  //   } catch (error) {
+  //     console.error("Error fetching chats:", error);
+  //   }
+  // };
 
   const fetchChats = async () => {
     try {
@@ -97,30 +144,53 @@ const Message = (props) => {
           withCredentials: true,
         }
       );
-      // getUserDetails([loggedInUserId, response?.data?.result[0]?.receiver_id]);
       setMessages(response.data.result || []);
-      // // console.log("getUserChat", responseData.result);
-      // const userChats = response.data.result.filter(
-      //   (res) =>
-      //     (res.sender_id === loggedInUserId &&
-      //       res.receiver_id === receiverUserId) ||
-      //     (res.sender_id === receiverUserId &&
-      //       res.receiver_id === loggedInUserId)
-      // );
-      // setUserChat(userChats);
     } catch (error) {
       console.error("Error fetching chats:", error);
     }
   };
+  
+
+  // const sendMessage = async () => {
+  //   if (message.trim() !== "") {
+  //     try {
+  //       console.log("Sending message:", message);
+
+  //       socket.emit("message", {
+  //         sender_id: loggedInUserId,
+  //         receiver_id: receiverUserId,
+  //         message: message,
+  //       });
+  //       await axios.post(
+  //         "http://localhost:3000/directConnect/send-chat",
+  //         {
+  //           sender_id: loggedInUserId,
+  //           receiver_id: receiverUserId,
+  //           message: message,
+  //           sender_email: "sender@gmail.com",
+  //           receiver_email: "receiver@gmail.com",
+  //         },
+  //         {
+  //           withCredentials: true,
+  //           headers: {
+  //             "Content-Type": "application/json",
+  //           },
+  //         }
+  //       );
+  //       setMessages((prevMessages) => [...prevMessages, message]);
+  //       setMessage("");
+  //       fetchChats();
+  //     } catch (error) {
+  //       console.error("Error saving message:", error);
+  //     }
+  //   }
+  // };
 
   const sendMessage = async () => {
     if (message.trim() !== "") {
       try {
-        socket.emit("message", {
-          sender_id: loggedInUserId,
-          receiver_id: receiverUserId,
-          message: message,
-        });
+        console.log("Sending message:", message);
+  
         await axios.post(
           "http://localhost:3000/directConnect/send-chat",
           {
@@ -137,14 +207,14 @@ const Message = (props) => {
             },
           }
         );
-        setMessages((prevMessages) => [...prevMessages, message]);
         setMessage("");
-        fetchChats();
+        fetchChats(); // Fetch messages after sending a message
       } catch (error) {
         console.error("Error saving message:", error);
       }
     }
   };
+  
   const getUserDetails = async (userIds) => {
     const url = `http://localhost:3000/learner/user/v3/search`;
     const requestBody = {
