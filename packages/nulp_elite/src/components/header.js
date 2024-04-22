@@ -88,7 +88,7 @@ function Header() {
               paddingRight: "10px",
             }}
           >
-           {t("MAIN_CONTENT")}{" "}
+           {t('MAIN_CONTENT')}{" "}
           </Link>
         </Box>
         <Box
@@ -198,10 +198,10 @@ function Header() {
                   </MenuItem>
                 </Menu>
             </Box>
-            {/* <InputLabel  id="language-select-label">
+            <InputLabel  id="language-select-label">
               {" "}
               {t("LANGUAGE")}
-            </InputLabel> */}
+            </InputLabel>
  {/* <Box sx={{ minWidth: 120 }}>
       <FormControl fullWidth>
         <InputLabel id="demo-simple-select-label">Age</InputLabel>
@@ -218,7 +218,7 @@ function Header() {
         </Select>
       </FormControl>
     </Box> */}
-    {/* <Box sx={{ minWidth: 120 }}>
+    <Box sx={{ minWidth: 120 }}>
     <InputLabel id="language-select-label">Select language</InputLabel>
 
             <Select
@@ -244,7 +244,7 @@ function Header() {
     {t("HINDI")}
   </MenuItem>
 </Select>
-</Box> */}
+</Box>
 
 
             <Box
