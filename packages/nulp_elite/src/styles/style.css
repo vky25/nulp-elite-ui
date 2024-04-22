@@ -184,9 +184,9 @@ body{
     background: #004367 !important;
     border-radius: none !important;
    }
-   .MuiCard-root{
+   /* .MuiCard-root{
     height: 287px;
-   }
+   } */
  }
 
  .language fieldset{

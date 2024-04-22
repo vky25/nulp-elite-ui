@@ -50,6 +50,7 @@ import SendOtp from "pages/registration/SendOtp"
 import PDFContent from "pages/content/pdf";
 import NoResult from "pages/content/noResultFound";
 import UserPrefPopup from "pages/UserPrefPopup";
+import Terms from "pages/terms";
 
 function App() {
   // const [t] = useTranslation();
@@ -186,7 +187,13 @@ function App() {
       moduleName: "nulp_elite",
       path: "/otp-old",
       component: SendOtp,
-    }, {
+    }, 
+    {
+      moduleName: "nulp_elite",
+      path: "/terms",
+      component: Terms,
+    },
+    {
       moduleName: "nulp_elite",
       path: "/otp",
       component: Otp,
