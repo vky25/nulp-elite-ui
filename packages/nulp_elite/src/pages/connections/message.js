@@ -8,6 +8,7 @@ import {
   DialogTitle,
   DialogContent,
   DialogActions,
+  TextareaAutosize,
 } from "@mui/material";
 import Box from "@mui/material/Box";
 import * as util from "../../services/utilService";
@@ -58,7 +59,7 @@ const useStyles = makeStyles((theme) => ({
     textAlign: "right",
     background: "linear-gradient(180deg, #004367 0%, #102244 100%)",
     color:"#fff",
-    float:"right"
+    // float:"right"
 
   },
   receiverMessage: {
@@ -271,7 +272,7 @@ const Message = (props) => {
 onClose={handleDialogClose}>
         <DialogTitle>Block User</DialogTitle>
         <DialogContent>
-          <TextField
+          <TextareaAutosize
             autoFocus
             margin="dense"
             id="reason"

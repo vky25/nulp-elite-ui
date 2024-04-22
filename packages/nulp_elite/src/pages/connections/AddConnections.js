@@ -767,7 +767,7 @@ const AddConnections = () => {
                   width: "100%",
                   flex: 1,
                   marginRight: "0.5rem",
-                  padding: "0.5rem",
+                  padding: "10px",
                   borderRadius: "4px",
                   border: "1px solid #CACACA",
                 }}
