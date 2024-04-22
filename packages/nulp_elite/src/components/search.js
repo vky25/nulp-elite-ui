@@ -2,18 +2,21 @@ import React, { useState } from "react";
 import { Button } from "@mui/base/Button";
 import Box from "@mui/material/Box";
 
-export default function SearchBox({ onSearch }) {
+export default function SearchBox({ onSearch, domainquery }) {
   const [query, setQuery] = useState("");
+  console.log(domainquery);
 
   const handleSearchClick = () => {
     onSearch(query);
   };
 
   return (
-    <Box style={{ display: "flex", alignItems: "center", marginBottom: "1rem" }}>
+    <Box
+      style={{ display: "flex", alignItems: "center", marginBottom: "1rem" }}
+    >
       <input
         type="text"
-        value={query}
+        value={query || domainquery}
         onChange={(e) => setQuery(e.target.value)}
         placeholder="Search..."
         style={{
