@@ -77,7 +77,7 @@ export default function BoxCard({ items, index ,onClick}) {
                   <Box className="cardCourses"> {items.primaryCategory}</Box>
                   </Typography>
         <Box style={{background:'#fff',padding:'10px',borderRadius:'150px',height:'50px',width:'50px',border:'solid 1px #E1E1E1',position:'absolute',top:'115px',right:'30px',textAlign:'center',zIndex:'999'}}>
-          <img src={items.appIcon ? items.appIcon : require("assets/swm.png")} style={{height:'50px',maxWidth:'100%',objectFit:'contain'}} />
+          <img src={items.appIcon ? items.appIcon : require("assets/default.png")} style={{height:'50px',maxWidth:'100%',objectFit:'contain'}} />
 
           </Box>
 
