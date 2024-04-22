@@ -589,39 +589,6 @@ const AddConnections = () => {
       setIsLoading(false);
     }
   };
-  // const blockChatInvitation = async (userId) => {
-  //   setIsLoading(true);
-  //   setError(null);
-  //   const requestBody = {
-  //     sender_id: userId,
-  //     receiver_id: loggedInUserId,
-  //     reason: "block reason",
-  //   };
-
-  //   const url = `http://localhost:3000/directConnect/block-user`;
-
-  //   try {
-  //     const response = await fetch(url, {
-  //       method: "POST",
-  //       headers: {
-  //         "Content-Type": "application/json",
-  //       },
-  //       body: JSON.stringify(requestBody),
-  //     });
-  //     if (!response.ok) {
-  //       throw new Error("Failed to block chat");
-  //     }
-
-  //     const responseData = await response.json();
-  //     console.log("blockChatInvitation", responseData.result);
-  //     onMyConnection();
-  //     // getConnections();
-  //   } catch (error) {
-  //     setError(error.message);
-  //   } finally {
-  //     setIsLoading(false);
-  //   }
-  // };
 
   const getUserChat = async (userId) => {
     setIsLoading(true);
