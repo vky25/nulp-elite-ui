@@ -9,6 +9,7 @@ import {
   DialogContent,
   DialogActions,
 } from "@mui/material";
+import Box from "@mui/material/Box";
 import * as util from "../../services/utilService";
 const axios = require("axios");
 import { useNavigate } from "react-router-dom";
@@ -17,6 +18,7 @@ import { IconButton, Menu, MenuItem } from "@mui/material";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import MenuIcon from "@mui/icons-material/Menu";
 import BlockIcon from "@mui/icons-material/Block";
+import SendIcon from '@mui/icons-material/Send';
 
 const moment = require("moment");
 const timezone = require("moment-timezone");
@@ -26,13 +28,12 @@ const useStyles = makeStyles((theme) => ({
     flexDirection: "column",
     height: "100vh",
     overflow: "hidden",
-    padding: "16px",
-    backgroundColor: "#f0f0f0",
+    background:"#fff"
   },
   chatHeader: {
     padding: "8px 16px",
-    backgroundColor: "#1976d2",
-    color: "#ffffff",
+    backgroundColor: "#e7e9e9",
+    color: "#000",
     display: "flex",
     alignItems: "center",
     justifyContent: "space-between",
@@ -51,22 +52,24 @@ const useStyles = makeStyles((theme) => ({
     backgroundColor: "#ffffff",
   },
   senderMessage: {
-    alignSelf: "flex-start",
-    backgroundColor: "#d6e4ff",
-    borderRadius: "4px",
+    borderRadius: "5px",
     padding: "8px",
-    margin: "4px 0",
-    maxWidth: "70%",
+    margin: "15px 0",
     textAlign: "right",
+    background: "linear-gradient(180deg, #004367 0%, #102244 100%)",
+    color:"#fff",
+    float:"right"
+
   },
   receiverMessage: {
-    alignSelf: "flex-end",
-    backgroundColor: "#f0f0f0",
-    borderRadius: "8px",
-    padding: "8px",
     margin: "4px 0",
-    maxWidth: "70%",
-    textAlign: "left",
+    padding: "8px",
+    clear: "both",
+    alignSelf: "flex-end",
+    display: "table",
+    borderRadius: "5px",
+    color: "#212121",
+    backgroundColor: "#F1F1F1"
   },
 }));
 
@@ -85,6 +88,7 @@ const Message = (props) => {
   const [reason, setReason] = useState("");
   const [dialogOpen, setDialogOpen] = useState(false);
   const [isBlocked, setIsBlocked] = useState(false); // State to track if user is blocked
+  const [maxWidth, setMaxWidth] = React.useState('md');
 
   useEffect(() => {
     const _userId = util.userId();
@@ -241,12 +245,18 @@ const Message = (props) => {
       <div className={classes.chatHeader}>
         <IconButton onClick={handleGoBack}>
           <ArrowBackIcon />
+          <Box sx={{fontSize:'22px',fontWeight:'600',paddingLeft:'10px'}}>{dataStore.fullName || localStorage.getItem("chatName")}</Box>
+
         </IconButton>
-        <span>{dataStore.fullName || localStorage.getItem("chatName")}</span>
-        <IconButton onClick={handleMenuClick}>
+        <Box onClick={handleBlockUser} disabled={isBlocked} style={{display:'flex',alignItems:'center',fontSize:'18px',cursor:'pointer'}}>
+        <BlockIcon style={{paddingRight:'10px',cursor:'pointer'}} />
+            Block
+        </Box>
+        
+        {/* <IconButton onClick={handleMenuClick}>
           <MenuIcon />
-        </IconButton>
-        <Menu
+        </IconButton> */}
+        {/* <Menu
           anchorEl={anchorEl}
           open={Boolean(anchorEl)}
           onClose={handleMenuClose}
@@ -255,9 +265,10 @@ const Message = (props) => {
             <BlockIcon />
             Block
           </MenuItem>
-        </Menu>
+        </Menu> */}
       </div>
-      <Dialog open={dialogOpen} onClose={handleDialogClose}>
+      <Dialog open={dialogOpen}         maxWidth={maxWidth}
+onClose={handleDialogClose}>
         <DialogTitle>Block User</DialogTitle>
         <DialogContent>
           <TextField
@@ -272,16 +283,38 @@ const Message = (props) => {
           />
         </DialogContent>
         <DialogActions>
-          <Button onClick={handleDialogClose} color="primary">
+          <Button onClick={handleDialogClose}  variant="outlined"
+                          style={{
+                            borderRadius: "10px",
+                            color: "#004367",
+                            padding: "10px 12px",
+                            margin: "0 10px",
+                            fontWeight: "500",
+                            fontSize: "12px",
+                            border: "solid 1px #efefea00",
+                            width: "50%",
+                          }}>
             Cancel
           </Button>
-          <Button onClick={handleBlockUserConfirmed} color="primary">
+          <Button onClick={handleBlockUserConfirmed} 
+          style={{
+            background: "#004367",
+            borderRadius: "10px",
+            color: "#fff",
+            padding: "10px 12px",
+            margin: "0 10px",
+            fontWeight: "500",
+            fontSize: "12px",
+            border: "solid 1px #004367",
+            width: "50%",
+          }}
+          >
             Block
           </Button>
         </DialogActions>
       </Dialog>
 
-      <Alert severity="info" style={{ marginBottom: "10px" }}>
+      <Alert severity="info" style={{ margin: "10px 0" }}>
         Your chat will disappear after 7 Days.
       </Alert>
       <div className={classes.chat}>
@@ -318,17 +351,19 @@ const Message = (props) => {
               variant="outlined"
               placeholder="Type your message..."
               fullWidth
+              style={{background:'#fff',border:'none'}}
               value={message}
               onChange={(e) => setMessage(e.target.value)}
               disabled={isBlocked} // Disable input field if user is blocked
             />
             <Button
               variant="contained"
+              style={{padding:'15px'}}
               color="primary"
               onClick={sendMessage}
               disabled={isBlocked} // Disable send button if user is blocked
             >
-              Send
+              <SendIcon/>
             </Button>
           </div>
         </>

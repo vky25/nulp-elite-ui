@@ -31,6 +31,7 @@ import { useStore } from "configs/zustandStore";
 import { Link as RouterLink } from "react-router-dom";
 import Pagination from "@mui/material/Pagination";
 import Popover from "@mui/material/Popover";
+import { Container } from "@mui/material";
 
 // Define modal styles
 const useStyles = makeStyles((theme) => ({
@@ -746,66 +747,132 @@ const AddConnections = () => {
   return (
     <Box>
       <Header />
-      <Box textAlign="center" padding="10">
-        <Box sx={{ width: "100%", typography: "body1" }}>
-          {/* <div style={{ display: 'flex', alignItems: 'center', marginBottom: '1rem' }}>
-      <input type="text" placeholder="Search..." style={{ flex: 1, marginRight: '0.5rem', padding: '0.5rem', borderRadius: '4px', border: '1px solid #CACACA' }} />
-      <button style={{ padding:'11px 16px 11px 16px', borderRadius: '4px', backgroundColor: '#004367', color: 'white', border: '1px', cursor: 'pointer' ,fontSize:'12px'}}>Search</button>
-    </div> */}
-          <Box
-            style={{
-              display: "flex",
-              alignItems: "center",
-              marginBottom: "1rem",
-            }}
-          >
-            <input
-              label="Search for a user..."
-              type="text"
-              value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
+      <Container  maxWidth="xxl" role="main" className="container-pb">
+        <Box textAlign="center" padding="10" style={{minHeight:'500px'}}>
+          <Box sx={{ width: "100%", typography: "body1" }}>
+            {/* <div style={{ display: 'flex', alignItems: 'center', marginBottom: '1rem' }}>
+        <input type="text" placeholder="Search..." style={{ flex: 1, marginRight: '0.5rem', padding: '0.5rem', borderRadius: '4px', border: '1px solid #CACACA' }} />
+        <button style={{ padding:'11px 16px 11px 16px', borderRadius: '4px', backgroundColor: '#004367', color: 'white', border: '1px', cursor: 'pointer' ,fontSize:'12px'}}>Search</button>
+      </div> */}
+            <Box
               style={{
-                width: "100%",
-                flex: 1,
-                marginRight: "0.5rem",
-                padding: "0.5rem",
-                borderRadius: "4px",
-                border: "1px solid #CACACA",
+                display: "flex",
+                alignItems: "center",
+                marginBottom: "1rem",
+                marginTop:'1rem'
               }}
-            />
-            <Button
-              style={{
-                padding: "11px 9px",
-                borderRadius: "4px",
-                backgroundColor: "#004367",
-                color: "white",
-                border: "1px",
-                cursor: "pointer",
-                fontSize: "12px",
-              }}
-              onClick={(e) => {
-                onUserQuerySearch();
-                handlePopoverClick(e);
-              }}
+              className="search-data"
             >
-              Search
-            </Button>
-          </Box>
-          <div>
-            <Popover
-              id={id}
-              open={openPopover}
-              anchorEl={anchorEl}
-              onClose={handlePopoverClose}
-              anchorOrigin={{
-                vertical: "bottom",
-                horizontal: "left",
-              }}
-            >
-              <Typography sx={{ p: 2 }}>
-                {userQuerySearchData &&
-                  userQuerySearchData?.length > 0 &&
-                  userQuerySearchData?.map((item) => (
+              <input
+                label="Search for a user..."
+                type="text"
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                style={{
+                  width: "100%",
+                  flex: 1,
+                  marginRight: "0.5rem",
+                  padding: "0.5rem",
+                  borderRadius: "4px",
+                  border: "1px solid #CACACA",
+                }}
+              />
+              <Button
+                style={{
+                  padding: "11px 9px",
+                  borderRadius: "4px",
+                  backgroundColor: "#004367",
+                  color: "white",
+                  border: "1px",
+                  cursor: "pointer",
+                  fontSize: "12px",
+                }}
+                onClick={(e) => {
+                  onUserQuerySearch();
+                  handlePopoverClick(e);
+                }}
+              >
+                Search
+              </Button>
+            </Box>
+            <div>
+              <Popover
+                id={id}
+                open={openPopover}
+                anchorEl={anchorEl}
+                onClose={handlePopoverClose}
+                anchorOrigin={{
+                  vertical: "bottom",
+                  horizontal: "left",
+                }}
+              >
+                <Typography sx={{ p: 2 }}>
+                  {userQuerySearchData &&
+                    userQuerySearchData?.length > 0 &&
+                    userQuerySearchData?.map((item) => (
+                      <List sx={{}} style={{ color: "gray" }}>
+                        <ListItem>
+                          <ListItemText
+                            primary={`${item.firstName}${
+                              item.lastName ? ` ${item.lastName}` : ""
+                            }`}
+                            secondary="Designation"
+                            onClick={() => onClickSearchedUser(item.userId)}
+                          />
+                        </ListItem>
+                        <Divider />
+                      </List>
+                    ))}
+                  {(!userQuerySearchData || userQuerySearchData.length === 0) && (
+                    <Box>
+                      <p>No users found</p>
+                    </Box>
+                  )}
+                </Typography>
+              </Popover>
+            </div>
+            <TabContext value={value}>
+              <Box sx={{ borderBottom: 1, borderColor: "divider" }}>
+                <TabList
+                  onChange={handleChange}
+                  aria-label="lab API tabs example"
+                >
+                  <Tab
+                    label="My Connections"
+                    value="1"
+                    style={{ fontSize: "12px", color: "#484848" }}
+                    onClick={() => {
+                      handleTabClick("Tab1");
+                      setCurrentPage(1);
+                      onMyConnection();
+                    }}
+                  />
+                  <Tab
+                    label="Add New"
+                    value="2"
+                    style={{ fontSize: "12px", color: "#484848" }}
+                    onClick={() => {
+                      handleTabClick("Tab2");
+                      setCurrentPage(1);
+                      handleSearch();
+                    }}
+                  />
+                </TabList>
+              </Box>
+              <TabPanel value="1" style={{ padding: "0" }}>
+                {invitationReceiverByUser &&
+                  invitationReceiverByUser.length === 0 &&
+                  invitationAcceptedUsers &&
+                  invitationAcceptedUsers.length === 0 &&
+                  invitationNotAcceptedUsers &&
+                  invitationNotAcceptedUsers.length === 0 && (
+                    <Box>
+                      <p>No users found</p>
+                    </Box>
+                  )}
+
+                {invitationReceiverByUser &&
+                  invitationReceiverByUser?.map((item) => (
                     <List sx={{}} style={{ color: "gray" }}>
                       <ListItem>
                         <ListItemText
@@ -813,156 +880,230 @@ const AddConnections = () => {
                             item.lastName ? ` ${item.lastName}` : ""
                           }`}
                           secondary="Designation"
-                          onClick={() => onClickSearchedUser(item.userId)}
+                        />
+                      </ListItem>
+                      <div
+                        style={{
+                          display: "flex",
+                          justifyContent: "flex-end",
+                          marginTop: "10px",
+                        }}
+                      >
+                        <Link
+                          href="#"
+                          underline="none"
+                          color="primary"
+                          onClick={() => acceptChat(item.userId)}
+                          style={{ marginLeft: "10px" }}
+                        >
+                          <CheckCircleOutlineIcon />
+                        </Link>
+                        <span style={{ margin: "0 5px" }}></span>
+                        <Link
+                          href="#"
+                          underline="none"
+                          color="secondary"
+                          onClick={() => rejectChat(item.userId)}
+                        >
+                          <CancelOutlinedIcon />
+                        </Link>
+                      </div>
+
+                      <Divider />
+                    </List>
+                  ))}
+                {invitationAcceptedUsers &&
+                  invitationAcceptedUsers?.map((item) => (
+                    <List sx={{}} style={{ color: "green" }}>
+                      <ListItem
+                        component={RouterLink}
+                        to={{
+                          pathname: "/message",
+                        }}
+                      >
+                        <ListItemText
+                          primary={`${item.firstName}${
+                            item.lastName ? ` ${item.lastName}` : ""
+                          }`}
+                          secondary="Designation"
+                          onClick={() =>
+                            handleAcceptedChatOpen(
+                              item.userId,
+                              `${item.firstName}${
+                                item.lastName ? ` ${item.lastName}` : ""
+                              }`
+                            )
+                          }
                         />
                       </ListItem>
                       <Divider />
                     </List>
                   ))}
-                {(!userQuerySearchData || userQuerySearchData.length === 0) && (
-                  <Box>
-                    <p>No users found</p>
-                  </Box>
-                )}
-              </Typography>
-            </Popover>
-          </div>
-          <TabContext value={value}>
-            <Box sx={{ borderBottom: 1, borderColor: "divider" }}>
-              <TabList
-                onChange={handleChange}
-                aria-label="lab API tabs example"
-              >
-                <Tab
-                  label="My Connections"
-                  value="1"
-                  style={{ fontSize: "12px", color: "#484848" }}
-                  onClick={() => {
-                    handleTabClick("Tab1");
-                    setCurrentPage(1);
-                    onMyConnection();
-                  }}
-                />
-                <Tab
-                  label="Add New"
-                  value="2"
-                  style={{ fontSize: "12px", color: "#484848" }}
-                  onClick={() => {
-                    handleTabClick("Tab2");
-                    setCurrentPage(1);
-                    handleSearch();
-                  }}
-                />
-              </TabList>
-            </Box>
-            <TabPanel value="1" style={{ padding: "0" }}>
-              {invitationReceiverByUser &&
-                invitationReceiverByUser.length === 0 &&
-                invitationAcceptedUsers &&
-                invitationAcceptedUsers.length === 0 &&
-                invitationNotAcceptedUsers &&
-                invitationNotAcceptedUsers.length === 0 && (
-                  <Box>
-                    <p>No users found</p>
-                  </Box>
-                )}
 
-              {invitationReceiverByUser &&
-                invitationReceiverByUser?.map((item) => (
-                  <List sx={{}} style={{ color: "gray" }}>
-                    <ListItem>
-                      <ListItemText
-                        primary={`${item.firstName}${
-                          item.lastName ? ` ${item.lastName}` : ""
-                        }`}
-                        secondary="Designation"
-                      />
-                    </ListItem>
-                    <div
-                      style={{
+                {invitationNotAcceptedUsers &&
+                  invitationNotAcceptedUsers?.map((item) => (
+                    <List
+                      sx={{}}
+                      style={{ fontSize:'14px' }}
+                      onClick={() => userClick(item)}
+                    >
+                      <ListItem>
+                        <ListItemText
+                          primary={`${item.firstName}${
+                            item.lastName ? ` ${item.lastName}` : ""
+                          }`}
+                          secondary="Designation"
+                        />
+                      </ListItem>
+
+                      <Divider />
+                    </List>
+                  ))}
+                <div>
+                  {showChatModal && (
+                    <Modal
+                      open={showChatModal}
+                      onClose={handleCloseModal}
+                      aria-labelledby="modal-title"
+                      aria-describedby="modal-desc"
+                      className="sx-bottom"
+                      sx={{
                         display: "flex",
-                        justifyContent: "flex-end",
-                        marginTop: "10px",
+                        justifyContent: "center",
+                        alignItems: "flex-end",
+                        pt: "10vh",
+                        p: "0",
                       }}
                     >
-                      <Link
-                        href="#"
-                        underline="none"
-                        color="primary"
-                        onClick={() => acceptChat(item.userId)}
-                        style={{ marginLeft: "10px" }}
-                      >
-                        <CheckCircleOutlineIcon />
-                      </Link>
-                      <span style={{ margin: "0 5px" }}></span>
-                      <Link
-                        href="#"
-                        underline="none"
-                        color="secondary"
-                        onClick={() => rejectChat(item.userId)}
-                      >
-                        <CancelOutlinedIcon />
-                      </Link>
-                    </div>
-
-                    <Divider />
-                  </List>
-                ))}
-              {invitationAcceptedUsers &&
-                invitationAcceptedUsers?.map((item) => (
-                  <List sx={{}} style={{ color: "green" }}>
-                    <ListItem
-                      component={RouterLink}
-                      to={{
-                        pathname: "/message",
-                      }}
+                      <ModalContent sx={{ width: 400 }} style={{}}>
+                        <div style={{ textAlign: "center" }}>
+                          <h2
+                            style={{
+                              fontSize: "14px",
+                              textAlign: "center",
+                              padding: "13px",
+                            }}
+                          >
+                            {t("INVITATION_NOT_ACCEPTED")}
+                          </h2>
+                          <Button
+                            onClick={(e) => {
+                              setShowChatModal(false);
+                            }}
+                            style={{
+                              background: "#004367",
+                              border: "solid 1px #004367",
+                              borderRadius: "10px",
+                              color: "#fff",
+                              padding: "10px 12px",
+                              margin: "0 10px",
+                              fontWeight: "500",
+                              fontSize: "12px",
+                              width: "50%",
+                            }}
+                          >
+                            {t("CLOSE")}
+                          </Button>
+                        </div>
+                      </ModalContent>
+                    </Modal>
+                  )}
+                </div>
+              </TabPanel>
+              <TabPanel value="2">
+                {userSearchData &&
+                  userSearchData?.map((item) => (
+                    <List
+                      key={item.id} // Add key prop to each List element
+                      sx={{ fontSize: "14px" }} // Add styling here if needed
+                      onClick={() => handleUserClick(item)}
                     >
-                      <ListItemText
-                        primary={`${item.firstName}${
-                          item.lastName ? ` ${item.lastName}` : ""
-                        }`}
-                        secondary="Designation"
-                        onClick={() =>
-                          handleAcceptedChatOpen(
-                            item.userId,
-                            `${item.firstName}${
-                              item.lastName ? ` ${item.lastName}` : ""
-                            }`
-                          )
-                        }
-                      />
-                    </ListItem>
-                    <Divider />
-                  </List>
-                ))}
+                      <ListItem>
+                        <ListItemText
+                          primary={`${item.firstName}${
+                            item.lastName ? ` ${item.lastName}` : ""
+                          }`}
+                          secondary="Designation"
+                        />
+                        <Link
+                          href="#"
+                          underline="none"
+                          color="primary"
+                          onClick={handleOpen}
+                          style={{
+                            fontSize: "14px",
+                            color: "#004367",
+                            fontWeight: "600",
+                          }}
+                        >
+                          Invite
+                        </Link>
+                      </ListItem>
+                      <Divider />
+                      {/* <Box
+              style={{
+                display: "flex",
+                alignItems: "center",
+                flexDirection: "column", // Added to align items vertically
+              }}
+            >
+              <TextField
+                label="Search for a user..."
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                style={{
+                  width: "100%",
+                  marginBottom: "1rem",
+                }}
+              />
+              <Button
+                style={{
+                  padding: "11px 9px",
+                  borderRadius: "4px",
+                  backgroundColor: "#004367",
+                  color: "white",
+                  border: "1px",
+                  cursor: "pointer",
+                  fontSize: "12px",
+                }}
+                onClick={handleSearch}
+              >
+                Search
+              </Button>
+              {!isLoading && !error && (
+                <List>
+                  {filteredUsers &&
+                    filteredUsers.map((user, index) => (
+                      <React.Fragment key={index}>
+                        <ListItem>
+                          <ListItemText
+                            primary={`Name Surname: ${user.firstName} ${user.lastName}`}
+                            secondary={`Designation: ${user.designation}`}
+                          />
+                        </ListItem>
+                        <Divider />
+                      </React.Fragment>
+                    ))}
+                </List>
+              )}
+              {isLoading && <Typography>Loading...</Typography>}
+              {error && <Typography>Error: {error}</Typography>}
+            </Box> */}
+                    </List>
+                  ))}
 
-              {invitationNotAcceptedUsers &&
-                invitationNotAcceptedUsers?.map((item) => (
-                  <List
-                    sx={{}}
-                    style={{ color: "red" }}
-                    onClick={() => userClick(item)}
-                  >
-                    <ListItem>
-                      <ListItemText
-                        primary={`${item.firstName}${
-                          item.lastName ? ` ${item.lastName}` : ""
-                        }`}
-                        secondary="Designation"
-                      />
-                    </ListItem>
-
-                    <Divider />
-                  </List>
-                ))}
-              <div>
-                {showChatModal && (
+                <Pagination
+                  count={totalPages}
+                  page={currentPage}
+                  onChange={handlePageChange}
+                />
+                <div>
                   <Modal
-                    open={showChatModal}
-                    onClose={handleCloseModal}
                     aria-labelledby="modal-title"
                     aria-describedby="modal-desc"
+                    open={open}
                     className="sx-bottom"
+                    onClose={() => setOpen(false)}
                     sx={{
                       display: "flex",
                       justifyContent: "center",
@@ -972,301 +1113,112 @@ const AddConnections = () => {
                     }}
                   >
                     <ModalContent sx={{ width: 400 }} style={{}}>
-                      <div style={{ textAlign: "center" }}>
-                        <h2
+                      <h2
+                        id="unstyled-modal-title"
+                        className="modal-title"
+                        style={{
+                          paddingTop: "10px",
+                          paddingRight: "10px",
+                          paddingLeft: "10px",
+                          paddingBottom: "10px", // Changed to paddingBottom to avoid duplication
+                          backgroundColor: "#004367",
+                          color: "white",
+                          borderRadius: "4px", // Changed to "4px" from "md" for borderRadius
+                        }}
+                      >
+                        {selectedUser && (
+                          <div
+                            style={{
+                              fontSize: "16px",
+                              lineHeight: "1.6",
+                              fontWeight: "500",
+                            }}
+                          >
+                            {selectedUser?.firstName}
+                            {selectedUser?.lastName}
+                          </div>
+                        )}
+                        {selectedUser && (
+                          <div
+                            style={{
+                              fontSize: "15px",
+                              paddingBottom: "10px",
+                              fontWeight: "400",
+                            }}
+                          >
+                            Designation:
+                          </div>
+                        )}
+                      </h2>
+
+                      {!showChat && (
+                        <p
                           style={{
-                            fontSize: "14px",
-                            textAlign: "center",
-                            padding: "13px",
+                            fontSize: "12px",
+                            paddingLeft: "10px",
+                            paddingRight: "10px",
                           }}
+                          id="unstyled-modal-description"
+                          className="modal-description"
                         >
-                          {t("INVITATION_NOT_ACCEPTED")}
-                        </h2>
+                          <Box
+                            style={{
+                              fontSize: "12px",
+                              color: "#484848",
+                              paddingBottom: "15px",
+                            }}
+                          >
+                            {selectedUser.firstName} {selectedUser.lastName} is a
+                            manager with the department of Revenue and taxes and
+                            has actively contributed to the growth and
+                            authenticity of the knowledge curated for the
+                            betterment of the department.
+                          </Box>
+                          <Box>
+                            Connect with them to get insights on what they do or
+                            simply answers to your question!
+                          </Box>
+                        </p>
+                      )}
+                      {showChat && (
+                        <div>
+                          <TextField
+                            multiline
+                            rows={4} // You can adjust the number of rows as needed
+                            value={textValue}
+                            onChange={handleTextareaChange}
+                            placeholder="Enter your text here..."
+                            fullWidth
+                            sx={{ fontSize: "13px" }}
+                          />
+                        </div>
+                      )}
+                      <Box
+                        style={{
+                          paddingBottom: "30px",
+                          display: "flex",
+                          justifyContent: "space-between",
+                          flexDirection: "row",
+                        }}
+                      >
                         <Button
-                          onClick={(e) => {
-                            setShowChatModal(false);
-                          }}
+                          variant="outlined"
                           style={{
-                            background: "#004367",
-                            border: "solid 1px #004367",
                             borderRadius: "10px",
-                            color: "#fff",
+                            color: "#004367",
                             padding: "10px 12px",
                             margin: "0 10px",
                             fontWeight: "500",
                             fontSize: "12px",
+                            border: "solid 1px #efefea00",
                             width: "50%",
                           }}
+                          onClick={handleClose}
                         >
-                          {t("CLOSE")}
+                          Cancel
                         </Button>
-                      </div>
-                    </ModalContent>
-                  </Modal>
-                )}
-              </div>
-            </TabPanel>
-            <TabPanel value="2">
-              {userSearchData &&
-                userSearchData?.map((item) => (
-                  <List
-                    key={item.id} // Add key prop to each List element
-                    sx={{ fontSize: "14px" }} // Add styling here if needed
-                    onClick={() => handleUserClick(item)}
-                  >
-                    <ListItem>
-                      <ListItemText
-                        primary={`${item.firstName}${
-                          item.lastName ? ` ${item.lastName}` : ""
-                        }`}
-                        secondary="Designation"
-                      />
-                      <Link
-                        href="#"
-                        underline="none"
-                        color="primary"
-                        onClick={handleOpen}
-                        style={{
-                          fontSize: "14px",
-                          color: "#004367",
-                          fontWeight: "600",
-                        }}
-                      >
-                        Invite
-                      </Link>
-                    </ListItem>
-                    <Divider />
-                    {/* <Box
-            style={{
-              display: "flex",
-              alignItems: "center",
-              flexDirection: "column", // Added to align items vertically
-            }}
-          >
-            <TextField
-              label="Search for a user..."
-              value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
-              style={{
-                width: "100%",
-                marginBottom: "1rem",
-              }}
-            />
-            <Button
-              style={{
-                padding: "11px 9px",
-                borderRadius: "4px",
-                backgroundColor: "#004367",
-                color: "white",
-                border: "1px",
-                cursor: "pointer",
-                fontSize: "12px",
-              }}
-              onClick={handleSearch}
-            >
-              Search
-            </Button>
-            {!isLoading && !error && (
-              <List>
-                {filteredUsers &&
-                  filteredUsers.map((user, index) => (
-                    <React.Fragment key={index}>
-                      <ListItem>
-                        <ListItemText
-                          primary={`Name Surname: ${user.firstName} ${user.lastName}`}
-                          secondary={`Designation: ${user.designation}`}
-                        />
-                      </ListItem>
-                      <Divider />
-                    </React.Fragment>
-                  ))}
-              </List>
-            )}
-            {isLoading && <Typography>Loading...</Typography>}
-            {error && <Typography>Error: {error}</Typography>}
-          </Box> */}
-                  </List>
-                ))}
 
-              <Pagination
-                count={totalPages}
-                page={currentPage}
-                onChange={handlePageChange}
-              />
-              <div>
-                <Modal
-                  aria-labelledby="modal-title"
-                  aria-describedby="modal-desc"
-                  open={open}
-                  className="sx-bottom"
-                  onClose={() => setOpen(false)}
-                  sx={{
-                    display: "flex",
-                    justifyContent: "center",
-                    alignItems: "flex-end",
-                    pt: "10vh",
-                    p: "0",
-                  }}
-                >
-                  <ModalContent sx={{ width: 400 }} style={{}}>
-                    <h2
-                      id="unstyled-modal-title"
-                      className="modal-title"
-                      style={{
-                        paddingTop: "10px",
-                        paddingRight: "10px",
-                        paddingLeft: "10px",
-                        paddingBottom: "10px", // Changed to paddingBottom to avoid duplication
-                        backgroundColor: "#004367",
-                        color: "white",
-                        borderRadius: "4px", // Changed to "4px" from "md" for borderRadius
-                      }}
-                    >
-                      {selectedUser && (
-                        <div
-                          style={{
-                            fontSize: "16px",
-                            lineHeight: "1.6",
-                            fontWeight: "500",
-                          }}
-                        >
-                          {selectedUser?.firstName}
-                          {selectedUser?.lastName}
-                        </div>
-                      )}
-                      {selectedUser && (
-                        <div
-                          style={{
-                            fontSize: "15px",
-                            paddingBottom: "10px",
-                            fontWeight: "400",
-                          }}
-                        >
-                          Designation:
-                        </div>
-                      )}
-                    </h2>
-
-                    {!showChat && (
-                      <p
-                        style={{
-                          fontSize: "12px",
-                          paddingLeft: "10px",
-                          paddingRight: "10px",
-                        }}
-                        id="unstyled-modal-description"
-                        className="modal-description"
-                      >
-                        <Box
-                          style={{
-                            fontSize: "12px",
-                            color: "#484848",
-                            paddingBottom: "15px",
-                          }}
-                        >
-                          {selectedUser.firstName} {selectedUser.lastName} is a
-                          manager with the department of Revenue and taxes and
-                          has actively contributed to the growth and
-                          authenticity of the knowledge curated for the
-                          betterment of the department.
-                        </Box>
-                        <Box>
-                          Connect with them to get insights on what they do or
-                          simply answers to your question!
-                        </Box>
-                      </p>
-                    )}
-                    {showChat && (
-                      <div>
-                        <TextField
-                          multiline
-                          rows={4} // You can adjust the number of rows as needed
-                          value={textValue}
-                          onChange={handleTextareaChange}
-                          placeholder="Enter your text here..."
-                          fullWidth
-                          sx={{ fontSize: "13px" }}
-                        />
-                      </div>
-                    )}
-                    <Box
-                      style={{
-                        paddingBottom: "30px",
-                        display: "flex",
-                        justifyContent: "space-between",
-                        flexDirection: "row",
-                      }}
-                    >
-                      <Button
-                        variant="outlined"
-                        style={{
-                          borderRadius: "10px",
-                          color: "#004367",
-                          padding: "10px 12px",
-                          margin: "0 10px",
-                          fontWeight: "500",
-                          fontSize: "12px",
-                          border: "solid 1px #efefea00",
-                          width: "50%",
-                        }}
-                        onClick={handleClose}
-                      >
-                        Cancel
-                      </Button>
-
-                      <Button
-                        style={{
-                          background: "#004367",
-                          borderRadius: "10px",
-                          color: "#fff",
-                          padding: "10px 12px",
-                          margin: "0 10px",
-                          fontWeight: "500",
-                          fontSize: "12px",
-                          border: "solid 1px #004367",
-                          width: "50%",
-                        }}
-                        onClick={showChat ? handleSendClick : toggleChat}
-                      >
-                        {buttonText}
-                      </Button>
-                    </Box>
-                  </ModalContent>
-                </Modal>
-
-                {showModal && (
-                  <Modal
-                    open={showModal}
-                    onClose={handleCloseModal}
-                    aria-labelledby="modal-title"
-                    aria-describedby="modal-desc"
-                    className="sx-bottom"
-                    sx={{
-                      display: "flex",
-                      justifyContent: "center",
-                      alignItems: "flex-end",
-                      pt: "10vh",
-                      p: "0",
-                    }}
-                  >
-                    <ModalContent
-                      sx={{ width: 400, bottom: "30px" }}
-                      style={{}}
-                    >
-                      <div style={{ padding: "10px", textAlign: "center" }}>
-                        <h2
-                          style={{
-                            fontSize: "14px",
-                            textAlign: "center",
-                            padding: "13px",
-                          }}
-                        >
-                          {t("INVITATION_SEND_SUCCESSFULLY")}
-                        </h2>
                         <Button
-                          onClick={(e) => {
-                            setShowModal(false);
-                          }}
                           style={{
                             background: "#004367",
                             borderRadius: "10px",
@@ -1275,20 +1227,73 @@ const AddConnections = () => {
                             margin: "0 10px",
                             fontWeight: "500",
                             fontSize: "12px",
-                            width: "40%",
+                            border: "solid 1px #004367",
+                            width: "50%",
                           }}
+                          onClick={showChat ? handleSendClick : toggleChat}
                         >
-                          {t("CLOSE")}
+                          {buttonText}
                         </Button>
-                      </div>
+                      </Box>
                     </ModalContent>
                   </Modal>
-                )}
-              </div>
-            </TabPanel>
-          </TabContext>
+
+                  {showModal && (
+                    <Modal
+                      open={showModal}
+                      onClose={handleCloseModal}
+                      aria-labelledby="modal-title"
+                      aria-describedby="modal-desc"
+                      className="sx-bottom"
+                      sx={{
+                        display: "flex",
+                        justifyContent: "center",
+                        alignItems: "flex-end",
+                        pt: "10vh",
+                        p: "0",
+                      }}
+                    >
+                      <ModalContent
+                        sx={{ width: 400, bottom: "30px" }}
+                        style={{}}
+                      >
+                        <div style={{ padding: "10px", textAlign: "center" }}>
+                          <h2
+                            style={{
+                              fontSize: "14px",
+                              textAlign: "center",
+                              padding: "13px",
+                            }}
+                          >
+                            {t("INVITATION_SEND_SUCCESSFULLY")}
+                          </h2>
+                          <Button
+                            onClick={(e) => {
+                              setShowModal(false);
+                            }}
+                            style={{
+                              background: "#004367",
+                              borderRadius: "10px",
+                              color: "#fff",
+                              padding: "10px 12px",
+                              margin: "0 10px",
+                              fontWeight: "500",
+                              fontSize: "12px",
+                              width: "40%",
+                            }}
+                          >
+                            {t("CLOSE")}
+                          </Button>
+                        </div>
+                      </ModalContent>
+                    </Modal>
+                  )}
+                </div>
+              </TabPanel>
+            </TabContext>
+          </Box>
         </Box>
-      </Box>
+      </Container>
       <Footer />
     </Box>
   );
