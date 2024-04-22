@@ -15,7 +15,8 @@ import TextField from "@mui/material/TextField";
 import Divider from "@mui/material/Divider";
 import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
-import { useLocation } from "react-router-dom";
+import Search from "components/search";
+import { useLocation, Navigate } from "react-router-dom";
 import * as util from "../../services/utilService";
 import Dialog from "@material-ui/core/Dialog";
 import DialogTitle from "@material-ui/core/DialogTitle";
@@ -26,6 +27,8 @@ import Footer from "components/Footer";
 import CheckCircleOutlineIcon from "@mui/icons-material/CheckCircleOutline";
 import CancelOutlinedIcon from "@mui/icons-material/CancelOutlined";
 import { useTranslation } from "react-i18next";
+import { useStore } from "configs/zustandStore";
+import { Link as RouterLink } from "react-router-dom";
 import Pagination from "@mui/material/Pagination";
 import Popover from "@mui/material/Popover";
 
@@ -82,6 +85,7 @@ const AddConnections = () => {
   const [showChatModal, setShowChatModal] = useState(false);
   const [selectedUserName, setSelectedUserName] = useState(false);
   const { t } = useTranslation();
+  const setData = useStore((state) => state.setData);
   const [totalPages, setTotalPages] = useState(1);
   const [userQuerySearchData, setUserQuerySearchData] = useState();
   const [anchorEl, setAnchorEl] = React.useState(null);
@@ -503,10 +507,18 @@ const AddConnections = () => {
   };
 
   const handleAcceptedChatOpen = (userId, name) => {
+    const dataToSend = {
+      userId: userId,
+      fullName: name,
+    };
+    localStorage.setItem("userId", userId);
+    localStorage.setItem("chatName", name);
+    setData(dataToSend);
     setSelectedUserName(name);
     getUserChat(userId);
     setIsModalOpen(true);
     setOpen(true);
+    // return <Navigate to={`/message`} />;
   };
 
   const handleCloseChatHistoryModal = () => {
@@ -899,7 +911,12 @@ const AddConnections = () => {
               {invitationAcceptedUsers &&
                 invitationAcceptedUsers?.map((item) => (
                   <List sx={{}} style={{ color: "green" }}>
-                    <ListItem>
+                    <ListItem
+                      component={RouterLink}
+                      to={{
+                        pathname: "/message",
+                      }}
+                    >
                       <ListItemText
                         primary={`${item.firstName}${
                           item.lastName ? ` ${item.lastName}` : ""
@@ -915,61 +932,6 @@ const AddConnections = () => {
                         }
                       />
                     </ListItem>
-                    <div>
-                      <Dialog open={open} onClick={handleCloseModal}>
-                        <DialogTitle>{selectedUserName}</DialogTitle>
-                        {/* <TriggerButton
-                          type="button"
-                          variant="contained"
-                          color="primary"
-                          onClick={blockChatInvitation}
-                          style={{ marginLeft: "10px" }}
-                        >
-                          Block User
-                        </TriggerButton> */}
-                        <DialogContent dividers>
-                          {userChat?.map((msg, index) => (
-                            <div
-                              style={{ maxHeight: "300px", overflowY: "auto" }}
-                            >
-                              <p
-                                style={{
-                                  marginLeft:
-                                    msg.sender_id === loggedInUserId && "30px",
-                                }}
-                              >
-                                <Typography
-                                  key={index}
-                                  variant="body1"
-                                  style={{ marginBottom: "8px" }}
-                                >
-                                  <strong>{msg?.message}</strong>{" "}
-                                  <span style={{ fontSize: "x-small" }}>
-                                    {new Intl.DateTimeFormat("en-US", {
-                                      year: "numeric",
-                                      month: "2-digit",
-                                      day: "2-digit",
-                                      hour: "numeric",
-                                      minute: "numeric",
-                                      second: "numeric",
-                                      timeZone: "UTC", // Set the time zone if necessary
-                                    }).format(new Date(msg?.timestamp))}
-                                  </span>
-                                </Typography>
-                              </p>
-                            </div>
-                          ))}
-                        </DialogContent>
-                        <DialogActions>
-                          <Button
-                            onClick={handleCloseChatHistoryModal}
-                            color="primary"
-                          >
-                            {t("CLOSE")}
-                          </Button>
-                        </DialogActions>
-                      </Dialog>
-                    </div>
                     <Divider />
                   </List>
                 ))}
