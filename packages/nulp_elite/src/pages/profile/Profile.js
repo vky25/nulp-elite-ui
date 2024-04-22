@@ -23,17 +23,24 @@ import { useNavigate } from "react-router-dom";
 import SearchBox from "components/search";
 import ContinueLearning from "./continueLearning";
 
-
 const Profile = () => {
   const { t } = useTranslation();
   const [userData, setUserData] = useState(null);
+  const [certData, setCertificateCountData] = useState({
+    totalCourses: 0,
+    certificatesReceived: 0,
+  });
+  const [courseData, setCourseCountData] = useState({
+    enrolledThisMonth: 0,
+    enrolledLastMonth: 0,
+  });
   const progressValue = 60; // Example value, you can set this dynamically based on your progress
   const navigate = useNavigate();
+  const _userId = util.userId();
 
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const _userId = util.userId();
         const url = `http://localhost:3000/learner/user/v5/read/${_userId}?fields=organisations,roles,locations,declarations,externalIds`;
         const header = "application/json";
         const response = await fetch(url, {
@@ -47,6 +54,38 @@ const Profile = () => {
         console.error("Error fetching user data:", error);
       }
     };
+
+    const fetchCertificateCount = async () => {
+      try {
+        const url = `http://localhost:3000/profilePage/certificateCount?user_id=${_userId}`;
+        const response = await fetch(url);
+        const data = await response.json();
+        setCertificateCountData({
+          totalCourses: data.result.courseWithCertificate,
+          certificatesReceived: data.result.certificateReceived,
+        });
+      } catch (error) {
+        console.error("Error fetching certificate count:", error);
+      }
+    };
+
+    const fetchCourseCount = async () => {
+      try {
+        const url = `http://localhost:3000/profilePage/courseCount?user_id=${_userId}`;
+        const response = await fetch(url);
+        const data = await response.json();
+        setCourseCountData({
+          enrolledThisMonth: data.result.enrolledThisMonth,
+          enrolledLastMonth: data.result.enrolledLastMonth,
+        });
+      } catch (error) {
+        console.error(error);
+      }
+    };
+
+    fetchData();
+    fetchCertificateCount();
+    fetchCourseCount();
 
     fetchData();
   }, []);
@@ -70,370 +109,415 @@ const Profile = () => {
   return (
     <div>
       <Header />
-      <Box sx={{background:'#2D2D2D',padding:'20px'}} className="xs-hide">
-   <p style={{fontSize:'20px',fontWeight:'700',color:'#fff',paddingBottom:'5px',margin:'0'}}>Explore content related to your domain.Learn from well curated courses and content.</p>
-   <p style={{fontSize:'16px',fontWeight:'700',color:'#C1C1C1',margin:'0',paddingBottom:'30px'}}>Learn from well curated courses and content.</p>
-   <SearchBox onSearch={handleSearch} />
- </Box>
-      <Container maxWidth="xxl" role="main" className="container-pb" sx={{margin:'20px 0'}}>
-      <Grid container spacing={2}>
-        <Grid item xs={12} md={4}  lg={4} sx={{paddingRight:'20px'}}>
-        <Box sx={{fontSize:'18px',color:'#484848'}}>{t('MY_PROFILE')}</Box>
-
-        <Box textAlign="center" padding="10" sx={{marginTop:'22px'}}>
-          <Card
-            sx={{
-              marginTop: "10px",
-              padding: "10px",
-              boxShadow: "0px 4px 4px 0px #00000040",
-            }}
-          >
-            <Box
-              sx={{
-                display: "flex",
-                flexDirection: "row",
-                justifyContent: "space-between",
-              }}
-            >
-              <Box style={{ display: "flex", alignItems: "center" }}>
-                <PersonIcon
-                  style={{ paddingRight: "10px", fontSize: "28px" }}
-                />
-                {t("ABOUT_ME")}{" "}
-              </Box>
-              <ModeEditIcon />
+      <Box sx={{ background: "#2D2D2D", padding: "20px" }} className="xs-hide">
+        <p
+          style={{
+            fontSize: "20px",
+            fontWeight: "700",
+            color: "#fff",
+            paddingBottom: "5px",
+            margin: "0",
+          }}
+        >
+          Explore content related to your domain.Learn from well curated courses
+          and content.
+        </p>
+        <p
+          style={{
+            fontSize: "16px",
+            fontWeight: "700",
+            color: "#C1C1C1",
+            margin: "0",
+            paddingBottom: "30px",
+          }}
+        >
+          Learn from well curated courses and content.
+        </p>
+        <SearchBox onSearch={handleSearch} />
+      </Box>
+      <Container
+        maxWidth="xxl"
+        role="main"
+        className="container-pb"
+        sx={{ margin: "20px 0" }}
+      >
+        <Grid container spacing={2}>
+          <Grid item xs={12} md={4} lg={4} sx={{ paddingRight: "20px" }}>
+            <Box sx={{ fontSize: "18px", color: "#484848" }}>
+              {t("MY_PROFILE")}
             </Box>
-            <Box
-              sx={{
-                display: "flex",
-                flexDirection: "row",
-                padding: "20px 10px",
-              }}
-            >
-              <img
-                src={require("../../assets/blank.png")}
-                style={{ width: "20%" }}
-              />
-              <CardContent style={{ textAlign: "left", paddingTop: "0" }}>
-                {userData && (
-                  <>
-                    <Typography
-                      component="div"
-                      variant="h5"
-                      style={{
-                        color: "#004367",
-                        fontSize: "16px",
-                        fontWeight: "600",
-                      }}
-                    >
-                      {userData.result.response.firstName}{" "}
-                      {userData.result.response.lastName}
-                    </Typography>
-                    <Typography
-                      variant="subtitle1"
-                      color="text.secondary"
-                      component="div"
-                      style={{
-                        fontSize: "12px",
-                        padding: "10px 0",
-                        display: "flex",
-                      }}
-                    >
-                      {t("DESIGNATION")} |{" "}
-                      <Box style={{ paddingLeft: "10px" }}> ID: </Box>{" "}
-                      {userData.result.response.organisations.orgName}
-                    </Typography>
-                    <Typography
-                      variant="subtitle1"
-                      color="text.secondary"
-                      component="div"
-                      style={{ fontSize: "12px" }}
-                    >
-                      A manager with the department of Revenue and taxes and has
-                      actively contributed to the growth and authenticity of the
-                      knowledge curated for the betterment of the department.
-                    </Typography>
-                    {/* Displaying the framework.board field */}
-                    <Typography
-                      variant="subtitle1"
-                      color="text.secondary"
-                      component="div"
-                      style={{
-                        fontSize: "14px",
-                        padding: "10px 0",
-                        display: "flex",
-                      }}
-                    >
-                      <Box style={{ fontWeight: "600", paddingRight: "10px" }}>
-                        {t("Domain")}:{" "}
-                      </Box>{" "}
-                      {userData.result.response.framework.board}
-                    </Typography>
-                  </>
-                )}
-              </CardContent>
-            </Box>
-          </Card>
 
-          <Grid container spacing={2} style={{ padding: "5px 0" }}>
-            <Grid item xs={6} md={6}>
+            <Box textAlign="center" padding="10" sx={{ marginTop: "22px" }}>
               <Card
                 sx={{
                   marginTop: "10px",
                   padding: "10px",
                   boxShadow: "0px 4px 4px 0px #00000040",
-                  display: "flex",
-                  alignItems: "center",
-                }}
-                onClick={handleContinueLearningClick}
-              >
-                <Box
-                  className="profileBox"
-                  style={{
-                    background: "#004367",
-                    color: "#fff",
-                    margin: "-10px",
-                    borderTopRightRadius: "250px",
-                    borderBottomRightRadius: "250px",
-                  }}
-                >
-                  <LibraryAddCheckOutlinedIcon />
-                </Box>
-
-                <Box style={{ paddingLeft: "20px" }}>
-                  {t("CONTINUE_LEARNNG")}
-                </Box>
-              </Card>
-            </Grid>
-            <Grid item xs={6} md={6}>
-              <Card
-                sx={{
-                  marginTop: "10px",
-                  padding: "10px",
-                  boxShadow: "0px 4px 4px 0px #00000040",
-                  display: "flex",
-                  alignItems: "center",
-                }}
-                onClick={handleDownloadCertificateClick}
-              >
-                <Box
-                  className="profileBox"
-                  style={{
-                    background: "#004367",
-                    color: "#fff",
-                    margin: "-10px",
-                    borderTopRightRadius: "250px",
-                    borderBottomRightRadius: "250px",
-                  }}
-                >
-                  <ReceiptLongOutlinedIcon />
-                </Box>
-
-                <Box style={{ paddingLeft: "20px" }}>
-                  {t("DOWNLOAD_CERTIFICATES")}
-                </Box>
-              </Card>
-            </Grid>
-            <Grid item xs={6} md={6}>
-              <Card
-                sx={{
-                  padding: "10px",
-                  boxShadow: "0px 4px 4px 0px #00000040",
-                  display: "flex",
-                  alignItems: "center",
-                }}
-                onClick={handleLearningHistoryClick}
-              >
-                <Box
-                className="profileBox"
-                  style={{
-                    background: "#004367",
-                    color: "#fff",
-                    margin: "-10px",
-                    borderTopRightRadius: "250px",
-                    borderBottomRightRadius: "250px",
-                  }}
-                >
-                  <RestoreOutlinedIcon />
-                </Box>
-
-                <Box style={{ paddingLeft: "20px" }}>
-                  {t("LEARNNG_HISTORY")}
-                </Box>
-              </Card>
-            </Grid>
-            <Grid item xs={6} md={6}>
-              <Card
-                sx={{
-                  padding: "10px",
-                  boxShadow: "0px 4px 4px 0px #00000040",
-                  display: "flex",
-                  alignItems: "center",
                 }}
               >
                 <Box
-                className="profileBox"
-                  style={{
-                    background: "#004367",
-                    color: "#fff",
-                    margin: "-10px",
-                    borderTopRightRadius: "250px",
-                    borderBottomRightRadius: "250px",
+                  sx={{
+                    display: "flex",
+                    flexDirection: "row",
+                    justifyContent: "space-between",
                   }}
                 >
-                  <SettingsOutlinedIcon />
-                </Box>
-
-                <Box style={{ paddingLeft: "20px" }}>
-                  {t("CHANGE_PREFERENCES")}
-                </Box>
-              </Card>
-            </Grid>
-          </Grid>
-
-          <Card sx={{ marginTop: "10px", padding: "10px" }}>
-            <Box>
-              <Box
-                sx={{
-                  display: "flex",
-                  flexDirection: "row",
-                  justifyContent: "space-between",
-                }}
-              >
-                <Box style={{ display: "flex", alignItems: "center" }}>
-                  <TimelapseOutlinedIcon style={{ paddingRight: "10px" }} />
-                  {t("LEARNING_TIME")}
-                </Box>
-              </Box>
-
-              <Box
-                sx={{
-                  display: "flex",
-                  flexDirection: "row",
-                  padding: "20px 10px",
-                  fontSize: "14px",
-                  color: "#484848",
-                  justifyContent:'space-between'
-                }}
-              >
-                <Box
-                  style={{
-                    background: "#A7E0FF",
-                    padding: "20px 50px",
-                    borderRadius: "20px",
-                    marginRight: "20px",
-                  }}
-                >
-                  {t("COURSES")}
-                  <br />
-                  <Typography
-                    variant="h7"
-                    style={{
-                      fontWeight: "700",
-                      margin: "9px 0",
-                      display: "block",
-                    }}
-                  >
-                    14h 20m
-                  </Typography>
+                  <Box style={{ display: "flex", alignItems: "center" }}>
+                    <PersonIcon
+                      style={{ paddingRight: "10px", fontSize: "28px" }}
+                    />
+                    {t("ABOUT_ME")}{" "}
+                  </Box>
+                  <ModeEditIcon />
                 </Box>
                 <Box
-                  style={{
-                    background: "#f7cfb6",
-                    padding: "20px 50px",
-                    borderRadius: "20px",
+                  sx={{
+                    display: "flex",
+                    flexDirection: "row",
+                    padding: "20px 10px",
                   }}
                 >
-                  {t("WEBINARS")}
-                  <br />
-                  <Typography
-                    variant="h7"
-                    style={{
-                      fontWeight: "700",
-                      margin: "9px 0",
-                      display: "block",
-                    }}
-                  >
-                    10h 15m
-                  </Typography>
-                </Box>
-              </Box>
-            </Box>
-          </Card>
-
-          <Card sx={{ margin: "15px 0 40px 0", padding: "10px" }}>
-            <Box>
-              <Box
-                sx={{
-                  display: "flex",
-                  flexDirection: "row",
-                  justifyContent: "space-between",
-                  padding: "0 0 12px 0",
-                }}
-              >
-                <Box style={{ display: "flex", alignItems: "center" }}>
-                  <EmojiEventsOutlinedIcon style={{ paddingRight: "10px" }} />{" "}
-                  {t("PERFORMANCE")}
-                </Box>
-              </Box>
-
-              <Grid container spacing={2}>
-                <Grid
-                  item
-                  xs={3}
-                  md={3}
-                  className="circular"
-                  style={{ paddingRight: "0", textAlign: "right" }}
-                >
-                  <CircularProgressWithLabel
-                    value={progressValue}
-                    className="crcular"
-                    style={{ width: "80px", height: "80px" }}
+                  <img
+                    src={require("../../assets/blank.png")}
+                    style={{ width: "20%" }}
                   />
+                  <CardContent style={{ textAlign: "left", paddingTop: "0" }}>
+                    {userData && (
+                      <>
+                        <Typography
+                          component="div"
+                          variant="h5"
+                          style={{
+                            color: "#004367",
+                            fontSize: "16px",
+                            fontWeight: "600",
+                          }}
+                        >
+                          {userData.result.response.firstName}{" "}
+                          {userData.result.response.lastName}
+                        </Typography>
+                        <Typography
+                          variant="subtitle1"
+                          color="text.secondary"
+                          component="div"
+                          style={{
+                            fontSize: "12px",
+                            padding: "10px 0",
+                            display: "flex",
+                          }}
+                        >
+                          {t("DESIGNATION")} |{" "}
+                          <Box style={{ paddingLeft: "10px" }}> ID: </Box>{" "}
+                          {userData.result.response.organisations.orgName}
+                        </Typography>
+                        <Typography
+                          variant="subtitle1"
+                          color="text.secondary"
+                          component="div"
+                          style={{ fontSize: "12px" }}
+                        >
+                          A manager with the department of Revenue and taxes and
+                          has actively contributed to the growth and
+                          authenticity of the knowledge curated for the
+                          betterment of the department.
+                        </Typography>
+                        {/* Displaying the framework.board field */}
+                        <Typography
+                          variant="subtitle1"
+                          color="text.secondary"
+                          component="div"
+                          style={{
+                            fontSize: "14px",
+                            padding: "10px 0",
+                            display: "flex",
+                          }}
+                        >
+                          <Box
+                            style={{ fontWeight: "600", paddingRight: "10px" }}
+                          >
+                            {t("Domain")}:{" "}
+                          </Box>{" "}
+                          {userData.result.response.framework.board}
+                        </Typography>
+                      </>
+                    )}
+                  </CardContent>
+                </Box>
+              </Card>
+
+              <Grid container spacing={2} style={{ padding: "5px 0" }}>
+                <Grid item xs={6} md={6}>
+                  <Card
+                    sx={{
+                      marginTop: "10px",
+                      padding: "10px",
+                      boxShadow: "0px 4px 4px 0px #00000040",
+                      display: "flex",
+                      alignItems: "center",
+                    }}
+                    onClick={handleContinueLearningClick}
+                  >
+                    <Box
+                      className="profileBox"
+                      style={{
+                        background: "#004367",
+                        color: "#fff",
+                        margin: "-10px",
+                        borderTopRightRadius: "250px",
+                        borderBottomRightRadius: "250px",
+                      }}
+                    >
+                      <LibraryAddCheckOutlinedIcon />
+                    </Box>
+
+                    <Box style={{ paddingLeft: "20px" }}>
+                      {t("CONTINUE_LEARNNG")}
+                    </Box>
+                  </Card>
                 </Grid>
-                <Grid item xs={3} md={3} className="circular">
-                  <Typography
-                    variant="h7"
-                    style={{
-                      margin: "9px 0",
-                      display: "block",
-                      textAlign: "left",
+                <Grid item xs={6} md={6}>
+                  <Card
+                    sx={{
+                      marginTop: "10px",
+                      padding: "10px",
+                      boxShadow: "0px 4px 4px 0px #00000040",
+                      display: "flex",
+                      alignItems: "center",
+                    }}
+                    onClick={handleDownloadCertificateClick}
+                  >
+                    <Box
+                      className="profileBox"
+                      style={{
+                        background: "#004367",
+                        color: "#fff",
+                        margin: "-10px",
+                        borderTopRightRadius: "250px",
+                        borderBottomRightRadius: "250px",
+                      }}
+                    >
+                      <ReceiptLongOutlinedIcon />
+                    </Box>
+
+                    <Box style={{ paddingLeft: "20px" }}>
+                      {t("DOWNLOAD_CERTIFICATES")}
+                    </Box>
+                  </Card>
+                </Grid>
+                <Grid item xs={6} md={6}>
+                  <Card
+                    sx={{
+                      padding: "10px",
+                      boxShadow: "0px 4px 4px 0px #00000040",
+                      display: "flex",
+                      alignItems: "center",
+                    }}
+                    onClick={handleLearningHistoryClick}
+                  >
+                    <Box
+                      className="profileBox"
+                      style={{
+                        background: "#004367",
+                        color: "#fff",
+                        margin: "-10px",
+                        borderTopRightRadius: "250px",
+                        borderBottomRightRadius: "250px",
+                      }}
+                    >
+                      <RestoreOutlinedIcon />
+                    </Box>
+
+                    <Box style={{ paddingLeft: "20px" }}>
+                      {t("LEARNNG_HISTORY")}
+                    </Box>
+                  </Card>
+                </Grid>
+                <Grid item xs={6} md={6}>
+                  <Card
+                    sx={{
+                      padding: "10px",
+                      boxShadow: "0px 4px 4px 0px #00000040",
+                      display: "flex",
+                      alignItems: "center",
                     }}
                   >
-                    {t("CERTIFICATIONS_RECEIVED")}
-                  </Typography>
-                </Grid>
-                <Grid
-                  item
-                  xs={3}
-                  md={3}
-                  style={{ paddingRight: "0", textAlign: "right" }}
-                >
-                  <CircularProgressWithLabel value={progressValue} />
-                </Grid>
-                <Grid item xs={3} md={3}>
-                  <Typography
-                    variant="h7"
-                    style={{
-                      margin: "9px 0",
-                      display: "block",
-                      textAlign: "left",
-                    }}
-                  >
-                    {t("COURSES_THAN_LAST_MONTH")}
-                  </Typography>
+                    <Box
+                      className="profileBox"
+                      style={{
+                        background: "#004367",
+                        color: "#fff",
+                        margin: "-10px",
+                        borderTopRightRadius: "250px",
+                        borderBottomRightRadius: "250px",
+                      }}
+                    >
+                      <SettingsOutlinedIcon />
+                    </Box>
+
+                    <Box style={{ paddingLeft: "20px" }}>
+                      {t("CHANGE_PREFERENCES")}
+                    </Box>
+                  </Card>
                 </Grid>
               </Grid>
+
+              {/* <Card sx={{ marginTop: "10px", padding: "10px" }}>
+                <Box>
+                  <Box
+                    sx={{
+                      display: "flex",
+                      flexDirection: "row",
+                      justifyContent: "space-between",
+                    }}
+                  >
+                    <Box style={{ display: "flex", alignItems: "center" }}>
+                      <TimelapseOutlinedIcon style={{ paddingRight: "10px" }} />
+                      {t("LEARNING_TIME")}
+                    </Box>
+                  </Box>
+
+                  <Box
+                    sx={{
+                      display: "flex",
+                      flexDirection: "row",
+                      padding: "20px 10px",
+                      fontSize: "14px",
+                      color: "#484848",
+                      justifyContent: "space-between",
+                    }}
+                  >
+                    <Box
+                      style={{
+                        background: "#A7E0FF",
+                        padding: "20px 50px",
+                        borderRadius: "20px",
+                        marginRight: "20px",
+                      }}
+                    >
+                      {t("COURSES")}
+                      <br />
+                      <Typography
+                        variant="h7"
+                        style={{
+                          fontWeight: "700",
+                          margin: "9px 0",
+                          display: "block",
+                        }}
+                      >
+                        14h 20m
+                      </Typography>
+                    </Box>
+                    <Box
+                      style={{
+                        background: "#f7cfb6",
+                        padding: "20px 50px",
+                        borderRadius: "20px",
+                      }}
+                    >
+                      {t("WEBINARS")}
+                      <br />
+                      <Typography
+                        variant="h7"
+                        style={{
+                          fontWeight: "700",
+                          margin: "9px 0",
+                          display: "block",
+                        }}
+                      >
+                        10h 15m
+                      </Typography>
+                    </Box>
+                  </Box>
+                </Box>
+              </Card> */}
+
+              <Card sx={{ margin: "15px 0 40px 0", padding: "10px" }}>
+                <Box>
+                  <Box
+                    sx={{
+                      display: "flex",
+                      flexDirection: "row",
+                      justifyContent: "space-between",
+                      padding: "0 0 12px 0",
+                    }}
+                  >
+                    <Box style={{ display: "flex", alignItems: "center" }}>
+                      <EmojiEventsOutlinedIcon
+                        style={{ paddingRight: "10px" }}
+                      />{" "}
+                      {t("PERFORMANCE")}
+                    </Box>
+                  </Box>
+
+                  <Grid container spacing={2}>
+                    <Grid
+                      item
+                      xs={3}
+                      md={3}
+                      className="circular"
+                      style={{ paddingRight: "0", textAlign: "right" }}
+                    >
+                      <CircularProgressWithLabel
+                        value={
+                          (certData.certificatesReceived /
+                            certData.totalCourses) *
+                          100
+                        }
+                        className="crcular"
+                        style={{ width: "80px", height: "80px" }}
+                      />
+                    </Grid>
+                    <Grid item xs={3} md={3} className="circular">
+                      <Typography
+                        variant="h7"
+                        style={{
+                          margin: "9px 0",
+                          display: "block",
+                          textAlign: "left",
+                        }}
+                      >
+                        {t("CERTIFICATIONS_RECEIVED")}
+                      </Typography>
+                    </Grid>
+                    <Grid
+                      item
+                      xs={3}
+                      md={3}
+                      style={{ paddingRight: "0", textAlign: "right" }}
+                    >
+                      <CircularProgressWithLabel
+                        value={
+                          courseData.enrolledThisMonth -
+                          courseData.enrolledLastMonth
+                        }
+                      />
+                    </Grid>
+                    <Grid item xs={3} md={3}>
+                      <Typography
+                        variant="h7"
+                        style={{
+                          margin: "9px 0",
+                          display: "block",
+                          textAlign: "left",
+                        }}
+                      >
+                        {t("COURSES_THAN_LAST_MONTH")}
+                      </Typography>
+                    </Grid>
+                  </Grid>
+                </Box>
+              </Card>
             </Box>
-          </Card>
-        </Box>
+          </Grid>
+          <Grid
+            item
+            xs={8}
+            className="xs-hide"
+            style={{ borderLeft: "solid 1px #898989" }}
+          >
+            <ContinueLearning />
+          </Grid>
         </Grid>
-        <Grid item xs={8} className="xs-hide" style={{borderLeft:'solid 1px #898989'}}>
-          <ContinueLearning/>
-        </Grid>
-       
-      </Grid>
-        
       </Container>
       <FloatingChatIcon />
       <Footer />
