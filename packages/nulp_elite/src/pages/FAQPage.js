@@ -7,9 +7,18 @@ import Grid from "@mui/material/Grid";
 import Box from "@mui/material/Box";
 import { Accordion, AccordionSummary, AccordionDetails } from "@mui/material";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
+import { makeStyles } from "@mui/styles";
+
+const useStyles = makeStyles((theme) => ({
+  active: {
+    color: "blue", // Change color to blue
+    textDecoration: "underline", // Add underline
+  },
+}));
 
 const FAQPage = () => {
   const { t } = useTranslation();
+  const classes = useStyles();
   const [faqData, setFaqData] = useState([]);
   const [selectedCategory, setSelectedCategory] = useState("Login");
 
@@ -42,6 +51,9 @@ const FAQPage = () => {
                 <li
                   key={index}
                   onClick={() => setSelectedCategory(category.name)}
+                  className={
+                    selectedCategory === category.name ? classes.active : ""
+                  } // Apply active class
                 >
                   {category.name}
                 </li>
@@ -60,8 +72,8 @@ const FAQPage = () => {
                         background: "#fee9dd",
                         borderRadius: "10px",
                         marginTop: "10px",
-                        maxHeight: "calc(100vh - 20px)", // Ensure Accordion has a height for scrolling
-                        overflow: "auto", // Enable scrolling
+                        maxHeight: "calc(100vh - 20px)",
+                        overflow: "auto",
                       }}
                     >
                       <div>
@@ -74,7 +86,7 @@ const FAQPage = () => {
                             borderRadius: "10px",
                             position: "sticky",
                             top: "0",
-                            zIndex: "1", // Ensure it's above other content
+                            zIndex: "1",
                           }}
                         >
                           {faq.topic}
