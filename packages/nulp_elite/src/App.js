@@ -46,9 +46,10 @@ import continueLearning from "pages/profile/continueLearning";
 import JoinCourse from "pages/content/joinCourse";
 import Player from "pages/content/Player";
 import Otp from "pages/registration/Otp";
-import SendOtp from "pages/registration/SendOtp"
+import SendOtp from "pages/registration/SendOtp";
 import PDFContent from "pages/content/pdf";
 import NoResult from "pages/content/noResultFound";
+import Message from "pages/connections/message";
 import UserPrefPopup from "pages/UserPrefPopup";
 import Terms from "pages/terms";
 
@@ -187,7 +188,7 @@ function App() {
       moduleName: "nulp_elite",
       path: "/otp-old",
       component: SendOtp,
-    }, 
+    },
     {
       moduleName: "nulp_elite",
       path: "/terms",
@@ -207,6 +208,11 @@ function App() {
       moduleName: "nulp_elite",
       path: "/view-all/:category",
       component: CategoryPage,
+    },
+    {
+      moduleName: "nulp_elite",
+      path: "/message",
+      component: Message,
     },
   ];
   // public_url="http://localhost:5000"
@@ -231,11 +237,10 @@ function App() {
           },
         });
         const data = await response.json();
-        console.log(data.result.response.framework.board)
-        if(data.result.response.framework.board){
+        console.log(data.result.response.framework.board);
+        if (data.result.response.framework.board) {
           setCheckPref(true);
-        }
-        else{
+        } else {
           setCheckPref(false);
         }
       } catch (error) {
@@ -253,10 +258,8 @@ function App() {
       {/* <I18nextProvider i18n={i18n}> */}
       {/* <ChakraProvider> */}
       <React.Suspense>
-      { !checkPref &&
-        <UserPrefPopup />
-      }
-    
+        {!checkPref && <UserPrefPopup />}
+
         <Router>
           <Routes>
             {routes.map((route, index) => (
