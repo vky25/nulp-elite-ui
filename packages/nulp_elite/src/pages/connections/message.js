@@ -1,11 +1,22 @@
 import React, { useEffect, useState } from "react";
 import { makeStyles } from "@mui/styles";
-import { TextField, Button, Alert} from "@mui/material";
-import io from "socket.io-client";
+import {
+  TextField,
+  Button,
+  Alert,
+  Dialog,
+  DialogTitle,
+  DialogContent,
+  DialogActions,
+} from "@mui/material";
 import * as util from "../../services/utilService";
 const axios = require("axios");
-import { Navigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { useStore } from "configs/zustandStore";
+import { IconButton, Menu, MenuItem } from "@mui/material";
+import ArrowBackIcon from "@mui/icons-material/ArrowBack";
+import MenuIcon from "@mui/icons-material/Menu";
+import BlockIcon from "@mui/icons-material/Block";
 
 const moment = require("moment");
 const timezone = require("moment-timezone");
@@ -59,9 +70,6 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-
-// const socket = io("http://localhost:3000");
-
 const Message = (props) => {
   const classes = useStyles();
   const [message, setMessage] = useState("");
@@ -72,125 +80,67 @@ const Message = (props) => {
   const [searchQuery, setSearchQuery] = useState("");
   const dataStore = useStore((state) => state.data);
   const receiverUserId = dataStore.userId || localStorage.getItem("userId");
+  const [anchorEl, setAnchorEl] = useState(null);
+  const navigate = useNavigate();
+  const [reason, setReason] = useState("");
+  const [dialogOpen, setDialogOpen] = useState(false);
+  const [isBlocked, setIsBlocked] = useState(false); // State to track if user is blocked
+
   useEffect(() => {
     const _userId = util.userId();
     setLoggedInUserId(_userId);
   }, []);
-
-  // useEffect(() => {
-  //   if (loggedInUserId) {
-  //     socket.on("message", (message) => {
-  //       console.log("Received message:", message);
-  //       setMessages((prevMessages) => [...prevMessages, message]);
-  //     });
-  //     fetchChats();
-  //   }
-  
-  //   return () => {
-  //     socket.disconnect();
-  //   };
-  // }, [loggedInUserId]);
-
   useEffect(() => {
     if (loggedInUserId) {
+      // Fetch block user status when component mounts
+      fetchBlockUserStatus();
       fetchChats();
-      // Fetch messages at regular intervals (e.g., every 5 seconds)
-      const intervalId = setInterval(fetchChats, 5000);
-      return () => clearInterval(intervalId);
     }
   }, [loggedInUserId]);
 
-  // useEffect(() => {
-  //   const _userId = util.userId();
-  //   setLoggedInUserId(_userId);
-  
-  //   // Log socket connection status
-  //   console.log("Socket connected:", socket.connected);
-  
-  //   return () => {
-  //     socket.disconnect();
-  //   };
-  // }, []);
-  
-  // const fetchChats = async () => {
-  //   try {
-  //     const response = await axios.get(
-  //       `http://localhost:3000/directConnect/get-chats?sender_id=${loggedInUserId}&receiver_id=${receiverUserId}&is_accepted=true`,
-  //       {
-  //         withCredentials: true,
-  //       }
-  //     );
-  //     // getUserDetails([loggedInUserId, response?.data?.result[0]?.receiver_id]);
-  //     setMessages(response.data.result || []);
-  //     // // console.log("getUserChat", responseData.result);
-  //     // const userChats = response.data.result.filter(
-  //     //   (res) =>
-  //     //     (res.sender_id === loggedInUserId &&
-  //     //       res.receiver_id === receiverUserId) ||
-  //     //     (res.sender_id === receiverUserId &&
-  //     //       res.receiver_id === loggedInUserId)
-  //     // );
-  //     // setUserChat(userChats);
-  //   } catch (error) {
-  //     console.error("Error fetching chats:", error);
-  //   }
-  // };
+  useEffect(() => {
+    if (loggedInUserId && !isBlocked) {
+      const intervalId = setInterval(fetchChats, 5000);
+      return () => clearInterval(intervalId);
+    }
+  }, [loggedInUserId, isBlocked]);
 
-  const fetchChats = async () => {
+  const fetchBlockUserStatus = async () => {
     try {
       const response = await axios.get(
-        `http://localhost:3000/directConnect/get-chats?sender_id=${loggedInUserId}&receiver_id=${receiverUserId}&is_accepted=true`,
+        `http://localhost:3000/directConnect/get-block-user?sender_id=${loggedInUserId}&receiver_id=${receiverUserId}`,
         {
           withCredentials: true,
         }
       );
-      setMessages(response.data.result || []);
+      setIsBlocked(response.data.result.length > 0); // Update isBlocked state based on API response
+    } catch (error) {
+      console.error("Error fetching block user status:", error);
+    }
+  };
+
+  const fetchChats = async () => {
+    try {
+      // Check if the user is not blocked before fetching chats
+      if (!isBlocked) {
+        const response = await axios.get(
+          `http://localhost:3000/directConnect/get-chats?sender_id=${loggedInUserId}&receiver_id=${receiverUserId}&is_accepted=true`,
+          {
+            withCredentials: true,
+          }
+        );
+        setMessages(response.data.result || []);
+      }
     } catch (error) {
       console.error("Error fetching chats:", error);
     }
   };
-  
-
-  // const sendMessage = async () => {
-  //   if (message.trim() !== "") {
-  //     try {
-  //       console.log("Sending message:", message);
-
-  //       socket.emit("message", {
-  //         sender_id: loggedInUserId,
-  //         receiver_id: receiverUserId,
-  //         message: message,
-  //       });
-  //       await axios.post(
-  //         "http://localhost:3000/directConnect/send-chat",
-  //         {
-  //           sender_id: loggedInUserId,
-  //           receiver_id: receiverUserId,
-  //           message: message,
-  //           sender_email: "sender@gmail.com",
-  //           receiver_email: "receiver@gmail.com",
-  //         },
-  //         {
-  //           withCredentials: true,
-  //           headers: {
-  //             "Content-Type": "application/json",
-  //           },
-  //         }
-  //       );
-  //       setMessages((prevMessages) => [...prevMessages, message]);
-  //       setMessage("");
-  //       fetchChats();
-  //     } catch (error) {
-  //       console.error("Error saving message:", error);
-  //     }
-  //   }
-  // };
 
   const sendMessage = async () => {
     if (message.trim() !== "") {
       try {
         console.log("Sending message:", message);
-  
+
         await axios.post(
           "http://localhost:3000/directConnect/send-chat",
           {
@@ -214,41 +164,7 @@ const Message = (props) => {
       }
     }
   };
-  
-  const getUserDetails = async (userIds) => {
-    const url = `http://localhost:3000/learner/user/v3/search`;
-    const requestBody = {
-      request: {
-        filters: {
-          status: "1",
-          rootOrgId: "0130701891041689600",
-          userId: userIds,
-        },
-        query: searchQuery,
-        pageNumber: currentPage,
-        pageSize: pageSize,
-      },
-    };
 
-    try {
-      const response = await fetch(url, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(requestBody),
-      });
-
-      if (!response.ok) {
-        throw new Error("Failed to search data");
-      }
-
-      const responseData = await response.json();
-      console.log(responseData);
-    } catch (error) {
-      console.log("error", error);
-    }
-  };
   const getTimeAgo = (timestamp) => {
     const timeZone = "Asia/Kolkata";
     const date = moment(timestamp).utc();
@@ -272,19 +188,106 @@ const Message = (props) => {
     return data;
   };
 
+  const handleMenuClick = (event) => {
+    setAnchorEl(event.currentTarget);
+  };
+
+  const handleMenuClose = () => {
+    setAnchorEl(null);
+  };
+  const handleGoBack = () => {
+    navigate(-1); // Navigate back in history
+  };
+
+  const handleDialogOpen = () => {
+    setDialogOpen(true);
+  };
+
+  const handleDialogClose = () => {
+    setDialogOpen(false);
+  };
+  const handleBlockUser = () => {
+    handleDialogOpen();
+  };
+  const handleBlockUserConfirmed = async () => {
+    try {
+      console.log("Blocking User");
+
+      await axios.post(
+        "http://localhost:3000/directConnect/block-user",
+        {
+          sender_id: loggedInUserId,
+          receiver_id: receiverUserId,
+          reason: reason,
+        },
+        {
+          withCredentials: true,
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }
+      );
+      setReason("");
+      setDialogOpen(false);
+      console.log("User blocked successfully!");
+    } catch (error) {
+      console.error("Error blocking user:", error);
+    }
+    handleMenuClose(); // Close the menu after the action is completed
+  };
+
   return (
     <div className={classes.chatContainer}>
       <div className={classes.chatHeader}>
-        <span>{dataStore.fullName || localStorage.getItem("chatName")} </span>{" "}
+        <IconButton onClick={handleGoBack}>
+          <ArrowBackIcon />
+        </IconButton>
+        <span>{dataStore.fullName || localStorage.getItem("chatName")}</span>
+        <IconButton onClick={handleMenuClick}>
+          <MenuIcon />
+        </IconButton>
+        <Menu
+          anchorEl={anchorEl}
+          open={Boolean(anchorEl)}
+          onClose={handleMenuClose}
+        >
+          <MenuItem onClick={handleBlockUser} disabled={isBlocked}>
+            <BlockIcon />
+            Block
+          </MenuItem>
+        </Menu>
       </div>
-      <Alert severity="info" style={{ textAlign: "left" }}>
-        Your chat will be disappear after 7 Days.
+      <Dialog open={dialogOpen} onClose={handleDialogClose}>
+        <DialogTitle>Block User</DialogTitle>
+        <DialogContent>
+          <TextField
+            autoFocus
+            margin="dense"
+            id="reason"
+            label="Reason for blocking"
+            type="text"
+            fullWidth
+            value={reason}
+            onChange={(e) => setReason(e.target.value)}
+          />
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={handleDialogClose} color="primary">
+            Cancel
+          </Button>
+          <Button onClick={handleBlockUserConfirmed} color="primary">
+            Block
+          </Button>
+        </DialogActions>
+      </Dialog>
+
+      <Alert severity="info" style={{ marginBottom: "10px" }}>
+        Your chat will disappear after 7 Days.
       </Alert>
       <div className={classes.chat}>
         {messages.map((msg, index) => (
           <div key={index}>
             <div style={{ textAlign: "center" }}>
-              {" "}
               {index === 0 ||
               getTimeAgo(msg.timestamp) !==
                 getTimeAgo(messages[index - 1].timestamp) ? (
@@ -304,18 +307,32 @@ const Message = (props) => {
           </div>
         ))}
       </div>
-      <div className={classes.messageInput}>
-        <TextField
-          variant="outlined"
-          placeholder="Type your message..."
-          fullWidth
-          value={message}
-          onChange={(e) => setMessage(e.target.value)}
-        />
-        <Button variant="contained" color="primary" onClick={sendMessage}>
-          Send
-        </Button>
-      </div>
+      {isBlocked ? (
+        <Alert severity="warning" style={{ marginBottom: "10px" }}>
+          User blocked. You cannot send messages to this user.
+        </Alert>
+      ) : (
+        <>
+          <div className={classes.messageInput}>
+            <TextField
+              variant="outlined"
+              placeholder="Type your message..."
+              fullWidth
+              value={message}
+              onChange={(e) => setMessage(e.target.value)}
+              disabled={isBlocked} // Disable input field if user is blocked
+            />
+            <Button
+              variant="contained"
+              color="primary"
+              onClick={sendMessage}
+              disabled={isBlocked} // Disable send button if user is blocked
+            >
+              Send
+            </Button>
+          </div>
+        </>
+      )}
     </div>
   );
 };
