@@ -27,6 +27,7 @@ import CheckCircleOutlineIcon from "@mui/icons-material/CheckCircleOutline";
 import CancelOutlinedIcon from "@mui/icons-material/CancelOutlined";
 import { useTranslation } from "react-i18next";
 import Pagination from "@mui/material/Pagination";
+import Popover from "@mui/material/Popover";
 
 // Define modal styles
 const useStyles = makeStyles((theme) => ({
@@ -82,6 +83,8 @@ const AddConnections = () => {
   const [selectedUserName, setSelectedUserName] = useState(false);
   const { t } = useTranslation();
   const [totalPages, setTotalPages] = useState(1);
+  const [userQuerySearchData, setUserQuerySearchData] = useState();
+  const [anchorEl, setAnchorEl] = React.useState(null);
 
   // const handleFilterChange = (selectedOptions) => {
   //   const selectedValues = selectedOptions.map((option) => option.value);
@@ -91,6 +94,17 @@ const AddConnections = () => {
   // const filteredUsers = userData?.filter(
   //   (user) => user.name && user.name.includes(searchQuery)
   // );
+  const handlePopoverClick = (event) => {
+    setAnchorEl(event.currentTarget);
+  };
+
+  const handlePopoverClose = () => {
+    setAnchorEl(null);
+  };
+
+  const openPopover = Boolean(anchorEl);
+  const id = openPopover ? "simple-popover" : undefined;
+
   const handlePageChange = (event, newValue) => {
     setCurrentPage(newValue);
   };
@@ -108,7 +122,7 @@ const AddConnections = () => {
 
   const toggleChat = () => {
     setShowChat(!showChat);
-    setButtonText(showChat ? t('INVITE') : t('SEND_CHAT'));
+    setButtonText(showChat ? t("INVITE") : t("SEND_INVITATION"));
   };
 
   useEffect(() => {
@@ -134,19 +148,23 @@ const AddConnections = () => {
     setIsModalOpen(false);
   };
 
-  const handleSearch = async () => {
+  const handleSearch = async (selectedUserId = "") => {
     setIsLoading(true);
     setError(null);
     setUserSearchData([]);
 
     const url = `http://localhost:3000/learner/user/v3/search`;
+    let filters = {
+      status: "1",
+      rootOrgId: "0130701891041689600",
+    };
+    if (selectedUserId) {
+      filters.userId = selectedUserId;
+    }
     const requestBody = {
       request: {
-        filters: {
-          status: "1",
-          rootOrgId: "0130701891041689600",
-        },
-        query: searchQuery,
+        filters: filters,
+        // query: searchQuery,
         limit: 10,
         offset: 10 * (currentPage - 1),
         sort_by: {
@@ -169,7 +187,7 @@ const AddConnections = () => {
       }
 
       let responseData = await response.json();
-      setTotalPages(Math.ceil(responseData?.result?.response?.count / 10) + 1);
+      setTotalPages(Math.ceil(responseData?.result?.response?.count / 10));
       console.log("responseData", responseData);
       console.log(
         "user list of all type user",
@@ -194,6 +212,49 @@ const AddConnections = () => {
       console.log("responseUserData", responseUserData);
       setUserSearchData(responseUserData);
       console.log("responseSearchData", responseData);
+    } catch (error) {
+      console.error("Error fetching data:", error);
+      setError("Failed to fetch data. Please try again.");
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  const onUserQuerySearch = async () => {
+    setIsLoading(true);
+    setError(null);
+    setUserQuerySearchData([]);
+
+    const url = `http://localhost:3000/learner/user/v3/search`;
+    const requestBody = {
+      request: {
+        filters: {
+          status: "1",
+          rootOrgId: "0130701891041689600",
+        },
+        query: searchQuery,
+        sort_by: {
+          lastUpdatedOn: "desc",
+        },
+      },
+    };
+
+    try {
+      const response = await fetch(url, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(requestBody),
+      });
+
+      if (!response.ok) {
+        throw new Error("Failed to fetch data");
+      }
+
+      let responseData = await response.json();
+      setUserQuerySearchData(responseData?.result?.response?.content);
+      console.log("setUserQuerySearchData", responseData);
     } catch (error) {
       console.error("Error fetching data:", error);
       setError("Failed to fetch data. Please try again.");
@@ -528,39 +589,6 @@ const AddConnections = () => {
       setIsLoading(false);
     }
   };
-  // const blockChatInvitation = async (userId) => {
-  //   setIsLoading(true);
-  //   setError(null);
-  //   const requestBody = {
-  //     sender_id: userId,
-  //     receiver_id: loggedInUserId,
-  //     reason: "block reason",
-  //   };
-
-  //   const url = `http://localhost:3000/directConnect/block-user`;
-
-  //   try {
-  //     const response = await fetch(url, {
-  //       method: "POST",
-  //       headers: {
-  //         "Content-Type": "application/json",
-  //       },
-  //       body: JSON.stringify(requestBody),
-  //     });
-  //     if (!response.ok) {
-  //       throw new Error("Failed to block chat");
-  //     }
-
-  //     const responseData = await response.json();
-  //     console.log("blockChatInvitation", responseData.result);
-  //     onMyConnection();
-  //     // getConnections();
-  //   } catch (error) {
-  //     setError(error.message);
-  //   } finally {
-  //     setIsLoading(false);
-  //   }
-  // };
 
   const getUserChat = async (userId) => {
     setIsLoading(true);
@@ -636,6 +664,73 @@ const AddConnections = () => {
     }
   };
 
+  const onClickSearchedUser = (selectedUserId) => {
+    handlePopoverClose();
+    const allTypeOfUsers = [
+      ...(invitationAcceptedUsers || []),
+      ...(invitationNotAcceptedUsers || []),
+      ...(invitationReceiverByUser || []),
+    ];
+    if (activeTab === "Tab1") {
+      if (
+        allTypeOfUsers &&
+        allTypeOfUsers.find((user) => user.userId === selectedUserId)
+      ) {
+        emptyOtherSectionsFromMyConnection(selectedUserId);
+      } else {
+        handleTabClick("Tab2");
+        setValue("2");
+        handleSearch(selectedUserId);
+      }
+    } else {
+      if (
+        allTypeOfUsers &&
+        allTypeOfUsers.find((user) => user.userId === selectedUserId)
+      ) {
+        emptyOtherSectionsFromMyConnection(selectedUserId);
+        handleTabClick("Tab1");
+        setValue("1");
+      } else {
+        handleSearch(selectedUserId);
+      }
+    }
+  };
+
+  const emptyOtherSectionsFromMyConnection = (selectedUserId) => {
+    if (
+      invitationReceiverByUser &&
+      invitationReceiverByUser.find((user) => user.userId === selectedUserId)
+    ) {
+      setInvitationReceivedUserByIds(
+        invitationReceiverByUser.filter(
+          (user) => user.userId === selectedUserId
+        )
+      );
+      setInvitationAcceptedUsers([]);
+      setInvitationNotAcceptedUsers([]);
+    } else if (
+      invitationAcceptedUsers &&
+      invitationAcceptedUsers.find((user) => user.userId === selectedUserId)
+    ) {
+      setInvitationAcceptedUsers(
+        invitationAcceptedUsers.filter((user) => user.userId === selectedUserId)
+      );
+      setInvitationReceivedUserByIds([]);
+      setInvitationNotAcceptedUsers([]);
+    } else if (
+      invitationNotAcceptedUsers &&
+      invitationNotAcceptedUsers.find((user) => user.userId === selectedUserId)
+    ) {
+      setInvitationNotAcceptedUsers(
+        invitationNotAcceptedUsers.filter(
+          (user) => user.userId === selectedUserId
+        )
+      );
+      setInvitationAcceptedUsers([]);
+      setInvitationReceivedUserByIds([]);
+    }
+  };
+
   return (
     <Box>
       <Header />
@@ -645,20 +740,25 @@ const AddConnections = () => {
       <input type="text" placeholder="Search..." style={{ flex: 1, marginRight: '0.5rem', padding: '0.5rem', borderRadius: '4px', border: '1px solid #CACACA' }} />
       <button style={{ padding:'11px 16px 11px 16px', borderRadius: '4px', backgroundColor: '#004367', color: 'white', border: '1px', cursor: 'pointer' ,fontSize:'12px'}}>Search</button>
     </div> */}
-          {/* <Box
+          <Box
             style={{
               display: "flex",
               alignItems: "center",
-              flexDirection: "column", // Added to align items vertically
+              marginBottom: "1rem",
             }}
           >
-            <TextField
+            <input
               label="Search for a user..."
+              type="text"
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
               style={{
                 width: "100%",
-                marginBottom: "1rem",
+                flex: 1,
+                marginRight: "0.5rem",
+                padding: "0.5rem",
+                borderRadius: "4px",
+                border: "1px solid #CACACA",
               }}
             />
             <Button
@@ -671,11 +771,50 @@ const AddConnections = () => {
                 cursor: "pointer",
                 fontSize: "12px",
               }}
-              onClick={handleSearch}
+              onClick={(e) => {
+                onUserQuerySearch();
+                handlePopoverClick(e);
+              }}
             >
               Search
             </Button>
-          </Box> */}
+          </Box>
+          <div>
+            <Popover
+              id={id}
+              open={openPopover}
+              anchorEl={anchorEl}
+              onClose={handlePopoverClose}
+              anchorOrigin={{
+                vertical: "bottom",
+                horizontal: "left",
+              }}
+            >
+              <Typography sx={{ p: 2 }}>
+                {userQuerySearchData &&
+                  userQuerySearchData?.length > 0 &&
+                  userQuerySearchData?.map((item) => (
+                    <List sx={{}} style={{ color: "gray" }}>
+                      <ListItem>
+                        <ListItemText
+                          primary={`${item.firstName}${
+                            item.lastName ? ` ${item.lastName}` : ""
+                          }`}
+                          secondary="Designation"
+                          onClick={() => onClickSearchedUser(item.userId)}
+                        />
+                      </ListItem>
+                      <Divider />
+                    </List>
+                  ))}
+                {(!userQuerySearchData || userQuerySearchData.length === 0) && (
+                  <Box>
+                    <p>No users found</p>
+                  </Box>
+                )}
+              </Typography>
+            </Popover>
+          </div>
           <TabContext value={value}>
             <Box sx={{ borderBottom: 1, borderColor: "divider" }}>
               <TabList
@@ -685,7 +824,7 @@ const AddConnections = () => {
                 <Tab
                   label="My Connections"
                   value="1"
-                  style={{ fontSize: "12px", color: "#484848"}}
+                  style={{ fontSize: "12px", color: "#484848" }}
                   onClick={() => {
                     handleTabClick("Tab1");
                     setCurrentPage(1);
@@ -695,7 +834,7 @@ const AddConnections = () => {
                 <Tab
                   label="Add New"
                   value="2"
-                  style={{ fontSize: "12px", color: "#484848"}}
+                  style={{ fontSize: "12px", color: "#484848" }}
                   onClick={() => {
                     handleTabClick("Tab2");
                     setCurrentPage(1);
@@ -871,8 +1010,16 @@ const AddConnections = () => {
                     }}
                   >
                     <ModalContent sx={{ width: 400 }} style={{}}>
-                      <div style={{textAlign:'center'}}>
-                        <h2 style={{fontSize:'14px',textAlign:'center',padding:'13px'}}>{t("INVITATION_NOT_ACCEPTED")}</h2>
+                      <div style={{ textAlign: "center" }}>
+                        <h2
+                          style={{
+                            fontSize: "14px",
+                            textAlign: "center",
+                            padding: "13px",
+                          }}
+                        >
+                          {t("INVITATION_NOT_ACCEPTED")}
+                        </h2>
                         <Button
                           onClick={(e) => {
                             setShowChatModal(false);
@@ -886,7 +1033,7 @@ const AddConnections = () => {
                             margin: "0 10px",
                             fontWeight: "500",
                             fontSize: "12px",
-                            width:'50%'
+                            width: "50%",
                           }}
                         >
                           {t("CLOSE")}
@@ -902,7 +1049,7 @@ const AddConnections = () => {
                 userSearchData?.map((item) => (
                   <List
                     key={item.id} // Add key prop to each List element
-                    sx={{ fontSize:'14px'}} // Add styling here if needed
+                    sx={{ fontSize: "14px" }} // Add styling here if needed
                     onClick={() => handleUserClick(item)}
                   >
                     <ListItem>
@@ -917,12 +1064,65 @@ const AddConnections = () => {
                         underline="none"
                         color="primary"
                         onClick={handleOpen}
-                        style={{fontSize:'14px',color:'#004367',fontWeight:'600' }}
+                        style={{
+                          fontSize: "14px",
+                          color: "#004367",
+                          fontWeight: "600",
+                        }}
                       >
                         Invite
                       </Link>
                     </ListItem>
                     <Divider />
+                    {/* <Box
+            style={{
+              display: "flex",
+              alignItems: "center",
+              flexDirection: "column", // Added to align items vertically
+            }}
+          >
+            <TextField
+              label="Search for a user..."
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+              style={{
+                width: "100%",
+                marginBottom: "1rem",
+              }}
+            />
+            <Button
+              style={{
+                padding: "11px 9px",
+                borderRadius: "4px",
+                backgroundColor: "#004367",
+                color: "white",
+                border: "1px",
+                cursor: "pointer",
+                fontSize: "12px",
+              }}
+              onClick={handleSearch}
+            >
+              Search
+            </Button>
+            {!isLoading && !error && (
+              <List>
+                {filteredUsers &&
+                  filteredUsers.map((user, index) => (
+                    <React.Fragment key={index}>
+                      <ListItem>
+                        <ListItemText
+                          primary={`Name Surname: ${user.firstName} ${user.lastName}`}
+                          secondary={`Designation: ${user.designation}`}
+                        />
+                      </ListItem>
+                      <Divider />
+                    </React.Fragment>
+                  ))}
+              </List>
+            )}
+            {isLoading && <Typography>Loading...</Typography>}
+            {error && <Typography>Error: {error}</Typography>}
+          </Box> */}
                   </List>
                 ))}
 
@@ -961,14 +1161,24 @@ const AddConnections = () => {
                       }}
                     >
                       {selectedUser && (
-                        <div style={{ fontSize: "16px", lineHeight: "1.6",fontWeight:'500' }}>
-                           {selectedUser?.firstName}
+                        <div
+                          style={{
+                            fontSize: "16px",
+                            lineHeight: "1.6",
+                            fontWeight: "500",
+                          }}
+                        >
+                          {selectedUser?.firstName}
                           {selectedUser?.lastName}
                         </div>
                       )}
                       {selectedUser && (
                         <div
-                          style={{ fontSize: "15px", paddingBottom: "10px",fontWeight:'400' }}
+                          style={{
+                            fontSize: "15px",
+                            paddingBottom: "10px",
+                            fontWeight: "400",
+                          }}
                         >
                           Designation:
                         </div>
@@ -1013,7 +1223,7 @@ const AddConnections = () => {
                           onChange={handleTextareaChange}
                           placeholder="Enter your text here..."
                           fullWidth
-                          sx={{fontSize:'13px'}}
+                          sx={{ fontSize: "13px" }}
                         />
                       </div>
                     )}
@@ -1025,39 +1235,39 @@ const AddConnections = () => {
                         flexDirection: "row",
                       }}
                     >
-                        <Button
-                          variant="outlined"
-                          style={{
-                            borderRadius: "10px",
-                            color: "#004367",
-                            padding: "10px 12px",
-                            margin: "0 10px",
-                            fontWeight: "500",
-                            fontSize: "12px",
-                            border: "solid 1px #efefea00",
-                            width:'50%'
-                          }}
-                          onClick={handleClose}
-                        >
-                          Cancel
-                        </Button>
-                      
-                        <Button
-                          style={{
-                            background: "#004367",
-                            borderRadius: "10px",
-                            color: "#fff",
-                            padding: "10px 12px",
-                            margin: "0 10px",
-                            fontWeight: "500",
-                            fontSize: "12px",
-                            border: "solid 1px #004367",
-                            width:'50%'
-                          }}
-                          onClick={showChat ? handleSendClick : toggleChat}
-                        >
-                          {buttonText}
-                        </Button>
+                      <Button
+                        variant="outlined"
+                        style={{
+                          borderRadius: "10px",
+                          color: "#004367",
+                          padding: "10px 12px",
+                          margin: "0 10px",
+                          fontWeight: "500",
+                          fontSize: "12px",
+                          border: "solid 1px #efefea00",
+                          width: "50%",
+                        }}
+                        onClick={handleClose}
+                      >
+                        Cancel
+                      </Button>
+
+                      <Button
+                        style={{
+                          background: "#004367",
+                          borderRadius: "10px",
+                          color: "#fff",
+                          padding: "10px 12px",
+                          margin: "0 10px",
+                          fontWeight: "500",
+                          fontSize: "12px",
+                          border: "solid 1px #004367",
+                          width: "50%",
+                        }}
+                        onClick={showChat ? handleSendClick : toggleChat}
+                      >
+                        {buttonText}
+                      </Button>
                     </Box>
                   </ModalContent>
                 </Modal>
@@ -1075,12 +1285,22 @@ const AddConnections = () => {
                       alignItems: "flex-end",
                       pt: "10vh",
                       p: "0",
-                     
                     }}
                   >
-                    <ModalContent sx={{ width: 400,bottom:'30px' }} style={{}}>
-                      <div style={{padding:'10px',textAlign:'center'}}>
-                        <h2 style={{fontSize:'14px',textAlign:'center',padding:'13px'}}>{t('INVITATION_SEND_SUCCESSFULLY')}</h2>
+                    <ModalContent
+                      sx={{ width: 400, bottom: "30px" }}
+                      style={{}}
+                    >
+                      <div style={{ padding: "10px", textAlign: "center" }}>
+                        <h2
+                          style={{
+                            fontSize: "14px",
+                            textAlign: "center",
+                            padding: "13px",
+                          }}
+                        >
+                          {t("INVITATION_SEND_SUCCESSFULLY")}
+                        </h2>
                         <Button
                           onClick={(e) => {
                             setShowModal(false);
@@ -1093,10 +1313,10 @@ const AddConnections = () => {
                             margin: "0 10px",
                             fontWeight: "500",
                             fontSize: "12px",
-                            width:'40%'
+                            width: "40%",
                           }}
                         >
-                          {t('CLOSE')}
+                          {t("CLOSE")}
                         </Button>
                       </div>
                     </ModalContent>
