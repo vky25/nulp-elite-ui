@@ -126,7 +126,7 @@ const AddConnections = () => {
 
   const toggleChat = () => {
     setShowChat(!showChat);
-    setButtonText(showChat ? t("INVITE") : t("SEND_INVITATION"));
+    setButtonText(showChat ? t('INVITE') : t('SEND_INVITATION'));
   };
 
   useEffect(() => {
@@ -980,7 +980,7 @@ const AddConnections = () => {
                             padding: "13px",
                           }}
                         >
-                          {t("INVITATION_NOT_ACCEPTED")}
+                          {t('INVITATION_NOT_ACCEPTED')}
                         </h2>
                         <Button
                           onClick={(e) => {
@@ -998,7 +998,7 @@ const AddConnections = () => {
                             width: "50%",
                           }}
                         >
-                          {t("CLOSE")}
+                          {t('CLOSE')}
                         </Button>
                       </div>
                     </ModalContent>
@@ -1261,7 +1261,7 @@ const AddConnections = () => {
                             padding: "13px",
                           }}
                         >
-                          {t("INVITATION_SEND_SUCCESSFULLY")}
+                          {t('INVITATION_SEND_SUCCESSFULLY')}
                         </h2>
                         <Button
                           onClick={(e) => {
@@ -1278,7 +1278,7 @@ const AddConnections = () => {
                             width: "40%",
                           }}
                         >
-                          {t("CLOSE")}
+                          {t('CLOSE')}
                         </Button>
                       </div>
                     </ModalContent>

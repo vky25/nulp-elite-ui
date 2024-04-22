@@ -89,7 +89,7 @@ const Certificate = () => {
               fontWeight: "600",
             }}
           >
-            <Link underline="hover" color="#004367" href="/">
+            <Link underline="hover" color="#004367" href="/profile">
               {t("MY_PROFILE")}
             </Link>
             <Link underline="hover" href="" aria-current="page" color="#484848">
