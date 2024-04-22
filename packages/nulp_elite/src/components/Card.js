@@ -40,7 +40,7 @@ export default function BoxCard({ items, index ,onClick}) {
 
 
   return (
-    <Card sx={{  position: "relative" }}>
+    <Card sx={{  position: "relative",cursor:'pointer' }}>
       <CardMedia
         sx={{
           height: 140,

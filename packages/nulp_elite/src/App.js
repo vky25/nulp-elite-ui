@@ -51,6 +51,7 @@ import PDFContent from "pages/content/pdf";
 import NoResult from "pages/content/noResultFound";
 import Message from "pages/connections/message";
 import UserPrefPopup from "pages/UserPrefPopup";
+import Terms from "pages/terms";
 
 function App() {
   // const [t] = useTranslation();
@@ -190,6 +191,11 @@ function App() {
     },
     {
       moduleName: "nulp_elite",
+      path: "/terms",
+      component: Terms,
+    },
+    {
+      moduleName: "nulp_elite",
       path: "/otp",
       component: Otp,
     },
@@ -231,11 +237,10 @@ function App() {
           },
         });
         const data = await response.json();
-        console.log(data.result.response.framework.board)
-        if(data.result.response.framework.board){
+        console.log(data.result.response.framework.board);
+        if (data.result.response.framework.board) {
           setCheckPref(true);
-        }
-        else{
+        } else {
           setCheckPref(false);
         }
       } catch (error) {
@@ -253,10 +258,8 @@ function App() {
       {/* <I18nextProvider i18n={i18n}> */}
       {/* <ChakraProvider> */}
       <React.Suspense>
-      { !checkPref &&
-        <UserPrefPopup />
-      }
-    
+        {!checkPref && <UserPrefPopup />}
+
         <Router>
           <Routes>
             {routes.map((route, index) => (

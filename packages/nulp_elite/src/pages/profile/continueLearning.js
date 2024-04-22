@@ -86,7 +86,7 @@ const ContinueLearning = () => {
 
   return (
     <div>
-      <Header />
+      {/* <Header /> */}
       <Container maxWidth="xxl" role="main" className="container-pb">
         <Breadcrumbs
           aria-label="breadcrumb"
@@ -136,7 +136,7 @@ const ContinueLearning = () => {
                     item
                     xs={12}
                     md={6}
-                    lg={3}
+                    lg={4}
                     style={{ marginBottom: "10px" }}
                     key={items.contentId}
                   >
