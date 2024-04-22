@@ -233,7 +233,6 @@ const DomainList = () => {
       </Container>
       <Footer />
     </div>
-
   );
 };
 
