@@ -160,7 +160,6 @@ const AddConnections = () => {
     const url = `http://localhost:3000/learner/user/v3/search`;
     let filters = {
       status: "1",
-      rootOrgId: "0130701891041689600",
     };
     if (selectedUserId) {
       filters.userId = selectedUserId;
@@ -234,7 +233,6 @@ const AddConnections = () => {
       request: {
         filters: {
           status: "1",
-          rootOrgId: "0130701891041689600",
         },
         query: searchQuery,
         sort_by: {
@@ -361,7 +359,6 @@ const AddConnections = () => {
       request: {
         filters: {
           status: "1",
-          rootOrgId: "0130701891041689600",
           userId: userIds,
         },
         // query: searchQuery,
@@ -413,7 +410,6 @@ const AddConnections = () => {
       request: {
         filters: {
           status: "1",
-          rootOrgId: "0130701891041689600",
           userId: userIds,
         },
         // query: searchQuery,
@@ -460,7 +456,6 @@ const AddConnections = () => {
       request: {
         filters: {
           status: "1",
-          rootOrgId: "0130701891041689600",
           userId: userIds,
         },
         // query: searchQuery,
