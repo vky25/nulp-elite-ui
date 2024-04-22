@@ -152,9 +152,9 @@ body{
  .MuiGrid-container.MuiGrid-spacing-xs-2 {
   margin:0 -16px !important; 
  }
- .react-multi-carousel-list{
+ /* .react-multi-carousel-list{
   height: 95px !important;
- }
+ } */
  .css-1l1167e{
   color:#000 !important;
  }
@@ -286,10 +286,13 @@ Link{
   width: 94.6% !important;
 }
 .MuiCardMedia-root{
-  background-size: cover;
-  background-repeat: no-repeat;
+  background-size: cover !important;
+  background-repeat: no-repeat !important;
 }
  #simple-popover .MuiPopover-paper{
   left: 23px !important;
   width: 92% !important;
+}
+Footer{
+  margin-top:30px;
 }
