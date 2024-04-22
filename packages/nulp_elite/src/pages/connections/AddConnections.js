@@ -122,7 +122,7 @@ const AddConnections = () => {
 
   const toggleChat = () => {
     setShowChat(!showChat);
-    setButtonText(showChat ? t("INVITE") : t("SEND_CHAT"));
+    setButtonText(showChat ? t("INVITE") : t("SEND_INVITATION"));
   };
 
   useEffect(() => {
