@@ -23,20 +23,19 @@ import Select from "@mui/material/Select";
 import LanguageIcon from "@mui/icons-material/Language";
 import { useTranslation } from "react-i18next";
 import { changeLanguage } from "i18next";
-import  { useState } from 'react';
-import LiveHelpOutlinedIcon from '@mui/icons-material/LiveHelpOutlined';
-import LogoutOutlinedIcon from '@mui/icons-material/LogoutOutlined';
+import { useState } from "react";
+import LiveHelpOutlinedIcon from "@mui/icons-material/LiveHelpOutlined";
+import LogoutOutlinedIcon from "@mui/icons-material/LogoutOutlined";
 
 function Header() {
-  // const [age, setAge] = React.useState("");
   const { t } = useTranslation();
-  const [language, setLanguage] = useState('');
+  const [language, setLanguage] = useState("en");
 
-  const handleChange = (event) => {
-    setAge(event.target.value);
+  const handleChangeLanguage = (event) => {
+    const selectedLanguage = event.target.value;
+    setLanguage(selectedLanguage);
+    changeLanguage(selectedLanguage);
   };
-
-  
 
   const [anchorElNav, setAnchorElNav] = React.useState(null);
   const [anchorElUser, setAnchorElUser] = React.useState(null);
@@ -56,11 +55,9 @@ function Header() {
     setAnchorElUser(null);
   };
 
- 
-  
-
   return (
     <>
+      {/* Sidebar Navigation */}
       <Box
         className="xs-hide"
         style={{
@@ -70,6 +67,7 @@ function Header() {
           alignItems: "center",
         }}
       >
+        {/* Navigation Links */}
         <Box style={{ padding: "10px" }}>
           <DevicesIcon
             style={{
@@ -88,7 +86,7 @@ function Header() {
               paddingRight: "10px",
             }}
           >
-           {t('MAIN_CONTENT')}{" "}
+            {t("MAIN_CONTENT")}{" "}
           </Link>
         </Box>
         <Box
@@ -139,13 +137,9 @@ function Header() {
             {t("SCREEN_READER")}{" "}
           </Link>
         </Box>
-        
-              <FormControl sx={{ m: 1, minWidth: 120 }} size="small">
-            
-            
-    </FormControl>
-        </Box>
+      </Box>
 
+      {/* Top Navigation Bar */}
       <AppBar position="sticky" style={{ background: "#fff" }}>
         <Container
           maxWidth="xl"
@@ -170,83 +164,69 @@ function Header() {
               />
             </Box>
 
+            {/* Language Select */}
             <Box sx={{ flexGrow: 2, display: { xs: "flex", md: "none" } }}>
-                <Menu
-                  id="menu-appbar"
-                  anchorEl={anchorElNav}
-                  anchorOrigin={{
-                    vertical: "bottom",
-                    horizontal: "left",
-                  }}
-                  keepMounted
-                  transformOrigin={{
-                    vertical: "top",
-                    horizontal: "left",
-                  }}
-                  open={Boolean(anchorElNav)}
-                  onClose={handleCloseNavMenu}
-                  sx={{
-                    display: { xs: "block", md: "none" },
-                  }}
-                >
-                   
-                    <MenuItem>
-                    <Link href="/help" textAlign="center" underline="none"><LiveHelpOutlinedIcon  style={{verticalAlign:'bottom',color:'#000'}}/> {t('HELP')}</Link>
-                  </MenuItem>
-                  <MenuItem>
-                    <Link href="/logoff" textAlign="center" underline="none"><LogoutOutlinedIcon  style={{verticalAlign:'bottom',color:'#000'}}/> {t('LOGOUT')}</Link>
-                  </MenuItem>
-                </Menu>
+              <Menu
+                id="menu-appbar"
+                anchorEl={anchorElNav}
+                anchorOrigin={{
+                  vertical: "bottom",
+                  horizontal: "left",
+                }}
+                keepMounted
+                transformOrigin={{
+                  vertical: "top",
+                  horizontal: "left",
+                }}
+                open={Boolean(anchorElNav)}
+                onClose={handleCloseNavMenu}
+                sx={{
+                  display: { xs: "block", md: "none" },
+                }}
+              >
+                <MenuItem>
+                  <Link href="/help" textAlign="center" underline="none">
+                    <LiveHelpOutlinedIcon
+                      style={{ verticalAlign: "bottom", color: "#000" }}
+                    />{" "}
+                    {t("HELP")}
+                  </Link>
+                </MenuItem>
+                <MenuItem>
+                  <Link href="/logoff" textAlign="center" underline="none">
+                    <LogoutOutlinedIcon
+                      style={{ verticalAlign: "bottom", color: "#000" }}
+                    />{" "}
+                    {t("LOGOUT")}
+                  </Link>
+                </MenuItem>
+              </Menu>
             </Box>
-            <InputLabel  id="language-select-label">
-              {" "}
-              {t("LANGUAGE")}
-            </InputLabel>
- {/* <Box sx={{ minWidth: 120 }}>
-      <FormControl fullWidth>
-        <InputLabel id="demo-simple-select-label">Age</InputLabel>
-        <Select
-          labelId="demo-simple-select-label"
-          id="demo-simple-select"
-          value={age}
-          label="Age"
-          onChange={handleChange}
-        >
-          <MenuItem value={10}>Ten</MenuItem>
-          <MenuItem value={20}>Twenty</MenuItem>
-          <MenuItem value={30}>Thirty</MenuItem>
-        </Select>
-      </FormControl>
-    </Box> */}
-    <Box sx={{ minWidth: 120 }}>
-    <InputLabel id="language-select-label">Select language</InputLabel>
 
-            <Select
-  labelId="language-select-label"
-  id="language-select"
-  className="language"
-  style={{ border: "none" }}
-  label="select language"
-  
+            {/* Language Select */}
+            <Box sx={{ minWidth: 120 }}>
+              <FormControl fullWidth size="small">
+                {/* <InputLabel id="language-select-label">
+                  {t("LANGUAGE")}
+                </InputLabel> */}
+                <Select
+                  labelId="language-select-label"
+                  id="language-select"
+                  className="language"
+                  style={{ border: "none" }}
+                  label={t("LANGUAGE")}
+                  value={language}
+                  startIcon={<LanguageIcon />}
+                  onChange={handleChangeLanguage}
+                  inputProps={{ "aria-label": t("SELECT_LANGUAGE") }}
+                >
+                  <MenuItem value="en">{t("ENGLISH")}</MenuItem>
+                  <MenuItem value="hi">{t("HINDI")}</MenuItem>
+                </Select>
+              </FormControl>
+            </Box>
 
-  startIcon={<LanguageIcon />}
-  onChange={(event) => changeLanguage(event.target.value)}
-  inputProps={{ 'aria-label': 'Select Language' }}
-
-><MenuItem value="" disabled>
-        Select Language
-      </MenuItem>
-             
-  <MenuItem value="en">
-    {t("ENGLISH")}
-  </MenuItem>
-  <MenuItem value="hi">
-    {t("HINDI")}
-  </MenuItem>
-</Select>
-</Box>
-
-
+            {/* Search Box */}
             <Box
               className="xs-hide"
               style={{
@@ -257,7 +237,7 @@ function Header() {
               }}
             >
               <TextField
-                placeholder="Search"
+                placeholder={t("SEARCH")}
                 variant="outlined"
                 size="small"
                 fullWidth
@@ -271,6 +251,7 @@ function Header() {
               />
             </Box>
 
+            {/* Other Navigation Links */}
             <Box
               className="xs-hide"
               sx={{ flexGrow: 1, display: "flex", justifyContent: "flex-end" }}
@@ -288,7 +269,7 @@ function Header() {
                 <EditNoteOutlinedIcon
                   style={{ padding: "0 10px", verticalAlign: "middle" }}
                 />
-                {t('CONTENT')}
+                {t("CONTENT")}
               </Link>
               <Link
                 href="/addConnections"
@@ -303,16 +284,16 @@ function Header() {
                 <GroupsOutlinedIcon
                   style={{ padding: "0 10px", verticalAlign: "middle" }}
                 />
-                {t('CONNECTIONS')}
+                {t("CONNECTIONS")}
               </Link>
-              {/* <Link href="#" style={{ my: 2, color: 'black', display: 'block' }}> <AccountCircleOutlinedIcon />Profile</Link> */}
 
-              <Tooltip title="Open settings">
+              {/* User Profile */}
+              <Tooltip title={t("OPEN_SETTINGS")}>
                 <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
                   <AccountCircleOutlinedIcon
                     style={{ padding: "0 10px", verticalAlign: "middle" }}
                   />{" "}
-                  {t('PROFILE')}
+                  {t("PROFILE")}
                 </IconButton>
               </Tooltip>
               <Menu
@@ -331,15 +312,21 @@ function Header() {
                 open={Boolean(anchorElUser)}
                 onClose={handleCloseUserMenu}
               >
-                  <MenuItem>
-                    <Link href="/profile" textAlign="center">{t('PROFILE')}</Link>
-                  </MenuItem>
-                  <MenuItem>
-                    <Link href="/help" textAlign="center">{t('HELP')}</Link>
-                  </MenuItem>
-                  <MenuItem>
-                    <Link href="/logoff" textAlign="center">{t('LOGOUT')}</Link>
-                  </MenuItem>
+                <MenuItem>
+                  <Link href="/profile" textAlign="center">
+                    {t("PROFILE")}
+                  </Link>
+                </MenuItem>
+                <MenuItem>
+                  <Link href="/help" textAlign="center">
+                    {t("HELP")}
+                  </Link>
+                </MenuItem>
+                <MenuItem>
+                  <Link href="/logoff" textAlign="center">
+                    {t("LOGOUT")}
+                  </Link>
+                </MenuItem>
               </Menu>
             </Box>
           </Toolbar>
@@ -348,4 +335,5 @@ function Header() {
     </>
   );
 }
+
 export default Header;
