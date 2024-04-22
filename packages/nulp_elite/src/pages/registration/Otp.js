@@ -304,7 +304,7 @@ const Otp = () => {
         <Box style={{display:'flex', alignItems:'center'}}>
 
 <FormGroup style={{flexDirection:'row', alignItems:'center'}}>
-    <FormControlLabel  control={<Checkbox />} /> <Link href="../terms.html" target="_blank"> <span className="required">*</span>{t('TERMS_CONDITIONS')}</Link>
+    <FormControlLabel style={{marginRight:'0'}}  control={<Checkbox />} /> <Link href="../terms" target="_blank"> <span className="required">*</span>{t('TERMS_CONDITIONS')}</Link>
   </FormGroup>
   </Box>
         <Box py={1}>
