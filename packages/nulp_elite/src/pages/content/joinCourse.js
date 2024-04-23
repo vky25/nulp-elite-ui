@@ -19,7 +19,6 @@ import { useParams, useNavigate, useLocation } from "react-router-dom";
 import axios from "axios";
 import SummarizeOutlinedIcon from "@mui/icons-material/SummarizeOutlined";
 
-
 import data from "../../assets/courseHierarchy.json";
 
 const JoinCourse = () => {
@@ -122,9 +121,9 @@ const JoinCourse = () => {
                     fontWeight: "600",
                   }}
                 >
-                  <Link underline="hover" color="#004367" href="/">
+                  {/* <Link underline="hover" color="#004367" href="/">
                     {t("COURSES")}
-                  </Link>
+                  </Link> */}
                   <Link
                     underline="hover"
                     href=""
@@ -313,8 +312,8 @@ const JoinCourse = () => {
                       {faqIndex.name}
                     </AccordionSummary>
                     {faqIndex.children.map((faqIndexname) => (
-                      <AccordionDetails style={{paddingLeft:'35px'}}>
-                        <SummarizeOutlinedIcon/> 
+                      <AccordionDetails style={{ paddingLeft: "35px" }}>
+                        <SummarizeOutlinedIcon />
 
                         <Link
                           href="#"
