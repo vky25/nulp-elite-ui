@@ -443,7 +443,13 @@ const JoinCourse = () => {
                   {t("LICENSE_TERMS")}:{" "}
                   {userData?.result?.content?.licenseDetails?.name}
                   {t("FOR_DETAILS")}:{" "}
-                  {userData?.result?.content?.licenseDetails?.url}
+                  <a
+                    href={userData?.result?.content?.licenseDetails?.url}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  >
+                    {userData?.result?.content?.licenseDetails?.url}
+                  </a>
                 </Typography>
               </AccordionDetails>
             </Accordion>
