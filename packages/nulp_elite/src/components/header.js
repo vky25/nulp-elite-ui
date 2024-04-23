@@ -182,10 +182,11 @@ function Header() {
               <MenuIcon />
             </IconButton>
             <Box sx={{ flexGrow: 1, paddingLeft: "20px",display:'flex',justifyContent:'space-between' }}>
+             <Link href="/all">
               <img
                 src={require("../assets/logo.png")}
                 style={{ maxWidth: "100%" }}
-              />
+              /></Link>
                {/* Language Select */}
          <Box sx={{ minWidth: 120,paddingLeft:'10px' }} className="lg-hide">
               <FormControl fullWidth size="small" style={{display:'flex',alignItems:'center',flexDirection:'row'}}> 

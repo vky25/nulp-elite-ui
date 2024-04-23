@@ -115,16 +115,17 @@ const JoinCourse = () => {
 
       <Container maxWidth="xxl" role="main" className="container-pb">
         <Grid container spacing={2}>
-          <Grid item xs={12} md={4} lg={4} sx={{ paddingRight: "20px" }}>
+          <Grid item xs={12} md={4} lg={4} className="sm-p-25">
             <Grid container spacing={2}>
-              <Grid item xs={8}>
+              <Grid item xs={8} className="xs-p-0">
                 <Link
                   onClick={handleGoBack}
                   style={{
                     display: "block",
                     display: "flex",
                     fontSize: "14px",
-                    paddingTop: "30px",
+                    paddingTop: "15px",
+                    marginBottom:"10px",
                     color: "rgb(0, 67, 103)",
                   }}
                 >
@@ -136,7 +137,6 @@ const JoinCourse = () => {
                 <Breadcrumbs
                   aria-label="breadcrumb"
                   style={{
-                    padding: "25px 0",
                     fontSize: "16px",
                     fontWeight: "600",
                   }}
@@ -170,9 +170,9 @@ const JoinCourse = () => {
               <Typography
                 variant="h7"
                 style={{
-                  margin: "0 0 9px 0",
+                  margin: "12px 0 12px 0",
                   display: "block",
-                  fontSize: "11px",
+                  fontSize: "13px",
                 }}
               >
                 {t("RELEVANT_FOR")}:
@@ -181,7 +181,7 @@ const JoinCourse = () => {
                   style={{
                     background: "#ffefc2",
                     color: "#484848",
-                    fontSize: "10px",
+                    fontSize: "12px",
                     margin: "0 10px",
                   }}
                 >
@@ -273,6 +273,7 @@ const JoinCourse = () => {
                   padding: "10px 71px",
                   fontWeight: "600",
                   fontSize: "14px",
+                  margin:'15px 0'
                 }}
               >
                 {t("JOIN_COURSE")}
@@ -338,6 +339,7 @@ const JoinCourse = () => {
                         <Link
                           href="#"
                           key={faqIndexname.id}
+                          style={{verticalAlign:'super'}}
                           onClick={handleLinkClick}
                         >
                           {faqIndexname.name}
