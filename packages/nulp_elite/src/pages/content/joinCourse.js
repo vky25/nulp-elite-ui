@@ -115,16 +115,17 @@ const JoinCourse = () => {
 
       <Container maxWidth="xxl" role="main" className="container-pb">
         <Grid container spacing={2}>
-          <Grid item xs={12} md={4} lg={4}>
-            <Grid container spacing={2} style={{padding:'0'}}>
-              <Grid item xs={8}>
+          <Grid item xs={12} md={4} lg={4} className="sm-p-25">
+            <Grid container spacing={2}>
+              <Grid item xs={8} className="xs-p-0">
                 <Link
                   onClick={handleGoBack}
                   style={{
                     display: "block",
                     display: "flex",
                     fontSize: "14px",
-                    paddingTop: "30px",
+                    paddingTop: "15px",
+                    marginBottom:"10px",
                     color: "rgb(0, 67, 103)",
                   }}
                 >
@@ -171,7 +172,7 @@ const JoinCourse = () => {
                 style={{
                   margin: "12px 0 12px 0",
                   display: "block",
-                  fontSize: "11px",
+                  fontSize: "13px",
                 }}
               >
                 {t("RELEVANT_FOR")}:
@@ -338,6 +339,7 @@ const JoinCourse = () => {
                         <Link
                           href="#"
                           key={faqIndexname.id}
+                          style={{verticalAlign:'super'}}
                           onClick={handleLinkClick}
                         >
                           {faqIndexname.name}

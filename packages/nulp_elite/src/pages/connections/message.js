@@ -51,6 +51,7 @@ const useStyles = makeStyles((theme) => ({
     padding: "8px",
     borderTop: "1px solid #ccc",
     backgroundColor: "#ffffff",
+    marginTop:"10px"
   },
   senderMessage: {
     borderRadius: "5px",
@@ -59,6 +60,8 @@ const useStyles = makeStyles((theme) => ({
     textAlign: "right",
     background: "linear-gradient(180deg, #004367 0%, #102244 100%)",
     color:"#fff",
+    width: "50%",
+    float: "right"
     // float:"right"
 
   },
@@ -89,7 +92,6 @@ const Message = (props) => {
   const [reason, setReason] = useState("");
   const [dialogOpen, setDialogOpen] = useState(false);
   const [isBlocked, setIsBlocked] = useState(false); // State to track if user is blocked
-  const [maxWidth, setMaxWidth] = React.useState('md');
 
   useEffect(() => {
     const _userId = util.userId();
@@ -268,16 +270,17 @@ const Message = (props) => {
           </MenuItem>
         </Menu> */}
       </div>
-      <Dialog open={dialogOpen}         maxWidth={maxWidth}
+      <Dialog open={dialogOpen}         maxWidth="lg"
 onClose={handleDialogClose}>
         <DialogTitle>Block User</DialogTitle>
         <DialogContent>
           <TextareaAutosize
             autoFocus
+            minRows={6}
+            maxRows={4}
             margin="dense"
             id="reason"
             label="Reason for blocking"
-            type="text"
             fullWidth
             value={reason}
             onChange={(e) => setReason(e.target.value)}
