@@ -13,9 +13,10 @@ import { useNavigate, Navigate } from "react-router-dom";
 import image from "../../assets/bg.png";
 import { useStore } from "configs/zustandStore";
 const axios = require("axios");
-import FormControlLabel from '@mui/material/FormControlLabel';
-import Checkbox from '@mui/material/Checkbox';
-import FormGroup from '@mui/material/FormGroup';
+import FormControlLabel from "@mui/material/FormControlLabel";
+import Checkbox from "@mui/material/Checkbox";
+import FormGroup from "@mui/material/FormGroup";
+import { Dialog, DialogContent, DialogActions } from "@material-ui/core";
 
 const Otp = () => {
   const { t } = useTranslation();
@@ -29,14 +30,23 @@ const Otp = () => {
   const [goToOtp, setGoToOtp] = useState(false);
   const dataStore = useStore((state) => state.data);
   const captchaResponse = dataStore.captchaResponse;
+  const [open, setOpen] = useState(false);
+  const [tncConfig, setTncConfig] = useState();
+  const [tncConfigVersion, setTncConfigVersion] = useState();
+  const [birthYear, setBirthYear] = useState(2000);
+  const [isChecked, setIsChecked] = useState(false);
 
   useEffect(() => {
     const storedUserData = dataStore.userData;
     if (storedUserData) {
       setUserData(storedUserData);
+      setBirthYear(storedUserData.age);
+      const latestVersion = JSON.parse(dataStore.tncConfig).latestVersion;
+      setTncConfigVersion(latestVersion);
+      const url = JSON.parse(dataStore.tncConfig)[latestVersion]?.url || "";
+      setTncConfig(url);
     }
-  });
-
+  }, [dataStore.userData, dataStore.tncConfig]);
   useEffect(() => {
     let timer;
     if (!resendDisabled) {
@@ -79,6 +89,14 @@ const Otp = () => {
     }
   };
 
+  const handleClose = () => {
+    setOpen(false);
+  };
+
+  const handleLinkClick = () => {
+    setOpen(true);
+  };
+
   const verifyUser = async () => {
     setIsLoading(true);
     setError(null);
@@ -105,8 +123,8 @@ const Otp = () => {
       }
 
       const data = await response.json();
-      signupUser(data.reqData);
-      // acceptTermsAndConditions();
+      await signupUser(data.reqData);
+      acceptTermsAndConditions();
     } catch (error) {
       setError(error.message);
     } finally {
@@ -165,10 +183,10 @@ const Otp = () => {
 
     try {
       const response = await axios.post(
-        "http://localhost:3000/user/v2/accept/tnc",
+        "https://nulp.niua.org/user/v2/accept/tnc",
         {
           request: {
-            version: "v12",
+            version: tncConfigVersion,
             identifier: userData.email,
           },
         }
@@ -186,7 +204,6 @@ const Otp = () => {
       setIsLoading(false);
     }
   };
-
   const generateOtp = async (email) => {
     const url = `http://localhost:3000/learner/anonymous/otp/v1/generate?captchaResponse=${captchaResponse}`;
     const requestBody = {
@@ -218,6 +235,21 @@ const Otp = () => {
   const resendOtp = () => {
     generateOtp(userData.email);
     setResendDisabled(false); // Enable resend button
+  };
+  const age = new Date().getFullYear() - birthYear;
+  const tncText =
+    age < 18 ? (
+      <span>
+        As a parent/guardian I understand & accept the NULP Terms of Use agree
+        my child to register on NULP with the given information.
+      </span>
+    ) : (
+      <span>
+        I am 18+ years old and understand and accept the NULP Terms of Use
+      </span>
+    );
+  const handleCheckboxChange = (event) => {
+    setIsChecked(event.target.checked);
   };
 
   return (
@@ -283,13 +315,43 @@ const Otp = () => {
             ? t("RESEND_CODE")
             : `Resend OTP in ${remainingTime}s`}
         </Button>
+        <FormGroup style={{ flexDirection: "row", alignItems: "center" }}>
+          <FormControlLabel
+            style={{ marginRight: "0" }}
+            control={
+              <Checkbox checked={isChecked} onChange={handleCheckboxChange} />
+            }
+          />{" "}
+          <Link href="#" onClick={handleLinkClick}>
+            {" "}
+            <span style={{ color: "#FF0000", marginLeft: "2px" }}>*</span>
+            {tncText}
+          </Link>
+        </FormGroup>
+        <Dialog open={open} onClose={handleClose}>
+          <DialogContent>
+            <iframe
+              title="Terms and Conditions"
+              src={tncConfig}
+              style={{ width: "100%", height: "80vh", border: "none" }}
+            />
+          </DialogContent>
+          <DialogActions>
+            <Button onClick={handleClose} color="primary">
+              Close
+            </Button>
+          </DialogActions>
+        </Dialog>
+
         <Box pt={4}>
           <Button
             onClick={handleLogin}
-            disabled={otp.length !== 6}
+            disabled={!isChecked || otp.length < 5}
             style={{
               background:
-                otp.length !== 6 ? "rgba(0, 67, 103, 0.5)" : "#004367",
+                !isChecked || otp.length < 5
+                  ? "rgba(0, 67, 103, 0.5)"
+                  : "#004367",
               borderRadius: "10px",
               color: "#fff",
               padding: "10px 71px",
@@ -301,12 +363,7 @@ const Otp = () => {
             {t("SUBMIT")}
           </Button>
         </Box>
-        <Box style={{display:'flex', alignItems:'center'}}>
-
-<FormGroup style={{flexDirection:'row', alignItems:'center'}}>
-    <FormControlLabel style={{marginRight:'0'}}  control={<Checkbox />} /> <Link href="../terms" target="_blank"> <span className="required">*</span>{t('TERMS_CONDITIONS')}</Link>
-  </FormGroup>
-  </Box>
+        <Box style={{ display: "flex", alignItems: "center" }}></Box>
         <Box py={1}>
           <Typography
             variant="h1"
@@ -315,11 +372,9 @@ const Otp = () => {
               fontSize: "12px",
             }}
           >
-            {t("DONT_HAVE_AN_ACCOUNT")}{" "}
-            <Link
-              href={`http://localhost:3000/signup${window.location.search}`}
-            >
-              {t("REGISTER_HERE")}
+            {t("ALREADY_HAVE_AN_ACCOUNT")}{" "}
+            <Link href={`http://localhost:3000/all${window.location.search}`}>
+              {t("LOGIN")}
             </Link>
           </Typography>
         </Box>
