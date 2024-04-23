@@ -21,8 +21,7 @@ import NoResult from "pages/content/noResultFound";
 const ContentList = (props) => {
   const [search, setSearch] = useState(true);
   const location = useLocation();
-  const [pageNumber, setPageNumber] = useState();
-  const [totalPages, setTotalPages] = useState(1);
+  const [pageNumber, setPageNumber] = useState(1);
   const [data, setData] = useState([]);
   const [filters, setFilters] = useState({});
   const [isLoading, setIsLoading] = useState(false);
@@ -31,12 +30,14 @@ const ContentList = (props) => {
   const navigate = useNavigate();
   const { domain } = location.state || {};
   const { domainquery } = location.state || {};
+  const [totalPages, setTotalPages] = useState(1);
+  const [currentPage, setCurrentPage] = useState(1);
 
   useEffect(() => {
     fetchData();
     fetchGradeLevels();
     const random = getRandomValue();
-  }, [filters, search]);
+  }, [filters, search, currentPage]);
 
   const handleFilterChange = (selectedOptions) => {
     const selectedValues = selectedOptions.map((option) => option.value);
@@ -74,7 +75,7 @@ const ContentList = (props) => {
         },
         limit: 20,
         query: search.query || domainquery,
-        offset: 20 * (pageNumber - 1),
+        offset: 20 * (currentPage - 1),
         sort_by: {
           lastUpdatedOn: "desc",
         },
@@ -94,7 +95,7 @@ const ContentList = (props) => {
       if (response.data.result.content && response.data.result.count <= 20) {
         setTotalPages(1);
       } else if (response.data.result.count > 20) {
-        setTotalPages(Math.floor(response.data.result.count / 20) + 1);
+        setTotalPages(Math.floor(response.data.result.count / 20));
       }
 
       setData(response.data.result);
@@ -111,10 +112,13 @@ const ContentList = (props) => {
   };
 
   const handleChange = (event, value) => {
-    setPageNumber(value);
-    setData({});
-    navigate("/contentList/" + value, { state: { domain: domain } });
-    fetchData();
+    if (value !== pageNumber) {
+      setPageNumber(value);
+      setCurrentPage(value);
+      setData({});
+      navigate(`/contentList/${value}`, { state: { domain: domain } });
+      // fetchData();
+    }
   };
   const handleGoBack = () => {
     navigate(-1); // Navigate back in history
