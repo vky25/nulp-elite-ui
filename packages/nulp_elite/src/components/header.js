@@ -26,6 +26,7 @@ import { changeLanguage } from "i18next";
 import { useState } from "react";
 import LiveHelpOutlinedIcon from "@mui/icons-material/LiveHelpOutlined";
 import LogoutOutlinedIcon from "@mui/icons-material/LogoutOutlined";
+import GTranslateIcon from '@mui/icons-material/GTranslate';
 
 function Header() {
   const { t } = useTranslation();
@@ -137,6 +138,29 @@ function Header() {
             {t("SCREEN_READER")}{" "}
           </Link>
         </Box>
+         {/* Language Select */}
+         <Box sx={{ minWidth: 120,paddingLeft:'10px' }}>
+              <FormControl fullWidth size="small" style={{display:'flex',alignItems:'center',flexDirection:'row'}}> 
+                {/* <InputLabel id="language-select-label">
+                  {t("LANGUAGE")}
+                </InputLabel> */}
+                <GTranslateIcon/>
+                <Select
+                  labelId="language-select-label"
+                  id="language-select"
+                  className="language"
+                  style={{ border: "none" }}
+                  label={t("LANGUAGE")}
+                  value={language}
+                  startIcon={<LanguageIcon />}
+                  onChange={handleChangeLanguage}
+                  inputProps={{ "aria-label": t("SELECT_LANGUAGE") }}
+                >
+                  <MenuItem value="en">{t("ENGLISH")}</MenuItem>
+                  <MenuItem value="hi">{t("HINDI")}</MenuItem>
+                </Select>
+              </FormControl>
+            </Box>
       </Box>
 
       {/* Top Navigation Bar */}
@@ -157,15 +181,38 @@ function Header() {
             >
               <MenuIcon />
             </IconButton>
-            <Box sx={{ flexGrow: 1, paddingLeft: "20px" }}>
+            <Box sx={{ flexGrow: 1, paddingLeft: "20px",display:'flex',justifyContent:'space-between' }}>
               <img
                 src={require("../assets/logo.png")}
                 style={{ maxWidth: "100%" }}
               />
+               {/* Language Select */}
+         <Box sx={{ minWidth: 120,paddingLeft:'10px' }} className="lg-hide">
+              <FormControl fullWidth size="small" style={{display:'flex',alignItems:'center',flexDirection:'row'}}> 
+                {/* <InputLabel id="language-select-label">
+                  {t("LANGUAGE")}
+                </InputLabel> */}
+                <GTranslateIcon/>
+                <Select
+                  labelId="language-select-label"
+                  id="language-select"
+                  className="language"
+                  style={{ border: "none" }}
+                  label={t("LANGUAGE")}
+                  value={language}
+                  startIcon={<LanguageIcon />}
+                  onChange={handleChangeLanguage}
+                  inputProps={{ "aria-label": t("SELECT_LANGUAGE") }}
+                >
+                  <MenuItem value="en">{t("ENGLISH")}</MenuItem>
+                  <MenuItem value="hi">{t("HINDI")}</MenuItem>
+                </Select>
+              </FormControl>
+            </Box>
             </Box>
 
             {/* Language Select */}
-            <Box sx={{ flexGrow: 2, display: { xs: "flex", md: "none" } }}>
+            <Box>
               <Menu
                 id="menu-appbar"
                 anchorEl={anchorElNav}
@@ -203,28 +250,7 @@ function Header() {
               </Menu>
             </Box>
 
-            {/* Language Select */}
-            <Box sx={{ minWidth: 120 }}>
-              <FormControl fullWidth size="small">
-                {/* <InputLabel id="language-select-label">
-                  {t("LANGUAGE")}
-                </InputLabel> */}
-                <Select
-                  labelId="language-select-label"
-                  id="language-select"
-                  className="language"
-                  style={{ border: "none" }}
-                  label={t("LANGUAGE")}
-                  value={language}
-                  startIcon={<LanguageIcon />}
-                  onChange={handleChangeLanguage}
-                  inputProps={{ "aria-label": t("SELECT_LANGUAGE") }}
-                >
-                  <MenuItem value="en">{t("ENGLISH")}</MenuItem>
-                  <MenuItem value="hi">{t("HINDI")}</MenuItem>
-                </Select>
-              </FormControl>
-            </Box>
+           
 
             {/* Search Box */}
             <Box
