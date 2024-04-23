@@ -13,12 +13,10 @@ import Card from "@mui/material/Card";
 import * as util from "../../services/utilService";
 import Filter from "components/filter";
 import NoResult from "pages/content/noResultFound";
-
 const LearningHistory = () => {
   const { t } = useTranslation();
   const [courseData, setCourseData] = useState(null);
   const [selectedStatus, setSelectedStatus] = useState(null);
-
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -35,25 +33,20 @@ const LearningHistory = () => {
         console.error("Error fetching user data:", error);
       }
     };
-
     fetchData();
   }, [selectedStatus]); // Include selectedStatus in the dependency array
-
   // Function to handle filter change
   const handleFilterChange = (selectedOption) => {
     setSelectedStatus(selectedOption);
   };
-
   // Function to convert Unix timestamp to human-readable date
   const unixTimestampToHumanDate = (unixTimestamp) => {
     const dateObject = new Date(unixTimestamp * 1000); // Multiply by 1000 to convert from seconds to milliseconds
     return dateObject.toLocaleString(); // Convert to human-readable date format
   };
-
   return (
     <div>
       <Header />
-
       <Container maxWidth="xl" role="main" className="container-pb">
         <Box textAlign="center" padding="10">
           <Breadcrumbs
@@ -152,18 +145,18 @@ const LearningHistory = () => {
                             marginTop: "10px",
                             color:
                               course.status === 2
-                                ? "green"
+                                ? "red"
                                 : course.status === 1
-                                ? "orange"
-                                : "red",
+                                ? "blue"
+                                : "green",
                             fontSize: "12px",
                           }}
                         >
                           {course.status === 2
-                            ? t("COMPLETED")
+                            ? t("Expired")
                             : course.status === 1
-                            ? t("ONGOING")
-                            : t("BATCH_EXPIRED")}
+                            ? t("Completed")
+                            : t("ongoing")}
                         </Typography>
                       </Card>
                     </Grid>
@@ -178,5 +171,4 @@ const LearningHistory = () => {
     </div>
   );
 };
-
 export default LearningHistory;
