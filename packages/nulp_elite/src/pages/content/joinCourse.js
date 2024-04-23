@@ -18,6 +18,7 @@ import Grid from "@mui/material/Grid";
 import { useParams, useNavigate, useLocation } from "react-router-dom";
 import axios from "axios";
 import SummarizeOutlinedIcon from "@mui/icons-material/SummarizeOutlined";
+import ArrowBackOutlinedIcon from "@mui/icons-material/ArrowBackOutlined";
 
 import data from "../../assets/courseHierarchy.json";
 
@@ -94,6 +95,10 @@ const JoinCourse = () => {
     fetchBatchdata();
   }, []);
 
+  const handleGoBack = () => {
+    navigate(-1); // Navigate back in history
+  };
+
   const formatDate = (dateString) => {
     const date = new Date(dateString);
     const options = { day: "2-digit", month: "long", year: "numeric" };
@@ -113,6 +118,21 @@ const JoinCourse = () => {
           <Grid item xs={12} md={4} lg={4} sx={{ paddingRight: "20px" }}>
             <Grid container spacing={2}>
               <Grid item xs={8}>
+                <Link
+                  onClick={handleGoBack}
+                  style={{
+                    display: "block",
+                    display: "flex",
+                    fontSize: "14px",
+                    paddingTop: "30px",
+                    color: "rgb(0, 67, 103)",
+                  }}
+                >
+                  <ArrowBackOutlinedIcon
+                    style={{ width: "0.65em", height: "0.65em" }}
+                  />{" "}
+                  Back
+                </Link>
                 <Breadcrumbs
                   aria-label="breadcrumb"
                   style={{
