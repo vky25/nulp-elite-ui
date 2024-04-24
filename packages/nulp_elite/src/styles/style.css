@@ -153,22 +153,26 @@ body {
   /* .react-multi-carousel-list{
   height: 95px !important;
  } */
-  .css-1l1167e {
-    color: #000 !important;
-  }
-  .MuiPopover-paper.MuiMenu-paper {
-    width: 40% !important;
-    left: 50% !important;
-  }
-  .container-pb {
-    margin-bottom: 105px !important;
-  }
-  .xs-p-0 {
-    padding-top: 0 !important;
-  }
+ .css-1l1167e{
+  color:#000 !important;
+ }
+ .MuiPopover-paper.MuiMenu-paper{
+  left: 0% !important;
+  width: 34% !important;
+ }
+ .container-pb{
+  margin-bottom: 105px !important;
+ }
+ .xs-p-0{
+  padding-top: 0 !important;
+ }
+ }
+ @media(min-width:769px) {
+  .senderMessage{
+    width:50%;
+    transform:translate(95%, 0)
 }
-@media (min-width: 769px) {
-  .sm-pt-22 {
+  .sm-pt-22{
     padding: 22px 0 0 0;
   }
   .sm-p-25 {
