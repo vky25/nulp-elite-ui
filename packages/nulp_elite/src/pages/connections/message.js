@@ -60,9 +60,6 @@ const useStyles = makeStyles((theme) => ({
     textAlign: "right",
     background: "linear-gradient(180deg, #004367 0%, #102244 100%)",
     color: "#fff",
-    width: "50%",
-    float: "right",
-    // float:"right"
   },
   receiverMessage: {
     margin: "4px 0",

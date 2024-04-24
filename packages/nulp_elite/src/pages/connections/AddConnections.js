@@ -99,37 +99,6 @@ const AddConnections = () => {
   // const filteredUsers = userData?.filter(
   //   (user) => user.name && user.name.includes(searchQuery)
   // );
-  const [chats, setChats] = useState([]);
-
-  useEffect(() => {
-    const fetchData = async () => {
-      // Fetch chat list for each user
-      const chatLists = await Promise.all(
-        invitationAcceptedUsers?.map(async (item) => {
-          const chats = await getChat(item.userId);
-          return {
-            userId: item.userId,
-            chats: chats,
-          };
-        })
-      );
-
-      // Filter chats for each user to find unread messages from the logged-in user
-      const unreadChats = chatLists.map(({ userId, chats }) => {
-        return {
-          userId: userId,
-          unreadChatExists: chats.some(
-            (chat) => !chat.is_read && chat.sender_id === loggedInUserId
-          ),
-        };
-      });
-
-      // Update state with the unread chats information
-      setChats(unreadChats);
-    };
-
-    fetchData();
-  }, []);
 
   const getChat = async (userId) => {
     setIsLoading(true);
@@ -139,6 +108,7 @@ const AddConnections = () => {
       sender_id: loggedInUserId,
       receiver_id: userId,
       is_accepted: true,
+      is_read: false,
     });
 
     const url = `http://localhost:3000/directConnect/get-chats?${params.toString()}`;
@@ -499,8 +469,20 @@ const AddConnections = () => {
       }
 
       const responseData = await response.json();
-      console.log(responseData);
-      setInvitationAcceptedUsers(responseData?.result?.response?.content || []);
+      const userList = responseData?.result?.response?.content || [];
+
+      const userListWithChat = await Promise.all(
+        userList.map(async (item) => {
+          const userChat = await getChat(item.id);
+          if (userChat?.length > 0) {
+            item = { ...item, isRead: false };
+          }
+
+          return item;
+        })
+      );
+
+      setInvitationAcceptedUsers(userListWithChat || []);
       console.log(
         "InvitationAcceptedUsers",
         responseData.result.response.content
@@ -979,40 +961,9 @@ const AddConnections = () => {
                       <Divider />
                     </List>
                   ))}
-                {/* {invitationAcceptedUsers &&
-                  invitationAcceptedUsers?.map((item) => (
-                    <List sx={{}} style={{ color: "green",cursor:'pointer' }}>
-                      <ListItem
-                        component={RouterLink}
-                        to={{
-                          pathname: "/message",
-                        }}
-                      >
-                        {console.log(
-                          "03444444444440000000000000000000044444444444",
-                          item
-                        )}
-                        <ListItemText
-                          primary={`${item.firstName}${
-                            item.lastName ? ` ${item.lastName}` : ""
-                          }`}
-                          secondary="Designation"
-                          onClick={() =>
-                            handleAcceptedChatOpen(
-                              item.userId,
-                              `${item.firstName}${
-                                item.lastName ? ` ${item.lastName}` : ""
-                              }`
-                            )
-                          }
-                        />
-                      </ListItem>
-                      <Divider />
-                    </List>
-                  ))} */}
                 {invitationAcceptedUsers &&
-                  invitationAcceptedUsers?.map((item, index) => (
-                    <List sx={{}} style={{ color: "green" }} key={index}>
+                  invitationAcceptedUsers?.map((item) => (
+                    <List sx={{}} style={{ color: "green", cursor: "pointer" }}>
                       <ListItem
                         component={RouterLink}
                         to={{
@@ -1020,17 +971,24 @@ const AddConnections = () => {
                         }}
                       >
                         <ListItemText
-                          primary={`${item.firstName}${
-                            item.lastName ? ` ${item.lastName}` : ""
-                          }`}
+                          primary={
+                            <span
+                              style={{
+                                color:
+                                  item && item.isRead === false
+                                    ? "black"
+                                    : "black",
+                                fontWeight:
+                                  item && item.isRead === false
+                                    ? "bold"
+                                    : "normal",
+                              }}
+                            >
+                              {item.firstName}
+                              {item.lastName ? ` ${item.lastName}` : ""}
+                            </span>
+                          }
                           secondary="Designation"
-                          primaryTypographyProps={{
-                            style: {
-                              fontWeight: chats[index]?.unreadChatExists
-                                ? "bold"
-                                : "normal",
-                            },
-                          }}
                           onClick={() =>
                             handleAcceptedChatOpen(
                               item.userId,
