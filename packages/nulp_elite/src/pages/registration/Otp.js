@@ -315,7 +315,7 @@ const Otp = () => {
             ? t("RESEND_CODE")
             : `Resend OTP in ${remainingTime}s`}
         </Button>
-        <FormGroup style={{ flexDirection: "row", alignItems: "center" }}>
+        <FormGroup style={{ flexDirection: "row", alignItems: "center",flexFlow:"row" }}>
           <FormControlLabel
             style={{ marginRight: "0" }}
             control={
@@ -328,8 +328,10 @@ const Otp = () => {
             {tncText}
           </Link>
         </FormGroup>
-        <Dialog open={open} onClose={handleClose}>
+        <Dialog open={open} onClose={handleClose} maxWidth="xxl" className="sm-w-700"
+>
           <DialogContent>
+            <h1 style={{fontSize:'22px'}}>Terms and Conditions  </h1>
             <iframe
               title="Terms and Conditions"
               src={tncConfig}
