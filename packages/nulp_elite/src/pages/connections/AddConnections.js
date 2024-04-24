@@ -739,57 +739,42 @@ const AddConnections = () => {
     }
   };
 
+  useEffect(() => {
+    if (searchQuery.length >= 3) {
+      onUserQuerySearch(searchQuery);
+    }
+  }, [searchQuery]);
+
   return (
     <Box>
       <Header />
-      <Container  maxWidth="xxl" role="main" className="container-pb">
-        <Box textAlign="center" padding="10" style={{minHeight:'500px'}}>
+      <Container maxWidth="xxl" role="main" className="container-pb">
+        <Box textAlign="center" padding="10" style={{ minHeight: "500px" }}>
           <Box sx={{ width: "100%", typography: "body1" }}>
             {/* <div style={{ display: 'flex', alignItems: 'center', marginBottom: '1rem' }}>
         <input type="text" placeholder="Search..." style={{ flex: 1, marginRight: '0.5rem', padding: '0.5rem', borderRadius: '4px', border: '1px solid #CACACA' }} />
         <button style={{ padding:'11px 16px 11px 16px', borderRadius: '4px', backgroundColor: '#004367', color: 'white', border: '1px', cursor: 'pointer' ,fontSize:'12px'}}>Search</button>
       </div> */}
-            <Box
-              style={{
-                display: "flex",
-                alignItems: "center",
-                marginBottom: "1rem",
-                marginTop:'1rem'
-              }}
-              className="search-data"
-            >
-              <input
-                label="Search for a user..."
-                type="text"
-                value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)}
-                style={{
-                  width: "100%",
-                  flex: 1,
-                  marginRight: "0.5rem",
-                  padding: "10px",
-                  borderRadius: "4px",
-                  border: "1px solid #CACACA",
-                }}
-              />
-              <Button
-                style={{
-                  padding: "11px 9px",
-                  borderRadius: "4px",
-                  backgroundColor: "#004367",
-                  color: "white",
-                  border: "1px",
-                  cursor: "pointer",
-                  fontSize: "12px",
-                }}
-                onClick={(e) => {
-                  onUserQuerySearch();
+
+            <input
+              label="Search for a user..."
+              type="text"
+              onChange={(e) => {
+                const value = e.target.value.trim();
+                setSearchQuery(value);
+                if (value.length >= 3) {
                   handlePopoverClick(e);
-                }}
-              >
-                Search
-              </Button>
-            </Box>
+                }
+              }}
+              style={{
+                width: "100%",
+                flex: 1,
+                marginRight: "0.5rem",
+                padding: "10px",
+                borderRadius: "4px",
+                border: "1px solid #CACACA",
+              }}
+            />
             <div>
               <Popover
                 id={id}
@@ -818,7 +803,8 @@ const AddConnections = () => {
                         <Divider />
                       </List>
                     ))}
-                  {(!userQuerySearchData || userQuerySearchData.length === 0) && (
+                  {(!userQuerySearchData ||
+                    userQuerySearchData.length === 0) && (
                     <Box>
                       <p>No users found</p>
                     </Box>
@@ -939,7 +925,7 @@ const AddConnections = () => {
                   invitationNotAcceptedUsers?.map((item) => (
                     <List
                       sx={{}}
-                      style={{ fontSize:'14px' }}
+                      style={{ fontSize: "14px" }}
                       onClick={() => userClick(item)}
                     >
                       <ListItem>
@@ -1163,9 +1149,9 @@ const AddConnections = () => {
                               paddingBottom: "15px",
                             }}
                           >
-                            {selectedUser.firstName} {selectedUser.lastName} is a
-                            manager with the department of Revenue and taxes and
-                            has actively contributed to the growth and
+                            {selectedUser.firstName} {selectedUser.lastName} is
+                            a manager with the department of Revenue and taxes
+                            and has actively contributed to the growth and
                             authenticity of the knowledge curated for the
                             betterment of the department.
                           </Box>

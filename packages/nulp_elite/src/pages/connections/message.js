@@ -19,7 +19,7 @@ import { IconButton, Menu, MenuItem } from "@mui/material";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import MenuIcon from "@mui/icons-material/Menu";
 import BlockIcon from "@mui/icons-material/Block";
-import SendIcon from '@mui/icons-material/Send';
+import SendIcon from "@mui/icons-material/Send";
 
 const moment = require("moment");
 const timezone = require("moment-timezone");
@@ -29,7 +29,7 @@ const useStyles = makeStyles((theme) => ({
     flexDirection: "column",
     height: "100vh",
     overflow: "hidden",
-    background:"#fff"
+    background: "#fff",
   },
   chatHeader: {
     padding: "8px 16px",
@@ -58,9 +58,8 @@ const useStyles = makeStyles((theme) => ({
     margin: "15px 0",
     textAlign: "right",
     background: "linear-gradient(180deg, #004367 0%, #102244 100%)",
-    color:"#fff",
+    color: "#fff",
     // float:"right"
-
   },
   receiverMessage: {
     margin: "4px 0",
@@ -70,7 +69,7 @@ const useStyles = makeStyles((theme) => ({
     display: "table",
     borderRadius: "5px",
     color: "#212121",
-    backgroundColor: "#F1F1F1"
+    backgroundColor: "#F1F1F1",
   },
 }));
 
@@ -89,7 +88,7 @@ const Message = (props) => {
   const [reason, setReason] = useState("");
   const [dialogOpen, setDialogOpen] = useState(false);
   const [isBlocked, setIsBlocked] = useState(false); // State to track if user is blocked
-  const [maxWidth, setMaxWidth] = React.useState('md');
+  const [maxWidth, setMaxWidth] = React.useState("md");
 
   useEffect(() => {
     const _userId = util.userId();
@@ -246,14 +245,26 @@ const Message = (props) => {
       <div className={classes.chatHeader}>
         <IconButton onClick={handleGoBack}>
           <ArrowBackIcon />
-          <Box sx={{fontSize:'22px',fontWeight:'600',paddingLeft:'10px'}}>{dataStore.fullName || localStorage.getItem("chatName")}</Box>
-
+          <Box
+            sx={{ fontSize: "22px", fontWeight: "600", paddingLeft: "10px" }}
+          >
+            {dataStore.fullName || localStorage.getItem("chatName")}
+          </Box>
         </IconButton>
-        <Box onClick={handleBlockUser} disabled={isBlocked} style={{display:'flex',alignItems:'center',fontSize:'18px',cursor:'pointer'}}>
-        <BlockIcon style={{paddingRight:'10px',cursor:'pointer'}} />
-            Block
+        <Box
+          onClick={handleBlockUser}
+          disabled={isBlocked}
+          style={{
+            display: "flex",
+            alignItems: "center",
+            fontSize: "18px",
+            cursor: "pointer",
+          }}
+        >
+          <BlockIcon style={{ paddingRight: "10px", cursor: "pointer" }} />
+          Block
         </Box>
-        
+
         {/* <IconButton onClick={handleMenuClick}>
           <MenuIcon />
         </IconButton> */}
@@ -268,47 +279,52 @@ const Message = (props) => {
           </MenuItem>
         </Menu> */}
       </div>
-      <Dialog open={dialogOpen}         maxWidth={maxWidth}
-onClose={handleDialogClose}>
+      <Dialog open={dialogOpen} maxWidth={maxWidth} onClose={handleDialogClose}>
         <DialogTitle>Block User</DialogTitle>
         <DialogContent>
-          <TextareaAutosize
+          <TextField
             autoFocus
+            multiline
             margin="dense"
             id="reason"
             label="Reason for blocking"
-            type="text"
-            fullWidth
+            rows={4}
             value={reason}
+            fullWidth
+            sx={{ fontSize: "13px" }}
             onChange={(e) => setReason(e.target.value)}
           />
         </DialogContent>
         <DialogActions>
-          <Button onClick={handleDialogClose}  variant="outlined"
-                          style={{
-                            borderRadius: "10px",
-                            color: "#004367",
-                            padding: "10px 12px",
-                            margin: "0 10px",
-                            fontWeight: "500",
-                            fontSize: "12px",
-                            border: "solid 1px #efefea00",
-                            width: "50%",
-                          }}>
+          <Button
+            onClick={handleDialogClose}
+            variant="outlined"
+            style={{
+              borderRadius: "10px",
+              color: "#004367",
+              padding: "10px 12px",
+              margin: "0 10px",
+              fontWeight: "500",
+              fontSize: "12px",
+              border: "solid 1px #efefea00",
+              width: "50%",
+            }}
+          >
             Cancel
           </Button>
-          <Button onClick={handleBlockUserConfirmed} 
-          style={{
-            background: "#004367",
-            borderRadius: "10px",
-            color: "#fff",
-            padding: "10px 12px",
-            margin: "0 10px",
-            fontWeight: "500",
-            fontSize: "12px",
-            border: "solid 1px #004367",
-            width: "50%",
-          }}
+          <Button
+            onClick={handleBlockUserConfirmed}
+            style={{
+              background: "#004367",
+              borderRadius: "10px",
+              color: "#fff",
+              padding: "10px 12px",
+              margin: "0 10px",
+              fontWeight: "500",
+              fontSize: "12px",
+              border: "solid 1px #004367",
+              width: "50%",
+            }}
           >
             Block
           </Button>
@@ -352,19 +368,19 @@ onClose={handleDialogClose}>
               variant="outlined"
               placeholder="Type your message..."
               fullWidth
-              style={{background:'#fff',border:'none'}}
+              style={{ background: "#fff", border: "none" }}
               value={message}
               onChange={(e) => setMessage(e.target.value)}
               disabled={isBlocked} // Disable input field if user is blocked
             />
             <Button
               variant="contained"
-              style={{padding:'15px'}}
+              style={{ padding: "15px" }}
               color="primary"
               onClick={sendMessage}
               disabled={isBlocked} // Disable send button if user is blocked
             >
-              <SendIcon/>
+              <SendIcon />
             </Button>
           </div>
         </>
