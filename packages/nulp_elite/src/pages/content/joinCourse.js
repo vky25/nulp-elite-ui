@@ -183,6 +183,7 @@ const JoinCourse = () => {
                     color: "#484848",
                     fontSize: "12px",
                     margin: "0 10px",
+                    textTransform:"capitalize"
                   }}
                 >
                   {userData?.result?.content?.children[0]?.children[0]?.board}
@@ -192,7 +193,8 @@ const JoinCourse = () => {
                   style={{
                     background: "#ffefc2",
                     color: "#484848",
-                    fontSize: "10px",
+                    fontSize: "12px",
+                    textTransform:"capitalize"
                   }}
                 >
                   {" "}

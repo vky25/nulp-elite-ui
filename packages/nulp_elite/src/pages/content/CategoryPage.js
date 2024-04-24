@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { useParams,Link, useNavigate } from "react-router-dom";
+import { useParams, Link, useNavigate } from "react-router-dom";
 import BoxCard from "components/Card";
 import Box from "@mui/material/Box";
 import Grid from "@mui/material/Grid";
@@ -7,8 +7,8 @@ import { getAllContents } from "services/contentService";
 import Header from "components/header";
 import Footer from "components/Footer";
 import URLSConfig from "../../configs/urlConfig.json";
-import ArrowBackOutlinedIcon from '@mui/icons-material/ArrowBackOutlined';
-import Container from '@mui/material/Container';
+import ArrowBackOutlinedIcon from "@mui/icons-material/ArrowBackOutlined";
+import Container from "@mui/material/Container";
 import Pagination from "@mui/material/Pagination";
 
 import domainWithImage from "../../assets/domainImgForm.json";
@@ -16,8 +16,6 @@ import DomainCarousel from "components/domainCarousel";
 import { frameworkService } from "@shiksha/common-lib";
 
 import SearchBox from "components/search";
-
-
 
 const CategoryPage = () => {
   // const history = useHistory();
@@ -97,13 +95,12 @@ const CategoryPage = () => {
       setError(error.message);
     }
   };
-   // Function to push data to the array
-   const pushData = (term) => {
+  // Function to push data to the array
+  const pushData = (term) => {
     setItemsArray((prevData) => [...prevData, term]);
   };
 
   const fetchDomains = async () => {
-
     setError(null);
     // Headers
     const headers = {
@@ -119,7 +116,6 @@ const CategoryPage = () => {
       console.log("error---", error);
       setError(error.message);
     } finally {
-
     }
     try {
       const url = `http://localhost:3000/api/framework/v1/read/nulp?categories=board,gradeLevel,medium,class,subject`;
@@ -127,12 +123,12 @@ const CategoryPage = () => {
         url,
         headers
       );
-     
+
       response.data.result.framework.categories[0].terms.map((term) => {
         if (domainWithImage) {
           domainWithImage.result.form.data.fields.map((imgItem) => {
             if ((term && term.code) === (imgItem && imgItem.code)) {
-              term["image"]= imgItem.image ? imgItem.image : "";
+              term["image"] = imgItem.image ? imgItem.image : "";
               pushData(term);
               itemsArray.push(term);
             }
@@ -147,7 +143,6 @@ const CategoryPage = () => {
       setError(error.message);
     } finally {
       console.log("nulp finally---");
-
     }
   };
   const getCookieValue = (name) => {
@@ -164,13 +159,22 @@ const CategoryPage = () => {
   useEffect(() => {
     fetchMoreItems(category);
     fetchDomains();
-
   }, [category]);
+
+  const handleCardClick = (contentId, courseType) => {
+    if (courseType === "Course") {
+      navigate("/joinCourse", { state: { contentId } });
+    } else {
+      navigate("/player");
+    }
+  };
 
   return (
     <>
       <Header />
-      {domain &&  <DomainCarousel onSelectDomain={handleDomainFilter} domains={domain}/>}
+      {domain && (
+        <DomainCarousel onSelectDomain={handleDomainFilter} domains={domain} />
+      )}
       <Box sx={{ background: "#2D2D2D", padding: "20px" }} className="xs-hide">
         <p
           style={{
@@ -198,31 +202,58 @@ const CategoryPage = () => {
         <SearchBox onSearch={handleSearch} />
       </Box>
       <Container maxWidth="xxl" role="main" className="container-pb">
-      <Link onClick={handleGoBack} style={{display:'block',display:'flex',fontSize:'16px',paddingTop:'30px',color:'rgb(0, 67, 103)'}} ><ArrowBackOutlinedIcon/> Back</Link>
+        <Link
+          onClick={handleGoBack}
+          style={{
+            display: "block",
+            display: "flex",
+            fontSize: "16px",
+            paddingTop: "30px",
+            color: "rgb(0, 67, 103)",
+          }}
+        >
+          <ArrowBackOutlinedIcon /> Back
+        </Link>
 
-      <p style={{display:'inline-block',borderBottom:'solid 2px #000',fontSize:'14px',color:'#1E1E1E'}}>{category}</p>
-      <Box textAlign="center">
-        <Box>
-          <Grid
-            container
-            spacing={2}
-            style={{ margin: "20px 0", marginBottom: "10px" }}
-          >
-            {data && data.map((item) => (
-              <Grid
-                item
-                xs={12}
-                md={6}
-                lg={3}
-                key={item.id}
-                style={{ marginBottom: "10px" }}
-              >
-                <BoxCard items={item} index={item.count}></BoxCard>
-              </Grid>
-            ))}
-          </Grid>
+        <p
+          style={{
+            display: "inline-block",
+            borderBottom: "solid 2px #000",
+            fontSize: "14px",
+            color: "#1E1E1E",
+          }}
+        >
+          {category}
+        </p>
+        <Box textAlign="center">
+          <Box>
+            <Grid
+              container
+              spacing={2}
+              style={{ margin: "20px 0", marginBottom: "10px" }}
+            >
+              {data &&
+                data.map((item) => (
+                  <Grid
+                    item
+                    xs={12}
+                    md={6}
+                    lg={3}
+                    key={item.id}
+                    style={{ marginBottom: "10px" }}
+                  >
+                    <BoxCard
+                      items={item}
+                      index={item.count}
+                      onClick={() =>
+                        handleCardClick(item.identifier, item.contentType)
+                      }
+                    ></BoxCard>
+                  </Grid>
+                ))}
+            </Grid>
+          </Box>
         </Box>
-      </Box>
       </Container>
       {/* <Pagination
           count={totalPages}
