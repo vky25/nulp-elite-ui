@@ -790,7 +790,10 @@ const AddConnections = () => {
                   {userQuerySearchData &&
                     userQuerySearchData?.length > 0 &&
                     userQuerySearchData?.map((item) => (
-                      <List sx={{}} style={{ color: "gray" }}>
+                      <List
+                        sx={{}}
+                        style={{ color: "gray", cursor: "pointer" }}
+                      >
                         <ListItem>
                           <ListItemText
                             primary={`${item.firstName}${
@@ -854,7 +857,7 @@ const AddConnections = () => {
 
                 {invitationReceiverByUser &&
                   invitationReceiverByUser?.map((item) => (
-                    <List sx={{}} style={{ color: "gray" }}>
+                    <List sx={{}} style={{ color: "gray", cursor: "pointer" }}>
                       <ListItem>
                         <ListItemText
                           primary={`${item.firstName}${
@@ -862,40 +865,42 @@ const AddConnections = () => {
                           }`}
                           secondary="Designation"
                         />
+                        <div
+                          style={{
+                            display: "flex",
+                            justifyContent: "flex-end",
+                            marginTop: "10px",
+                          }}
+                        >
+                          <Link
+                            href="#"
+                            underline="none"
+                            color="#004367"
+                            onClick={() => acceptChat(item.userId)}
+                            style={{ marginLeft: "10px" }}
+                          >
+                            <CheckCircleOutlineIcon
+                              style={{ fontSize: "28px" }}
+                            />
+                          </Link>
+                          <span style={{ margin: "0 5px" }}></span>
+                          <Link
+                            href="#"
+                            underline="none"
+                            color="#7d7a7a"
+                            onClick={() => rejectChat(item.userId)}
+                          >
+                            <CancelOutlinedIcon style={{ fontSize: "28px" }} />
+                          </Link>
+                        </div>
                       </ListItem>
-                      <div
-                        style={{
-                          display: "flex",
-                          justifyContent: "flex-end",
-                          marginTop: "10px",
-                        }}
-                      >
-                        <Link
-                          href="#"
-                          underline="none"
-                          color="primary"
-                          onClick={() => acceptChat(item.userId)}
-                          style={{ marginLeft: "10px" }}
-                        >
-                          <CheckCircleOutlineIcon />
-                        </Link>
-                        <span style={{ margin: "0 5px" }}></span>
-                        <Link
-                          href="#"
-                          underline="none"
-                          color="secondary"
-                          onClick={() => rejectChat(item.userId)}
-                        >
-                          <CancelOutlinedIcon />
-                        </Link>
-                      </div>
 
                       <Divider />
                     </List>
                   ))}
                 {invitationAcceptedUsers &&
                   invitationAcceptedUsers?.map((item) => (
-                    <List sx={{}} style={{ color: "green" }}>
+                    <List sx={{}} style={{ color: "green", cursor: "pointer" }}>
                       <ListItem
                         component={RouterLink}
                         to={{
@@ -925,7 +930,7 @@ const AddConnections = () => {
                   invitationNotAcceptedUsers?.map((item) => (
                     <List
                       sx={{}}
-                      style={{ fontSize: "14px" }}
+                      style={{ fontSize: "14px", cursor: "pointer" }}
                       onClick={() => userClick(item)}
                     >
                       <ListItem>
@@ -981,6 +986,7 @@ const AddConnections = () => {
                               fontWeight: "500",
                               fontSize: "12px",
                               width: "50%",
+                              marginBottom: "10px",
                             }}
                           >
                             {t("CLOSE")}
@@ -1165,7 +1171,8 @@ const AddConnections = () => {
                         <div>
                           <TextField
                             multiline
-                            rows={4} // You can adjust the number of rows as needed
+                            minRows={5}
+                            maxRows={10}
                             value={textValue}
                             onChange={handleTextareaChange}
                             placeholder="Enter your text here..."
@@ -1234,10 +1241,7 @@ const AddConnections = () => {
                         p: "0",
                       }}
                     >
-                      <ModalContent
-                        sx={{ width: 400, bottom: "30px" }}
-                        style={{}}
-                      >
+                      <ModalContent sx={{ width: 400 }} style={{}}>
                         <div style={{ padding: "10px", textAlign: "center" }}>
                           <h2
                             style={{

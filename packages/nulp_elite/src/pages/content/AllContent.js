@@ -4,7 +4,7 @@ import BoxCard from "components/Card";
 import { getAllContents } from "services/contentService";
 import Header from "components/header";
 import Footer from "components/Footer";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import URLSConfig from "../../configs/urlConfig.json";
 import FloatingChatIcon from "../../components/FloatingChatIcon";
 import Box from "@mui/material/Box";
@@ -47,6 +47,7 @@ const AllContent = () => {
   const [expandedCategory, setExpandedCategory] = useState(null);
   const [isMobile, setIsMobile] = useState(window.innerWidth <= 767);
   const [itemsArray, setItemsArray] = useState([]);
+  const navigate = useNavigate();
 
   const handleResize = () => {
     setIsMobile(window.innerWidth <= 767);
@@ -170,7 +171,6 @@ const AllContent = () => {
   };
 
   const fetchDomains = async () => {
-
     setError(null);
     // Headers
     const headers = {
@@ -186,7 +186,6 @@ const AllContent = () => {
       console.log("error---", error);
       setError(error.message);
     } finally {
-
     }
     try {
       const url = `http://localhost:3000/api/framework/v1/read/nulp?categories=board,gradeLevel,medium,class,subject`;
@@ -195,14 +194,12 @@ const AllContent = () => {
         headers
       );
 
-     
       response.data.result.framework.categories[0].terms.map((term) => {
-
         if (domainWithImage) {
           domainWithImage.result.form.data.fields.map((imgItem) => {
             if ((term && term.code) === (imgItem && imgItem.code)) {
               term["image"] = imgItem.image ? imgItem.image : "";
-              pushData(term)
+              pushData(term);
               itemsArray.push(term);
             }
           });
@@ -214,13 +211,12 @@ const AllContent = () => {
       setError(error.message);
     } finally {
       console.log("nulp finally---");
-
     }
   };
-    // Function to push data to the array
-    const pushData = (term) => {
-      setItemsArray((prevData) => [...prevData, term]);
-    };
+  // Function to push data to the array
+  const pushData = (term) => {
+    setItemsArray((prevData) => [...prevData, term]);
+  };
 
   const renderItems = (items, category) => {
     return items.map((item) => (
@@ -232,9 +228,20 @@ const AllContent = () => {
         key={item.id}
         style={{ marginBottom: "10px" }}
       >
-        <BoxCard items={item}></BoxCard>
+        <BoxCard
+          items={item}
+          onClick={() => handleCardClick(item.identifier, item.primaryCategory)}
+        ></BoxCard>
       </Grid>
     ));
+  };
+
+  const handleCardClick = (contentId, courseType) => {
+    if (courseType === "Course") {
+      navigate("/joinCourse", { state: { contentId } });
+    } else {
+      navigate("/player");
+    }
   };
 
   return (
@@ -266,92 +273,113 @@ const AllContent = () => {
         </p>
         <SearchBox onSearch={handleSearch} />
       </Box>
-      <Box sx={{fontWeight:'600',fontSize:'16px',padding:'10px'}}>Filter by popular domain:</Box>
-      {domain &&  <DomainCarousel onSelectDomain={handleDomainFilter}  domains={domain}/>}
-     
-      <Container maxWidth="xxl" role="main" className="container-pb">
-        { data && Object?.entries(
-          data?.reduce((acc, item) => {
-            if (!acc[item.primaryCategory]) {
-              acc[item.primaryCategory] = [];
-            }
-            acc[item.primaryCategory].push(item);
-            return acc;
-          }, {})
-        ).map(([category, items]) => (
-          // console.log(data,"hi"),
+      <Box sx={{ fontWeight: "600", fontSize: "16px", padding: "10px" }}>
+        Filter by popular domain:
+      </Box>
+      {domain && (
+        <DomainCarousel onSelectDomain={handleDomainFilter} domains={domain} />
+      )}
 
-          <React.Fragment key={category}>
-            <p style={{ display: "flex", justifyContent: "space-between" }}>
-              <Box
-                style={{
-                  display: "inline-block",
-                  fontSize: "14px",
-                  color: "#1E1E1E",
-                }}
-              >
-                <SummarizeOutlinedIcon style={{ verticalAlign: "top" }} />{" "}
+      <Container maxWidth="xxl" role="main" className="container-pb">
+        {data &&
+          Object?.entries(
+            data?.reduce((acc, item) => {
+              if (!acc[item.primaryCategory]) {
+                acc[item.primaryCategory] = [];
+              }
+              acc[item.primaryCategory].push(item);
+              return acc;
+            }, {})
+          ).map(([category, items]) => (
+            // console.log(data,"hi"),
+
+            <React.Fragment key={category}>
+              <p style={{ display: "flex", justifyContent: "space-between" }}>
                 <Box
                   style={{
-                    borderBottom: "solid 2px #000",
                     display: "inline-block",
+                    fontSize: "14px",
+                    color: "#1E1E1E",
                   }}
                 >
-                  {category}{" "}
-                </Box>{" "}
-              </Box>
-              {items?.length > 4 && (
-                <Link
-                  to={`/view-all/${category}`}
-                  style={{
-                    color: "#424242",
-                    fontSize: "12px",
-                    textAlign: "right",
-                    fontWeight: "600",
-                  }}
+                  <SummarizeOutlinedIcon style={{ verticalAlign: "top" }} />{" "}
+                  <Box
+                    style={{
+                      borderBottom: "solid 2px #000",
+                      display: "inline-block",
+                    }}
+                  >
+                    {category}{" "}
+                  </Box>{" "}
+                </Box>
+                {items?.length > 4 && (
+                  <Link
+                    to={`/view-all/${category}`}
+                    style={{
+                      color: "#424242",
+                      fontSize: "12px",
+                      textAlign: "right",
+                      fontWeight: "600",
+                    }}
+                  >
+                    View All
+                  </Link>
+                )}
+              </p>
+              {isMobile ? (
+                <Carousel
+                  swipeable={false}
+                  draggable={false}
+                  showDots={true}
+                  responsive={responsive}
+                  ssr={true}
+                  infinite={true}
+                  autoPlaySpeed={1000}
+                  keyBoardControl={true}
+                  customTransition="all .5"
+                  transitionDuration={500}
+                  containerClass="carousel-container"
+                  removeArrowOnDeviceType={["tablet", "mobile"]}
+                  dotListClass="custom-dot-list-style"
+                  itemClass="carousel-item-padding-40-px"
                 >
-                  View All
-                </Link>
+                  {expandedCategory === category
+                    ? items.map((item) => (
+                        <Grid item xs={12} md={6} lg={3} key={item.id}>
+                          <BoxCard
+                            items={item}
+                            onClick={() =>
+                              handleCardClick(
+                                item.identifier,
+                                item.primaryCategory
+                              )
+                            }
+                          ></BoxCard>
+                        </Grid>
+                      ))
+                    : items.slice(0, 4).map((item) => (
+                        <Grid item xs={12} md={6} lg={3} key={item.id}>
+                          <BoxCard
+                            items={item}
+                            onClick={() =>
+                              handleCardClick(
+                                item.identifier,
+                                item.primaryCategory
+                              )
+                            }
+                          ></BoxCard>
+                        </Grid>
+                      ))}
+                </Carousel>
+              ) : (
+                <Grid container spacing={2}>
+                  {expandedCategory === category
+                    ? renderItems(items, category)
+                    : renderItems(items.slice(0, 4), category)}
+                </Grid>
               )}
-            </p>
-            {isMobile ? (
-              <Carousel
-                swipeable={false}
-                draggable={false}
-                showDots={true}
-                responsive={responsive}
-                ssr={true}
-                infinite={true}
-                autoPlaySpeed={1000}
-                keyBoardControl={true}
-                customTransition="all .5"
-                transitionDuration={500}
-                containerClass="carousel-container"
-                removeArrowOnDeviceType={["tablet", "mobile"]}
-                dotListClass="custom-dot-list-style"
-                itemClass="carousel-item-padding-40-px"
-              >
-                {expandedCategory === category
-                  ? items.map((item) => (
-                      <Grid item xs={12} md={6} lg={3} key={item.id}>
-                        <BoxCard items={item}></BoxCard>
-                      </Grid>
-                    ))
-                  : items.slice(0, 4).map((item) => (
-                      <Grid item xs={12} md={6} lg={3} key={item.id}>
-                        <BoxCard items={item}></BoxCard>
-                      </Grid>
-                    ))}
-              </Carousel>
-            ) : (
-              <Grid container spacing={2}>
-                {expandedCategory === category
-                  ? renderItems(items, category)
-                  : renderItems(items.slice(0, 4), category)}
-              </Grid>
-            )}
-          </React.Fragment>
-        ))}
+            </React.Fragment>
+          ))}
       </Container>
       <FloatingChatIcon />
       <Footer />

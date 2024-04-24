@@ -162,8 +162,21 @@ body{
   width: 40% !important;
   left: 50% !important;
  }
+ .container-pb{
+  margin-bottom: 105px !important;
+ }
+ .xs-p-0{
+  padding-top: 0 !important;
+ }
  }
  @media(min-width:769px) {
+  
+  .sm-pt-22{
+    padding: 22px 0 0 0;
+  }
+  .sm-p-25{
+    padding: 0 25px;
+  }
  
   .react-multi-carousel-list{
     padding: 20px !important;
@@ -176,6 +189,10 @@ body{
   }
   .lg-hide{
     display: none !important;
+  }
+  .sm-w-700 .MuiDialog-paper {
+    
+    width: 62%;
   }
   .chatIcon{
     bottom: 173px;
@@ -197,9 +214,7 @@ body{
  }
 /* mobile menu */
  
- .container-pb{
-  padding-bottom: 50px !important;
- }
+
  .footer a{
     border-bottom: solid 1px #fff;
   }
@@ -295,4 +310,18 @@ Link{
 }
 Footer{
   margin-top:30px;
+}
+.MuiTabPanel-root{
+  padding: 0 !important;
+}
+.css-148fdm8:hover{
+  background: none !important;
+}
+.bg-white{
+  background: #fff;
+    padding: 20px;
+    list-style-type: none;
+}
+.bg-white li{
+  padding: 10px;
 }
