@@ -99,6 +99,72 @@ const AddConnections = () => {
   // const filteredUsers = userData?.filter(
   //   (user) => user.name && user.name.includes(searchQuery)
   // );
+  const [chats, setChats] = useState([]);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      // Fetch chat list for each user
+      const chatLists = await Promise.all(
+        invitationAcceptedUsers?.map(async (item) => {
+          const chats = await getChat(item.userId);
+          return {
+            userId: item.userId,
+            chats: chats,
+          };
+        })
+      );
+
+      // Filter chats for each user to find unread messages from the logged-in user
+      const unreadChats = chatLists.map(({ userId, chats }) => {
+        return {
+          userId: userId,
+          unreadChatExists: chats.some(
+            (chat) => !chat.is_read && chat.sender_id === loggedInUserId
+          ),
+        };
+      });
+
+      // Update state with the unread chats information
+      setChats(unreadChats);
+    };
+
+    fetchData();
+  }, []);
+
+  const getChat = async (userId) => {
+    setIsLoading(true);
+    setError(null);
+
+    const params = new URLSearchParams({
+      sender_id: loggedInUserId,
+      receiver_id: userId,
+      is_accepted: true,
+    });
+
+    const url = `http://localhost:3000/directConnect/get-chats?${params.toString()}`;
+
+    try {
+      const response = await fetch(url, {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
+
+      if (!response.ok) {
+        throw new Error("Failed to get chat");
+      }
+
+      const responseData = await response.json();
+      console.log("getChat", responseData.result);
+      return responseData.result;
+    } catch (error) {
+      setError(error.message);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
   const handlePopoverClick = (event) => {
     setAnchorEl(event.currentTarget);
   };
@@ -742,8 +808,8 @@ const AddConnections = () => {
   return (
     <Box>
       <Header />
-      <Container  maxWidth="xxl" role="main" className="container-pb">
-        <Box textAlign="center" padding="10" style={{minHeight:'500px'}}>
+      <Container maxWidth="xxl" role="main" className="container-pb">
+        <Box textAlign="center" padding="10" style={{ minHeight: "500px" }}>
           <Box sx={{ width: "100%", typography: "body1" }}>
             {/* <div style={{ display: 'flex', alignItems: 'center', marginBottom: '1rem' }}>
         <input type="text" placeholder="Search..." style={{ flex: 1, marginRight: '0.5rem', padding: '0.5rem', borderRadius: '4px', border: '1px solid #CACACA' }} />
@@ -754,7 +820,7 @@ const AddConnections = () => {
                 display: "flex",
                 alignItems: "center",
                 marginBottom: "1rem",
-                marginTop:'1rem'
+                marginTop: "1rem",
               }}
               className="search-data"
             >
@@ -818,7 +884,8 @@ const AddConnections = () => {
                         <Divider />
                       </List>
                     ))}
-                  {(!userQuerySearchData || userQuerySearchData.length === 0) && (
+                  {(!userQuerySearchData ||
+                    userQuerySearchData.length === 0) && (
                     <Box>
                       <p>No users found</p>
                     </Box>
@@ -907,9 +974,40 @@ const AddConnections = () => {
                       <Divider />
                     </List>
                   ))}
-                {invitationAcceptedUsers &&
+                {/* {invitationAcceptedUsers &&
                   invitationAcceptedUsers?.map((item) => (
                     <List sx={{}} style={{ color: "green" }}>
+                      <ListItem
+                        component={RouterLink}
+                        to={{
+                          pathname: "/message",
+                        }}
+                      >
+                        {console.log(
+                          "03444444444440000000000000000000044444444444",
+                          item
+                        )}
+                        <ListItemText
+                          primary={`${item.firstName}${
+                            item.lastName ? ` ${item.lastName}` : ""
+                          }`}
+                          secondary="Designation"
+                          onClick={() =>
+                            handleAcceptedChatOpen(
+                              item.userId,
+                              `${item.firstName}${
+                                item.lastName ? ` ${item.lastName}` : ""
+                              }`
+                            )
+                          }
+                        />
+                      </ListItem>
+                      <Divider />
+                    </List>
+                  ))} */}
+                {invitationAcceptedUsers &&
+                  invitationAcceptedUsers?.map((item, index) => (
+                    <List sx={{}} style={{ color: "green" }} key={index}>
                       <ListItem
                         component={RouterLink}
                         to={{
@@ -921,6 +1019,13 @@ const AddConnections = () => {
                             item.lastName ? ` ${item.lastName}` : ""
                           }`}
                           secondary="Designation"
+                          primaryTypographyProps={{
+                            style: {
+                              fontWeight: chats[index]?.unreadChatExists
+                                ? "bold"
+                                : "normal",
+                            },
+                          }}
                           onClick={() =>
                             handleAcceptedChatOpen(
                               item.userId,
@@ -939,7 +1044,7 @@ const AddConnections = () => {
                   invitationNotAcceptedUsers?.map((item) => (
                     <List
                       sx={{}}
-                      style={{ fontSize:'14px' }}
+                      style={{ fontSize: "14px" }}
                       onClick={() => userClick(item)}
                     >
                       <ListItem>
@@ -1163,9 +1268,9 @@ const AddConnections = () => {
                               paddingBottom: "15px",
                             }}
                           >
-                            {selectedUser.firstName} {selectedUser.lastName} is a
-                            manager with the department of Revenue and taxes and
-                            has actively contributed to the growth and
+                            {selectedUser.firstName} {selectedUser.lastName} is
+                            a manager with the department of Revenue and taxes
+                            and has actively contributed to the growth and
                             authenticity of the knowledge curated for the
                             betterment of the department.
                           </Box>
