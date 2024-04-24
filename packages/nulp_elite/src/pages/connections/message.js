@@ -60,6 +60,9 @@ const useStyles = makeStyles((theme) => ({
     textAlign: "right",
     background: "linear-gradient(180deg, #004367 0%, #102244 100%)",
     color: "#fff",
+    width: "50%",
+    float: "right",
+    // float:"right"
   },
   receiverMessage: {
     margin: "4px 0",
@@ -276,6 +279,8 @@ const Message = (props) => {
           </Box>
         </IconButton>
         <Box
+          onClick={handleBlockUser}
+          disabled={isBlocked}
           style={{
             display: "flex",
             alignItems: "center",
@@ -283,21 +288,8 @@ const Message = (props) => {
             cursor: "pointer",
           }}
         >
-          {/* <BlockIcon
-            onClick={handleBlockUser}
-            disabled={isBlocked}
-            style={{ paddingRight: "10px", cursor: "pointer" }}
-          />
-          Block */}
-          {!isBlocked && (
-            <IconButton
-              onClick={handleBlockUser}
-              style={{ paddingRight: "10px", cursor: "pointer" }}
-            >
-              <BlockIcon />
-              Block
-            </IconButton>
-          )}
+          <BlockIcon style={{ paddingRight: "10px", cursor: "pointer" }} />
+          Block
         </Box>
 
         {/* <IconButton onClick={handleMenuClick}>
@@ -317,7 +309,7 @@ const Message = (props) => {
       <Dialog open={dialogOpen} maxWidth="lg" onClose={handleDialogClose}>
         <DialogTitle>Block User</DialogTitle>
         <DialogContent>
-          <TextareaAutosize
+          <TextField
             autoFocus
             minRows={6}
             maxRows={4}
@@ -326,6 +318,7 @@ const Message = (props) => {
             label="Reason for blocking"
             fullWidth
             value={reason}
+            sx={{ fontSize: "13px" }}
             onChange={(e) => setReason(e.target.value)}
           />
         </DialogContent>

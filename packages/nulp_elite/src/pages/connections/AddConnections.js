@@ -787,6 +787,12 @@ const AddConnections = () => {
     }
   };
 
+  useEffect(() => {
+    if (searchQuery.length >= 3) {
+      onUserQuerySearch(searchQuery);
+    }
+  }, [searchQuery]);
+
   return (
     <Box>
       <Header />
@@ -797,47 +803,26 @@ const AddConnections = () => {
         <input type="text" placeholder="Search..." style={{ flex: 1, marginRight: '0.5rem', padding: '0.5rem', borderRadius: '4px', border: '1px solid #CACACA' }} />
         <button style={{ padding:'11px 16px 11px 16px', borderRadius: '4px', backgroundColor: '#004367', color: 'white', border: '1px', cursor: 'pointer' ,fontSize:'12px'}}>Search</button>
       </div> */}
-            <Box
-              style={{
-                display: "flex",
-                alignItems: "center",
-                marginBottom: "1rem",
-                marginTop: "1rem",
-              }}
-              className="search-data"
-            >
-              <input
-                label="Search for a user..."
-                type="text"
-                value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)}
-                style={{
-                  width: "100%",
-                  flex: 1,
-                  marginRight: "0.5rem",
-                  padding: "10px",
-                  borderRadius: "4px",
-                  border: "1px solid #CACACA",
-                }}
-              />
-              <Button
-                style={{
-                  padding: "10px 9px",
-                  borderRadius: "4px",
-                  backgroundColor: "#004367",
-                  color: "white",
-                  border: "1px",
-                  cursor: "pointer",
-                  fontSize: "12px",
-                }}
-                onClick={(e) => {
-                  onUserQuerySearch();
+
+            <input
+              label="Search for a user..."
+              type="text"
+              onChange={(e) => {
+                const value = e.target.value.trim();
+                setSearchQuery(value);
+                if (value.length >= 3) {
                   handlePopoverClick(e);
-                }}
-              >
-                Search
-              </Button>
-            </Box>
+                }
+              }}
+              style={{
+                width: "100%",
+                flex: 1,
+                marginRight: "0.5rem",
+                padding: "10px",
+                borderRadius: "4px",
+                border: "1px solid #CACACA",
+              }}
+            />
             <div>
               <Popover
                 id={id}

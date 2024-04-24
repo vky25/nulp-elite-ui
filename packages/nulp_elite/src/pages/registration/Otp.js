@@ -312,7 +312,7 @@ const Otp = () => {
           }}
         >
           {resendDisabled
-            ? t("RESEND_CODE")
+            ? t("RESEND_OTP")
             : `Resend OTP in ${remainingTime}s`}
         </Button>
         <FormGroup
