@@ -24,9 +24,11 @@ const ContentList = (props) => {
   const [pageNumber, setPageNumber] = useState(1);
   const [data, setData] = useState([]);
   const [filters, setFilters] = useState({});
+  const [domainfilter, setDomainfilter] = useState({});
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState(null);
   const [gradeLevels, setGradeLevels] = useState([]);
+  const [category, setCategory] = useState([]);
   const navigate = useNavigate();
   const { domain } = location.state || {};
   const { domainquery } = location.state || {};
@@ -36,12 +38,18 @@ const ContentList = (props) => {
   useEffect(() => {
     fetchData();
     fetchGradeLevels();
+    Fetchdomain();
     const random = getRandomValue();
-  }, [filters, search, currentPage]);
+  }, [filters, search, currentPage, domainfilter]);
 
   const handleFilterChange = (selectedOptions) => {
     const selectedValues = selectedOptions.map((option) => option.value);
     setFilters({ ...filters, se_gradeleverl: selectedValues });
+  };
+
+  const handlefilter = (selectedOption) => {
+    const selectedValue = selectedOption.map((option) => option.value);
+    setDomainfilter({ ...domainfilter, se_board: selectedValue });
   };
 
   const handleSearch = (query) => {
@@ -70,7 +78,7 @@ const ContentList = (props) => {
             "eTextBook",
             "TVLesson",
           ],
-          se_boards: [domain],
+          se_boards: domainfilter.se_board || [domain],
           se_gradeLevels: filters.se_gradeleverl,
         },
         limit: 20,
@@ -106,7 +114,7 @@ const ContentList = (props) => {
     }
   };
 
-  const getRandomValue = (array) => {
+  const getRandomValue = () => {
     const randomIndex = RandomImage;
     return randomIndex;
   };
@@ -120,9 +128,11 @@ const ContentList = (props) => {
       // fetchData();
     }
   };
+
   const handleGoBack = () => {
     navigate(-1); // Navigate back in history
   };
+
   const fetchGradeLevels = async () => {
     try {
       const response = await fetch(
@@ -147,6 +157,38 @@ const ContentList = (props) => {
       }
     } catch (error) {
       console.error("Error fetching grade levels:", error);
+    }
+  };
+
+  const Fetchdomain = async () => {
+    try {
+      const url = `http://localhost:3000/api/framework/v1/read/nulp?categories=board,gradeLevel,medium,class,subject`;
+      const response = await fetch(url);
+
+      if (response.ok) {
+        const responseData = await response.json();
+        if (
+          responseData.result &&
+          responseData.result.framework &&
+          responseData.result.framework.categories &&
+          responseData.result.framework.categories.length > 0 &&
+          responseData.result.framework.categories[0].terms
+        ) {
+          const domainOptions =
+            responseData.result.framework.categories[0].terms.map((term) => ({
+              value: term.code,
+              label: term.name,
+            }));
+          setCategory(domainOptions);
+        }
+      } else {
+        throw new Error("Failed to fetch domain data");
+      }
+    } catch (error) {
+      console.log("Error fetching domain data:", error);
+      setError(error.message);
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -199,6 +241,14 @@ const ContentList = (props) => {
             label="Filter by Sub-Domain"
             onChange={handleFilterChange}
           />
+          {!domain && (
+            <Filter
+              options={category}
+              label="Filter by Domain"
+              onChange={handlefilter}
+              // isMulti={false}
+            />
+          )}
         </Box>
         <Link
           onClick={handleGoBack}
@@ -215,9 +265,12 @@ const ContentList = (props) => {
           />{" "}
           Back
         </Link>
-        <Box sx={{ fontSize: "14px", marginTop: "10px" }}></Box>You are viewing
-        courses for :
-        <Box sx={{ fontSize: "16px", fontWeight: "700" }}>{domain}</Box>
+        {domain && (
+          <Box sx={{ fontSize: "14px", marginTop: "10px" }}>
+            You are viewing courses for :
+            <Box sx={{ fontSize: "16px", fontWeight: "700" }}>{domain}</Box>
+          </Box>
+        )}
         <Box textAlign="center" padding="10">
           <Box sx={{ paddingTop: "30px" }}>
             {isLoading ? (
