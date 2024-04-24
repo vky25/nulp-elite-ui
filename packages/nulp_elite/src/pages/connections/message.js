@@ -198,23 +198,29 @@ const Message = (props) => {
 
   const getTimeAgo = (timestamp) => {
     const timeZone = "Asia/Kolkata";
-    const date = moment(timestamp).utc();
-    const now = moment();
-    const diffHours = now.diff(date, "hours");
+    const date = moment(timestamp).tz(timeZone);
+    const now = moment().tz(timeZone);
 
-    if (diffHours < 24) {
+    if (date.isSame(now, "day")) {
       return "Today";
-    } else if (diffHours < 48) {
+    } else if (date.isSame(now.clone().subtract(1, "day"), "day")) {
       return "Yesterday";
     } else {
-      const data = date.tz(timeZone).format("D MMMM YYYY");
-      return data;
+      return date.format("D MMMM YYYY");
     }
   };
-
   const getTime = (timestamp) => {
-    const data = moment.utc(timestamp).format("hh:mm a");
-    return data;
+    // const data = moment.utc(timestamp).format("hh:mm a");
+    // return data;
+    // Convert UTC timestamp to IST in the format HH:MM AM/PM
+    const date = new Date(timestamp);
+    const istTime = date.toLocaleString("en-US", {
+      timeZone: "Asia/Kolkata",
+      hour: "numeric",
+      minute: "numeric",
+      hour12: true,
+    });
+    return istTime;
   };
 
   const handleMenuClick = (event) => {
@@ -266,6 +272,12 @@ const Message = (props) => {
     }
     handleMenuClose(); // Close the menu after the action is completed
   };
+  const isSameDay = (timestamp1, timestamp2) => {
+    const timeZone = "Asia/Kolkata";
+    const date1 = moment(timestamp1).tz(timeZone).startOf("day");
+    const date2 = moment(timestamp2).tz(timeZone).startOf("day");
+    return date1.isSame(date2);
+  };
 
   return (
     <div className={classes.chatContainer}>
@@ -279,8 +291,6 @@ const Message = (props) => {
           </Box>
         </IconButton>
         <Box
-          onClick={handleBlockUser}
-          disabled={isBlocked}
           style={{
             display: "flex",
             alignItems: "center",
@@ -288,8 +298,21 @@ const Message = (props) => {
             cursor: "pointer",
           }}
         >
-          <BlockIcon style={{ paddingRight: "10px", cursor: "pointer" }} />
-          Block
+          {/* <BlockIcon
+            onClick={handleBlockUser}
+            disabled={isBlocked}
+            style={{ paddingRight: "10px", cursor: "pointer" }}
+          />
+          Block */}
+          {!isBlocked && (
+            <IconButton
+              onClick={handleBlockUser}
+              style={{ paddingRight: "10px", cursor: "pointer" }}
+            >
+              <BlockIcon />
+              Block
+            </IconButton>
+          )}
         </Box>
 
         {/* <IconButton onClick={handleMenuClick}>
@@ -309,7 +332,7 @@ const Message = (props) => {
       <Dialog open={dialogOpen} maxWidth="lg" onClose={handleDialogClose}>
         <DialogTitle>Block User</DialogTitle>
         <DialogContent>
-          <TextField
+          <TextareaAutosize
             autoFocus
             minRows={6}
             maxRows={4}
@@ -318,7 +341,6 @@ const Message = (props) => {
             label="Reason for blocking"
             fullWidth
             value={reason}
-            sx={{ fontSize: "13px" }}
             onChange={(e) => setReason(e.target.value)}
           />
         </DialogContent>
@@ -361,7 +383,7 @@ const Message = (props) => {
       <Alert severity="info" style={{ margin: "10px 0" }}>
         Your chat will disappear after 7 Days.
       </Alert>
-      <div className={classes.chat}>
+      {/* <div className={classes.chat}>
         {messages.map((msg, index) => (
           <div key={index}>
             <div style={{ textAlign: "center" }}>
@@ -383,7 +405,30 @@ const Message = (props) => {
             </div>
           </div>
         ))}
+      </div> */}
+      <div className={classes.chat}>
+        {messages.map((msg, index) => (
+          <div key={index}>
+            {index === 0 ||
+            !isSameDay(msg.timestamp, messages[index - 1].timestamp) ? (
+              <div style={{ textAlign: "center" }}>
+                {getTimeAgo(msg.timestamp)}
+              </div>
+            ) : null}
+            <div
+              className={
+                msg.sender_id === loggedInUserId
+                  ? `${classes.senderMessage} ${classes.message}`
+                  : `${classes.receiverMessage} ${classes.message}`
+              }
+            >
+              <div>{msg.message}</div>
+              <div>{getTime(msg.timestamp)}</div>
+            </div>
+          </div>
+        ))}
       </div>
+
       {isBlocked ? (
         <Alert severity="warning" style={{ marginBottom: "10px" }}>
           User blocked. You cannot send messages to this user.
