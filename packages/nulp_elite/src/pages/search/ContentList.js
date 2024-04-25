@@ -15,14 +15,13 @@ import Container from "@mui/material/Container";
 import { contentService } from "@shiksha/common-lib";
 import queryString from "query-string";
 import Pagination from "@mui/material/Pagination";
-import ArrowBackOutlinedIcon from '@mui/icons-material/ArrowBackOutlined';
+import ArrowBackOutlinedIcon from "@mui/icons-material/ArrowBackOutlined";
 import NoResult from "pages/content/noResultFound";
 
 const ContentList = (props) => {
   const [search, setSearch] = useState(true);
   const location = useLocation();
-  const [ pageNumber, setPageNumber ] = useState();
-  const [totalPages, setTotalPages] = useState(1);
+  const [pageNumber, setPageNumber] = useState(1);
   const [data, setData] = useState([]);
   const [filters, setFilters] = useState({});
   const [isLoading, setIsLoading] = useState(false);
@@ -31,12 +30,14 @@ const ContentList = (props) => {
   const navigate = useNavigate();
   const { domain } = location.state || {};
   const { domainquery } = location.state || {};
+  const [totalPages, setTotalPages] = useState(1);
+  const [currentPage, setCurrentPage] = useState(1);
 
   useEffect(() => {
     fetchData();
     fetchGradeLevels();
     const random = getRandomValue();
-  }, [ filters, search]);
+  }, [filters, search, currentPage]);
 
   const handleFilterChange = (selectedOptions) => {
     const selectedValues = selectedOptions.map((option) => option.value);
@@ -74,7 +75,7 @@ const ContentList = (props) => {
         },
         limit: 20,
         query: search.query || domainquery,
-        offset: 20 * (pageNumber - 1),
+        offset: 20 * (currentPage - 1),
         sort_by: {
           lastUpdatedOn: "desc",
         },
@@ -91,12 +92,12 @@ const ContentList = (props) => {
     try {
       const response = await contentService.getAllContents(url, req, headers);
 
-        if(response.data.result.content && response.data.result.count<=20){
-          setTotalPages(1);
-        }else if(response.data.result.count>20){
-          setTotalPages(Math.floor(response.data.result.count / 20) + 1);
-        }
-      
+      if (response.data.result.content && response.data.result.count <= 20) {
+        setTotalPages(1);
+      } else if (response.data.result.count > 20) {
+        setTotalPages(Math.floor(response.data.result.count / 20));
+      }
+
       setData(response.data.result);
     } catch (error) {
       setError(error.message);
@@ -111,10 +112,13 @@ const ContentList = (props) => {
   };
 
   const handleChange = (event, value) => {
-    setPageNumber(value)
-    setData({})  
-    navigate("/contentList/" + value, { state: { domain: domain } }); 
-    fetchData();
+    if (value !== pageNumber) {
+      setPageNumber(value);
+      setCurrentPage(value);
+      setData({});
+      navigate(`/contentList/${value}`, { state: { domain: domain } });
+      // fetchData();
+    }
   };
   const handleGoBack = () => {
     navigate(-1); // Navigate back in history
@@ -181,7 +185,10 @@ const ContentList = (props) => {
         >
           Learn from well curated courses and content.
         </p>
-        <SearchBox onSearch={handleSearch} />
+        <SearchBox
+          onSearch={handleSearch}
+          domainquery={search.query || domainquery}
+        />
       </Box>
 
       <Container maxWidth="xxl" role="main" className="container-pb">
@@ -189,14 +196,28 @@ const ContentList = (props) => {
           <domainCarousel></domainCarousel>
           <Filter
             options={gradeLevels}
-            label="Filter by Grade Level"
+            label="Filter by Sub-Domain"
             onChange={handleFilterChange}
           />
         </Box>
-        <Link onClick={handleGoBack} style={{display:'block',display:'flex',fontSize:'14px',paddingTop:'30px',color:'rgb(0, 67, 103)'}}><ArrowBackOutlinedIcon style={{width:'0.65em',height:'0.65em'}}/> Back</Link>
-
-  <Box sx={{fontSize:'14px',marginTop:'10px'}}></Box>You are viewing courses for :
-  <Box  sx={{fontSize:'16px',fontWeight:'700'}}>{domain}</Box>
+        <Link
+          onClick={handleGoBack}
+          style={{
+            display: "block",
+            display: "flex",
+            fontSize: "14px",
+            paddingTop: "30px",
+            color: "rgb(0, 67, 103)",
+          }}
+        >
+          <ArrowBackOutlinedIcon
+            style={{ width: "0.65em", height: "0.65em" }}
+          />{" "}
+          Back
+        </Link>
+        <Box sx={{ fontSize: "14px", marginTop: "10px" }}></Box>You are viewing
+        courses for :
+        <Box sx={{ fontSize: "16px", fontWeight: "700" }}>{domain}</Box>
         <Box textAlign="center" padding="10">
           <Box sx={{ paddingTop: "30px" }}>
             {isLoading ? (
@@ -205,43 +226,41 @@ const ContentList = (props) => {
               <p>{error}</p>
             ) : data && data.content && data.content.length > 0 ? (
               <div>
-              <Grid
-                container
-                spacing={2}
-                style={{ margin: "20px 0", marginBottom: "10px" }}
-              >
-                {data.content.map((items, index) => (
-                  <Grid
-                    item
-                    xs={12}
-                    md={6}
-                    lg={3}
-                    style={{ marginBottom: "10px" }}
-                    key={items.identifier}
-                  >
-                    <BoxCard
-                      items={items}
-                      index={index}
-                      onClick={() =>
-                        handleCardClick(items.identifier, items.contentType)
-                      }
-                    ></BoxCard>
-                  </Grid>
-                ))}
-              </Grid>
+                <Grid
+                  container
+                  spacing={2}
+                  style={{ margin: "20px 0", marginBottom: "10px" }}
+                >
+                  {data.content.map((items, index) => (
+                    <Grid
+                      item
+                      xs={12}
+                      md={6}
+                      lg={3}
+                      style={{ marginBottom: "10px" }}
+                      key={items.identifier}
+                    >
+                      <BoxCard
+                        items={items}
+                        index={index}
+                        onClick={() =>
+                          handleCardClick(items.identifier, items.contentType)
+                        }
+                      ></BoxCard>
+                    </Grid>
+                  ))}
+                </Grid>
                 <Pagination
-                count={totalPages}
-                page={pageNumber}
-                onChange={handleChange}
-              />
+                  count={totalPages}
+                  page={pageNumber}
+                  onChange={handleChange}
+                />
               </div>
             ) : (
               <NoResult /> // Render NoResult component when there are no search results
             )}
           </Box>
         </Box>
-
-      
       </Container>
       <Footer />
     </div>

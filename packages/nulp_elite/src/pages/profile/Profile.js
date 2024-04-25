@@ -139,10 +139,9 @@ const Profile = () => {
         maxWidth="xxl"
         role="main"
         className="container-pb"
-        sx={{ margin: "20px 0" }}
       >
-        <Grid container spacing={2}>
-          <Grid item xs={12} md={4} lg={4} sx={{ paddingRight: "20px" }}>
+        <Grid container spacing={2} className="sm-pt-22">
+          <Grid item xs={12} md={4} lg={4} className="sm-p-25">
             <Box sx={{ fontSize: "18px", color: "#484848" }}>
               {t("MY_PROFILE")}
             </Box>

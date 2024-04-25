@@ -76,6 +76,12 @@ const Certificate = () => {
     fetchData();
   }, []);
 
+  const formatDate = (dateString) => {
+    const date = new Date(dateString);
+    const options = { day: "2-digit", month: "long", year: "numeric" };
+    return date.toLocaleDateString("en-GB", options);
+  };
+
   return (
     <div>
       <Header />
@@ -154,7 +160,7 @@ const Certificate = () => {
                             style={{ fontSize: "12px" }}
                           >
                             {t("CERTIFICATE_ISSUE_DATE")}:{" "}
-                            {certificate._source.data.issuedOn}
+                            {formatDate(certificate._source.data.issuedOn)}
                           </Typography>
                           <Box
                             style={{
@@ -221,7 +227,7 @@ const Certificate = () => {
                           style={{ fontSize: "12px" }}
                         >
                           {t("CERTIFICATE_ISSUE_DATE")}:{" "}
-                          {certificate.osCreatedAt}
+                          {formatDate(certificate.osCreatedAt)}
                         </Typography>
                         <Box
                           style={{
