@@ -60,9 +60,6 @@ const useStyles = makeStyles((theme) => ({
     textAlign: "right",
     background: "linear-gradient(180deg, #004367 0%, #102244 100%)",
     color: "#fff",
-    width: "50%",
-    float: "right",
-    // float:"right"
   },
   receiverMessage: {
     margin: "4px 0",
@@ -190,7 +187,6 @@ const Message = (props) => {
           },
         }
       );
-      console.log("------333333333333333333----", data);
     } catch (error) {
       console.error("Error updating message:", error);
     }
@@ -210,9 +206,6 @@ const Message = (props) => {
     }
   };
   const getTime = (timestamp) => {
-    // const data = moment.utc(timestamp).format("hh:mm a");
-    // return data;
-    // Convert UTC timestamp to IST in the format HH:MM AM/PM
     const date = new Date(timestamp);
     const istTime = date.toLocaleString("en-US", {
       timeZone: "Asia/Kolkata",
@@ -298,12 +291,6 @@ const Message = (props) => {
             cursor: "pointer",
           }}
         >
-          {/* <BlockIcon
-            onClick={handleBlockUser}
-            disabled={isBlocked}
-            style={{ paddingRight: "10px", cursor: "pointer" }}
-          />
-          Block */}
           {!isBlocked && (
             <IconButton
               onClick={handleBlockUser}
@@ -314,20 +301,6 @@ const Message = (props) => {
             </IconButton>
           )}
         </Box>
-
-        {/* <IconButton onClick={handleMenuClick}>
-          <MenuIcon />
-        </IconButton> */}
-        {/* <Menu
-          anchorEl={anchorEl}
-          open={Boolean(anchorEl)}
-          onClose={handleMenuClose}
-        >
-          <MenuItem onClick={handleBlockUser} disabled={isBlocked}>
-            <BlockIcon />
-            Block
-          </MenuItem>
-        </Menu> */}
       </div>
       <Dialog open={dialogOpen} maxWidth="lg" onClose={handleDialogClose}>
         <DialogTitle>Block User</DialogTitle>
