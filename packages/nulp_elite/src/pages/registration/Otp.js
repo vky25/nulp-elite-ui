@@ -78,7 +78,7 @@ const Otp = () => {
   }, [remainingTime]);
 
   const handleLogin = () => {
-    if (otp.length < 5) {
+    if (otp.length >= 5 && isChecked) {
       verifyUser();
     }
   };
@@ -311,9 +311,7 @@ const Otp = () => {
             marginTop: "10px",
           }}
         >
-          {resendDisabled
-            ? t("RESEND_OTP")
-            : `Resend OTP in ${remainingTime}s`}
+          {resendDisabled ? t("RESEND_OTP") : `Resend OTP in ${remainingTime}s`}
         </Button>
         <FormGroup
           style={{

@@ -265,12 +265,6 @@ const Message = (props) => {
     }
     handleMenuClose(); // Close the menu after the action is completed
   };
-  const isSameDay = (timestamp1, timestamp2) => {
-    const timeZone = "Asia/Kolkata";
-    const date1 = moment(timestamp1).tz(timeZone).startOf("day");
-    const date2 = moment(timestamp2).tz(timeZone).startOf("day");
-    return date1.isSame(date2);
-  };
 
   return (
     <div className={classes.chatContainer}>
@@ -356,34 +350,12 @@ const Message = (props) => {
       <Alert severity="info" style={{ margin: "10px 0" }}>
         Your chat will disappear after 7 Days.
       </Alert>
-      {/* <div className={classes.chat}>
-        {messages.map((msg, index) => (
-          <div key={index}>
-            <div style={{ textAlign: "center" }}>
-              {index === 0 ||
-              getTimeAgo(msg.timestamp) !==
-                getTimeAgo(messages[index - 1].timestamp) ? (
-                <div>{getTimeAgo(msg.timestamp)}</div>
-              ) : null}
-            </div>
-            <div
-              className={
-                msg.sender_id === loggedInUserId
-                  ? `${classes.senderMessage} ${classes.message}`
-                  : `${classes.receiverMessage} ${classes.message}`
-              }
-            >
-              <div>{msg.message}</div>
-              <div>{getTime(msg.timestamp)}</div>
-            </div>
-          </div>
-        ))}
-      </div> */}
       <div className={classes.chat}>
         {messages.map((msg, index) => (
           <div key={index}>
             {index === 0 ||
-            !isSameDay(msg.timestamp, messages[index - 1].timestamp) ? (
+            getTimeAgo(msg.timestamp) !==
+              getTimeAgo(messages[index - 1].timestamp) ? (
               <div style={{ textAlign: "center" }}>
                 {getTimeAgo(msg.timestamp)}
               </div>
