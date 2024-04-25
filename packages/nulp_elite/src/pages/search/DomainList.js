@@ -214,7 +214,7 @@ const DomainList = () => {
                       }}
                     >
                       <img
-                        src={require(`../../assets/domainImgs/${term.image}`)}
+                        src={require(`../../assets/domainImgs${term.image}`)}
                         style={{ width: "100%" }}
                       />
                     </Box>
