@@ -327,8 +327,8 @@ Link {
 }
 #simple-popover .MuiPopover-paper {
   left: 23px !important;
-  width: 50px;
-  top: 39% !important;
+  top: 185px !important;
+  width: 96%;
 }
 Footer {
   margin-top: 30px;
