@@ -1269,38 +1269,6 @@ const AddConnections = () => {
                           Cancel
                         </Button>
 
-<<<<<<< HEAD
-                {showModal && (
-                  <Modal
-                    open={showModal}
-                    onClose={handleCloseModal}
-                    aria-labelledby="modal-title"
-                    aria-describedby="modal-desc"
-                    className="sx-bottom"
-                    sx={{
-                      display: "flex",
-                      justifyContent: "center",
-                      alignItems: "flex-end",
-                      pt: "10vh",
-                      p: "0",
-                    }}
-                  >
-                    <ModalContent
-                      sx={{ width: 400, bottom: "30px" }}
-                      style={{}}
-                    >
-                      <div style={{ padding: "10px", textAlign: "center" }}>
-                        <h2
-                          style={{
-                            fontSize: "14px",
-                            textAlign: "center",
-                            padding: "13px",
-                          }}
-                        >
-                          {t('INVITATION_SEND_SUCCESSFULLY')}
-                        </h2>
-=======
->>>>>>> 064364543f1855f28fbb171c1ed2d78bbb0326c7
                         <Button
                           style={{
                             background: "#004367",
@@ -1315,11 +1283,7 @@ const AddConnections = () => {
                           }}
                           onClick={showChat ? handleSendClick : toggleChat}
                         >
-<<<<<<< HEAD
-                          {t('CLOSE')}
-=======
                           {buttonText}
->>>>>>> 064364543f1855f28fbb171c1ed2d78bbb0326c7
                         </Button>
                       </Box>
                     </ModalContent>
