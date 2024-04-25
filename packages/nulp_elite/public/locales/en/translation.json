@@ -121,5 +121,7 @@
   "YEAR_OF_BIRTH": "Year of Birth",
   "CONFIRM_NEW_PASSWORD": "Confirm New Password",
   "NEW_PASSWORD": "New Password",
-  "TERMS_CONDITIONS": "Terms and conditions"
+  "TERMS_CONDITIONS": "Terms and conditions",
+  "SELECT_CATEGORY":"Select category",
+  "FAQS":"Faq(s)"
 }
