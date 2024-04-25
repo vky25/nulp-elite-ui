@@ -267,7 +267,7 @@ const ContentList = (props) => {
         </Link>
         {domain && (
           <Box sx={{ fontSize: "14px", marginTop: "10px" }}>
-            You are viewing courses for :
+            You are viewing contents for :
             <Box sx={{ fontSize: "16px", fontWeight: "700" }}>{domain}</Box>
           </Box>
         )}
