@@ -60,9 +60,6 @@ const useStyles = makeStyles((theme) => ({
     textAlign: "right",
     background: "linear-gradient(180deg, #004367 0%, #102244 100%)",
     color: "#fff",
-    width: "50%",
-    float: "right",
-    // float:"right"
   },
   receiverMessage: {
     margin: "4px 0",
@@ -101,6 +98,7 @@ const Message = (props) => {
       // Fetch block user status when component mounts
       fetchBlockUserStatus();
       fetchChats();
+      updateMessage();
     }
   }, [loggedInUserId]);
 
@@ -171,27 +169,51 @@ const Message = (props) => {
     }
   };
 
-  const getTimeAgo = (timestamp) => {
-    const timeZone = "Asia/Kolkata";
-    const date = moment(timestamp).utc();
-    const now = moment();
-    const diffHours = now.diff(date, "hours");
+  const updateMessage = async () => {
+    try {
+      console.log("updating message:", message);
 
-    if (diffHours < 24) {
-      return "Today";
-    } else if (diffHours < 48) {
-      return "Yesterday";
-    } else {
-      const data = date.tz(timeZone).format("D MMMM YYYY");
-      return data;
+      const data = await axios.put(
+        "http://localhost:3000/directConnect/update-chat",
+        {
+          sender_id: loggedInUserId,
+          receiver_id: receiverUserId,
+          is_read: true,
+        },
+        {
+          withCredentials: true,
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }
+      );
+    } catch (error) {
+      console.error("Error updating message:", error);
     }
   };
 
-  const getTime = (timestamp) => {
+  const getTimeAgo = (timestamp) => {
     const timeZone = "Asia/Kolkata";
     const date = moment(timestamp).tz(timeZone);
-    const data = date.format("HH:mm:ss");
-    return data;
+    const now = moment().tz(timeZone);
+
+    if (date.isSame(now, "day")) {
+      return "Today";
+    } else if (date.isSame(now.clone().subtract(1, "day"), "day")) {
+      return "Yesterday";
+    } else {
+      return date.format("D MMMM YYYY");
+    }
+  };
+  const getTime = (timestamp) => {
+    const date = new Date(timestamp);
+    const istTime = date.toLocaleString("en-US", {
+      timeZone: "Asia/Kolkata",
+      hour: "numeric",
+      minute: "numeric",
+      hour12: true,
+    });
+    return istTime;
   };
 
   const handleMenuClick = (event) => {
@@ -236,10 +258,18 @@ const Message = (props) => {
       setReason("");
       setDialogOpen(false);
       console.log("User blocked successfully!");
+      // Reload the page after blocking the user
+      window.location.reload();
     } catch (error) {
       console.error("Error blocking user:", error);
     }
     handleMenuClose(); // Close the menu after the action is completed
+  };
+  const isSameDay = (timestamp1, timestamp2) => {
+    const timeZone = "Asia/Kolkata";
+    const date1 = moment(timestamp1).tz(timeZone).startOf("day");
+    const date2 = moment(timestamp2).tz(timeZone).startOf("day");
+    return date1.isSame(date2);
   };
 
   return (
@@ -254,8 +284,6 @@ const Message = (props) => {
           </Box>
         </IconButton>
         <Box
-          onClick={handleBlockUser}
-          disabled={isBlocked}
           style={{
             display: "flex",
             alignItems: "center",
@@ -263,28 +291,21 @@ const Message = (props) => {
             cursor: "pointer",
           }}
         >
-          <BlockIcon style={{ paddingRight: "10px", cursor: "pointer" }} />
-          Block
+          {!isBlocked && (
+            <IconButton
+              onClick={handleBlockUser}
+              style={{ paddingRight: "10px", cursor: "pointer" }}
+            >
+              <BlockIcon />
+              Block
+            </IconButton>
+          )}
         </Box>
-
-        {/* <IconButton onClick={handleMenuClick}>
-          <MenuIcon />
-        </IconButton> */}
-        {/* <Menu
-          anchorEl={anchorEl}
-          open={Boolean(anchorEl)}
-          onClose={handleMenuClose}
-        >
-          <MenuItem onClick={handleBlockUser} disabled={isBlocked}>
-            <BlockIcon />
-            Block
-          </MenuItem>
-        </Menu> */}
       </div>
       <Dialog open={dialogOpen} maxWidth="lg" onClose={handleDialogClose}>
         <DialogTitle>Block User</DialogTitle>
         <DialogContent>
-          <TextField
+          <TextareaAutosize
             autoFocus
             minRows={6}
             maxRows={4}
@@ -293,7 +314,6 @@ const Message = (props) => {
             label="Reason for blocking"
             fullWidth
             value={reason}
-            sx={{ fontSize: "13px" }}
             onChange={(e) => setReason(e.target.value)}
           />
         </DialogContent>
@@ -336,7 +356,7 @@ const Message = (props) => {
       <Alert severity="info" style={{ margin: "10px 0" }}>
         Your chat will disappear after 7 Days.
       </Alert>
-      <div className={classes.chat}>
+      {/* <div className={classes.chat}>
         {messages.map((msg, index) => (
           <div key={index}>
             <div style={{ textAlign: "center" }}>
@@ -358,7 +378,30 @@ const Message = (props) => {
             </div>
           </div>
         ))}
+      </div> */}
+      <div className={classes.chat}>
+        {messages.map((msg, index) => (
+          <div key={index}>
+            {index === 0 ||
+            !isSameDay(msg.timestamp, messages[index - 1].timestamp) ? (
+              <div style={{ textAlign: "center" }}>
+                {getTimeAgo(msg.timestamp)}
+              </div>
+            ) : null}
+            <div
+              className={
+                msg.sender_id === loggedInUserId
+                  ? `${classes.senderMessage} ${classes.message}`
+                  : `${classes.receiverMessage} ${classes.message}`
+              }
+            >
+              <div>{msg.message}</div>
+              <div>{getTime(msg.timestamp)}</div>
+            </div>
+          </div>
+        ))}
       </div>
+
       {isBlocked ? (
         <Alert severity="warning" style={{ marginBottom: "10px" }}>
           User blocked. You cannot send messages to this user.

@@ -78,7 +78,7 @@ const Otp = () => {
   }, [remainingTime]);
 
   const handleLogin = () => {
-    if (otp.length === 6) {
+    if (otp.length < 5) {
       verifyUser();
     }
   };
@@ -315,7 +315,13 @@ const Otp = () => {
             ? t("RESEND_OTP")
             : `Resend OTP in ${remainingTime}s`}
         </Button>
-        <FormGroup style={{ flexDirection: "row", alignItems: "center",flexFlow:"row" }}>
+        <FormGroup
+          style={{
+            flexDirection: "row",
+            alignItems: "center",
+            flexFlow: "row",
+          }}
+        >
           <FormControlLabel
             style={{ marginRight: "0" }}
             control={
@@ -328,10 +334,14 @@ const Otp = () => {
             {tncText}
           </Link>
         </FormGroup>
-        <Dialog open={open} onClose={handleClose} maxWidth="xxl" className="sm-w-700"
->
+        <Dialog
+          open={open}
+          onClose={handleClose}
+          maxWidth="xxl"
+          className="sm-w-700"
+        >
           <DialogContent>
-            <h1 style={{fontSize:'22px'}}>Terms and Conditions  </h1>
+            <h1 style={{ fontSize: "22px" }}>Terms and Conditions </h1>
             <iframe
               title="Terms and Conditions"
               src={tncConfig}

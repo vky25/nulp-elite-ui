@@ -99,6 +99,42 @@ const AddConnections = () => {
   // const filteredUsers = userData?.filter(
   //   (user) => user.name && user.name.includes(searchQuery)
   // );
+
+  const getChat = async (userId) => {
+    setIsLoading(true);
+    setError(null);
+
+    const params = new URLSearchParams({
+      sender_id: loggedInUserId,
+      receiver_id: userId,
+      is_accepted: true,
+      is_read: false,
+    });
+
+    const url = `http://localhost:3000/directConnect/get-chats?${params.toString()}`;
+
+    try {
+      const response = await fetch(url, {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
+
+      if (!response.ok) {
+        throw new Error("Failed to get chat");
+      }
+
+      const responseData = await response.json();
+      console.log("getChat", responseData.result);
+      return responseData.result;
+    } catch (error) {
+      setError(error.message);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
   const handlePopoverClick = (event) => {
     setAnchorEl(event.currentTarget);
   };
@@ -433,8 +469,20 @@ const AddConnections = () => {
       }
 
       const responseData = await response.json();
-      console.log(responseData);
-      setInvitationAcceptedUsers(responseData?.result?.response?.content || []);
+      const userList = responseData?.result?.response?.content || [];
+
+      const userListWithChat = await Promise.all(
+        userList.map(async (item) => {
+          const userChat = await getChat(item.id);
+          if (userChat?.length > 0) {
+            item = { ...item, isRead: false };
+          }
+
+          return item;
+        })
+      );
+
+      setInvitationAcceptedUsers(userListWithChat || []);
       console.log(
         "InvitationAcceptedUsers",
         responseData.result.response.content
@@ -908,9 +956,23 @@ const AddConnections = () => {
                         }}
                       >
                         <ListItemText
-                          primary={`${item.firstName}${
-                            item.lastName ? ` ${item.lastName}` : ""
-                          }`}
+                          primary={
+                            <span
+                              style={{
+                                color:
+                                  item && item.isRead === false
+                                    ? "black"
+                                    : "black",
+                                fontWeight:
+                                  item && item.isRead === false
+                                    ? "bold"
+                                    : "normal",
+                              }}
+                            >
+                              {item.firstName}
+                              {item.lastName ? ` ${item.lastName}` : ""}
+                            </span>
+                          }
                           secondary="Designation"
                           onClick={() =>
                             handleAcceptedChatOpen(
