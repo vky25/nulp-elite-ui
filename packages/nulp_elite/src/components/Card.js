@@ -17,6 +17,7 @@ export default function BoxCard({ items, index ,onClick}) {
 
   useEffect(() => { 
     // const random = getRandomValue();
+    console.log("random banner----",RandomImage.ImagePaths[index % 10 || 10])
     setImgUrl(RandomImage.ImagePaths[index % 10 || 10]);
  }, []);
 // const randomImg = (i) => {
@@ -51,7 +52,8 @@ export default function BoxCard({ items, index ,onClick}) {
           background:
             "linear-gradient(45deg, RGBA(28, 25, 25, 0.46) 7%, RGBA(20, 18, 18, 0.57) 45%)",
         }}
-        image={imgUrl? imgUrl: require("../assets/card-bg.png")}
+        
+        image={imgUrl? require(`./../assets/dummyCardImgs/${imgUrl}`): require("../assets/card-bg.png")}
         title="green iguana"
       />
       <div 
