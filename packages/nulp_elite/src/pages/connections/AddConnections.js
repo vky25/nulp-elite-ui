@@ -798,7 +798,7 @@ const AddConnections = () => {
       <Header />
       <Container maxWidth="xxl" role="main" className="container-pb">
         <Box textAlign="center" padding="10" style={{ minHeight: "500px" }}>
-          <Box sx={{ width: "100%", typography: "body1" }}>
+          <Box>
             {/* <div style={{ display: 'flex', alignItems: 'center', marginBottom: '1rem' }}>
         <input type="text" placeholder="Search..." style={{ flex: 1, marginRight: '0.5rem', padding: '0.5rem', borderRadius: '4px', border: '1px solid #CACACA' }} />
         <button style={{ padding:'11px 16px 11px 16px', borderRadius: '4px', backgroundColor: '#004367', color: 'white', border: '1px', cursor: 'pointer' ,fontSize:'12px'}}>Search</button>
@@ -815,14 +815,15 @@ const AddConnections = () => {
                 }
               }}
               style={{
-                width: "100%",
-                flex: 1,
+                width: "99%",
+                margin:"20px 0",
                 marginRight: "0.5rem",
-                padding: "10px",
+                padding: "10px 0",
                 borderRadius: "4px",
                 border: "1px solid #CACACA",
               }}
             />
+             </Box>
             <div>
               <Popover
                 id={id}
@@ -1338,7 +1339,7 @@ const AddConnections = () => {
                 </div>
               </TabPanel>
             </TabContext>
-          </Box>
+         
         </Box>
       </Container>
       <Footer />
