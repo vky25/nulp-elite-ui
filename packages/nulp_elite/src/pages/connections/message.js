@@ -19,7 +19,7 @@ import { IconButton, Menu, MenuItem } from "@mui/material";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import MenuIcon from "@mui/icons-material/Menu";
 import BlockIcon from "@mui/icons-material/Block";
-import SendIcon from '@mui/icons-material/Send';
+import SendIcon from "@mui/icons-material/Send";
 
 const moment = require("moment");
 const timezone = require("moment-timezone");
@@ -29,7 +29,7 @@ const useStyles = makeStyles((theme) => ({
     flexDirection: "column",
     height: "100vh",
     overflow: "hidden",
-    background:"#fff"
+    background: "#fff",
   },
   chatHeader: {
     padding: "8px 16px",
@@ -51,6 +51,7 @@ const useStyles = makeStyles((theme) => ({
     padding: "8px",
     borderTop: "1px solid #ccc",
     backgroundColor: "#ffffff",
+    marginTop: "10px",
   },
   senderMessage: {
     borderRadius: "5px",
@@ -58,9 +59,7 @@ const useStyles = makeStyles((theme) => ({
     margin: "15px 0",
     textAlign: "right",
     background: "linear-gradient(180deg, #004367 0%, #102244 100%)",
-    color:"#fff",
-    // float:"right"
-
+    color: "#fff",
   },
   receiverMessage: {
     margin: "4px 0",
@@ -70,7 +69,7 @@ const useStyles = makeStyles((theme) => ({
     display: "table",
     borderRadius: "5px",
     color: "#212121",
-    backgroundColor: "#F1F1F1"
+    backgroundColor: "#F1F1F1",
   },
 }));
 
@@ -89,7 +88,6 @@ const Message = (props) => {
   const [reason, setReason] = useState("");
   const [dialogOpen, setDialogOpen] = useState(false);
   const [isBlocked, setIsBlocked] = useState(false); // State to track if user is blocked
-  const [maxWidth, setMaxWidth] = React.useState('md');
 
   useEffect(() => {
     const _userId = util.userId();
@@ -100,6 +98,7 @@ const Message = (props) => {
       // Fetch block user status when component mounts
       fetchBlockUserStatus();
       fetchChats();
+      updateMessage();
     }
   }, [loggedInUserId]);
 
@@ -170,27 +169,51 @@ const Message = (props) => {
     }
   };
 
-  const getTimeAgo = (timestamp) => {
-    const timeZone = "Asia/Kolkata";
-    const date = moment(timestamp).utc();
-    const now = moment();
-    const diffHours = now.diff(date, "hours");
+  const updateMessage = async () => {
+    try {
+      console.log("updating message:", message);
 
-    if (diffHours < 24) {
-      return "Today";
-    } else if (diffHours < 48) {
-      return "Yesterday";
-    } else {
-      const data = date.tz(timeZone).format("D MMMM YYYY");
-      return data;
+      const data = await axios.put(
+        "http://localhost:3000/directConnect/update-chat",
+        {
+          sender_id: loggedInUserId,
+          receiver_id: receiverUserId,
+          is_read: true,
+        },
+        {
+          withCredentials: true,
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }
+      );
+    } catch (error) {
+      console.error("Error updating message:", error);
     }
   };
 
-  const getTime = (timestamp) => {
+  const getTimeAgo = (timestamp) => {
     const timeZone = "Asia/Kolkata";
     const date = moment(timestamp).tz(timeZone);
-    const data = date.format("HH:mm:ss");
-    return data;
+    const now = moment().tz(timeZone);
+
+    if (date.isSame(now, "day")) {
+      return "Today";
+    } else if (date.isSame(now.clone().subtract(1, "day"), "day")) {
+      return "Yesterday";
+    } else {
+      return date.format("D MMMM YYYY");
+    }
+  };
+  const getTime = (timestamp) => {
+    const date = new Date(timestamp);
+    const istTime = date.toLocaleString("en-US", {
+      timeZone: "Asia/Kolkata",
+      hour: "numeric",
+      minute: "numeric",
+      hour12: true,
+    });
+    return istTime;
   };
 
   const handleMenuClick = (event) => {
@@ -235,6 +258,8 @@ const Message = (props) => {
       setReason("");
       setDialogOpen(false);
       console.log("User blocked successfully!");
+      // Reload the page after blocking the user
+      window.location.reload();
     } catch (error) {
       console.error("Error blocking user:", error);
     }
@@ -246,69 +271,76 @@ const Message = (props) => {
       <div className={classes.chatHeader}>
         <IconButton onClick={handleGoBack}>
           <ArrowBackIcon />
-          <Box sx={{fontSize:'22px',fontWeight:'600',paddingLeft:'10px'}}>{dataStore.fullName || localStorage.getItem("chatName")}</Box>
-
+          <Box
+            sx={{ fontSize: "22px", fontWeight: "600", paddingLeft: "10px" }}
+          >
+            {dataStore.fullName || localStorage.getItem("chatName")}
+          </Box>
         </IconButton>
-        <Box onClick={handleBlockUser} disabled={isBlocked} style={{display:'flex',alignItems:'center',fontSize:'18px',cursor:'pointer'}}>
-        <BlockIcon style={{paddingRight:'10px',cursor:'pointer'}} />
-            Block
-        </Box>
-        
-        {/* <IconButton onClick={handleMenuClick}>
-          <MenuIcon />
-        </IconButton> */}
-        {/* <Menu
-          anchorEl={anchorEl}
-          open={Boolean(anchorEl)}
-          onClose={handleMenuClose}
+        <Box
+          style={{
+            display: "flex",
+            alignItems: "center",
+            fontSize: "18px",
+            cursor: "pointer",
+          }}
         >
-          <MenuItem onClick={handleBlockUser} disabled={isBlocked}>
-            <BlockIcon />
-            Block
-          </MenuItem>
-        </Menu> */}
+          {!isBlocked && (
+            <IconButton
+              onClick={handleBlockUser}
+              style={{ paddingRight: "10px", cursor: "pointer" }}
+            >
+              <BlockIcon />
+              Block
+            </IconButton>
+          )}
+        </Box>
       </div>
-      <Dialog open={dialogOpen}         maxWidth={maxWidth}
-onClose={handleDialogClose}>
+      <Dialog open={dialogOpen} maxWidth="lg" onClose={handleDialogClose}>
         <DialogTitle>Block User</DialogTitle>
         <DialogContent>
           <TextareaAutosize
             autoFocus
+            minRows={6}
+            maxRows={4}
             margin="dense"
             id="reason"
             label="Reason for blocking"
-            type="text"
             fullWidth
             value={reason}
             onChange={(e) => setReason(e.target.value)}
           />
         </DialogContent>
         <DialogActions>
-          <Button onClick={handleDialogClose}  variant="outlined"
-                          style={{
-                            borderRadius: "10px",
-                            color: "#004367",
-                            padding: "10px 12px",
-                            margin: "0 10px",
-                            fontWeight: "500",
-                            fontSize: "12px",
-                            border: "solid 1px #efefea00",
-                            width: "50%",
-                          }}>
+          <Button
+            onClick={handleDialogClose}
+            variant="outlined"
+            style={{
+              borderRadius: "10px",
+              color: "#004367",
+              padding: "10px 12px",
+              margin: "0 10px",
+              fontWeight: "500",
+              fontSize: "12px",
+              border: "solid 1px #efefea00",
+              width: "50%",
+            }}
+          >
             Cancel
           </Button>
-          <Button onClick={handleBlockUserConfirmed} 
-          style={{
-            background: "#004367",
-            borderRadius: "10px",
-            color: "#fff",
-            padding: "10px 12px",
-            margin: "0 10px",
-            fontWeight: "500",
-            fontSize: "12px",
-            border: "solid 1px #004367",
-            width: "50%",
-          }}
+          <Button
+            onClick={handleBlockUserConfirmed}
+            style={{
+              background: "#004367",
+              borderRadius: "10px",
+              color: "#fff",
+              padding: "10px 12px",
+              margin: "0 10px",
+              fontWeight: "500",
+              fontSize: "12px",
+              border: "solid 1px #004367",
+              width: "50%",
+            }}
           >
             Block
           </Button>
@@ -321,13 +353,13 @@ onClose={handleDialogClose}>
       <div className={classes.chat}>
         {messages.map((msg, index) => (
           <div key={index}>
-            <div style={{ textAlign: "center" }}>
-              {index === 0 ||
-              getTimeAgo(msg.timestamp) !==
-                getTimeAgo(messages[index - 1].timestamp) ? (
-                <div>{getTimeAgo(msg.timestamp)}</div>
-              ) : null}
-            </div>
+            {index === 0 ||
+            getTimeAgo(msg.timestamp) !==
+              getTimeAgo(messages[index - 1].timestamp) ? (
+              <div style={{ textAlign: "center" }}>
+                {getTimeAgo(msg.timestamp)}
+              </div>
+            ) : null}
             <div
               className={
                 msg.sender_id === loggedInUserId
@@ -341,6 +373,7 @@ onClose={handleDialogClose}>
           </div>
         ))}
       </div>
+
       {isBlocked ? (
         <Alert severity="warning" style={{ marginBottom: "10px" }}>
           User blocked. You cannot send messages to this user.
@@ -352,19 +385,19 @@ onClose={handleDialogClose}>
               variant="outlined"
               placeholder="Type your message..."
               fullWidth
-              style={{background:'#fff',border:'none'}}
+              style={{ background: "#fff", border: "none" }}
               value={message}
               onChange={(e) => setMessage(e.target.value)}
               disabled={isBlocked} // Disable input field if user is blocked
             />
             <Button
               variant="contained"
-              style={{padding:'15px'}}
+              style={{ padding: "15px" }}
               color="primary"
               onClick={sendMessage}
               disabled={isBlocked} // Disable send button if user is blocked
             >
-              <SendIcon/>
+              <SendIcon />
             </Button>
           </div>
         </>

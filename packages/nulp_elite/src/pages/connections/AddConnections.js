@@ -99,6 +99,42 @@ const AddConnections = () => {
   // const filteredUsers = userData?.filter(
   //   (user) => user.name && user.name.includes(searchQuery)
   // );
+
+  const getChat = async (userId) => {
+    setIsLoading(true);
+    setError(null);
+
+    const params = new URLSearchParams({
+      sender_id: loggedInUserId,
+      receiver_id: userId,
+      is_accepted: true,
+      is_read: false,
+    });
+
+    const url = `http://localhost:3000/directConnect/get-chats?${params.toString()}`;
+
+    try {
+      const response = await fetch(url, {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
+
+      if (!response.ok) {
+        throw new Error("Failed to get chat");
+      }
+
+      const responseData = await response.json();
+      console.log("getChat", responseData.result);
+      return responseData.result;
+    } catch (error) {
+      setError(error.message);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
   const handlePopoverClick = (event) => {
     setAnchorEl(event.currentTarget);
   };
@@ -127,7 +163,7 @@ const AddConnections = () => {
 
   const toggleChat = () => {
     setShowChat(!showChat);
-    setButtonText(showChat ? t("INVITE") : t("SEND_INVITATION"));
+    setButtonText(showChat ? t('INVITE') : t('SEND_INVITATION'));
   };
 
   useEffect(() => {
@@ -433,8 +469,20 @@ const AddConnections = () => {
       }
 
       const responseData = await response.json();
-      console.log(responseData);
-      setInvitationAcceptedUsers(responseData?.result?.response?.content || []);
+      const userList = responseData?.result?.response?.content || [];
+
+      const userListWithChat = await Promise.all(
+        userList.map(async (item) => {
+          const userChat = await getChat(item.id);
+          if (userChat?.length > 0) {
+            item = { ...item, isRead: false };
+          }
+
+          return item;
+        })
+      );
+
+      setInvitationAcceptedUsers(userListWithChat || []);
       console.log(
         "InvitationAcceptedUsers",
         responseData.result.response.content
@@ -739,57 +787,42 @@ const AddConnections = () => {
     }
   };
 
+  useEffect(() => {
+    if (searchQuery.length >= 3) {
+      onUserQuerySearch(searchQuery);
+    }
+  }, [searchQuery]);
+
   return (
     <Box>
       <Header />
-      <Container  maxWidth="xxl" role="main" className="container-pb">
-        <Box textAlign="center" padding="10" style={{minHeight:'500px'}}>
+      <Container maxWidth="xxl" role="main" className="container-pb">
+        <Box textAlign="center" padding="10" style={{ minHeight: "500px" }}>
           <Box sx={{ width: "100%", typography: "body1" }}>
             {/* <div style={{ display: 'flex', alignItems: 'center', marginBottom: '1rem' }}>
         <input type="text" placeholder="Search..." style={{ flex: 1, marginRight: '0.5rem', padding: '0.5rem', borderRadius: '4px', border: '1px solid #CACACA' }} />
         <button style={{ padding:'11px 16px 11px 16px', borderRadius: '4px', backgroundColor: '#004367', color: 'white', border: '1px', cursor: 'pointer' ,fontSize:'12px'}}>Search</button>
       </div> */}
-            <Box
-              style={{
-                display: "flex",
-                alignItems: "center",
-                marginBottom: "1rem",
-                marginTop:'1rem'
-              }}
-              className="search-data"
-            >
-              <input
-                label="Search for a user..."
-                type="text"
-                value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)}
-                style={{
-                  width: "100%",
-                  flex: 1,
-                  marginRight: "0.5rem",
-                  padding: "10px",
-                  borderRadius: "4px",
-                  border: "1px solid #CACACA",
-                }}
-              />
-              <Button
-                style={{
-                  padding: "11px 9px",
-                  borderRadius: "4px",
-                  backgroundColor: "#004367",
-                  color: "white",
-                  border: "1px",
-                  cursor: "pointer",
-                  fontSize: "12px",
-                }}
-                onClick={(e) => {
-                  onUserQuerySearch();
+
+            <input
+              label="Search for a user..."
+              type="text"
+              onChange={(e) => {
+                const value = e.target.value.trim();
+                setSearchQuery(value);
+                if (value.length >= 3) {
                   handlePopoverClick(e);
-                }}
-              >
-                Search
-              </Button>
-            </Box>
+                }
+              }}
+              style={{
+                width: "100%",
+                flex: 1,
+                marginRight: "0.5rem",
+                padding: "10px",
+                borderRadius: "4px",
+                border: "1px solid #CACACA",
+              }}
+            />
             <div>
               <Popover
                 id={id}
@@ -805,7 +838,10 @@ const AddConnections = () => {
                   {userQuerySearchData &&
                     userQuerySearchData?.length > 0 &&
                     userQuerySearchData?.map((item) => (
-                      <List sx={{}} style={{ color: "gray" }}>
+                      <List
+                        sx={{}}
+                        style={{ color: "gray", cursor: "pointer" }}
+                      >
                         <ListItem>
                           <ListItemText
                             primary={`${item.firstName}${
@@ -818,7 +854,8 @@ const AddConnections = () => {
                         <Divider />
                       </List>
                     ))}
-                  {(!userQuerySearchData || userQuerySearchData.length === 0) && (
+                  {(!userQuerySearchData ||
+                    userQuerySearchData.length === 0) && (
                     <Box>
                       <p>No users found</p>
                     </Box>
@@ -868,7 +905,7 @@ const AddConnections = () => {
 
                 {invitationReceiverByUser &&
                   invitationReceiverByUser?.map((item) => (
-                    <List sx={{}} style={{ color: "gray" }}>
+                    <List sx={{}} style={{ color: "gray", cursor: "pointer" }}>
                       <ListItem>
                         <ListItemText
                           primary={`${item.firstName}${
@@ -876,40 +913,42 @@ const AddConnections = () => {
                           }`}
                           secondary="Designation"
                         />
+                        <div
+                          style={{
+                            display: "flex",
+                            justifyContent: "flex-end",
+                            marginTop: "10px",
+                          }}
+                        >
+                          <Link
+                            href="#"
+                            underline="none"
+                            color="#004367"
+                            onClick={() => acceptChat(item.userId)}
+                            style={{ marginLeft: "10px" }}
+                          >
+                            <CheckCircleOutlineIcon
+                              style={{ fontSize: "28px" }}
+                            />
+                          </Link>
+                          <span style={{ margin: "0 5px" }}></span>
+                          <Link
+                            href="#"
+                            underline="none"
+                            color="#7d7a7a"
+                            onClick={() => rejectChat(item.userId)}
+                          >
+                            <CancelOutlinedIcon style={{ fontSize: "28px" }} />
+                          </Link>
+                        </div>
                       </ListItem>
-                      <div
-                        style={{
-                          display: "flex",
-                          justifyContent: "flex-end",
-                          marginTop: "10px",
-                        }}
-                      >
-                        <Link
-                          href="#"
-                          underline="none"
-                          color="primary"
-                          onClick={() => acceptChat(item.userId)}
-                          style={{ marginLeft: "10px" }}
-                        >
-                          <CheckCircleOutlineIcon />
-                        </Link>
-                        <span style={{ margin: "0 5px" }}></span>
-                        <Link
-                          href="#"
-                          underline="none"
-                          color="secondary"
-                          onClick={() => rejectChat(item.userId)}
-                        >
-                          <CancelOutlinedIcon />
-                        </Link>
-                      </div>
 
                       <Divider />
                     </List>
                   ))}
                 {invitationAcceptedUsers &&
                   invitationAcceptedUsers?.map((item) => (
-                    <List sx={{}} style={{ color: "green" }}>
+                    <List sx={{}} style={{ color: "green", cursor: "pointer" }}>
                       <ListItem
                         component={RouterLink}
                         to={{
@@ -917,9 +956,23 @@ const AddConnections = () => {
                         }}
                       >
                         <ListItemText
-                          primary={`${item.firstName}${
-                            item.lastName ? ` ${item.lastName}` : ""
-                          }`}
+                          primary={
+                            <span
+                              style={{
+                                color:
+                                  item && item.isRead === false
+                                    ? "black"
+                                    : "black",
+                                fontWeight:
+                                  item && item.isRead === false
+                                    ? "bold"
+                                    : "normal",
+                              }}
+                            >
+                              {item.firstName}
+                              {item.lastName ? ` ${item.lastName}` : ""}
+                            </span>
+                          }
                           secondary="Designation"
                           onClick={() =>
                             handleAcceptedChatOpen(
@@ -939,7 +992,7 @@ const AddConnections = () => {
                   invitationNotAcceptedUsers?.map((item) => (
                     <List
                       sx={{}}
-                      style={{ fontSize:'14px' }}
+                      style={{ fontSize: "14px", cursor: "pointer" }}
                       onClick={() => userClick(item)}
                     >
                       <ListItem>
@@ -995,6 +1048,7 @@ const AddConnections = () => {
                               fontWeight: "500",
                               fontSize: "12px",
                               width: "50%",
+                              marginBottom: "10px",
                             }}
                           >
                             {t("CLOSE")}
@@ -1163,9 +1217,9 @@ const AddConnections = () => {
                               paddingBottom: "15px",
                             }}
                           >
-                            {selectedUser.firstName} {selectedUser.lastName} is a
-                            manager with the department of Revenue and taxes and
-                            has actively contributed to the growth and
+                            {selectedUser.firstName} {selectedUser.lastName} is
+                            a manager with the department of Revenue and taxes
+                            and has actively contributed to the growth and
                             authenticity of the knowledge curated for the
                             betterment of the department.
                           </Box>
@@ -1179,7 +1233,8 @@ const AddConnections = () => {
                         <div>
                           <TextField
                             multiline
-                            rows={4} // You can adjust the number of rows as needed
+                            minRows={5}
+                            maxRows={10}
                             value={textValue}
                             onChange={handleTextareaChange}
                             placeholder="Enter your text here..."
@@ -1213,6 +1268,38 @@ const AddConnections = () => {
                           Cancel
                         </Button>
 
+<<<<<<< HEAD
+                {showModal && (
+                  <Modal
+                    open={showModal}
+                    onClose={handleCloseModal}
+                    aria-labelledby="modal-title"
+                    aria-describedby="modal-desc"
+                    className="sx-bottom"
+                    sx={{
+                      display: "flex",
+                      justifyContent: "center",
+                      alignItems: "flex-end",
+                      pt: "10vh",
+                      p: "0",
+                    }}
+                  >
+                    <ModalContent
+                      sx={{ width: 400, bottom: "30px" }}
+                      style={{}}
+                    >
+                      <div style={{ padding: "10px", textAlign: "center" }}>
+                        <h2
+                          style={{
+                            fontSize: "14px",
+                            textAlign: "center",
+                            padding: "13px",
+                          }}
+                        >
+                          {t('INVITATION_SEND_SUCCESSFULLY')}
+                        </h2>
+=======
+>>>>>>> 064364543f1855f28fbb171c1ed2d78bbb0326c7
                         <Button
                           style={{
                             background: "#004367",
@@ -1227,7 +1314,11 @@ const AddConnections = () => {
                           }}
                           onClick={showChat ? handleSendClick : toggleChat}
                         >
+<<<<<<< HEAD
+                          {t('CLOSE')}
+=======
                           {buttonText}
+>>>>>>> 064364543f1855f28fbb171c1ed2d78bbb0326c7
                         </Button>
                       </Box>
                     </ModalContent>
@@ -1248,10 +1339,7 @@ const AddConnections = () => {
                         p: "0",
                       }}
                     >
-                      <ModalContent
-                        sx={{ width: 400, bottom: "30px" }}
-                        style={{}}
-                      >
+                      <ModalContent sx={{ width: 400 }} style={{}}>
                         <div style={{ padding: "10px", textAlign: "center" }}>
                           <h2
                             style={{

@@ -118,7 +118,7 @@ const Registration = () => {
         });
 
         if (!response.ok) {
-          throw new Error("Failed to verify OTP");
+          throw new Error("Failed to check email");
         }
 
         const data = await response.json();
@@ -164,12 +164,14 @@ const Registration = () => {
         const data = response.data;
         console.log("OTP response:", data.result);
         // localStorage.setItem("registeringUser", JSON.stringify(formik.values));
+        const tncConfig = await getTermsAndCondition();
         const dataToSend = {
           captchaResponse: captchaResponse,
           userData: formik.values,
+          tncConfig: tncConfig,
         };
         setData(dataToSend);
-        getTermsAndCondition();
+
         setGoToOtp(true);
       } catch (error) {
         setError(error.message);
@@ -200,11 +202,12 @@ const Registration = () => {
       });
 
       if (!response.ok) {
-        throw new Error("Failed to verify");
+        throw new Error("Failed to get terms and conditions");
       }
 
       const data = await response.json();
-      console.log("response:", data.result);
+      console.log("response:", data.result.response.value);
+      return data.result.response.value;
     } catch (error) {
       setError(error.message);
     } finally {
@@ -236,7 +239,7 @@ const Registration = () => {
               marginBottom: "20px",
             }}
           >
-            {t('REGISTER')}
+            {t("REGISTER")}
           </Typography>
 
           <Box py={1}>
@@ -245,7 +248,7 @@ const Registration = () => {
               name="name"
               label={
                 <span>
-                  {t('NAME')} <span className="required">*</span>
+                  {t("NAME")} <span className="required">*</span>
                 </span>
               }
               variant="outlined"
@@ -262,7 +265,7 @@ const Registration = () => {
             <FormControl fullWidth style={{ marginTop: "10px" }}>
               <InputLabel id="demo-simple-select-label">
                 {" "}
-                {t('YEAR_OF_BIRTH')} <span className="required">*</span>
+                {t("YEAR_OF_BIRTH")} <span className="required">*</span>
               </InputLabel>
               <Select
                 labelId="demo-simple-select-label"
@@ -290,7 +293,7 @@ const Registration = () => {
               name="email"
               label={
                 <span>
-                 {t('EMAILID')} <span className="required">*</span>
+                  {t("EMAILID")} <span className="required">*</span>
                 </span>
               }
               variant="outlined"
@@ -309,10 +312,10 @@ const Registration = () => {
             <CssTextField
               id="password"
               name="password"
-              style={{background:'#fff'}}
+              style={{ background: "#fff" }}
               label={
                 <span>
-                  {t('NEW_PASSWORD')} <span className="required">*</span>
+                  {t("NEW_PASSWORD")} <span className="required">*</span>
                 </span>
               }
               type={showPassword ? "text" : "password"}
@@ -345,7 +348,8 @@ const Registration = () => {
               name="confirmPassword"
               label={
                 <span>
-                  {t('CONFIRM_NEW_PASSWORD')} <span className="required">*</span>
+                  {t("CONFIRM_NEW_PASSWORD")}{" "}
+                  <span className="required">*</span>
                 </span>
               }
               type="password"
@@ -360,11 +364,12 @@ const Registration = () => {
                 <p className="form-error">{formik.errors.confirmPassword}</p>
               )}
           </Box>
-         
+
           <Box pt={4}>
             <Button
               style={{
-                background: "#004367",
+                background:
+                  formik.isValid && captchaResponse ? "#004367" : "#a9a9a9",
                 borderRadius: "10px",
                 color: "#fff",
                 padding: "10px 71px",
@@ -386,7 +391,7 @@ const Registration = () => {
                 marginTop: "10px",
               }}
             >
-             {t('ALREADY_HAVE_AN_ACCOUNT')}{" "}
+              {t("ALREADY_HAVE_AN_ACCOUNT")}{" "}
               <Link href="http://localhost:3000/all">Log in</Link>
             </Typography>
           </Box>
