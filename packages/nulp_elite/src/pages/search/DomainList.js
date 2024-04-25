@@ -213,7 +213,10 @@ const DomainList = () => {
                         border: "solid 1px #E1E1E1",
                       }}
                     >
-                      <img src={term.image} style={{ width: "100%" }} />
+                      <img
+                        src={require(`../../assets/domainImgs/${term.image}`)}
+                        style={{ width: "100%" }}
+                      />
                     </Box>
                     <h5
                       style={{
