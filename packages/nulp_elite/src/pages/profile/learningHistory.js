@@ -57,7 +57,7 @@ const LearningHistory = () => {
               fontWeight: "600",
             }}
           >
-            <Link underline="hover" color="#004367" href="/">
+            <Link underline="hover" color="#004367" href="/profile">
               {t("MY_PROFILE")}
             </Link>
             <Typography color="#484848" aria-current="page">
