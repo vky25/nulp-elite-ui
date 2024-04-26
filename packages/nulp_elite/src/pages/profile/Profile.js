@@ -135,11 +135,7 @@ const Profile = () => {
         </p>
         <SearchBox onSearch={handleSearch} />
       </Box>
-      <Container
-        maxWidth="xxl"
-        role="main"
-        className="container-pb"
-      >
+      <Container maxWidth="xxl" role="main" className="container-pb">
         <Grid container spacing={2} className="sm-pt-22">
           <Grid item xs={12} md={4} lg={4} className="sm-p-25">
             <Box sx={{ fontSize: "18px", color: "#484848" }}>
@@ -457,12 +453,9 @@ const Profile = () => {
                       style={{ paddingRight: "0", textAlign: "right" }}
                     >
                       <CircularProgressWithLabel
-                        value={
-                          (certData.certificatesReceived /
-                            certData.totalCourses) *
-                          100
-                        }
-                        className="crcular"
+                        received={certData.certificatesReceived}
+                        total={certData.totalCourses}
+                        className="circular"
                         style={{ width: "80px", height: "80px" }}
                       />
                     </Grid>
