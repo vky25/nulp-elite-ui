@@ -115,7 +115,6 @@ const DomainList = () => {
           });
         }
       });
-      console.log("kkkkk----", itemsArray);
 
       setData(itemsArray);
     } catch (error) {
