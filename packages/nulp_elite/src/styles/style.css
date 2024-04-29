@@ -168,6 +168,9 @@ body {
  }
  }
  @media(min-width:769px) {
+  .footer{
+    margin-top: 20px !important;
+  }
   .senderMessage{
     width:50%;
     transform:translate(95%, 0)
@@ -358,4 +361,9 @@ width: 99.9% !important;
 }
 .filter-domain .css-w49w8k{
   background: none !important;
+}
+.MuiTouchRipple-root:focus-visible{
+  background: none !important;
+    outline: 0 !important;
+    color: transparent !important;
 }
