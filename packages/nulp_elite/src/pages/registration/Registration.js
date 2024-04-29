@@ -263,11 +263,13 @@ const Registration = () => {
           </Box>
           <Box py={1}>
             <FormControl fullWidth style={{ marginTop: "10px" }}>
-              <InputLabel id="demo-simple-select-label">
+              <InputLabel id="demo-simple-select-label"  className="year-select">
                 {" "}
                 {t("YEAR_OF_BIRTH")} <span className="required">*</span>
               </InputLabel>
               <Select
+                                    
+
                 labelId="demo-simple-select-label"
                 id="demo-simple-select"
                 name="age"

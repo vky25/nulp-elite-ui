@@ -76,7 +76,9 @@ export default function BoxCard({ items, index ,onClick}) {
            {items.name}
         </Typography>
         <Typography gutterBottom variant="h7" component="div" style={{zIndex:'999',fontSize:'14px',position:'absolute',top:'30px',right:'0',color:'#fff',textAlign:'center'}}>
+        {items.primaryCategory && (
                   <Box className="cardCourses"> {items.primaryCategory}</Box>
+                )}
                   </Typography>
         <Box style={{background:'#fff',padding:'10px',borderRadius:'150px',height:'50px',width:'50px',border:'solid 1px #E1E1E1',position:'absolute',top:'115px',right:'30px',textAlign:'center',zIndex:'999'}}>
           <img src={items.appIcon ? items.appIcon : require("assets/default.png")} style={{height:'50px',maxWidth:'100%',objectFit:'contain'}} />
