@@ -20,11 +20,9 @@ const CircularProgressWithLabel = ({ received, total }) => {
         alignItems="center"
         justifyContent="center"
       >
-        <Typography
-          variant="caption"
-          component="div"
-          color="textSecondary"
-        >{`${received}/${total}`}</Typography>
+        <Typography variant="caption" component="div" color="textSecondary">{`${
+          received ? 0 : received
+        }/${total ? 0 : total}`}</Typography>
       </Box>
     </Box>
   );
