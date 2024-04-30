@@ -20,6 +20,7 @@ import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import MenuIcon from "@mui/icons-material/Menu";
 import BlockIcon from "@mui/icons-material/Block";
 import SendIcon from "@mui/icons-material/Send";
+import { t } from "i18next";
 
 const moment = require("moment");
 const timezone = require("moment-timezone");
@@ -291,13 +292,13 @@ const Message = (props) => {
               style={{ paddingRight: "10px", cursor: "pointer" }}
             >
               <BlockIcon />
-              Block
+              {t("BLOCK")}
             </IconButton>
           )}
         </Box>
       </div>
       <Dialog open={dialogOpen} maxWidth="lg" onClose={handleDialogClose}>
-        <DialogTitle>Block User</DialogTitle>
+        <DialogTitle>{t("BLOCK_USER")}</DialogTitle>
         <DialogContent>
           <TextareaAutosize
             autoFocus
@@ -326,7 +327,7 @@ const Message = (props) => {
               width: "50%",
             }}
           >
-            Cancel
+            {("CANCEL")}
           </Button>
           <Button
             onClick={handleBlockUserConfirmed}
@@ -342,13 +343,13 @@ const Message = (props) => {
               width: "50%",
             }}
           >
-            Block
+            {("BLOCK")}
           </Button>
         </DialogActions>
       </Dialog>
 
       <Alert severity="info" style={{ margin: "10px 0" }}>
-        Your chat will disappear after 7 Days.
+        {t("YOUR_CHAT_WILL_DISAPPEAR")}
       </Alert>
       <div className={classes.chat}>
         {messages.map((msg, index) => (
@@ -376,7 +377,7 @@ const Message = (props) => {
 
       {isBlocked ? (
         <Alert severity="warning" style={{ marginBottom: "10px" }}>
-          User blocked. You cannot send messages to this user.
+          {t("USER_BLOCKED_YOU_CANNOT")}
         </Alert>
       ) : (
         <>

@@ -362,8 +362,6 @@ width: 99.9% !important;
 .filter-domain .css-w49w8k{
   background: none !important;
 }
-.MuiTouchRipple-root:focus-visible{
-  background: none !important;
-    outline: 0 !important;
-    color: transparent !important;
+.MuiIconButton-sizeMedium .MuiTouchRipple-root{
+ display: none !important;
 }

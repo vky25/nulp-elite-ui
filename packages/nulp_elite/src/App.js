@@ -121,21 +121,6 @@ function App() {
     },
     {
       moduleName: "nulp_elite",
-      path: "/user",
-      component: User,
-    },
-    {
-      moduleName: "nulp_elite",
-      path: "/coursetest",
-      component: Coursetest,
-    },
-    {
-      moduleName: "nulp_elite",
-      path: "/search",
-      component: Search,
-    },
-    {
-      moduleName: "nulp_elite",
       path: "/certificateOld",
       component: Certificate,
     },

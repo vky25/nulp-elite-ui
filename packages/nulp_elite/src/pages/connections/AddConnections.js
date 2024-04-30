@@ -799,11 +799,6 @@ const AddConnections = () => {
       <Container maxWidth="xxl" role="main" className="container-pb">
         <Box textAlign="center" padding="10" style={{ minHeight: "500px" }}>
           <Box>
-            {/* <div style={{ display: 'flex', alignItems: 'center', marginBottom: '1rem' }}>
-        <input type="text" placeholder="Search..." style={{ flex: 1, marginRight: '0.5rem', padding: '0.5rem', borderRadius: '4px', border: '1px solid #CACACA' }} />
-        <button style={{ padding:'11px 16px 11px 16px', borderRadius: '4px', backgroundColor: '#004367', color: 'white', border: '1px', cursor: 'pointer' ,fontSize:'12px'}}>Search</button>
-      </div> */}
-
             <input
               label="Search for a user..."
               type="text"
@@ -858,7 +853,7 @@ const AddConnections = () => {
                   {(!userQuerySearchData ||
                     userQuerySearchData.length === 0) && (
                     <Box>
-                      <p>No users found</p>
+                      <p>{t("NO_USERS_FOUND")}</p>
                     </Box>
                   )}
                 </Typography>
@@ -900,7 +895,7 @@ const AddConnections = () => {
                   invitationNotAcceptedUsers &&
                   invitationNotAcceptedUsers.length === 0 && (
                     <Box>
-                      <p>No users found</p>
+                      <p>{t("NO_USERS_FOUND")}</p>
                     </Box>
                   )}
 
@@ -1086,7 +1081,7 @@ const AddConnections = () => {
                             fontWeight: "600",
                           }}
                         >
-                          Invite
+                          {t("INVITE")}
                         </Link>
                       </ListItem>
                       <Divider />
@@ -1196,7 +1191,7 @@ const AddConnections = () => {
                               fontWeight: "400",
                             }}
                           >
-                            Designation:
+                            {t("DESIGNATION")}:
                           </div>
                         )}
                       </h2>
@@ -1218,15 +1213,11 @@ const AddConnections = () => {
                               paddingBottom: "15px",
                             }}
                           >
-                            {selectedUser.firstName} {selectedUser.lastName} is
-                            a manager with the department of Revenue and taxes
-                            and has actively contributed to the growth and
-                            authenticity of the knowledge curated for the
-                            betterment of the department.
+                            {selectedUser.firstName} {selectedUser.lastName} 
+                            {t("CONNECT_TEXT")}
                           </Box>
                           <Box>
-                            Connect with them to get insights on what they do or
-                            simply answers to your question!
+                            {t("CONNECT_WITH_THEM")}
                           </Box>
                         </p>
                       )}
@@ -1266,7 +1257,7 @@ const AddConnections = () => {
                           }}
                           onClick={handleClose}
                         >
-                          Cancel
+                          {t("CANCEL")}
                         </Button>
 
                         <Button
