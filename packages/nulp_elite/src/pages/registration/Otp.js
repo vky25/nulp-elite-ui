@@ -165,6 +165,7 @@ const Otp = () => {
       }
 
       const data = await response.json();
+      await saveUserInfoInCustomDB(data.result.userId);
       setGoToOtp(true);
     } catch (error) {
       setError(error.message);
@@ -173,6 +174,37 @@ const Otp = () => {
     }
   };
 
+  const saveUserInfoInCustomDB = async (userId) => {
+    const url = "http://localhost:3000/custom/user/signup";
+    const requestBody = {
+      user_id: userId,
+      designation:
+        userData.designation === "Other"
+          ? userData.otherDesignation
+          : userData.designation,
+      bio: userData.bio,
+      created_by: userId,
+    };
+    try {
+      const response = await fetch(url, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(requestBody),
+      });
+
+      if (!response.ok) {
+        throw new Error("Failed to save user data in custom DB");
+      }
+
+      const data = await response.json();
+    } catch (error) {
+      setError(error.message);
+    } finally {
+      setIsLoading(false);
+    }
+  };
   if (goToOtp) {
     return <Navigate to="/all" />;
   }

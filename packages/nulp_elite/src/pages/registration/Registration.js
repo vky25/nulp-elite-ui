@@ -102,13 +102,13 @@ const Registration = () => {
       handleSubmit();
     },
   });
-  const [designation, setDesignation] = useState("");
   const [designationsList, setDesignationsList] = useState([]);
 
   useEffect(() => {
     setTimeout(() => {
       setLoad(true);
     }, DELAY);
+    setDesignationsList(designations);
   }, []);
   const handleSubmit = async () => {
     const isEmailExist = async () => {
@@ -222,14 +222,14 @@ const Registration = () => {
       setIsLoading(false);
     }
   };
-  useEffect(() => {
-    setDesignationsList(designations);
-  }, []);
 
   const handleChangeDesignation = (event) => {
-    formik.setFieldValue("designation", event.target.value);
+    const { value } = event.target;
+    formik.setFieldValue("designation", value);
+    if (value === "Other") {
+      formik.setFieldValue("otherDesignation", "");
+    }
   };
-
   const handleChange = (event) => {
     const { value } = event.target;
     if (value.length <= MAX_CHARS) {
@@ -331,6 +331,28 @@ const Registration = () => {
               </Select>
             </FormControl>
           </Box>
+          {formik.values.designation === "Other" && (
+            <Box py={1}>
+              <CssTextField
+                id="otherDesignation"
+                name="otherDesignation"
+                label={
+                  <span>
+                    {t("OTHER_DESIGNATION")} <span className="required">*</span>
+                  </span>
+                }
+                variant="outlined"
+                size="small"
+                value={formik.values.otherDesignation}
+                onChange={formik.handleChange}
+                onBlur={formik.handleBlur}
+              />
+              {formik.touched.otherDesignation &&
+                formik.errors.otherDesignation && (
+                  <p className="form-error">{formik.errors.otherDesignation}</p>
+                )}
+            </Box>
+          )}
           <Box py={2}>
             <TextField
               id="bio"
@@ -341,7 +363,7 @@ const Registration = () => {
               variant="outlined"
               fullWidth
               value={formik.values.bio}
-              onChange={handleChange}
+              onChange={formik.handleChange}
               onBlur={formik.handleBlur}
               inputProps={{ maxLength: MAX_CHARS }}
             />
@@ -353,7 +375,7 @@ const Registration = () => {
                   : "textSecondary"
               }
             >
-              {formik.values.bio?.length}/{MAX_CHARS}
+              {formik.values.bio ? formik.values.bio.length : 0}/{MAX_CHARS}
             </Typography>
           </Box>
           <Box py={2}>
