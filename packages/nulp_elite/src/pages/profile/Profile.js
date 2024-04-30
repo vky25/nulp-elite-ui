@@ -22,6 +22,8 @@ import * as util from "../../services/utilService";
 import { useNavigate } from "react-router-dom";
 import SearchBox from "components/search";
 import ContinueLearning from "./continueLearning";
+import SelectPreference from "pages/SelectPreference";
+import { Dialog, DialogTitle, DialogContent } from "@mui/material";
 
 const Profile = () => {
   const { t } = useTranslation();
@@ -37,6 +39,7 @@ const Profile = () => {
   const progressValue = 60; // Example value, you can set this dynamically based on your progress
   const navigate = useNavigate();
   const _userId = util.userId();
+  const [openModal, setOpenModal] = useState(false);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -50,6 +53,7 @@ const Profile = () => {
         });
         const data = await response.json();
         setUserData(data);
+        localStorage.setItem("userRootOrgId", data.result.response.rootOrgId);
       } catch (error) {
         console.error("Error fetching user data:", error);
       }
@@ -86,8 +90,6 @@ const Profile = () => {
     fetchData();
     fetchCertificateCount();
     fetchCourseCount();
-
-    fetchData();
   }, []);
 
   const handleLearningHistoryClick = () => {
@@ -104,6 +106,15 @@ const Profile = () => {
   const handleSearch = (query) => {
     // Implement your search logic here
     console.log("Search query:", query);
+  };
+
+  const handleOpenModal = () => {
+    setOpenModal(true);
+  };
+
+  const handleCloseModal = () => {
+    setOpenModal(false);
+    fetchData();
   };
 
   return (
@@ -331,6 +342,7 @@ const Profile = () => {
                       display: "flex",
                       alignItems: "center",
                     }}
+                    onClick={handleOpenModal}
                   >
                     <Box
                       className="profileBox"
@@ -350,6 +362,13 @@ const Profile = () => {
                     </Box>
                   </Card>
                 </Grid>
+
+                <Dialog open={openModal} onClose={handleCloseModal}>
+                  <DialogTitle>Select Preference</DialogTitle>
+                  <DialogContent>
+                    <SelectPreference onClose={handleCloseModal} />
+                  </DialogContent>
+                </Dialog>
               </Grid>
 
               {/* <Card sx={{ marginTop: "10px", padding: "10px" }}>

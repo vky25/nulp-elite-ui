@@ -12,7 +12,7 @@ import Grid from "@mui/material/Grid";
 import Footer from "components/Footer";
 import Header from "components/header";
 import Container from "@mui/material/Container";
-import { contentService } from "@shiksha/common-lib";
+import * as contentService from "../../services/contentService";
 import queryString from "query-string";
 import Pagination from "@mui/material/Pagination";
 import ArrowBackOutlinedIcon from "@mui/icons-material/ArrowBackOutlined";

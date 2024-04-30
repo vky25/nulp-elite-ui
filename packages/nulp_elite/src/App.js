@@ -2,13 +2,6 @@ import React, { useEffect, useState } from "react";
 
 import "./App.css";
 import "./styles/style.css";
-import Sample from "pages/Sample";
-import Home from "pages/Home";
-import Courses from "pages/Courses";
-import Coursetest from "pages/CourseTest";
-import Search from "pages/Search";
-
-import Contents from "pages/Contents";
 import {
   NativeBaseProvider,
   Box,
@@ -25,11 +18,8 @@ import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 import { DEFAULT_THEME, H2, initializeI18n } from "@shiksha/common-lib";
 import { useTranslation, initReactI18next } from "react-i18next";
 import i18n from "i18next";
-import Framework from "pages/Frmework";
-import User from "pages/User";
-import * as util from "services/utilService";
 
-import UserPrefData from "pages/UserPrefData";
+import * as util from "services/utilService";
 import { ChakraProvider } from "@chakra-ui/react";
 import Profile from "pages/profile/Profile";
 import Certificate from "pages/profile/certificate";
@@ -50,8 +40,8 @@ import SendOtp from "pages/registration/SendOtp";
 import PDFContent from "pages/content/pdf";
 import NoResult from "pages/content/noResultFound";
 import Message from "pages/connections/message";
-import UserPrefPopup from "pages/UserPrefPopup";
 import Terms from "pages/terms";
+import SelectPreference from "pages/SelectPreference";
 
 function App() {
   // const [t] = useTranslation();
@@ -65,23 +55,8 @@ function App() {
   const routes = [
     {
       moduleName: "nulp_elite",
-      path: "/home",
-      component: Home,
-    },
-    {
-      moduleName: "nulp_elite",
-      path: "/contents",
-      component: Contents,
-    },
-    {
-      moduleName: "nulp_elite",
       path: "/all",
       component: AllContent,
-    },
-    {
-      moduleName: "nulp_elite",
-      path: "/sample",
-      component: Sample,
     },
     {
       moduleName: "nulp_elite",
@@ -110,11 +85,6 @@ function App() {
     },
     {
       moduleName: "nulp_elite",
-      path: "/framework",
-      component: Framework,
-    },
-    {
-      moduleName: "nulp_elite",
       path: "/addConnections",
       component: AddConnections,
     },
@@ -123,11 +93,6 @@ function App() {
       path: "/domainList",
       component: DomainList,
     },
-    // {
-    //   moduleName: "nulp_elite",
-    //   path: "contentList",
-    //   component: ContentList,
-    // },
     {
       moduleName: "nulp_elite",
       path: "/contentList/:pageNumber",
@@ -153,11 +118,6 @@ function App() {
       moduleName: "nulp_elite",
       path: "/noresult",
       component: NoResult,
-    },
-    {
-      moduleName: "nulp_elite",
-      path: "/userPrefData",
-      component: UserPrefData,
     },
     {
       moduleName: "nulp_elite",
@@ -214,14 +174,13 @@ function App() {
       path: "/message",
       component: Message,
     },
+    {
+      moduleName: "nulp_elite",
+      path: "/SelectPreference",
+      component: SelectPreference,
+    },
   ];
-  // public_url="http://localhost:5000"
-  //  public_url="https://alt.uniteframework.io"
-  // initializeI18n(
-  //   ["translation"],
-  //   // `${process.env.PUBLIC_URL}/locales/{{lng}}/{{ns}}.json`
-  //   // `http://localhost:3300/locales/{{lng}}/{{ns}}.json`
-  // );
+  
   initializeI18n(
     ["translation"],
     `${process.env.PUBLIC_URL}/locales/{{lng}}/{{ns}}.json`
@@ -229,7 +188,7 @@ function App() {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const url = `http://localhost:3000/learner/user/v5/read/${_userId}`;
+        const url = `/learner/user/v5/read/${_userId}`;
         const header = "application/json";
         const response = await fetch(url, {
           headers: {
@@ -258,7 +217,7 @@ function App() {
       {/* <I18nextProvider i18n={i18n}> */}
       {/* <ChakraProvider> */}
       <React.Suspense>
-        {!checkPref && <UserPrefPopup />}
+        {/* {!checkPref && <UserPrefPopup />} */}
 
         <Router>
           <Routes>

@@ -13,7 +13,7 @@ import Pagination from "@mui/material/Pagination";
 
 import domainWithImage from "../../assets/domainImgForm.json";
 import DomainCarousel from "components/domainCarousel";
-import { frameworkService } from "@shiksha/common-lib";
+import * as frameworkService from "../../services/frameworkService";
 
 import SearchBox from "components/search";
 import { t } from "i18next";
