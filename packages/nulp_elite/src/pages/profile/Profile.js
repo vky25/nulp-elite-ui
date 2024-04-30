@@ -135,7 +135,7 @@ const Profile = () => {
 
   const handleCloseModal = () => {
     setOpenModal(false);
-    fetchData();
+    // fetchData();
   };
 
   return (
