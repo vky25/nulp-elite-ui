@@ -10,7 +10,7 @@ import FloatingChatIcon from "../../components/FloatingChatIcon";
 import Box from "@mui/material/Box";
 import data from "../../assets/contentSerach.json";
 import SearchBox from "components/search";
-import { frameworkService } from "@shiksha/common-lib";
+import * as frameworkService from "../../services/frameworkService";
 import Container from "@mui/material/Container";
 import Carousel from "react-multi-carousel";
 import "react-multi-carousel/lib/styles.css";

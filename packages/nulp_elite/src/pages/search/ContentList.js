@@ -12,7 +12,7 @@ import Grid from "@mui/material/Grid";
 import Footer from "components/Footer";
 import Header from "components/header";
 import Container from "@mui/material/Container";
-import { contentService } from "@shiksha/common-lib";
+import * as contentService from "../../services/contentService";
 import queryString from "query-string";
 import Pagination from "@mui/material/Pagination";
 import ArrowBackOutlinedIcon from "@mui/icons-material/ArrowBackOutlined";
@@ -236,6 +236,7 @@ const ContentList = (props) => {
       <Container maxWidth="xxl" role="main" className="container-pb">
         <Box style={{ margin: "20px 0" }}>
           <domainCarousel></domainCarousel>
+          <Box style={{display:'flex',justifyContent:'space-between'}} className="filter-domain">
           <Filter
             options={gradeLevels}
             label="Filter by Sub-Domain"
@@ -247,8 +248,9 @@ const ContentList = (props) => {
               label="Filter by Domain"
               onChange={handlefilter}
               // isMulti={false}
-            />
+              />
           )}
+          </Box>
         </Box>
         <Link
           onClick={handleGoBack}

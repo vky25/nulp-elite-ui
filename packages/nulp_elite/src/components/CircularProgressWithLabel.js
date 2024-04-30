@@ -1,12 +1,15 @@
-import React from 'react';
-import CircularProgress from '@mui/material/CircularProgress';
-import Typography from '@mui/material/Typography';
-import Box from '@mui/material/Box';
+import React from "react";
+import CircularProgress from "@mui/material/CircularProgress";
+import Typography from "@mui/material/Typography";
+import Box from "@mui/material/Box";
 
-const CircularProgressWithLabel = ({ value }) => {
+const CircularProgressWithLabel = ({ received, total }) => {
+  // Calculate the progress percentage
+  const progress = (received / total) * 100;
+
   return (
     <Box position="relative" display="inline-flex">
-      <CircularProgress variant="determinate" value={value} />
+      <CircularProgress variant="determinate" value={progress} />
       <Box
         top={0}
         left={0}
@@ -17,7 +20,11 @@ const CircularProgressWithLabel = ({ value }) => {
         alignItems="center"
         justifyContent="center"
       >
-        <Typography variant="caption" component="div" color="textSecondary">{`${Math.round(value)}%`}</Typography>
+        <Typography
+          variant="caption"
+          component="div"
+          color="textSecondary"
+        >{`${received}/${total}`}</Typography>
       </Box>
     </Box>
   );
