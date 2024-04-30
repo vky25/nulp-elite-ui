@@ -1,39 +1,36 @@
-import axios from "axios";
-import { post, get, update as coreUpdate } from "./RestClient.ts";
-
+import axios from 'axios'
+// import {  } from '@shiksha/common-lib'
+import { post, get, update as coreUpdate } from './RestClient.ts'
 //  Get all content
 export const getAllContents = async (url, filters = {}, header = {}) => {
-  const result = await post(url, filters, header);
+  const result = await post(url, filters, header)
   if (result) {
-    return result;
+    return result
   } else {
-    return [];
+    return []
   }
-};
+}
 // Get  one content
 
-const getOne = async (url, header = {}) => {
+export const getOne = async (url, header = {}) => {
   const result = await get(url, {
-    header,
-  });
+    header
+  })
   if (result) {
-    return result;
+    return result
   } else {
-    return [];
+    return []
   }
-};
+}
 
 // Update content
 export const update = async (data = {}, headers = {}) => {
   const result = await coreUpdate(url, data, {
-    headers,
-  });
+    headers
+  })
   if (result) {
-    return result;
+    return result
   } else {
-    return {};
+    return {}
   }
-};
-
-export default update;
-
+}

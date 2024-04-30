@@ -18,7 +18,7 @@ import {
   background,
 } from "@chakra-ui/react";
 import { useDisclosure } from "@chakra-ui/react";
-import { frameworkService } from "@shiksha/common-lib";
+import * as frameworkService from "../services/frameworkService";
 import { ChevronDownIcon } from "@chakra-ui/icons";
 import * as util from "../services/utilService";
 

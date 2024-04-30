@@ -1,17 +1,11 @@
 // FilterPopup.js
 import React, { useState } from "react";
-
 import {
-  BodyLarge,
   capture,
   FilterButton,
-  IconByName,
   overrideColorTheme,
-  Layout,
-  Widget,
 } from "@shiksha/common-lib";
-import { H1, H2 } from "@shiksha/common-lib";
-import { Button, Modal, Text, VStack } from "native-base";
+import { Modal } from "native-base";
 // import React from "react";
 import { useTranslation } from "react-i18next";
 import colorTheme from "../colorTheme";

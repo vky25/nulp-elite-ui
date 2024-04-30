@@ -1,9 +1,6 @@
 import React, { useState, useEffect } from "react";
-import { Button, Modal } from "@chakra-ui/react";
 import { useDisclosure } from "@chakra-ui/react";
 import UserPrefPopup from "./UserPrefPopup";
-import { contentService, userService } from "@shiksha/common-lib";
-import { json } from "react-router-dom";
 
 const UserPrefData = () => {
   const { isOpen, onOpen, onClose } = useDisclosure();
