@@ -28,8 +28,6 @@ import i18n from "i18next";
 import Framework from "pages/Frmework";
 import User from "pages/User";
 import * as util from "services/utilService";
-
-import UserPrefData from "pages/UserPrefData";
 import { ChakraProvider } from "@chakra-ui/react";
 import Profile from "pages/profile/Profile";
 import Certificate from "pages/profile/certificate";
@@ -50,8 +48,8 @@ import SendOtp from "pages/registration/SendOtp";
 import PDFContent from "pages/content/pdf";
 import NoResult from "pages/content/noResultFound";
 import Message from "pages/connections/message";
-import UserPrefPopup from "pages/UserPrefPopup";
 import Terms from "pages/terms";
+import SelectPreference from "pages/SelectPreference";
 
 function App() {
   // const [t] = useTranslation();
@@ -156,11 +154,6 @@ function App() {
     },
     {
       moduleName: "nulp_elite",
-      path: "/userPrefData",
-      component: UserPrefData,
-    },
-    {
-      moduleName: "nulp_elite",
       path: "/user",
       component: User,
     },
@@ -214,6 +207,11 @@ function App() {
       path: "/message",
       component: Message,
     },
+    {
+      moduleName: "nulp_elite",
+      path: "/SelectPreference",
+      component: SelectPreference,
+    },
   ];
   // public_url="http://localhost:5000"
   //  public_url="https://alt.uniteframework.io"
@@ -258,7 +256,7 @@ function App() {
       {/* <I18nextProvider i18n={i18n}> */}
       {/* <ChakraProvider> */}
       <React.Suspense>
-        {!checkPref && <UserPrefPopup />}
+        {/* {!checkPref && <UserPrefPopup />} */}
 
         <Router>
           <Routes>
