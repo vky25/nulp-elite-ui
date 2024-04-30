@@ -24,6 +24,7 @@ import SearchBox from "components/search";
 import ContinueLearning from "./continueLearning";
 import SelectPreference from "pages/SelectPreference";
 import { Dialog, DialogTitle, DialogContent } from "@mui/material";
+const axios = require("axios");
 
 const Profile = () => {
   const { t } = useTranslation();
@@ -40,6 +41,7 @@ const Profile = () => {
   const navigate = useNavigate();
   const _userId = util.userId();
   const [openModal, setOpenModal] = useState(false);
+  const [userInfo, setUserInfo] = useState();
 
   useEffect(() => {
     const fetchData = async () => {
@@ -86,10 +88,29 @@ const Profile = () => {
         console.error(error);
       }
     };
+    const fetchUserInfo = async () => {
+      try {
+        const response = await axios.post(
+          "http://localhost:3000/custom/user/read",
+          { user_ids: [_userId] },
+          {
+            withCredentials: true,
+            headers: {
+              "Content-Type": "application/json",
+            },
+          }
+        );
+
+        setUserInfo(response.data.result);
+      } catch (error) {
+        console.error(error);
+      }
+    };
 
     fetchData();
     fetchCertificateCount();
     fetchCourseCount();
+    fetchUserInfo();
   }, []);
 
   const handleLearningHistoryClick = () => {
@@ -187,7 +208,7 @@ const Profile = () => {
                     style={{ width: "20%" }}
                   />
                   <CardContent style={{ textAlign: "left", paddingTop: "0" }}>
-                    {userData && (
+                    {userData && userInfo && (
                       <>
                         <Typography
                           component="div"
@@ -211,7 +232,8 @@ const Profile = () => {
                             display: "flex",
                           }}
                         >
-                          {t("DESIGNATION")} |{" "}
+                          {/* {t("DESIGNATION")} |{" "} */}
+                          {userInfo[0]?.designation}
                           <Box style={{ paddingLeft: "10px" }}> ID: </Box>{" "}
                           {userData.result.response.organisations.orgName}
                         </Typography>
@@ -221,7 +243,8 @@ const Profile = () => {
                           component="div"
                           style={{ fontSize: "12px" }}
                         >
-                          {t("A_MANAGER_WITH_THE_DEPARTMENT_OF_REVENUE")}
+                          {/* {t("A_MANAGER_WITH_THE_DEPARTMENT_OF_REVENUE")} */}
+                          {userInfo[0]?.bio}
                         </Typography>
                         {/* Displaying the framework.board field */}
                         <Typography
