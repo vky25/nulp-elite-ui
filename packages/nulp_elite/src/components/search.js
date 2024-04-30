@@ -1,8 +1,10 @@
 import React, { useState } from "react";
 import { Button } from "@mui/base/Button";
 import Box from "@mui/material/Box";
+import { useTranslation } from "react-i18next";
 
 export default function SearchBox({ onSearch, domainquery }) {
+  const { t } = useTranslation();
   const [query, setQuery] = useState("");
   console.log(domainquery);
 
@@ -40,7 +42,7 @@ export default function SearchBox({ onSearch, domainquery }) {
           fontSize: "12px",
         }}
       >
-        Search
+        {t("SEARCH")}
       </Button>
     </Box>
   );

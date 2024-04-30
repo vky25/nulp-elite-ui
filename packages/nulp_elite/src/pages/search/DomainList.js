@@ -151,8 +151,7 @@ const DomainList = () => {
             margin: "0",
           }}
         >
-          Explore content related to your domain.Learn from well curated courses
-          and content.
+          {t("EXPLORE_CONTENT_RELATED_TO_YOUR_DOMAIN")}
         </p>
         <p
           style={{
@@ -163,7 +162,7 @@ const DomainList = () => {
             paddingBottom: "30px",
           }}
         >
-          Learn from well curated courses and content.
+          {t("LEARN_FROM_WELL_CURATED")}
         </p>
         <SearchBox onSearch={handleSearch} />
       </Box>

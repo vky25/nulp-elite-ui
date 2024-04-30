@@ -83,27 +83,27 @@ export default function Footer() {
 
 <Grid container spacing={2} className='footer'>
   <Grid item xs={8} md={3} style={{fontSize:'14px', lineHeight:'2.4',fontWeight:'400'}}>
-  <Link underline="none" target="_blank" href="https://niua.in/" style={{padding:'10px 0 2px',color:'#fff',margin:'0 8px'}}>NIUA</Link>
-    <Link underline="none" target="_blank" href="https://mohua.gov.in/" style={{padding:'10px 0 2px',color:'#fff',margin:'0 8px'}}>MoHUA</Link><br/>
-    <Link  underline="none" target="_blank"  href="/aboutus.html" style={{padding:'10px 0 2px',color:'#fff',margin:'0 8px'}}>About Us</Link>
-    <Link underline="none" target="_blank"  href="#" style={{padding:'10px 0 2px',color:'#fff',margin:'0 8px'}}>Contact Us</Link>
-    <Link underline="none" target="_blank"  href="#" style={{padding:'10px 0 2px',color:'#fff',margin:'0 8px'}}>FAQs</Link>
-    <Link underline="none" target="_blank"  href="/logout" style={{padding:'10px 0 2px',color:'#fff',margin:'0 8px'}}>Log Out</Link>
+  <Link underline="none" target="_blank" href="https://niua.in/" style={{padding:'10px 0 2px',color:'#fff',margin:'0 8px'}}>{t("NIUA")}</Link>
+    <Link underline="none" target="_blank" href="https://mohua.gov.in/" style={{padding:'10px 0 2px',color:'#fff',margin:'0 8px'}}>{t("MOHUA")}</Link><br/>
+    <Link  underline="none" target="_blank"  href="/aboutus.html" style={{padding:'10px 0 2px',color:'#fff',margin:'0 8px'}}>{t("ABOUT_US")}</Link>
+    <Link underline="none" target="_blank"  href="#" style={{padding:'10px 0 2px',color:'#fff',margin:'0 8px'}}>{t("CONTACT_US")}</Link>
+    <Link underline="none" target="_blank"  href="#" style={{padding:'10px 0 2px',color:'#fff',margin:'0 8px'}}>{t("FAQS")}</Link>
+    <Link underline="none" target="_blank"  href="/logout" style={{padding:'10px 0 2px',color:'#fff',margin:'0 8px'}}>{t("LOG_OUT")}</Link>
 
   </Grid>
   <Grid item xs={4} md={3} style={{fontSize:'14px', lineHeight:'2.4',fontWeight:'400'}}>
-  <Link underline="none" target="_blank" href="https://niua.org/cdg/" style={{padding:'10px 0 2px',color:'#fff', fontSize:'14px'}}>Center for Digital Governance</Link><br/>
-    <Link  underline="none" target="_blank" href="https://nudm.mohua.gov.in/" style={{padding:'10px 0 2px',color:'#fff', fontSize:'14px'}}>National Urban Digital Mission</Link>
+  <Link underline="none" target="_blank" href="https://niua.org/cdg/" style={{padding:'10px 0 2px',color:'#fff', fontSize:'14px'}}>{t("CENTER_FOR_DIGITAL_GOVERNANCE")}</Link><br/>
+    <Link  underline="none" target="_blank" href="https://nudm.mohua.gov.in/" style={{padding:'10px 0 2px',color:'#fff', fontSize:'14px'}}>{t("NATIONAL_URBAN_DIGITAL_MISSION")}</Link>
 </Grid>
   <Grid item xs={4} md={3} style={{fontSize:'14px', lineHeight:'1.5', fontWeight:'400'}}>
-  <Box style={{fontSize:'14px',fontWeight:'700'}}>Nodal Ministry:</Box>
-  Ministry of Housing and Urban Affairs, Government of India<br/>
-  Nirman Bhawan, New Delhi- 110001, INDIA
+  <Box style={{fontSize:'14px',fontWeight:'700'}}>{t("N0DAL_MINISTRY")}:</Box>
+ {t("MINISTRY_OF_HOUSING_AND_URBAN")}<br/>
+ {t("NIRMAN_BHAWAN")}
 </Grid>
       <Grid item xs={8} md={3} style={{fontSize:'14px', lineHeight:'1.5',fontWeight:'400'}}>
-         <Box style={{fontSize:'14px',fontWeight:'700'}}> Anchor Institute:</Box>
-        National Institute of Urban Affairs<br/>
-        1st Floor, Core 4B, India Habitat Centre, Lodhi Road, New Delhi - 110003, INDIA<br/>
+         <Box style={{fontSize:'14px',fontWeight:'700'}}> {t("ANCHOR_INSTITUE")}:</Box>
+        {t("NATIONAL_INSTITUE_OF_URBAN")}<br/>
+        {t("FIRST_FLOOR_CORE")}<br/>
 
         Phone: (+91 11) 24617517, 24617543, 24617595
     </Grid>

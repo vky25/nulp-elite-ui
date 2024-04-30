@@ -132,7 +132,7 @@ const JoinCourse = () => {
                   <ArrowBackOutlinedIcon
                     style={{ width: "0.65em", height: "0.65em" }}
                   />{" "}
-                  Back
+                  {t("BACK")}
                 </Link>
                 <Breadcrumbs
                   aria-label="breadcrumb"
@@ -369,12 +369,11 @@ const JoinCourse = () => {
               <AccordionDetails style={{ background: "#fff" }}>
                 <ul>
                   <li>
-                    The completion certificate will be issued upon 100%
-                    completion
+                  {t("THE_COMPLETION_CERTIFICATE")}
+
                   </li>
                   <li>
-                    The certificate will be issued if you score greater than or
-                    equal to 60% in your assessment
+                   {T("THE_CERTIFICATE_WILL_BE_ISSUES")}
                   </li>
                 </ul>
               </AccordionDetails>
@@ -477,10 +476,9 @@ const JoinCourse = () => {
               }}
             >
               <Box sx={{ transform: "translate(0%, 550%)" }}>
-                Start learning !
+                {t("START_LEARNING")}
                 <Box style={{ fontSize: "14px" }}>
-                  Join the course and select any module to start viewing
-                  content!
+                  {t("JOIN_THE_COURSE_SELECT_MODULE")}
                 </Box>
               </Box>
             </Box>

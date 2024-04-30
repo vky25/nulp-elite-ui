@@ -16,6 +16,7 @@ import DomainCarousel from "components/domainCarousel";
 import { frameworkService } from "@shiksha/common-lib";
 
 import SearchBox from "components/search";
+import { t } from "i18next";
 
 const CategoryPage = () => {
   // const history = useHistory();
@@ -185,8 +186,7 @@ const CategoryPage = () => {
             margin: "0",
           }}
         >
-          Explore content related to your domain.Learn from well curated courses
-          and content.
+         {t("EXPLORE_CONTENT_RELATED_TO_YOUR_DOMAIN")}
         </p>
         <p
           style={{
@@ -197,7 +197,7 @@ const CategoryPage = () => {
             paddingBottom: "30px",
           }}
         >
-          Learn from well curated courses and content.
+         {t("LEARN_FROM_WELL_CURATED")}
         </p>
         <SearchBox onSearch={handleSearch} />
       </Box>
@@ -212,7 +212,7 @@ const CategoryPage = () => {
             color: "rgb(0, 67, 103)",
           }}
         >
-          <ArrowBackOutlinedIcon /> Back
+          <ArrowBackOutlinedIcon /> {t("BACK")}
         </Link>
 
         <p

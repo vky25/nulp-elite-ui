@@ -17,6 +17,7 @@ import "react-multi-carousel/lib/styles.css";
 import DomainCarousel from "components/domainCarousel";
 import SummarizeOutlinedIcon from "@mui/icons-material/SummarizeOutlined";
 import domainWithImage from "../../assets/domainImgForm.json";
+import { t } from "i18next";
 
 const responsive = {
   superLargeDesktop: {
@@ -257,8 +258,7 @@ const AllContent = () => {
             margin: "0",
           }}
         >
-          Explore content related to your domain.Learn from well curated courses
-          and content.
+          {t("EXPLORE_CONTENT_RELATED_TO_YOUR_DOMAIN")}
         </p>
         <p
           style={{
@@ -269,12 +269,12 @@ const AllContent = () => {
             paddingBottom: "30px",
           }}
         >
-          Learn from well curated courses and content.
+          {t("LEARN_FROM_WELL_CURATED")}
         </p>
         <SearchBox onSearch={handleSearch} />
       </Box>
       <Box sx={{ fontWeight: "600", fontSize: "16px", padding: "10px" }}>
-        Filter by popular domain:
+       {t("FILTER_BY_POPULAR_DOMAIN")}
       </Box>
       {domain && (
         <DomainCarousel onSelectDomain={handleDomainFilter} domains={domain} />
@@ -322,7 +322,7 @@ const AllContent = () => {
                       fontWeight: "600",
                     }}
                   >
-                    View All
+                    {t("VIEW_ALL")}
                   </Link>
                 )}
               </p>

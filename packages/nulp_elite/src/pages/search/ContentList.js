@@ -213,8 +213,7 @@ const ContentList = (props) => {
             margin: "0",
           }}
         >
-          Explore content related to your domain.Learn from well curated courses
-          and content.
+         {t("EXPLORE_CONTENT_RELATED_TO_YOUR_DOMAIN")}
         </p>
         <p
           style={{
@@ -225,8 +224,8 @@ const ContentList = (props) => {
             paddingBottom: "30px",
           }}
         >
-          Learn from well curated courses and content.
-        </p>
+          {t("LEARN_FROM_WELL_CURATED")}   
+     </p>
         <SearchBox
           onSearch={handleSearch}
           domainquery={search.query || domainquery}
@@ -265,18 +264,18 @@ const ContentList = (props) => {
           <ArrowBackOutlinedIcon
             style={{ width: "0.65em", height: "0.65em" }}
           />{" "}
-          Back
+          {t("BACK")}
         </Link>
         {domain && (
           <Box sx={{ fontSize: "14px", marginTop: "10px" }}>
-            You are viewing contents for :
+            {t("YOU_ARE_VIEWING_CONTENTS_FOR")}
             <Box sx={{ fontSize: "16px", fontWeight: "700" }}>{domain}</Box>
           </Box>
         )}
         <Box textAlign="center" padding="10">
           <Box sx={{ paddingTop: "30px" }}>
             {isLoading ? (
-              <p>Loading...</p>
+              <p>{t("LOADING")}</p>
             ) : error ? (
               <p>{error}</p>
             ) : data && data.content && data.content.length > 0 ? (

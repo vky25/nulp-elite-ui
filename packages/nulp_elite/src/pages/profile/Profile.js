@@ -119,8 +119,7 @@ const Profile = () => {
             margin: "0",
           }}
         >
-          Explore content related to your domain.Learn from well curated courses
-          and content.
+          {t("EXPLORE_CONTENT_RELATED_TO_YOUR_DOMAIN")}
         </p>
         <p
           style={{
@@ -131,7 +130,7 @@ const Profile = () => {
             paddingBottom: "30px",
           }}
         >
-          Learn from well curated courses and content.
+          {t("LEARN_FROM_WELL_CURATED")}
         </p>
         <SearchBox onSearch={handleSearch} />
       </Box>
@@ -211,10 +210,7 @@ const Profile = () => {
                           component="div"
                           style={{ fontSize: "12px" }}
                         >
-                          A manager with the department of Revenue and taxes and
-                          has actively contributed to the growth and
-                          authenticity of the knowledge curated for the
-                          betterment of the department.
+                          {t("A_MANAGER_WITH_THE_DEPARTMENT_OF_REVENUE")}
                         </Typography>
                         {/* Displaying the framework.board field */}
                         <Typography
