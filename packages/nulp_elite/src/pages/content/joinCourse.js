@@ -19,8 +19,7 @@ import { useParams, useNavigate, useLocation } from "react-router-dom";
 import axios from "axios";
 import SummarizeOutlinedIcon from "@mui/icons-material/SummarizeOutlined";
 import ArrowBackOutlinedIcon from "@mui/icons-material/ArrowBackOutlined";
-
-import data from "../../assets/courseHierarchy.json";
+import Alert from '@mui/material/Alert';
 
 const JoinCourse = () => {
   const { t } = useTranslation();
@@ -28,6 +27,8 @@ const JoinCourse = () => {
   const [batchData, setBatchdata] = useState();
   const location = useLocation();
   const navigate = useNavigate();
+  const [error, setError] = useState(null);
+
 
   const { contentId } = location.state || {};
 
@@ -36,7 +37,7 @@ const JoinCourse = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const url = `http://localhost:3000/api/course/v1/hierarchy/${contentId}?orgdetails=orgName,email&licenseDetails=name,description,url`;
+        const url = `http://localhost:3000/apis/course/v1/hierarchy/${contentId}?orgdetails=orgName,email&licenseDetails=name,description,url`;
         const header = "application/json";
         const response = await fetch(url, {
           headers: {
@@ -54,6 +55,7 @@ const JoinCourse = () => {
     };
 
     const fetchBatchdata = async () => {
+      setError(null);
       try {
         const url = "http://localhost:3000/learner/course/v1/batch/list";
         const request = {
@@ -88,6 +90,7 @@ const JoinCourse = () => {
         }
       } catch (error) {
         console.error("Error fetching batch data:", error);
+        setError(error.message);
       }
     };
 
@@ -114,6 +117,7 @@ const JoinCourse = () => {
       <Header />
 
       <Container maxWidth="xxl" role="main" className="container-pb">
+      {error &&  <Alert severity="error" >{error}</Alert> }
         <Grid container spacing={2}>
           <Grid item xs={12} md={4} lg={4} className="sm-p-25">
             <Grid container spacing={2}>
@@ -373,7 +377,7 @@ const JoinCourse = () => {
 
                   </li>
                   <li>
-                   {T("THE_CERTIFICATE_WILL_BE_ISSUES")}
+                   {t("THE_CERTIFICATE_WILL_BE_ISSUES")}
                   </li>
                 </ul>
               </AccordionDetails>
