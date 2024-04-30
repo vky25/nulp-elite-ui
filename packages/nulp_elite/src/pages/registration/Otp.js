@@ -380,7 +380,7 @@ const Otp = () => {
           </DialogContent>
           <DialogActions>
             <Button onClick={handleClose} color="primary">
-              Close
+              {t("Close")}
             </Button>
           </DialogActions>
         </Dialog>
