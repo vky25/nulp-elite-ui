@@ -12,7 +12,6 @@ import Filter from "components/filter";
 import BoxCard from "components/Card";
 import FloatingChatIcon from "../../components/FloatingChatIcon";
 import { useParams, useNavigate, useLocation } from "react-router-dom";
-import { contentService } from "@shiksha/common-lib";
 import URLSConfig from "../../configs/urlConfig.json";
 import * as util from "../../services/utilService";
 import Search from "components/search";
