@@ -44,9 +44,16 @@ const FAQPage = () => {
     <div>
       <Header />
       <Container maxWidth="xxl" role="main" className="container-pb">
+      <Box sx={{ fontSize: "18px", color: "#484848",marginTop:'15px' }}>
+              {t("FAQS")}
+            </Box>
         <Grid container spacing={2}>
+       
           <Grid item xs={12} lg={3}>
-            <ul>
+            <ul className="bg-white" style={{borderRadius:'5px'}}>
+            <Box sx={{ fontSize: "18px", color: "#484848" }}>
+              {t("SELECT_CATEGORY")}
+            </Box>
               {faqData.map((category, index) => (
                 <li
                   key={index}
@@ -60,11 +67,11 @@ const FAQPage = () => {
               ))}
             </ul>
           </Grid>
-          <Grid item xs={12} lg={9}>
+          <Grid item xs={12} lg={9} >
             {faqData
               .filter((category) => category.name === selectedCategory)
               .map((selectedCategoryData, index) => (
-                <Box key={index}>
+                <div key={index}>
                   {selectedCategoryData.faqs.map((faq, faqIndex) => (
                     <Accordion
                       key={faqIndex}
@@ -76,11 +83,9 @@ const FAQPage = () => {
                         overflow: "auto",
                       }}
                     >
-                      <div>
                         <AccordionSummary
                           expandIcon={<ExpandMoreIcon />}
-                          aria-controls="panel1-content"
-                          id="panel1-header"
+                         
                           style={{
                             background: "#fee9dd",
                             borderRadius: "10px",
@@ -91,18 +96,16 @@ const FAQPage = () => {
                         >
                           {faq.topic}
                         </AccordionSummary>
-
                         <AccordionDetails style={{ background: "#fff" }}>
                           <div
                             dangerouslySetInnerHTML={{
                               __html: faq.description,
                             }}
-                          />
+                            />
                         </AccordionDetails>
-                      </div>
                     </Accordion>
                   ))}
-                </Box>
+                </div>
               ))}
           </Grid>
         </Grid>
