@@ -24,6 +24,7 @@ import SearchBox from "components/search";
 import ContinueLearning from "./continueLearning";
 import SelectPreference from "pages/SelectPreference";
 import { Dialog, DialogTitle, DialogContent } from "@mui/material";
+import _ from "lodash";
 
 const Profile = () => {
   const { t } = useTranslation();
@@ -40,25 +41,9 @@ const Profile = () => {
   const navigate = useNavigate();
   const _userId = util.userId();
   const [openModal, setOpenModal] = useState(false);
+  const [isEmptyPreference, setIsEmptyPreference] = useState(false);
 
   useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const url = `http://localhost:3000/learner/user/v5/read/${_userId}?fields=organisations,roles,locations,declarations,externalIds`;
-        const header = "application/json";
-        const response = await fetch(url, {
-          headers: {
-            "Content-Type": "application/json",
-          },
-        });
-        const data = await response.json();
-        setUserData(data);
-        localStorage.setItem("userRootOrgId", data.result.response.rootOrgId);
-      } catch (error) {
-        console.error("Error fetching user data:", error);
-      }
-    };
-
     const fetchCertificateCount = async () => {
       try {
         const url = `http://localhost:3000/profilePage/certificateCount?user_id=${_userId}`;
@@ -91,6 +76,27 @@ const Profile = () => {
     fetchCertificateCount();
     fetchCourseCount();
   }, []);
+
+  const fetchData = async () => {
+    try {
+      const url = `http://localhost:3000/learner/user/v5/read/${_userId}?fields=organisations,roles,locations,declarations,externalIds`;
+      const header = "application/json";
+      const response = await fetch(url, {
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
+      const data = await response.json();
+      setUserData(data);
+      localStorage.setItem("userRootOrgId", data.result.response.rootOrgId);
+      if (_.isEmpty(data?.result?.response.framework)) {
+        setIsEmptyPreference(true);
+        setOpenModal(true);
+      }
+    } catch (error) {
+      console.error("Error fetching user data:", error);
+    }
+  };
 
   const handleLearningHistoryClick = () => {
     navigate("/learningHistory");
@@ -363,7 +369,11 @@ const Profile = () => {
                   </Card>
                 </Grid>
 
-                <Dialog open={openModal} onClose={handleCloseModal}>
+                <Dialog
+                  open={openModal}
+                  onClose={handleCloseModal}
+                  disableEscapeKeyDown={!isEmptyPreference}
+                >
                   <DialogTitle>Select Preference</DialogTitle>
                   <DialogContent>
                     <SelectPreference onClose={handleCloseModal} />
