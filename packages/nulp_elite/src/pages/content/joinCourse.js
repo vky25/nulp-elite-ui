@@ -19,71 +19,74 @@ import { useParams, useNavigate, useLocation } from "react-router-dom";
 import axios from "axios";
 import SummarizeOutlinedIcon from "@mui/icons-material/SummarizeOutlined";
 import ArrowBackOutlinedIcon from "@mui/icons-material/ArrowBackOutlined";
-import Alert from '@mui/material/Alert';
+import Alert from "@mui/material/Alert";
 
+import data from "../../assets/courseHierarchy.json";
 const JoinCourse = () => {
   const { t } = useTranslation();
   const [userData, setUserData] = useState();
-  const [batchData, setBatchdata] = useState();
+  const [batchData, setBatchData] = useState();
+  const [userCourseData, setUserCourseData] = useState({});
+  const [showEnrollmentSnackbar, setShowEnrollmentSnackbar] = useState(false);
+  const [enrolled, setEnrolled] = useState(false);
+
   const location = useLocation();
   const navigate = useNavigate();
   const [error, setError] = useState(null);
 
-
   const { contentId } = location.state || {};
-
-  // console.log(data.result.content.batches[0].endDate,"ekta")
+  const _userId = util.userId(); // Assuming util.userId() is defined
 
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const url = `http://localhost:3000/api/course/v1/hierarchy/${contentId}?orgdetails=orgName,email&licenseDetails=name,description,url`;
-        const header = "application/json";
-        const response = await fetch(url, {
-          headers: {
-            "Content-Type": "application/json",
-          },
-        });
+        const response = await fetch(
+          `http://localhost:3000/api/course/v1/hierarchy/${contentId}?orgdetails=orgName,email&licenseDetails=name,description,url`,
+          {
+            headers: {
+              "Content-Type": "application/json",
+            },
+          }
+        );
+        if (!response.ok) {
+          throw new Error("Failed to fetch course data");
+        }
         const data = await response.json();
-        const gradeLevel =
-          data.result.content.children[0].children[0].gradeLevel;
-        console.log(gradeLevel);
         setUserData(data);
       } catch (error) {
         console.error("Error fetching course data:", error);
       }
     };
 
-    const fetchBatchdata = async () => {
+    const fetchBatchData = async () => {
       setError(null);
       try {
-        const url = "http://localhost:3000/learner/course/v1/batch/list";
-        const request = {
-          request: {
-            filters: {
-              status: "1",
-              courseId: contentId,
-              enrollmentType: "open",
+        const response = await axios.post(
+          "http://localhost:3000/learner/course/v1/batch/list",
+          {
+            request: {
+              filters: {
+                status: "1",
+                courseId: contentId,
+                enrollmentType: "open",
+              },
+              sort_by: {
+                createdDate: "desc",
+              },
             },
-            sort_by: {
-              createdDate: "desc",
-            },
-          },
-        };
-
-        const response = await axios.post(url, request);
+          }
+        );
         const responseData = response.data;
-
-        // Check if response contains content
         if (
           responseData.result.response &&
           responseData.result.response.content
         ) {
           const batchDetails = responseData.result.response.content[0];
-          setBatchdata({
+          setBatchData({
             startDate: batchDetails.startDate,
             endDate: batchDetails.endDate,
             enrollmentEndDate: batchDetails.enrollmentEndDate,
+            batchId: batchDetails.batchId,
           });
         } else {
           console.error("Batch data not found in response");
@@ -95,7 +98,8 @@ const JoinCourse = () => {
     };
 
     fetchData();
-    fetchBatchdata();
+    fetchBatchData();
+    checkEnrolledCourse();
   }, []);
 
   const handleGoBack = () => {
@@ -104,20 +108,160 @@ const JoinCourse = () => {
 
   const formatDate = (dateString) => {
     const date = new Date(dateString);
-    const options = { day: "2-digit", month: "long", year: "numeric" };
-    return date.toLocaleDateString("en-GB", options);
+    return date.toLocaleDateString("en-GB", {
+      day: "2-digit",
+      month: "long",
+      year: "numeric",
+    });
   };
 
   const handleLinkClick = () => {
-    navigate("/player"); // Navigate to "/player" page
+    navigate("/player");
+  };
+
+  const handleSnackbarClose = (event, reason) => {
+    if (reason === "clickaway") {
+      return;
+    }
+    setShowEnrollmentSnackbar(false);
+  };
+
+  const isEnrolled = () => {
+    return (
+      userCourseData &&
+      userCourseData.courses &&
+      userCourseData.courses.some((course) => course.contentId === contentId)
+    );
+  };
+
+  const renderActionButton = () => {
+    if (isEnrolled() || enrolled) {
+      return (
+        <Button
+          onClick={handleLinkClick}
+          variant="contained"
+          style={{ background: "#9ACD32", color: "#fff", left: "160px" }}
+        >
+          {t("START_LEARNING")}
+        </Button>
+      );
+    } else {
+      if (
+        (batchData?.enrollmentEndDate &&
+          new Date(batchData.enrollmentEndDate) < new Date()) ||
+        (!batchData?.enrollmentEndDate &&
+          batchData?.endDate &&
+          new Date(batchData.endDate) < new Date())
+      ) {
+        return (
+          <Typography
+            variant="h7"
+            style={{
+              margin: "12px 0",
+              display: "block",
+              fontSize: "14px",
+              color: "red",
+            }}
+          >
+            {t("BATCH_EXPIRED_MESSAGE")}
+          </Typography>
+        );
+      } else {
+        const today = new Date();
+        let lastDayOfEnrollment = null;
+
+        if (batchData?.enrollmentEndDate) {
+          const enrollmentEndDate = new Date(batchData.enrollmentEndDate);
+          if (!isNaN(enrollmentEndDate.getTime())) {
+            lastDayOfEnrollment = enrollmentEndDate;
+          }
+        }
+
+        const isLastDayOfEnrollment =
+          lastDayOfEnrollment &&
+          lastDayOfEnrollment.toDateString() === today.toDateString();
+
+        const isExpired =
+          lastDayOfEnrollment &&
+          lastDayOfEnrollment < formatDate(today) &&
+          !isLastDayOfEnrollment;
+
+        if (isExpired) {
+          return (
+            <Typography
+              variant="h7"
+              style={{
+                margin: "12px 0",
+                display: "block",
+                fontSize: "14px",
+                color: "red",
+              }}
+            >
+              {t("BATCH_EXPIRED_MESSAGE")}
+            </Typography>
+          );
+        }
+
+        return (
+          <Button
+            onClick={handleJoinCourse}
+            disabled={isExpired} // Only disable if expired (not on last day)
+            variant="contained"
+            style={{
+              background: isExpired ? "#ccc" : "#004367",
+              color: "#fff",
+              left: "160px",
+            }}
+          >
+            {t("JOIN_COURSE")}
+          </Button>
+        );
+      }
+    }
+  };
+
+  const handleJoinCourse = async () => {
+    try {
+      const url = "http://localhost:3000/learner/course/v1/enrol";
+      const requestBody = {
+        request: {
+          courseId: contentId,
+          userId: _userId,
+          batchId: batchData?.batchId,
+        },
+      };
+      const response = await axios.post(url, requestBody);
+      if (response.status === 200) {
+        setEnrolled(true);
+        setShowEnrollmentSnackbar(true);
+      }
+    } catch (error) {
+      console.error("Error enrolling in the course:", error);
+    }
   };
 
   return (
     <div>
       <Header />
+      <Snackbar
+        open={showEnrollmentSnackbar}
+        // autoHideDuration={6000}
+        onClose={handleSnackbarClose}
+        anchorOrigin={{ vertical: "top", horizontal: "center" }}
+      >
+        <MuiAlert
+          elevation={6}
+          variant="filled"
+          onClose={handleSnackbarClose}
+          severity="success"
+          sx={{ mt: 2 }}
+        >
+          {t("ENROLLMENT_SUCCESS_MESSAGE")}
+        </MuiAlert>
+      </Snackbar>
 
       <Container maxWidth="xxl" role="main" className="container-pb">
-      {error &&  <Alert severity="error" >{error}</Alert> }
+        {error && <Alert severity="error">{error}</Alert>}
         <Grid container spacing={2}>
           <Grid item xs={12} md={4} lg={4} className="sm-p-25">
             <Grid container spacing={2}>
@@ -129,7 +273,7 @@ const JoinCourse = () => {
                     display: "flex",
                     fontSize: "14px",
                     paddingTop: "15px",
-                    marginBottom:"10px",
+                    marginBottom: "10px",
                     color: "rgb(0, 67, 103)",
                   }}
                 >
@@ -145,9 +289,6 @@ const JoinCourse = () => {
                     fontWeight: "600",
                   }}
                 >
-                  {/* <Link underline="hover" color="#004367" href="/">
-                    {t("COURSES")}
-                  </Link> */}
                   <Link
                     underline="hover"
                     href=""
@@ -187,7 +328,7 @@ const JoinCourse = () => {
                     color: "#484848",
                     fontSize: "12px",
                     margin: "0 10px",
-                    textTransform:"capitalize"
+                    textTransform: "capitalize",
                   }}
                 >
                   {userData?.result?.content?.children[0]?.children[0]?.board}
@@ -198,7 +339,7 @@ const JoinCourse = () => {
                     background: "#ffefc2",
                     color: "#484848",
                     fontSize: "12px",
-                    textTransform:"capitalize"
+                    textTransform: "capitalize",
                   }}
                 >
                   {" "}
@@ -270,21 +411,7 @@ const JoinCourse = () => {
                 </Typography>
               </Box>
             </Box>
-            <Box pt={2} style={{ textAlign: "center" }}>
-              <Button
-                style={{
-                  background: "#004367",
-                  borderRadius: "10px",
-                  color: "#fff",
-                  padding: "10px 71px",
-                  fontWeight: "600",
-                  fontSize: "14px",
-                  margin:'15px 0'
-                }}
-              >
-                {t("JOIN_COURSE")}
-              </Button>
-            </Box>
+            {renderActionButton()}
             <Box>
               <Typography
                 variant="h7"
@@ -345,7 +472,7 @@ const JoinCourse = () => {
                         <Link
                           href="#"
                           key={faqIndexname.id}
-                          style={{verticalAlign:'super'}}
+                          style={{ verticalAlign: "super" }}
                           onClick={handleLinkClick}
                         >
                           {faqIndexname.name}
@@ -372,13 +499,8 @@ const JoinCourse = () => {
               </AccordionSummary>
               <AccordionDetails style={{ background: "#fff" }}>
                 <ul>
-                  <li>
-                  {t("THE_COMPLETION_CERTIFICATE")}
-
-                  </li>
-                  <li>
-                   {t("THE_CERTIFICATE_WILL_BE_ISSUES")}
-                  </li>
+                  <li>{t("THE_COMPLETION_CERTIFICATE")}</li>
+                  <li>{t("THE_CERTIFICATE_WILL_BE_ISSUES")}</li>
                 </ul>
               </AccordionDetails>
             </Accordion>
@@ -467,9 +589,6 @@ const JoinCourse = () => {
             className="xs-hide"
             style={{ borderLeft: "solid 1px #898989" }}
           >
-            {/* <Link href="" underline="none" className="xs-hide" style="textAlign:'right'"> <ShareOutlinedIcon /> Share Course</Link>
-        <Link href="" underline="none" className="lg-hide" style="textAlign:'right'"> <ShareOutlinedIcon /></Link> */}
-
             <Box
               sx={{
                 background: "#EEEEEE",
