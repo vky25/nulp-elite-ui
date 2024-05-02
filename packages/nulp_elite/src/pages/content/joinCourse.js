@@ -20,6 +20,7 @@ import axios from "axios";
 import SummarizeOutlinedIcon from "@mui/icons-material/SummarizeOutlined";
 import ArrowBackOutlinedIcon from "@mui/icons-material/ArrowBackOutlined";
 import Alert from "@mui/material/Alert";
+import * as util from "../../services/utilService";
 
 import data from "../../assets/courseHierarchy.json";
 const JoinCourse = () => {
