@@ -26,11 +26,13 @@ const SelectPreference = ({ isOpen, onClose }) => {
   const [categories, setCategories] = useState([]);
   const [subCategories, setSubCategories] = useState([]);
   const [languages, setLanguages] = useState([]);
+  const [topics, setTopics] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState(null);
   const [frameworkData, setFrameworkData] = useState();
-  const [selectedCategory, setSelectedCategory] = useState("");
+  const [selectedCategory, setSelectedCategory] = useState([]);
   const [selectedSubCategory, setSelectedSubCategory] = useState([]);
+  const [selectedTopic, setSelectedTopic] = useState("");
   const [selectedLanguages, setSelectedLanguages] = useState([]);
   const [open, setOpen] = React.useState(false);
   const classes = useStyles();
@@ -41,7 +43,11 @@ const SelectPreference = ({ isOpen, onClose }) => {
   const [frameworks, setFrameworks] = useState([]);
   const [defaultFramework, setDefaultFramework] = useState("");
   const [custodianOrgId, setCustodianOrgId] = useState("");
-  const [userData, setUserData] = useState();
+  const [isEmptyPreference, setIsEmptyPreference] = useState(false);
+  const [domain, setDomain] = useState();
+  const [subDomain, setSubDomain] = useState();
+  const [language, setLanguage] = useState();
+  const [topic, setTopic] = useState();
 
   useEffect(() => {
     const fetchUserDataAndSetCustodianOrgData = async () => {
@@ -87,16 +93,21 @@ const SelectPreference = ({ isOpen, onClose }) => {
     }
   }, [defaultFramework]);
 
-  const handleLanguageChange = (event) => {
-    setSelectedLanguages(event.target.value);
-  };
-
   const handleCategoryChange = (event) => {
     setSelectedCategory(event.target.value);
+    setSelectedSubCategory([]);
   };
 
   const handleSubCategoryChange = (event) => {
     setSelectedSubCategory(event.target.value);
+  };
+
+  const handleTopicChange = (event) => {
+    setSelectedTopic(event.target.value);
+  };
+
+  const handleLanguageChange = (event) => {
+    setSelectedLanguages(event.target.value);
   };
 
   useEffect(() => {
@@ -125,9 +136,15 @@ const SelectPreference = ({ isOpen, onClose }) => {
 
       const data = await response.json();
       setFrameworkData(data?.result?.framework?.categories);
-      setCategories(data?.result?.framework?.categories[0]?.terms || []);
-      setSubCategories(data?.result?.framework?.categories[1]?.terms || []);
-      setLanguages(data?.result?.framework?.categories[3]?.terms || []);
+      setCategories(data?.result?.framework?.categories[0]?.terms);
+      setSubCategories(data?.result?.framework?.categories[1]?.terms);
+      setTopics(data?.result?.framework?.categories[2]?.terms);
+      setLanguages(data?.result?.framework?.categories[3]?.terms);
+
+      setDomain(data?.result?.framework?.categories[0]?.name);
+      setSubDomain(data?.result?.framework?.categories[1]?.name);
+      setTopic(data?.result?.framework?.categories[2]?.name);
+      setLanguage(data?.result?.framework?.categories[3]?.name);
     } catch (error) {
       console.error("Error fetching data:", error);
       setError("Failed to fetch data. Please try again.");
@@ -155,12 +172,18 @@ const SelectPreference = ({ isOpen, onClose }) => {
       }
 
       const responseData = await response.json();
-
-      setSelectedCategory(responseData?.result?.response?.framework?.board[0]);
-      setSelectedSubCategory(
-        responseData?.result?.response?.framework?.gradeLevel
-      );
-      setSelectedLanguages(responseData?.result?.response?.framework?.medium);
+      if (_.isEmpty(responseData?.result?.response.framework)) {
+        setIsEmptyPreference(true);
+      } else {
+        setSelectedCategory(
+          responseData?.result?.response?.framework?.board[0]
+        );
+        setSelectedSubCategory(
+          responseData?.result?.response?.framework?.gradeLevel
+        );
+        setSelectedTopic(responseData?.result?.response?.framework?.subject[0]);
+        setSelectedLanguages(responseData?.result?.response?.framework?.medium);
+      }
       console.log("getUserData", responseData);
     } catch (error) {
       console.error("Error fetching data:", error);
@@ -182,6 +205,7 @@ const SelectPreference = ({ isOpen, onClose }) => {
           board: [selectedCategory],
           medium: selectedLanguages,
           gradeLevel: selectedSubCategory,
+          subject: [selectedTopic],
           id: "nulp",
         },
         userId: _userId,
@@ -223,7 +247,7 @@ const SelectPreference = ({ isOpen, onClose }) => {
     <div>
       <Box sx={{ minWidth: 120 }}>
         <FormControl fullWidth sx={{ marginBottom: 2 }}>
-          <InputLabel id="category-label">Category</InputLabel>
+          <InputLabel id="category-label">{domain}</InputLabel>
           <Select
             labelId="category-label"
             value={selectedCategory}
@@ -239,7 +263,7 @@ const SelectPreference = ({ isOpen, onClose }) => {
 
         <Box sx={{ minWidth: 120 }}>
           <FormControl fullWidth sx={{ marginBottom: 2 }}>
-            <InputLabel id="sub-category-label">Sub-Category</InputLabel>
+            <InputLabel id="sub-category-label">{subDomain}</InputLabel>
             <Select
               labelId="sub-category-label"
               id="sub-category-select"
@@ -260,7 +284,7 @@ const SelectPreference = ({ isOpen, onClose }) => {
         </Box>
         <Box sx={{ minWidth: 120 }}>
           <FormControl fullWidth sx={{ marginBottom: 2 }}>
-            <InputLabel id="language-label">Language</InputLabel>
+            <InputLabel id="language-label">{language}</InputLabel>
             <Select
               labelId="language-label"
               id="language-select"
@@ -279,9 +303,23 @@ const SelectPreference = ({ isOpen, onClose }) => {
             </Select>
           </FormControl>
         </Box>
+        <FormControl fullWidth sx={{ marginBottom: 2 }}>
+          <InputLabel id="topic-label">{topic}</InputLabel>
+          <Select
+            labelId="topic-label"
+            value={selectedTopic}
+            onChange={handleTopicChange}
+          >
+            {topics?.map((topic) => (
+              <MenuItem key={topic?.id} value={topic?.name}>
+                {topic?.name}
+              </MenuItem>
+            ))}
+          </Select>
+        </FormControl>
       </Box>
       <Button onClick={handleSavePreferences}>Save</Button>
-      <Button onClick={handleClose}>Cancel</Button>
+      {!isEmptyPreference && <Button onClick={handleClose}>Cancel</Button>}
     </div>
   );
 };
