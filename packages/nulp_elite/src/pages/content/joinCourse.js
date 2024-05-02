@@ -36,7 +36,6 @@ const JoinCourse = () => {
 
   const location = useLocation();
   const navigate = useNavigate();
-  const [error, setError] = useState(null);
 
   const { contentId } = location.state || {};
   const _userId = util.userId(); // Assuming util.userId() is defined
@@ -63,7 +62,6 @@ const JoinCourse = () => {
     };
 
     const fetchBatchData = async () => {
-      setError(null);
       try {
         const response = await axios.post(
           "http://localhost:3000/learner/course/v1/batch/list",
@@ -97,7 +95,21 @@ const JoinCourse = () => {
         }
       } catch (error) {
         console.error("Error fetching batch data:", error);
-        setError(error.message);
+      }
+    };
+
+    const checkEnrolledCourse = async () => {
+      try {
+        const response = await fetch(
+          `http://localhost:3000/learner/course/v1/user/enrollment/list/${_userId}?orgdetails=orgName,email&licenseDetails=name,description,url&fields=contentType,topic,name,channel,mimeType,appIcon,gradeLevel,resourceType,identifier,medium,pkgVersion,board,subject,trackable,primaryCategory,organisation&batchDetails=name,endDate,startDate,status,enrollmentType,createdBy,certificates`
+        );
+        if (!response.ok) {
+          throw new Error("Failed to fetch user courses");
+        }
+        const data = await response.json();
+        setUserCourseData(data.result);
+      } catch (error) {
+        console.error("Error while fetching courses:", error);
       }
     };
 
@@ -265,7 +277,6 @@ const JoinCourse = () => {
       </Snackbar>
 
       <Container maxWidth="xxl" role="main" className="container-pb">
-        {error && <Alert severity="error">{error}</Alert>}
         <Grid container spacing={2}>
           <Grid item xs={12} md={4} lg={4} className="sm-p-25">
             <Grid container spacing={2}>
@@ -284,7 +295,7 @@ const JoinCourse = () => {
                   <ArrowBackOutlinedIcon
                     style={{ width: "0.65em", height: "0.65em" }}
                   />{" "}
-                  {t("BACK")}
+                  Back
                 </Link>
                 <Breadcrumbs
                   aria-label="breadcrumb"
@@ -332,7 +343,6 @@ const JoinCourse = () => {
                     color: "#484848",
                     fontSize: "12px",
                     margin: "0 10px",
-                    textTransform: "capitalize",
                   }}
                 >
                   {userData?.result?.content?.children[0]?.children[0]?.board}
@@ -342,8 +352,7 @@ const JoinCourse = () => {
                   style={{
                     background: "#ffefc2",
                     color: "#484848",
-                    fontSize: "12px",
-                    textTransform: "capitalize",
+                    fontSize: "10px",
                   }}
                 >
                   {" "}
@@ -503,8 +512,14 @@ const JoinCourse = () => {
               </AccordionSummary>
               <AccordionDetails style={{ background: "#fff" }}>
                 <ul>
-                  <li>{t("THE_COMPLETION_CERTIFICATE")}</li>
-                  <li>{t("THE_CERTIFICATE_WILL_BE_ISSUES")}</li>
+                  <li>
+                    {t("COMPLETION_CERTIFICATE_ISSUED")} 100%
+                    {t("COMPLETION")}
+                  </li>
+                  <li>
+                    {t("CERT_ISSUED_SCORE")} 60% {t("OR_GREATER")}{" "}
+                    {t("ASSESSMENT")}
+                  </li>
                 </ul>
               </AccordionDetails>
             </Accordion>
@@ -605,7 +620,7 @@ const JoinCourse = () => {
               <Box sx={{ transform: "translate(0%, 550%)" }}>
                 {t("START_LEARNING")}
                 <Box style={{ fontSize: "14px" }}>
-                  {t("JOIN_THE_COURSE_SELECT_MODULE")}
+                  {t("JOIN_COURSE_MESSAGE")}
                 </Box>
               </Box>
             </Box>
