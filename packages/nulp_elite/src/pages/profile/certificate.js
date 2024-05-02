@@ -85,7 +85,7 @@ const Certificate = () => {
   return (
     <div>
       <Header />
-      <Container maxWidth="xxl" role="main" className="container-pb">
+      <Container maxWidth="xxl" role="main" className="container-pb pb-20">
         <Box textAlign="center" padding="10">
           <Breadcrumbs
             aria-label="breadcrumb"

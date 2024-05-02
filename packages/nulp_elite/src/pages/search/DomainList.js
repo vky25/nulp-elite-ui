@@ -100,7 +100,7 @@ const DomainList = () => {
       setIsLoading(false);
     }
     try {
-      const url = `http://localhost:3000/api/framework/v1/reasd/nulp?categories=board,gradeLevel,medium,class,subject`;
+      const url = `http://localhost:3000/api/framework/v1/read/nulp?categories=board,gradeLevel,medium,class,subject`;
       const response = await frameworkService.getSelectedFrameworkCategories(
         url,
         headers
