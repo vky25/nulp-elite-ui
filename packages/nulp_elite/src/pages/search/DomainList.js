@@ -18,6 +18,8 @@ import { generatePath, useNavigate, useLocation } from "react-router-dom";
 import Footer from "../../components/Footer";
 import { object } from "yup";
 import Alert from '@mui/material/Alert';
+import { useTranslation } from "react-i18next";
+
 
 const Item = styled(Paper)(({ theme }) => ({
   backgroundColor: theme.palette.mode === "dark" ? "#1A2027" : "#fff",
@@ -41,6 +43,7 @@ theme.typography.h3 = {
 };
 
 const DomainList = () => {
+  const { t } = useTranslation();
   // console.log(data.result.categories.terms.category);
   // const [search, setSearch] = React.useState(true);
   // const [searchState, setSearchState] = React.useState(false);
