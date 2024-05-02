@@ -3,6 +3,7 @@
 import React, { useState, useEffect } from "react";
 // import { Box, Heading, Text, Button } from '@chakra-ui/react';
 import { createTheme, ThemeProvider } from "@mui/material/styles";
+import { useTranslation } from "react-i18next";
 import Typography from "@mui/material/Typography";
 import Grid from "@mui/material/Grid";
 import { styled } from "@mui/material/styles";
@@ -43,6 +44,7 @@ const DomainList = () => {
   // console.log(data.result.categories.terms.category);
   // const [search, setSearch] = React.useState(true);
   // const [searchState, setSearchState] = React.useState(false);
+  const { t } = useTranslation();
   const [data, setData] = React.useState();
   const [channelData, setChannelData] = React.useState(true);
   const [isLoading, setIsLoading] = useState(false);
