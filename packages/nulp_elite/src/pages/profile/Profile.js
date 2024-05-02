@@ -234,7 +234,10 @@ const Profile = () => {
                         >
                           {/* {t("DESIGNATION")} |{" "} */}
                           {userInfo[0]?.designation}
-                          <Box style={{ paddingLeft: "10px" }}> ID: </Box>{" "}
+                          <Box style={{ paddingLeft: "10px" }}>
+                            {" "}
+                            ID: {userData.result.response.userName}{" "}
+                          </Box>{" "}
                           {userData.result.response.organisations.orgName}
                         </Typography>
                         <Typography
