@@ -156,10 +156,10 @@ body {
  .css-1l1167e{
   color:#000 !important;
  }
- .MuiPopover-paper.MuiMenu-paper{
+ /* .MuiPopover-paper.MuiMenu-paper{
   left: 0% !important;
   width: 34% !important;
- }
+ } */
  .container-pb{
   margin-bottom: 105px !important;
  }
@@ -168,6 +168,9 @@ body {
  }
  }
  @media(min-width:769px) {
+  .pb-20{
+    padding-bottom: 20px;
+  }
   .footer{
     margin-top: 20px !important;
   }
@@ -288,7 +291,7 @@ header {
   );
 }
 .custom-dot-list-style {
-  display: none;
+  display: none !important;
 }
 .year-select{
   background: #fff;

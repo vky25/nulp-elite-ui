@@ -18,6 +18,9 @@ import * as frameworkService from ".././../services/frameworkService";
 import { generatePath, useNavigate, useLocation } from "react-router-dom";
 import Footer from "../../components/Footer";
 import { object } from "yup";
+import Alert from '@mui/material/Alert';
+import { useTranslation } from "react-i18next";
+
 
 const Item = styled(Paper)(({ theme }) => ({
   backgroundColor: theme.palette.mode === "dark" ? "#1A2027" : "#fff",
@@ -41,6 +44,7 @@ theme.typography.h3 = {
 };
 
 const DomainList = () => {
+  const { t } = useTranslation();
   // console.log(data.result.categories.terms.category);
   // const [search, setSearch] = React.useState(true);
   // const [searchState, setSearchState] = React.useState(false);
@@ -168,6 +172,7 @@ const DomainList = () => {
       </Box>
 
       <Container maxWidth="xxl" role="main" className="container-pb">
+      {error &&  <Alert severity="error" >{error}</Alert> }
         {/* <Box sx={{background:'#fff',padding:'20px 10px 30px 10px', margin:'25px 0'}}>
    <ThemeProvider theme={theme}>
    <Typography variant="h3" sx={{ margin: '10px 0 10px 0' }}>Filter by popular domain</Typography>
