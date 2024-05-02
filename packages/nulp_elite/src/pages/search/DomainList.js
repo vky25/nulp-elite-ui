@@ -17,6 +17,7 @@ import * as frameworkService from ".././../services/frameworkService";
 import { generatePath, useNavigate, useLocation } from "react-router-dom";
 import Footer from "../../components/Footer";
 import { object } from "yup";
+import Alert from '@mui/material/Alert';
 
 const Item = styled(Paper)(({ theme }) => ({
   backgroundColor: theme.palette.mode === "dark" ? "#1A2027" : "#fff",
@@ -96,7 +97,7 @@ const DomainList = () => {
       setIsLoading(false);
     }
     try {
-      const url = `http://localhost:3000/api/framework/v1/read/nulp?categories=board,gradeLevel,medium,class,subject`;
+      const url = `http://localhost:3000/api/framework/v1/reasd/nulp?categories=board,gradeLevel,medium,class,subject`;
       const response = await frameworkService.getSelectedFrameworkCategories(
         url,
         headers
@@ -166,6 +167,7 @@ const DomainList = () => {
       </Box>
 
       <Container maxWidth="xxl" role="main" className="container-pb">
+      {error &&  <Alert severity="error" >{error}</Alert> }
         {/* <Box sx={{background:'#fff',padding:'20px 10px 30px 10px', margin:'25px 0'}}>
    <ThemeProvider theme={theme}>
    <Typography variant="h3" sx={{ margin: '10px 0 10px 0' }}>Filter by popular domain</Typography>

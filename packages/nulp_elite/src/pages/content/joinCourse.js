@@ -37,7 +37,7 @@ const JoinCourse = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const url = `http://localhost:3000/apis/course/v1/hierarchy/${contentId}?orgdetails=orgName,email&licenseDetails=name,description,url`;
+        const url = `http://localhost:3000/api/course/v1/hierarchy/${contentId}?orgdetails=orgName,email&licenseDetails=name,description,url`;
         const header = "application/json";
         const response = await fetch(url, {
           headers: {

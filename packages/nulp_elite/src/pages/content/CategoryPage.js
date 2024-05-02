@@ -10,6 +10,7 @@ import URLSConfig from "../../configs/urlConfig.json";
 import ArrowBackOutlinedIcon from "@mui/icons-material/ArrowBackOutlined";
 import Container from "@mui/material/Container";
 import Pagination from "@mui/material/Pagination";
+import Alert from '@mui/material/Alert';
 
 import domainWithImage from "../../assets/domainImgForm.json";
 import DomainCarousel from "components/domainCarousel";
@@ -202,6 +203,7 @@ const CategoryPage = () => {
         <SearchBox onSearch={handleSearch} />
       </Box>
       <Container maxWidth="xxl" role="main" className="container-pb">
+      {error &&  <Alert className="my-4" severity="error" >{error}</Alert> }
         <Link
           onClick={handleGoBack}
           style={{
