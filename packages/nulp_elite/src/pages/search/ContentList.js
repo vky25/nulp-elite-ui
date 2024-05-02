@@ -17,6 +17,7 @@ import queryString from "query-string";
 import Pagination from "@mui/material/Pagination";
 import ArrowBackOutlinedIcon from "@mui/icons-material/ArrowBackOutlined";
 import NoResult from "pages/content/noResultFound";
+import { useTranslation } from "react-i18next";
 
 const ContentList = (props) => {
   const [search, setSearch] = useState(true);
@@ -34,6 +35,7 @@ const ContentList = (props) => {
   const { domainquery } = location.state || {};
   const [totalPages, setTotalPages] = useState(1);
   const [currentPage, setCurrentPage] = useState(1);
+  const { t } = useTranslation();
 
   useEffect(() => {
     fetchData();
@@ -213,7 +215,7 @@ const ContentList = (props) => {
             margin: "0",
           }}
         >
-         {t("EXPLORE_CONTENT_RELATED_TO_YOUR_DOMAIN")}
+          {t("EXPLORE_CONTENT_RELATED_TO_YOUR_DOMAIN")}
         </p>
         <p
           style={{
@@ -224,8 +226,8 @@ const ContentList = (props) => {
             paddingBottom: "30px",
           }}
         >
-          {t("LEARN_FROM_WELL_CURATED")}   
-     </p>
+          {t("LEARN_FROM_WELL_CURATED")}
+        </p>
         <SearchBox
           onSearch={handleSearch}
           domainquery={search.query || domainquery}
@@ -235,20 +237,23 @@ const ContentList = (props) => {
       <Container maxWidth="xxl" role="main" className="container-pb">
         <Box style={{ margin: "20px 0" }}>
           <domainCarousel></domainCarousel>
-          <Box style={{display:'flex',justifyContent:'space-between'}} className="filter-domain">
-          <Filter
-            options={gradeLevels}
-            label="Filter by Sub-Domain"
-            onChange={handleFilterChange}
-          />
-          {!domain && (
+          <Box
+            style={{ display: "flex", justifyContent: "space-between" }}
+            className="filter-domain"
+          >
             <Filter
-              options={category}
-              label="Filter by Domain"
-              onChange={handlefilter}
-              // isMulti={false}
+              options={gradeLevels}
+              label="Filter by Sub-Domain"
+              onChange={handleFilterChange}
+            />
+            {!domain && (
+              <Filter
+                options={category}
+                label="Filter by Domain"
+                onChange={handlefilter}
+                // isMulti={false}
               />
-          )}
+            )}
           </Box>
         </Box>
         <Link
