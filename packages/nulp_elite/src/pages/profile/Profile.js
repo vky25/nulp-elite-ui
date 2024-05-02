@@ -524,10 +524,27 @@ const Profile = () => {
                     padding: "20px 10px",
                   }}
                 >
-                  <img
-                    src={require("../../assets/blank.png")}
-                    style={{ width: "20%" }}
-                  />
+                  {userData && (
+                    <>
+                      <div
+                        style={{
+                          width: "80px",
+                          height: "60px",
+                          borderRadius: "2px",
+                          backgroundColor: "#6D757A",
+                          color: "#fff",
+                          display: "flex",
+                          justifyContent: "center",
+                          alignItems: "center",
+                          fontSize: "58px",
+                          fontWeight: "bold",
+                          marginRight: "10px",
+                        }}
+                      >
+                        {userData?.result?.response?.firstName[0]}
+                      </div>
+                    </>
+                  )}
                   <CardContent style={{ textAlign: "left", paddingTop: "0" }}>
                     {userData && userInfo.length > 0 && (
                       <>
