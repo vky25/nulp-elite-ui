@@ -17,6 +17,7 @@ import queryString from "query-string";
 import Pagination from "@mui/material/Pagination";
 import ArrowBackOutlinedIcon from "@mui/icons-material/ArrowBackOutlined";
 import NoResult from "pages/content/noResultFound";
+import { t } from "i18next";
 
 const ContentList = (props) => {
   const [search, setSearch] = useState(true);
