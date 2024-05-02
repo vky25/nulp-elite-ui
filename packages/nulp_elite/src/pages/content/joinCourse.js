@@ -19,10 +19,13 @@ import { useParams, useNavigate, useLocation } from "react-router-dom";
 import axios from "axios";
 import SummarizeOutlinedIcon from "@mui/icons-material/SummarizeOutlined";
 import ArrowBackOutlinedIcon from "@mui/icons-material/ArrowBackOutlined";
-import Alert from "@mui/material/Alert";
 import * as util from "../../services/utilService";
+import Snackbar from "@mui/material/Snackbar";
+import MuiAlert from "@mui/material/Alert";
 
 import data from "../../assets/courseHierarchy.json";
+import Alert from "@mui/material/Alert";
+
 const JoinCourse = () => {
   const { t } = useTranslation();
   const [userData, setUserData] = useState();
