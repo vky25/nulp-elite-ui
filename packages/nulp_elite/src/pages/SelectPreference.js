@@ -29,7 +29,7 @@ const SelectPreference = ({ isOpen, onClose }) => {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState(null);
   const [frameworkData, setFrameworkData] = useState();
-  const [selectedCategory, setSelectedCategory] = useState("");
+  const [selectedCategory, setSelectedCategory] = useState([]);
   const [selectedSubCategory, setSelectedSubCategory] = useState([]);
   const [selectedLanguages, setSelectedLanguages] = useState([]);
   const [open, setOpen] = React.useState(false);
@@ -87,16 +87,18 @@ const SelectPreference = ({ isOpen, onClose }) => {
     }
   }, [defaultFramework]);
 
-  const handleLanguageChange = (event) => {
-    setSelectedLanguages(event.target.value);
-  };
-
   const handleCategoryChange = (event) => {
     setSelectedCategory(event.target.value);
+    setSelectedSubCategory([]);
+    setSelectedLanguages([]);
   };
 
   const handleSubCategoryChange = (event) => {
     setSelectedSubCategory(event.target.value);
+  };
+
+  const handleLanguageChange = (event) => {
+    setSelectedLanguages(event.target.value);
   };
 
   useEffect(() => {
@@ -125,9 +127,9 @@ const SelectPreference = ({ isOpen, onClose }) => {
 
       const data = await response.json();
       setFrameworkData(data?.result?.framework?.categories);
-      setCategories(data?.result?.framework?.categories[0]?.terms || []);
-      setSubCategories(data?.result?.framework?.categories[1]?.terms || []);
-      setLanguages(data?.result?.framework?.categories[3]?.terms || []);
+      setCategories(data?.result?.framework?.categories[0]?.terms);
+      setSubCategories(data?.result?.framework?.categories[1]?.terms);
+      setLanguages(data?.result?.framework?.categories[3]?.terms);
     } catch (error) {
       console.error("Error fetching data:", error);
       setError("Failed to fetch data. Please try again.");
