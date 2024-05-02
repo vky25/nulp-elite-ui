@@ -42,6 +42,8 @@ const Profile = () => {
   const _userId = util.userId();
   const [openModal, setOpenModal] = useState(false);
   const [isEmptyPreference, setIsEmptyPreference] = useState(false);
+  const [userInfo, setUserInfo] = useState();
+  const axios = require("axios");
 
   useEffect(() => {
     const fetchCertificateCount = async () => {
@@ -71,10 +73,29 @@ const Profile = () => {
         console.error(error);
       }
     };
+    const fetchUserInfo = async () => {
+      try {
+        const response = await axios.post(
+          "http://localhost:3000/custom/user/read",
+          { user_ids: [_userId] },
+          {
+            withCredentials: true,
+            headers: {
+              "Content-Type": "application/json",
+            },
+          }
+        );
+
+        setUserInfo(response.data.result);
+      } catch (error) {
+        console.error(error);
+      }
+    };
 
     fetchData();
     fetchCertificateCount();
     fetchCourseCount();
+    fetchUserInfo();
   }, []);
 
   const fetchData = async () => {
@@ -120,7 +141,7 @@ const Profile = () => {
 
   const handleCloseModal = () => {
     setOpenModal(false);
-    fetchData();
+    // fetchData();
   };
 
   return (
@@ -193,7 +214,7 @@ const Profile = () => {
                     style={{ width: "20%" }}
                   />
                   <CardContent style={{ textAlign: "left", paddingTop: "0" }}>
-                    {userData && (
+                    {userData && userInfo && (
                       <>
                         <Typography
                           component="div"
@@ -217,7 +238,8 @@ const Profile = () => {
                             display: "flex",
                           }}
                         >
-                          {t("DESIGNATION")} |{" "}
+                          {/* {t("DESIGNATION")} |{" "} */}
+                          {userInfo[0]?.designation}
                           <Box style={{ paddingLeft: "10px" }}> ID: </Box>{" "}
                           {userData.result.response.organisations.orgName}
                         </Typography>
@@ -227,7 +249,8 @@ const Profile = () => {
                           component="div"
                           style={{ fontSize: "12px" }}
                         >
-                          {t("A_MANAGER_WITH_THE_DEPARTMENT_OF_REVENUE")}
+                          {/* {t("A_MANAGER_WITH_THE_DEPARTMENT_OF_REVENUE")} */}
+                          {userInfo[0]?.bio}
                         </Typography>
                         {/* Displaying the framework.board field */}
                         <Typography

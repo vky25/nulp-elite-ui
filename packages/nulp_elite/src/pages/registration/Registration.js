@@ -30,6 +30,8 @@ import VisibilityOff from "@mui/icons-material/VisibilityOff";
 import { t } from "i18next";
 
 const DELAY = 1500;
+const MAX_CHARS = 500;
+
 const CssTextField = styled(TextField)({
   "& label.Mui-focused": {
     color: "#A0AAB4",
@@ -62,6 +64,9 @@ const Registration = () => {
   const [goToOtp, setGoToOtp] = useState(false);
   const [showPassword, setShowPassword] = React.useState(false);
   const setData = useStore((state) => state.setData);
+  const designations = require("../../configs/designations.json");
+  const [bio, setBio] = useState("");
+
   const formik = useFormik({
     initialValues: {
       name: "",
@@ -97,10 +102,13 @@ const Registration = () => {
       handleSubmit();
     },
   });
+  const [designationsList, setDesignationsList] = useState([]);
+
   useEffect(() => {
     setTimeout(() => {
       setLoad(true);
     }, DELAY);
+    setDesignationsList(designations);
   }, []);
   const handleSubmit = async () => {
     const isEmailExist = async () => {
@@ -214,6 +222,21 @@ const Registration = () => {
       setIsLoading(false);
     }
   };
+
+  const handleChangeDesignation = (event) => {
+    const { value } = event.target;
+    formik.setFieldValue("designation", value);
+    if (value === "Other") {
+      formik.setFieldValue("otherDesignation", "");
+    }
+  };
+  const handleChange = (event) => {
+    const { value } = event.target;
+    if (value.length <= MAX_CHARS) {
+      formik.setFieldValue("bio", value);
+    }
+  };
+
   return (
     <>
       <Container
@@ -288,6 +311,74 @@ const Registration = () => {
                 })}
               </Select>
             </FormControl>
+          </Box>
+          <Box py={1}>
+            <FormControl fullWidth style={{ marginTop: "10px" }}>
+              <InputLabel id="designation-label">
+                {" "}
+                {t("DESIGNATION")} <span className="required">*</span>
+              </InputLabel>
+              <Select
+                labelId="designation-label"
+                id="designation"
+                value={formik.values.designation}
+                onChange={handleChangeDesignation}
+                onBlur={formik.handleBlur}
+              >
+                {designationsList.map((desig, index) => (
+                  <MenuItem key={index} value={desig}>
+                    {desig}
+                  </MenuItem>
+                ))}
+              </Select>
+            </FormControl>
+          </Box>
+          {formik.values.designation === "Other" && (
+            <Box py={1}>
+              <CssTextField
+                id="otherDesignation"
+                name="otherDesignation"
+                label={
+                  <span>
+                    {t("OTHER_DESIGNATION")} <span className="required">*</span>
+                  </span>
+                }
+                variant="outlined"
+                size="small"
+                value={formik.values.otherDesignation}
+                onChange={formik.handleChange}
+                onBlur={formik.handleBlur}
+              />
+              {formik.touched.otherDesignation &&
+                formik.errors.otherDesignation && (
+                  <p className="form-error">{formik.errors.otherDesignation}</p>
+                )}
+            </Box>
+          )}
+          <Box py={2}>
+            <TextField
+              id="bio"
+              name="bio"
+              label={<span>{t("BIO")}</span>}
+              multiline
+              rows={1}
+              variant="outlined"
+              fullWidth
+              value={formik.values.bio}
+              onChange={formik.handleChange}
+              onBlur={formik.handleBlur}
+              inputProps={{ maxLength: MAX_CHARS }}
+            />
+            <Typography
+              variant="caption"
+              color={
+                formik.values.bio?.length > MAX_CHARS
+                  ? "error"
+                  : "textSecondary"
+              }
+            >
+              {formik.values.bio ? formik.values.bio.length : 0}/{MAX_CHARS}
+            </Typography>
           </Box>
           <Box py={2}>
             <CssTextField

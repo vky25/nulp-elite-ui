@@ -30,7 +30,7 @@ const SelectPreference = ({ isOpen, onClose }) => {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState(null);
   const [frameworkData, setFrameworkData] = useState();
-  const [selectedCategory, setSelectedCategory] = useState("");
+  const [selectedCategory, setSelectedCategory] = useState([]);
   const [selectedSubCategory, setSelectedSubCategory] = useState([]);
   const [selectedTopic, setSelectedTopic] = useState("");
   const [selectedLanguages, setSelectedLanguages] = useState([]);
@@ -93,10 +93,6 @@ const SelectPreference = ({ isOpen, onClose }) => {
     }
   }, [defaultFramework]);
 
-  const handleLanguageChange = (event) => {
-    setSelectedLanguages(event.target.value);
-  };
-
   const handleCategoryChange = (event) => {
     setSelectedCategory(event.target.value);
     setSelectedSubCategory([]);
@@ -108,6 +104,10 @@ const SelectPreference = ({ isOpen, onClose }) => {
 
   const handleTopicChange = (event) => {
     setSelectedTopic(event.target.value);
+  };
+
+  const handleLanguageChange = (event) => {
+    setSelectedLanguages(event.target.value);
   };
 
   useEffect(() => {
