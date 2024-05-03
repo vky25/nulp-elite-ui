@@ -197,7 +197,7 @@ const AddConnections = () => {
     setError(null);
     setUserSearchData([]);
 
-    const url = `http://localhost:3000/learner/usxer/v3/search`;
+    const url = `http://localhost:3000/learner/user/v3/search`;
     let filters = {
       status: "1",
     };
