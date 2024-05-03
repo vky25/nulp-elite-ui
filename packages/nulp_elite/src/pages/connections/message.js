@@ -89,6 +89,7 @@ const Message = (props) => {
   const [reason, setReason] = useState("");
   const [dialogOpen, setDialogOpen] = useState(false);
   const [isBlocked, setIsBlocked] = useState(false); // State to track if user is blocked
+  const [showUnblockOption, setShowUnblockOption] = useState(false); // State to show/hide unblock option
 
   useEffect(() => {
     const _userId = util.userId();
@@ -118,7 +119,13 @@ const Message = (props) => {
           withCredentials: true,
         }
       );
+      const blockedUserId =
+        response.data.result.length > 0
+          ? response.data.result[0].sender_id
+          : null;
+
       setIsBlocked(response.data.result.length > 0); // Update isBlocked state based on API response
+      setShowUnblockOption(blockedUserId === loggedInUserId);
     } catch (error) {
       console.error("Error fetching block user status:", error);
     }
@@ -238,6 +245,34 @@ const Message = (props) => {
   const handleBlockUser = () => {
     handleDialogOpen();
   };
+  const handleUnblockUser = async () => {
+    try {
+      console.log("UnBlocking User");
+
+      const data = await axios.post(
+        "http://localhost:3000/directConnect/unblock-user",
+        {
+          sender_id: loggedInUserId,
+          receiver_id: receiverUserId,
+        },
+        {
+          withCredentials: true,
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }
+      );
+
+      console.log("User unblocked successfully!");
+      // Reload the page after unblocking the user
+      if (data) {
+        window.location.reload();
+      }
+    } catch (error) {
+      console.error("Error unblocking user:", error);
+    }
+  };
+
   const handleBlockUserConfirmed = async () => {
     try {
       console.log("Blocking User");
@@ -295,6 +330,15 @@ const Message = (props) => {
               {t("BLOCK")}
             </IconButton>
           )}
+          {showUnblockOption && (
+            <IconButton
+              onClick={handleUnblockUser}
+              style={{ paddingRight: "10px", cursor: "pointer" }}
+            >
+              <BlockIcon />
+              {t("UNBLOCK")}
+            </IconButton>
+          )}
         </Box>
       </div>
       <Dialog open={dialogOpen} maxWidth="lg" onClose={handleDialogClose}>
@@ -327,7 +371,7 @@ const Message = (props) => {
               width: "50%",
             }}
           >
-            {("CANCEL")}
+            {"CANCEL"}
           </Button>
           <Button
             onClick={handleBlockUserConfirmed}
@@ -343,7 +387,7 @@ const Message = (props) => {
               width: "50%",
             }}
           >
-            {("BLOCK")}
+            {"BLOCK"}
           </Button>
         </DialogActions>
       </Dialog>
