@@ -16,6 +16,7 @@ import URLSConfig from "../../configs/urlConfig.json";
 import * as util from "../../services/utilService";
 import Search from "components/search";
 import NoResult from "pages/content/noResultFound";
+import Alert from '@mui/material/Alert';
 
 const ContinueLearning = () => {
   const { t } = useTranslation();
@@ -87,6 +88,7 @@ const ContinueLearning = () => {
     <div>
       {/* <Header /> */}
       <Container maxWidth="xxl" role="main" className="container-pb">
+      {error &&  <Alert severity="error" className="my-10">{error}</Alert> }
         <Breadcrumbs
           aria-label="breadcrumb"
           style={{

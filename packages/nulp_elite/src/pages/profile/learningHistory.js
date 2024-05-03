@@ -13,12 +13,17 @@ import Card from "@mui/material/Card";
 import * as util from "../../services/utilService";
 import Filter from "components/filter";
 import NoResult from "pages/content/noResultFound";
+import Alert from '@mui/material/Alert';
+
 const LearningHistory = () => {
   const { t } = useTranslation();
   const [courseData, setCourseData] = useState(null);
   const [selectedStatus, setSelectedStatus] = useState(null);
+  const [error, setError] = useState(null);
+
   useEffect(() => {
     const fetchData = async () => {
+      setError(null);
       try {
         const _userId = util.userId();
         const url = `http://localhost:3000/learner/course/v1/user/enrollment/list/${_userId}?orgdetails=orgName,email&licenseDetails=name,description,url&fields=contentType,topic,name,channel,mimeType,appIcon,gradeLevel,resourceType,identifier,medium,pkgVersion,board,subject,trackable,primaryCategory,organisation&batchDetails=name,endDate,startDate,status,enrollmentType,createdBy,certificates`;
@@ -31,6 +36,7 @@ const LearningHistory = () => {
         setCourseData(data);
       } catch (error) {
         console.error("Error fetching user data:", error);
+        setError(error.message);
       }
     };
     fetchData();
@@ -48,6 +54,7 @@ const LearningHistory = () => {
     <div>
       <Header />
       <Container maxWidth="xl" role="main" className="container-pb">
+      {error &&  <Alert severity="error" className="my-10">{error}</Alert> }
         <Box textAlign="center" padding="10">
           <Breadcrumbs
             aria-label="breadcrumb"

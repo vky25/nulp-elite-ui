@@ -170,7 +170,7 @@ const DomainList = () => {
       </Box>
 
       <Container maxWidth="xxl" role="main" className="container-pb">
-      {error &&  <Alert severity="error" >{error}</Alert> }
+      {error &&  <Alert severity="error" className="my-10">{error}</Alert> }
         {/* <Box sx={{background:'#fff',padding:'20px 10px 30px 10px', margin:'25px 0'}}>
    <ThemeProvider theme={theme}>
    <Typography variant="h3" sx={{ margin: '10px 0 10px 0' }}>Filter by popular domain</Typography>

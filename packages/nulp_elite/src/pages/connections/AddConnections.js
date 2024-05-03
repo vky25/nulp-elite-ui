@@ -32,6 +32,7 @@ import { Link as RouterLink } from "react-router-dom";
 import Pagination from "@mui/material/Pagination";
 import Popover from "@mui/material/Popover";
 import { Container } from "@mui/material";
+import Alert from '@mui/material/Alert';
 
 // Define modal styles
 const useStyles = makeStyles((theme) => ({
@@ -194,7 +195,7 @@ const AddConnections = () => {
     setError(null);
     setUserSearchData([]);
 
-    const url = `http://localhost:3000/learner/user/v3/search`;
+    const url = `http://localhost:3000/learner/usxer/v3/search`;
     let filters = {
       status: "1",
     };
@@ -797,6 +798,9 @@ const AddConnections = () => {
     <Box>
       <Header />
       <Container maxWidth="xxl" role="main" className="container-pb">
+      {error &&  <Alert severity="error" className="my-10">{error}</Alert> }
+
+        
         <Box textAlign="center" padding="10" style={{ minHeight: "500px" }}>
           <Box>
             <input

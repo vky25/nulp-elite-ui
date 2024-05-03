@@ -24,6 +24,8 @@ import SearchBox from "components/search";
 import ContinueLearning from "./continueLearning";
 import SelectPreference from "pages/SelectPreference";
 import { Dialog, DialogTitle, DialogContent } from "@mui/material";
+import Alert from '@mui/material/Alert';
+
 const axios = require("axios");
 
 const Profile = () => {
@@ -42,9 +44,12 @@ const Profile = () => {
   const _userId = util.userId();
   const [openModal, setOpenModal] = useState(false);
   const [userInfo, setUserInfo] = useState();
+  const [error, setError] = useState(null);
+
 
   useEffect(() => {
     const fetchData = async () => {
+      setError(null);
       try {
         const url = `http://localhost:3000/learner/user/v5/read/${_userId}?fields=organisations,roles,locations,declarations,externalIds`;
         const header = "application/json";
@@ -58,6 +63,7 @@ const Profile = () => {
         localStorage.setItem("userRootOrgId", data.result.response.rootOrgId);
       } catch (error) {
         console.error("Error fetching user data:", error);
+        setError(error.message);
       }
     };
 
@@ -167,6 +173,8 @@ const Profile = () => {
         <SearchBox onSearch={handleSearch} />
       </Box>
       <Container maxWidth="xxl" role="main" className="container-pb">
+              {error &&  <Alert severity="error" className="my-10">{error}</Alert> }
+
         <Grid container spacing={2} className="sm-pt-22">
           <Grid item xs={12} md={4} lg={4} className="sm-p-25">
             <Box sx={{ fontSize: "18px", color: "#484848" }}>
@@ -290,6 +298,7 @@ const Profile = () => {
                         margin: "-10px",
                         borderTopRightRadius: "250px",
                         borderBottomRightRadius: "250px",
+                        cursor:"pointer"
                       }}
                     >
                       <LibraryAddCheckOutlinedIcon />
@@ -319,6 +328,7 @@ const Profile = () => {
                         margin: "-10px",
                         borderTopRightRadius: "250px",
                         borderBottomRightRadius: "250px",
+                        cursor:"pointer"
                       }}
                     >
                       <ReceiptLongOutlinedIcon />
@@ -347,6 +357,7 @@ const Profile = () => {
                         margin: "-10px",
                         borderTopRightRadius: "250px",
                         borderBottomRightRadius: "250px",
+                        cursor:"pointer"
                       }}
                     >
                       <RestoreOutlinedIcon />
@@ -375,6 +386,7 @@ const Profile = () => {
                         margin: "-10px",
                         borderTopRightRadius: "250px",
                         borderBottomRightRadius: "250px",
+                        cursor:"pointer"
                       }}
                     >
                       <SettingsOutlinedIcon />
