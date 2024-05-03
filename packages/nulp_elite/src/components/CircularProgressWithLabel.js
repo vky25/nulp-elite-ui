@@ -5,8 +5,7 @@ import Box from "@mui/material/Box";
 
 const CircularProgressWithLabel = ({ received, total }) => {
   // Calculate the progress percentage
-  const progress = (received / total) * 100;
-
+  const progress = 50;
   return (
     <Box position="relative" display="inline-flex">
       <CircularProgress variant="determinate" value={progress} />
@@ -20,9 +19,11 @@ const CircularProgressWithLabel = ({ received, total }) => {
         alignItems="center"
         justifyContent="center"
       >
-        <Typography variant="caption" component="div" color="textSecondary">{`${
-          received ? 0 : received
-        }/${total ? 0 : total}`}</Typography>
+        <Typography
+          variant="caption"
+          component="div"
+          color="textSecondary"
+        >{`${received}/${total}`}</Typography>
       </Box>
     </Box>
   );
