@@ -17,8 +17,9 @@ import queryString from "query-string";
 import Pagination from "@mui/material/Pagination";
 import ArrowBackOutlinedIcon from "@mui/icons-material/ArrowBackOutlined";
 import NoResult from "pages/content/noResultFound";
+import { t } from "i18next";
+import Alert from '@mui/material/Alert';
 import { useTranslation } from "react-i18next";
-
 
 const ContentList = (props) => {
   const [search, setSearch] = useState(true);
@@ -283,7 +284,7 @@ const ContentList = (props) => {
             {isLoading ? (
               <p>{t("LOADING")}</p>
             ) : error ? (
-              <p>{error}</p>
+              <Alert severity="error" >{error}</Alert>
             ) : data && data.content && data.content.length > 0 ? (
               <div>
                 <Grid

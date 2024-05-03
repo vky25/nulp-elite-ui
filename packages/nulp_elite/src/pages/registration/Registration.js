@@ -362,8 +362,7 @@ const Registration = () => {
               label={<span>{t("BIO")}</span>}
               multiline
               rows={1}
-              variant="outlined"
-              fullWidth
+              className="bio"
               value={formik.values.bio}
               onChange={formik.handleChange}
               onBlur={formik.handleBlur}
