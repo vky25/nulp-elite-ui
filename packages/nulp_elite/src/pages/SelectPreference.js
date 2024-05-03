@@ -30,7 +30,7 @@ const SelectPreference = ({ isOpen, onClose }) => {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState(null);
   const [frameworkData, setFrameworkData] = useState();
-  const [selectedCategory, setSelectedCategory] = useState([]);
+  const [selectedCategory, setSelectedCategory] = useState("");
   const [selectedSubCategory, setSelectedSubCategory] = useState([]);
   const [selectedTopic, setSelectedTopic] = useState("");
   const [selectedLanguages, setSelectedLanguages] = useState([]);
@@ -48,6 +48,7 @@ const SelectPreference = ({ isOpen, onClose }) => {
   const [subDomain, setSubDomain] = useState();
   const [language, setLanguage] = useState();
   const [topic, setTopic] = useState();
+  const [isDisabled, setIsDisabled] = useState(true);
 
   useEffect(() => {
     const fetchUserDataAndSetCustodianOrgData = async () => {
@@ -243,6 +244,19 @@ const SelectPreference = ({ isOpen, onClose }) => {
     onClose();
   };
 
+  useEffect(() => {
+    if (
+      selectedCategory ||
+      selectedSubCategory.length > 0 ||
+      selectedLanguages.length > 0 ||
+      selectedTopic
+    ) {
+      setIsDisabled(false); // Enable the button
+    } else {
+      setIsDisabled(true); // Disable the button
+    }
+  }, [selectedCategory, selectedSubCategory, selectedLanguages, selectedTopic]);
+
   return (
     <div>
       <Box sx={{ minWidth: 120 }}>
@@ -318,7 +332,10 @@ const SelectPreference = ({ isOpen, onClose }) => {
           </Select>
         </FormControl>
       </Box>
-      <Button onClick={handleSavePreferences}>Save</Button>
+      <Button onClick={handleSavePreferences} disabled={isDisabled}>
+        Submit
+      </Button>
+
       {!isEmptyPreference && <Button onClick={handleClose}>Cancel</Button>}
     </div>
   );

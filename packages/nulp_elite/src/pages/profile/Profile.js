@@ -111,7 +111,6 @@ const Profile = () => {
       setUserData(data);
       localStorage.setItem("userRootOrgId", data.result.response.rootOrgId);
       if (_.isEmpty(data?.result?.response.framework)) {
-        setIsEmptyPreference(true);
         setOpenModal(true);
       }
     } catch (error) {
@@ -141,7 +140,7 @@ const Profile = () => {
 
   const handleCloseModal = () => {
     setOpenModal(false);
-    // fetchData();
+    fetchData();
   };
 
   return (
@@ -394,8 +393,16 @@ const Profile = () => {
 
                 <Dialog
                   open={openModal}
-                  onClose={handleCloseModal}
-                  disableEscapeKeyDown={!isEmptyPreference}
+                  onClose={(event, reason) => {
+                    if (
+                      reason === "backdropClick" ||
+                      reason === "escapeKeyDown"
+                    ) {
+                      setOpenModal(true);
+                    } else {
+                      handleCloseModal();
+                    }
+                  }}
                 >
                   <DialogTitle>Select Preference</DialogTitle>
                   <DialogContent>
