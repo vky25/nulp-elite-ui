@@ -24,49 +24,93 @@ import SearchBox from "components/search";
 import ContinueLearning from "./continueLearning";
 import SelectPreference from "pages/SelectPreference";
 import { Dialog, DialogTitle, DialogContent } from "@mui/material";
-import Alert from '@mui/material/Alert';
+import _ from "lodash";
+const designations = require("../../configs/designations.json");
+import {
+  Button,
+  FormControl,
+  InputLabel,
+  MenuItem,
+  Select,
+  TextField,
+} from "@mui/material";
+import styled from "styled-components";
+const DELAY = 1500;
+const MAX_CHARS = 500;
+const CssTextField = styled(TextField)({
+  "& label.Mui-focused": {
+    color: "#A0AAB4",
+  },
+  "& .MuiInput-underline:after": {
+    borderBottomColor: "#B2BAC2",
+  },
+  "& .MuiOutlinedInput-root": {
+    "& fieldset": {
+      borderColor: "#E0E3E7",
+      border: "1px solid #004367",
+      borderRadius: "12px",
+    },
+    "&:hover fieldset": {
+      borderColor: "#B2BAC2",
+    },
 
-const axios = require("axios");
-
+    "&.Mui-focused fieldset": {
+      borderColor: "#6F7E8C",
+    },
+  },
+});
 const Profile = () => {
   const { t } = useTranslation();
   const [userData, setUserData] = useState(null);
-  const [certData, setCertificateCountData] = useState({
-    totalCourses: 0,
-    certificatesReceived: 0,
-  });
-  const [courseData, setCourseCountData] = useState({
-    enrolledThisMonth: 0,
-    enrolledLastMonth: 0,
-  });
-  const progressValue = 60; // Example value, you can set this dynamically based on your progress
+  const [certData, setCertificateCountData] = useState({});
+  const [courseData, setCourseCountData] = useState({});
   const navigate = useNavigate();
   const _userId = util.userId();
   const [openModal, setOpenModal] = useState(false);
+  const [isEmptyPreference, setIsEmptyPreference] = useState(false);
   const [userInfo, setUserInfo] = useState();
+  const axios = require("axios");
+  const [isEditing, setIsEditing] = useState(false);
+  const [editedUserInfo, setEditedUserInfo] = useState({
+    firstName: userData?.result?.response.firstName || "",
+    lastName: userData?.result?.response.lastName || "",
+    bio: "",
+    designation: "",
+    otherDesignation: "",
+  });
+  const [originalUserInfo, setOriginalUserInfo] = useState({});
+  const [isFormDirty, setIsFormDirty] = useState(false);
+  const [designationsList, setDesignationsList] = useState([]);
+  const [load, setLoad] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState(null);
-
+  useEffect(() => {
+    setTimeout(() => {
+      setLoad(true);
+    }, DELAY);
+    setDesignationsList(designations);
+  }, []);
+  useEffect(() => {
+    if (userData?.result?.response && userInfo) {
+      setEditedUserInfo({
+        firstName: userData?.result?.response.firstName,
+        lastName: userData?.result?.response.lastName,
+        bio: userInfo[0]?.bio,
+        designation: userInfo[0]?.designation,
+        otherDesignation: "",
+      });
+      setOriginalUserInfo({
+        firstName: userData?.result?.response.firstName,
+        lastName: userData?.result?.response.lastName,
+        bio: userInfo[0]?.bio,
+        designation: userInfo[0]?.designation,
+        otherDesignation: "",
+      });
+    }
+  }, [userData, userInfo]);
 
   useEffect(() => {
-    const fetchData = async () => {
-      setError(null);
-      try {
-        const url = `http://localhost:3000/learner/user/v5/read/${_userId}?fields=organisations,roles,locations,declarations,externalIds`;
-        const header = "application/json";
-        const response = await fetch(url, {
-          headers: {
-            "Content-Type": "application/json",
-          },
-        });
-        const data = await response.json();
-        setUserData(data);
-        localStorage.setItem("userRootOrgId", data.result.response.rootOrgId);
-      } catch (error) {
-        console.error("Error fetching user data:", error);
-        setError(error.message);
-      }
-    };
-
+    setDesignationsList(designations);
     const fetchCertificateCount = async () => {
       try {
         const url = `http://localhost:3000/profilePage/certificateCount?user_id=${_userId}`;
@@ -118,6 +162,117 @@ const Profile = () => {
     fetchCourseCount();
     fetchUserInfo();
   }, []);
+
+  const handleInputChange = (e) => {
+    const { name, value } = e.target;
+    setEditedUserInfo({
+      ...editedUserInfo,
+      [name]: value,
+    });
+    setIsFormDirty(true);
+  };
+  const handleOpenEditDialog = () => {
+    setIsEditing(true);
+  };
+
+  const handleCloseEditDialog = () => {
+    setIsEditing(false);
+  };
+  const updateUserData = async () => {
+    setIsLoading(true);
+    setError(null);
+
+    const url = "http://localhost:3000/learner/user/v3/update";
+    const requestBody = {
+      params: {},
+      request: {
+        firstName: editedUserInfo.firstName,
+        lastName: editedUserInfo.lastName,
+        userId: _userId,
+      },
+    };
+
+    try {
+      const response = await fetch(url, {
+        method: "PATCH",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(requestBody),
+      });
+
+      if (!response.ok) {
+        throw new Error("Failed to fetch data");
+      }
+
+      const responseData = await response.json();
+      await updateUserInfoInCustomDB();
+      console.log("responseData", responseData);
+    } catch (error) {
+      setError(error.message);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+  const updateUserInfoInCustomDB = async () => {
+    const url = `http://localhost:3000/custom/user/update?user_id=${_userId}`;
+    const requestBody = {
+      designation:
+        editedUserInfo.designation === "Other"
+          ? editedUserInfo.otherDesignation
+          : editedUserInfo.designation,
+      bio: editedUserInfo.bio,
+      created_by: _userId,
+    };
+    try {
+      const response = await fetch(url, {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(requestBody),
+      });
+
+      if (!response.ok) {
+        throw new Error("Failed to update user data in custom DB");
+      }
+
+      const data = await response.json();
+    } catch (error) {
+      setError(error.message);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+  // Handle form submit
+  const handleFormSubmit = async (e) => {
+    e.preventDefault();
+    await updateUserData();
+    // Close the edit dialog
+    setIsEditing(false);
+    setIsFormDirty(false);
+  };
+
+  const fetchData = async () => {
+    try {
+      const url = `http://localhost:3000/learner/user/v5/read/${_userId}?fields=organisations,roles,locations,declarations,externalIds`;
+      const header = "application/json";
+      const response = await fetch(url, {
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
+      const data = await response.json();
+      setUserData(data);
+      localStorage.setItem("userRootOrgId", data.result.response.rootOrgId);
+      if (_.isEmpty(data?.result?.response.framework)) {
+        setIsEmptyPreference(true);
+        setOpenModal(true);
+      }
+    } catch (error) {
+      console.error("Error fetching user data:", error);
+    }
+  };
 
   const handleLearningHistoryClick = () => {
     navigate("/learningHistory");
@@ -200,10 +355,163 @@ const Profile = () => {
                     <PersonIcon
                       style={{ paddingRight: "10px", fontSize: "28px" }}
                     />
-                    {t("ABOUT_ME")}{" "}
+                    {t("ABOUT_ME")}
                   </Box>
-                  <ModeEditIcon />
+                  <ModeEditIcon onClick={handleOpenEditDialog} />
                 </Box>
+                {isEditing && (
+                  <Dialog open={isEditing} onClose={handleCloseEditDialog}>
+                    <DialogTitle>Edit Profile</DialogTitle>
+                    <DialogContent>
+                      <form onSubmit={handleFormSubmit}>
+                        <Box py={1}>
+                          <CssTextField
+                            id="firstName"
+                            name="firstName"
+                            label={<span>First Name</span>}
+                            variant="outlined"
+                            size="small"
+                            value={editedUserInfo.firstName}
+                            onChange={(e) =>
+                              setEditedUserInfo({
+                                ...editedUserInfo,
+                                firstName: e.target.value,
+                              })
+                            }
+                          />
+                        </Box>
+                        <Box py={1}>
+                          <CssTextField
+                            id="lastName"
+                            name="lastName"
+                            label={<span>Last Name</span>}
+                            variant="outlined"
+                            size="small"
+                            value={editedUserInfo.lastName}
+                            onChange={(e) =>
+                              setEditedUserInfo({
+                                ...editedUserInfo,
+                                lastName: e.target.value,
+                              })
+                            }
+                          />
+                        </Box>
+
+                        <Box py={1}>
+                          <FormControl fullWidth style={{ marginTop: "10px" }}>
+                            <InputLabel id="designation-label">
+                              {" "}
+                              {t("DESIGNATION")}{" "}
+                            </InputLabel>
+                            <Select
+                              labelId="designation-label"
+                              id="designation"
+                              value={editedUserInfo.designation}
+                              onChange={(e) =>
+                                setEditedUserInfo({
+                                  ...editedUserInfo,
+                                  designation: e.target.value,
+                                })
+                              }
+                            >
+                              {designationsList.map((desig, index) => (
+                                <MenuItem key={index} value={desig}>
+                                  {desig}
+                                </MenuItem>
+                              ))}
+                            </Select>
+                          </FormControl>
+                        </Box>
+                        {editedUserInfo.designation === "Other" && (
+                          <Box py={1}>
+                            <CssTextField
+                              id="otherDesignation"
+                              name="otherDesignation"
+                              label={
+                                <span>
+                                  {t("OTHER_DESIGNATION")}{" "}
+                                  <span className="required">*</span>
+                                </span>
+                              }
+                              variant="outlined"
+                              size="small"
+                              value={editedUserInfo.otherDesignation}
+                              onChange={(e) =>
+                                setEditedUserInfo({
+                                  ...editedUserInfo,
+                                  otherDesignation: e.target.value,
+                                })
+                              }
+                            />
+                          </Box>
+                        )}
+                        <Box py={2}>
+                          <TextField
+                            id="bio"
+                            name="bio"
+                            label={<span>{t("BIO")}</span>}
+                            multiline
+                            rows={3}
+                            variant="outlined"
+                            fullWidth
+                            value={editedUserInfo.bio}
+                            onChange={(e) =>
+                              setEditedUserInfo({
+                                ...editedUserInfo,
+                                bio: e.target.value,
+                              })
+                            }
+                            inputProps={{ maxLength: MAX_CHARS }}
+                          />
+                          <Typography
+                            variant="caption"
+                            color={
+                              editedUserInfo.bio?.length > MAX_CHARS
+                                ? "error"
+                                : "textSecondary"
+                            }
+                          >
+                            {editedUserInfo.bio ? editedUserInfo.bio.length : 0}
+                            /{MAX_CHARS}
+                          </Typography>
+                        </Box>
+
+                        <Box pt={4}>
+                          <Button
+                            style={{
+                              background: "#004367",
+                              borderRadius: "10px",
+                              color: "#fff",
+                              padding: "10px 71px",
+                              fontWeight: "600",
+                              fontSize: "14px",
+                            }}
+                            type="submit"
+                          >
+                            Save
+                          </Button>
+                        </Box>
+
+                        <Box pt={4}>
+                          <Button
+                            style={{
+                              background: "#004367",
+                              borderRadius: "10px",
+                              color: "#fff",
+                              padding: "10px 71px",
+                              fontWeight: "600",
+                              fontSize: "14px",
+                            }}
+                            onClick={handleCloseEditDialog}
+                          >
+                            Cancel
+                          </Button>
+                        </Box>
+                      </form>
+                    </DialogContent>
+                  </Dialog>
+                )}
+
                 <Box
                   sx={{
                     display: "flex",
@@ -211,12 +519,29 @@ const Profile = () => {
                     padding: "20px 10px",
                   }}
                 >
-                  <img
-                    src={require("../../assets/blank.png")}
-                    style={{ width: "20%" }}
-                  />
+                  {userData && (
+                    <>
+                      <div
+                        style={{
+                          width: "80px",
+                          height: "60px",
+                          borderRadius: "2px",
+                          backgroundColor: "#6D757A",
+                          color: "#fff",
+                          display: "flex",
+                          justifyContent: "center",
+                          alignItems: "center",
+                          fontSize: "58px",
+                          fontWeight: "bold",
+                          marginRight: "10px",
+                        }}
+                      >
+                        {userData?.result?.response?.firstName[0]}
+                      </div>
+                    </>
+                  )}
                   <CardContent style={{ textAlign: "left", paddingTop: "0" }}>
-                    {userData && userInfo && (
+                    {userData && userInfo.length > 0 && (
                       <>
                         <Typography
                           component="div"
@@ -242,7 +567,10 @@ const Profile = () => {
                         >
                           {/* {t("DESIGNATION")} |{" "} */}
                           {userInfo[0]?.designation}
-                          <Box style={{ paddingLeft: "10px" }}> ID: </Box>{" "}
+                          <Box style={{ paddingLeft: "10px" }}>
+                            {" "}
+                            ID: {userData.result.response.userName}{" "}
+                          </Box>{" "}
                           {userData.result.response.organisations.orgName}
                         </Typography>
                         <Typography
@@ -398,7 +726,11 @@ const Profile = () => {
                   </Card>
                 </Grid>
 
-                <Dialog open={openModal} onClose={handleCloseModal}>
+                <Dialog
+                  open={openModal}
+                  onClose={handleCloseModal}
+                  disableEscapeKeyDown={!isEmptyPreference}
+                >
                   <DialogTitle>Select Preference</DialogTitle>
                   <DialogContent>
                     <SelectPreference onClose={handleCloseModal} />
@@ -502,12 +834,16 @@ const Profile = () => {
                       className="circular"
                       style={{ paddingRight: "0", textAlign: "right" }}
                     >
-                      <CircularProgressWithLabel
-                        received={certData.certificatesReceived}
-                        total={certData.totalCourses}
-                        className="circular"
-                        style={{ width: "80px", height: "80px" }}
-                      />
+                      {certData &&
+                        certData.certificatesReceived &&
+                        certData.totalCourses && (
+                          <CircularProgressWithLabel
+                            received={certData.certificatesReceived}
+                            total={certData.totalCourses}
+                            className="circular"
+                            style={{ width: "80px", height: "80px" }}
+                          />
+                        )}
                     </Grid>
                     <Grid item xs={3} md={3} className="circular">
                       <Typography
@@ -527,12 +863,14 @@ const Profile = () => {
                       md={3}
                       style={{ paddingRight: "0", textAlign: "right" }}
                     >
-                      <CircularProgressWithLabel
-                        value={
-                          courseData.enrolledThisMonth -
-                          courseData.enrolledLastMonth
-                        }
-                      />
+                      {courseData && (
+                        <CircularProgressWithLabel
+                          received={courseData.enrolledThisMonth}
+                          total={courseData.enrolledLastMonth}
+                          className="circular"
+                          style={{ width: "80px", height: "80px" }}
+                        />
+                      )}
                     </Grid>
                     <Grid item xs={3} md={3}>
                       <Typography
