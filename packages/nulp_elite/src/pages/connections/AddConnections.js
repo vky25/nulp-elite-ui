@@ -135,6 +135,40 @@ const AddConnections = () => {
       setIsLoading(false);
     }
   };
+  const getChatRequest = async (userId) => {
+    setIsLoading(true);
+    setError(null);
+
+    const params = new URLSearchParams({
+      sender_id: loggedInUserId,
+      receiver_id: userId,
+      is_accepted: false,
+      is_read: false,
+    });
+
+    const url = `http://localhost:3000/directConnect/get-chats?${params.toString()}`;
+
+    try {
+      const response = await fetch(url, {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
+
+      if (!response.ok) {
+        throw new Error("Failed to get chat");
+      }
+
+      const responseData = await response.json();
+      console.log("getChatRequest", responseData.result);
+      return responseData.result;
+    } catch (error) {
+      setError(error.message);
+    } finally {
+      setIsLoading(false);
+    }
+  };
 
   const handlePopoverClick = (event) => {
     setAnchorEl(event.currentTarget);
@@ -546,9 +580,6 @@ const AddConnections = () => {
           status: "1",
           userId: userIds,
         },
-        // query: searchQuery,
-        // pageNumber: currentPage,
-        // pageSize: pageSize,
       },
     };
 
@@ -567,16 +598,28 @@ const AddConnections = () => {
 
       const responseData = await response.json();
       const content = responseData?.result?.response?.content || [];
-      const userInfoPromises = content.map((item) => fetchUserInfo(item.id));
+
+      const userListWithChat = await Promise.all(
+        content.map(async (item) => {
+          const userChat = await getChatRequest(item.id);
+          if (userChat?.length > 0) {
+            item = { ...item, messageRequest: userChat[0]?.message };
+          }
+          return item;
+        })
+      );
+
+      const userInfoPromises = userListWithChat.map((item) =>
+        fetchUserInfo(item.id)
+      );
       const userInfoList = await Promise.all(userInfoPromises);
 
-      // Add designation and bio to each item
-      content.forEach((item, index) => {
+      userListWithChat.forEach((item, index) => {
         item.designation = userInfoList[index].designation || "";
         item.bio = userInfoList[index].bio || "";
       });
 
-      setInvitationReceivedUserByIds(content);
+      setInvitationReceivedUserByIds(userListWithChat);
       handleOpen();
       handleClose();
       console.log(
@@ -968,8 +1011,8 @@ const AddConnections = () => {
                       <ListItemText
                         primary={`${item.firstName}${
                           item.lastName ? ` ${item.lastName}` : ""
-                        }`}
-                        secondary={item.designation}
+                        }   | ${item.designation}`}
+                        secondary={item.messageRequest}
                       />
                       <div
                         style={{
@@ -1004,6 +1047,7 @@ const AddConnections = () => {
                     <Divider />
                   </List>
                 ))}
+
               {invitationAcceptedUsers &&
                 invitationAcceptedUsers?.map((item) => (
                   <List sx={{}} style={{ color: "green", cursor: "pointer" }}>
@@ -1241,8 +1285,7 @@ const AddConnections = () => {
                             fontWeight: "500",
                           }}
                         >
-                          {selectedUser?.firstName}
-                          {selectedUser?.lastName}
+                          {selectedUser?.firstName} {selectedUser?.lastName}
                         </div>
                       )}
                       {selectedUser && (
