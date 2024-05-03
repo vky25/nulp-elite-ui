@@ -62,15 +62,8 @@ const CssTextField = styled(TextField)({
 const Profile = () => {
   const { t } = useTranslation();
   const [userData, setUserData] = useState(null);
-  const [certData, setCertificateCountData] = useState({
-    totalCourses: 0,
-    certificatesReceived: 0,
-  });
-  const [courseData, setCourseCountData] = useState({
-    enrolledThisMonth: 0,
-    enrolledLastMonth: 0,
-  });
-  const progressValue = 60; // Example value, you can set this dynamically based on your progress
+  const [certData, setCertificateCountData] = useState({});
+  const [courseData, setCourseCountData] = useState({});
   const navigate = useNavigate();
   const _userId = util.userId();
   const [openModal, setOpenModal] = useState(false);
@@ -334,6 +327,8 @@ const Profile = () => {
         <SearchBox onSearch={handleSearch} />
       </Box>
       <Container maxWidth="xxl" role="main" className="container-pb">
+              {error &&  <Alert severity="error" className="my-10">{error}</Alert> }
+
         <Grid container spacing={2} className="sm-pt-22">
           <Grid item xs={12} md={4} lg={4} className="sm-p-25">
             <Box sx={{ fontSize: "18px", color: "#484848" }}>
@@ -630,6 +625,7 @@ const Profile = () => {
                         margin: "-10px",
                         borderTopRightRadius: "250px",
                         borderBottomRightRadius: "250px",
+                        cursor:"pointer"
                       }}
                     >
                       <LibraryAddCheckOutlinedIcon />
@@ -659,6 +655,7 @@ const Profile = () => {
                         margin: "-10px",
                         borderTopRightRadius: "250px",
                         borderBottomRightRadius: "250px",
+                        cursor:"pointer"
                       }}
                     >
                       <ReceiptLongOutlinedIcon />
@@ -687,6 +684,7 @@ const Profile = () => {
                         margin: "-10px",
                         borderTopRightRadius: "250px",
                         borderBottomRightRadius: "250px",
+                        cursor:"pointer"
                       }}
                     >
                       <RestoreOutlinedIcon />
@@ -715,6 +713,7 @@ const Profile = () => {
                         margin: "-10px",
                         borderTopRightRadius: "250px",
                         borderBottomRightRadius: "250px",
+                        cursor:"pointer"
                       }}
                     >
                       <SettingsOutlinedIcon />
@@ -842,12 +841,16 @@ const Profile = () => {
                       className="circular"
                       style={{ paddingRight: "0", textAlign: "right" }}
                     >
-                      <CircularProgressWithLabel
-                        received={certData.certificatesReceived}
-                        total={certData.totalCourses}
-                        className="circular"
-                        style={{ width: "80px", height: "80px" }}
-                      />
+                      {certData &&
+                        certData.certificatesReceived &&
+                        certData.totalCourses && (
+                          <CircularProgressWithLabel
+                            received={certData.certificatesReceived}
+                            total={certData.totalCourses}
+                            className="circular"
+                            style={{ width: "80px", height: "80px" }}
+                          />
+                        )}
                     </Grid>
                     <Grid item xs={3} md={3} className="circular">
                       <Typography
@@ -867,12 +870,14 @@ const Profile = () => {
                       md={3}
                       style={{ paddingRight: "0", textAlign: "right" }}
                     >
-                      <CircularProgressWithLabel
-                        value={
-                          courseData.enrolledThisMonth -
-                          courseData.enrolledLastMonth
-                        }
-                      />
+                      {courseData && (
+                        <CircularProgressWithLabel
+                          received={courseData.enrolledThisMonth}
+                          total={courseData.enrolledLastMonth}
+                          className="circular"
+                          style={{ width: "80px", height: "80px" }}
+                        />
+                      )}
                     </Grid>
                     <Grid item xs={3} md={3}>
                       <Typography

@@ -32,6 +32,7 @@ import { Link as RouterLink } from "react-router-dom";
 import Pagination from "@mui/material/Pagination";
 import Popover from "@mui/material/Popover";
 import { Container } from "@mui/material";
+import Alert from '@mui/material/Alert';
 const axios = require("axios");
 
 // Define modal styles
@@ -863,6 +864,9 @@ const AddConnections = () => {
     <Box>
       <Header />
       <Container maxWidth="xxl" role="main" className="container-pb">
+      {error &&  <Alert severity="error" className="my-10">{error}</Alert> }
+
+        
         <Box textAlign="center" padding="10" style={{ minHeight: "500px" }}>
           <Box>
             <input

@@ -8,6 +8,8 @@ import Box from "@mui/material/Box";
 import { Accordion, AccordionSummary, AccordionDetails } from "@mui/material";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import { makeStyles } from "@mui/styles";
+import Alert from '@mui/material/Alert';
+
 
 const useStyles = makeStyles((theme) => ({
   active: {
@@ -21,8 +23,10 @@ const FAQPage = () => {
   const classes = useStyles();
   const [faqData, setFaqData] = useState([]);
   const [selectedCategory, setSelectedCategory] = useState("Login");
+  const [error, setError] = useState(null);
 
   useEffect(() => {
+    setError(null);
     fetch(
       "https://nulpstorage1.blob.core.windows.net/public/portal-faq/resources/res/faq-en.json"
     )
@@ -37,6 +41,7 @@ const FAQPage = () => {
       })
       .catch((error) => {
         console.error("Error fetching FAQ data:", error);
+        setError(error.message);
       });
   }, []);
 
@@ -44,6 +49,7 @@ const FAQPage = () => {
     <div>
       <Header />
       <Container maxWidth="xxl" role="main" className="container-pb">
+      {error &&  <Alert severity="error" className="my-10">{error}</Alert> }
       <Box sx={{ fontSize: "18px", color: "#484848",marginTop:'15px' }}>
               {t("FAQS")}
             </Box>
