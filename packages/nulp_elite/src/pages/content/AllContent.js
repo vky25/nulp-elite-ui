@@ -18,6 +18,7 @@ import DomainCarousel from "components/domainCarousel";
 import SummarizeOutlinedIcon from "@mui/icons-material/SummarizeOutlined";
 import domainWithImage from "../../assets/domainImgForm.json";
 import { t } from "i18next";
+import Alert from '@mui/material/Alert';
 
 const responsive = {
   superLargeDesktop: {
@@ -281,6 +282,7 @@ const AllContent = () => {
       )}
 
       <Container maxWidth="xxl" role="main" className="container-pb">
+      {error &&  <Alert severity="error" className="my-10">{error}</Alert> }
         {data &&
           Object?.entries(
             data?.reduce((acc, item) => {

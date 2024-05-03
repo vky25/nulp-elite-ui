@@ -6,7 +6,6 @@ import {
   TextField,
   Button,
   Link,
-  Alert,
 } from "@mui/material";
 import { useTranslation } from "react-i18next";
 import { useNavigate, Navigate } from "react-router-dom";
@@ -17,6 +16,7 @@ import FormControlLabel from "@mui/material/FormControlLabel";
 import Checkbox from "@mui/material/Checkbox";
 import FormGroup from "@mui/material/FormGroup";
 import { Dialog, DialogContent, DialogActions } from "@material-ui/core";
+import Alert from '@mui/material/Alert';
 
 const Otp = () => {
   const { t } = useTranslation();
@@ -297,6 +297,8 @@ const Otp = () => {
           // backgroundSize: "contain",
         }}
       >
+      {error &&  <Alert severity="error" className="my-10">{error}</Alert> }
+
         <Box my={4}>
           <img src={require("../../assets/logo.png")} alt="Logo" />
         </Box>
