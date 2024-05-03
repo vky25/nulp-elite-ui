@@ -46,7 +46,6 @@ const DomainList = () => {
   // console.log(data.result.categories.terms.category);
   // const [search, setSearch] = React.useState(true);
   // const [searchState, setSearchState] = React.useState(false);
-
   const [data, setData] = React.useState();
   const [channelData, setChannelData] = React.useState(true);
   const [isLoading, setIsLoading] = useState(false);

@@ -19,6 +19,7 @@ import ArrowBackOutlinedIcon from "@mui/icons-material/ArrowBackOutlined";
 import NoResult from "pages/content/noResultFound";
 import { useTranslation } from "react-i18next";
 
+
 const ContentList = (props) => {
   const [search, setSearch] = useState(true);
   const location = useLocation();
