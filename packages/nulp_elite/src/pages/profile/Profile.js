@@ -64,7 +64,6 @@ const Profile = () => {
   const [userData, setUserData] = useState(null);
   const [certData, setCertificateCountData] = useState({});
   const [courseData, setCourseCountData] = useState({});
-  const progressValue = 60; // Example value, you can set this dynamically based on your progress
   const navigate = useNavigate();
   const _userId = util.userId();
   const [openModal, setOpenModal] = useState(false);
