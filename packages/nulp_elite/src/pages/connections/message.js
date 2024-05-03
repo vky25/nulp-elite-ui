@@ -414,6 +414,9 @@ const Message = (props) => {
             >
               <div>{msg.message}</div>
               <div>{getTime(msg.timestamp)}</div>
+              {msg.sender_id === loggedInUserId ? (
+                <div>{msg.is_read ? "Read" : "Delivered"}</div>
+              ) : null}
             </div>
           </div>
         ))}
