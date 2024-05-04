@@ -32,7 +32,7 @@ import { Link as RouterLink } from "react-router-dom";
 import Pagination from "@mui/material/Pagination";
 import Popover from "@mui/material/Popover";
 import { Container } from "@mui/material";
-import Alert from '@mui/material/Alert';
+import Alert from "@mui/material/Alert";
 const axios = require("axios");
 
 // Define modal styles
@@ -93,6 +93,7 @@ const AddConnections = () => {
   const [userQuerySearchData, setUserQuerySearchData] = useState();
   const [anchorEl, setAnchorEl] = React.useState(null);
   const [userInfo, setUserInfo] = useState();
+  const [expandedMessageId, setExpandedMessageId] = useState(null);
   // const handleFilterChange = (selectedOptions) => {
   //   const selectedValues = selectedOptions.map((option) => option.value);
   //   setFilters({ ...filters, firstName: selectedValues });
@@ -902,14 +903,20 @@ const AddConnections = () => {
       onUserQuerySearch(searchQuery);
     }
   }, [searchQuery]);
+  const handleShowFullMessage = (itemId) => {
+    setExpandedMessageId(itemId === expandedMessageId ? null : itemId);
+  };
 
   return (
     <Box>
       <Header />
       <Container maxWidth="xxl" role="main" className="container-pb">
-      {error &&  <Alert severity="error" className="my-10">{error}</Alert> }
+        {error && (
+          <Alert severity="error" className="my-10">
+            {error}
+          </Alert>
+        )}
 
-        
         <Box textAlign="center" padding="10" style={{ minHeight: "500px" }}>
           <Box>
             <input
@@ -1011,12 +1018,34 @@ const AddConnections = () => {
               {invitationReceiverByUser &&
                 invitationReceiverByUser?.map((item) => (
                   <List sx={{}} style={{ color: "gray", cursor: "pointer" }}>
-                    <ListItem>
+                    <ListItem key={item.userId}>
                       <ListItemText
                         primary={`${item.firstName}${
                           item.lastName ? ` ${item.lastName}` : ""
                         }   | ${item.designation}`}
-                        secondary={item.messageRequest}
+                        secondary={
+                          item.messageRequest.length > 20 ? (
+                            <>
+                              {expandedMessageId === item.userId
+                                ? item.messageRequest
+                                : // : `${item.messageRequest.substring(0, 20)}...`}
+                                  `${item.messageRequest.substring(0, 20)}`}
+                              <span
+                                style={{ color: "blue", cursor: "pointer" }}
+                                onClick={() =>
+                                  handleShowFullMessage(item.userId)
+                                }
+                              >
+                                {" "}
+                                {expandedMessageId === item.userId
+                                  ? ""
+                                  : "Show More"}
+                              </span>
+                            </>
+                          ) : (
+                            item.messageRequest
+                          )
+                        }
                       />
                       <div
                         style={{
