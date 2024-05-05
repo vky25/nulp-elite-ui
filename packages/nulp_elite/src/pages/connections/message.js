@@ -114,7 +114,7 @@ const Message = (props) => {
   const fetchBlockUserStatus = async () => {
     try {
       const response = await axios.get(
-        `http://localhost:3000/directConnect/get-block-user?sender_id=${loggedInUserId}&receiver_id=${receiverUserId}`,
+        `/directConnect/get-block-user?sender_id=${loggedInUserId}&receiver_id=${receiverUserId}`,
         {
           withCredentials: true,
         }
@@ -136,7 +136,7 @@ const Message = (props) => {
       // Check if the user is not blocked before fetching chats
       if (!isBlocked) {
         const response = await axios.get(
-          `http://localhost:3000/directConnect/get-chats?sender_id=${loggedInUserId}&receiver_id=${receiverUserId}&is_accepted=true`,
+          `/directConnect/get-chats?sender_id=${loggedInUserId}&receiver_id=${receiverUserId}&is_accepted=true`,
           {
             withCredentials: true,
           }
@@ -154,7 +154,7 @@ const Message = (props) => {
         console.log("Sending message:", message);
 
         await axios.post(
-          "http://localhost:3000/directConnect/send-chat",
+          "/directConnect/send-chat",
           {
             sender_id: loggedInUserId,
             receiver_id: receiverUserId,
@@ -182,7 +182,7 @@ const Message = (props) => {
       console.log("updating message:", message);
 
       const data = await axios.put(
-        "http://localhost:3000/directConnect/update-chat",
+        "/directConnect/update-chat",
         {
           sender_id: loggedInUserId,
           receiver_id: receiverUserId,
@@ -250,7 +250,7 @@ const Message = (props) => {
       console.log("UnBlocking User");
 
       const data = await axios.post(
-        "http://localhost:3000/directConnect/unblock-user",
+        "/directConnect/unblock-user",
         {
           sender_id: loggedInUserId,
           receiver_id: receiverUserId,
@@ -278,7 +278,7 @@ const Message = (props) => {
       console.log("Blocking User");
 
       await axios.post(
-        "http://localhost:3000/directConnect/block-user",
+        "/directConnect/block-user",
         {
           sender_id: loggedInUserId,
           receiver_id: receiverUserId,

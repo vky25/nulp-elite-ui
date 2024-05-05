@@ -18,7 +18,7 @@ import DomainCarousel from "components/domainCarousel";
 import SummarizeOutlinedIcon from "@mui/icons-material/SummarizeOutlined";
 import domainWithImage from "../../assets/domainImgForm.json";
 import { t } from "i18next";
-import Alert from '@mui/material/Alert';
+import Alert from "@mui/material/Alert";
 
 const responsive = {
   superLargeDesktop: {
@@ -139,7 +139,7 @@ const AllContent = () => {
     };
     // console.log(data.result.content)
 
-    const url = `http://localhost:3000/api/${URLSConfig.URLS.CONTENT.SEARCH}?orgdetails=orgName,email&licenseDetails=name,description,url`;
+    const url = `/api/${URLSConfig.URLS.CONTENT.SEARCH}?orgdetails=orgName,email&licenseDetails=name,description,url`;
     try {
       const response = await getAllContents(url, data, headers);
       const sortedData = response?.data?.result?.content?.sort((a, b) => {
@@ -180,7 +180,7 @@ const AllContent = () => {
       Cookie: `connect.sid=${getCookieValue("connect.sid")}`,
     };
     try {
-      const url = `http://localhost:3000/api/channel/v1/read/0130701891041689600`;
+      const url = `/api/channel/v1/read/0130701891041689600`;
       const response = await frameworkService.getChannel(url, headers);
       // console.log("channel---",response.data.result);
       setChannelData(response.data.result);
@@ -190,7 +190,7 @@ const AllContent = () => {
     } finally {
     }
     try {
-      const url = `http://localhost:3000/api/framework/v1/read/nulp?categories=board,gradeLevel,medium,class,subject`;
+      const url = `/api/framework/v1/read/nulp?categories=board,gradeLevel,medium,class,subject`;
       const response = await frameworkService.getSelectedFrameworkCategories(
         url,
         headers
@@ -275,14 +275,18 @@ const AllContent = () => {
         <SearchBox onSearch={handleSearch} />
       </Box>
       <Box sx={{ fontWeight: "600", fontSize: "16px", padding: "10px" }}>
-       {t("FILTER_BY_POPULAR_DOMAIN")}
+        {t("FILTER_BY_POPULAR_DOMAIN")}
       </Box>
       {domain && (
         <DomainCarousel onSelectDomain={handleDomainFilter} domains={domain} />
       )}
 
       <Container maxWidth="xxl" role="main" className="container-pb">
-      {error &&  <Alert severity="error" className="my-10">{error}</Alert> }
+        {error && (
+          <Alert severity="error" className="my-10">
+            {error}
+          </Alert>
+        )}
         {data &&
           Object?.entries(
             data?.reduce((acc, item) => {

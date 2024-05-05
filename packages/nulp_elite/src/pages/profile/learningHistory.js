@@ -13,7 +13,7 @@ import Card from "@mui/material/Card";
 import * as util from "../../services/utilService";
 import Filter from "components/filter";
 import NoResult from "pages/content/noResultFound";
-import Alert from '@mui/material/Alert';
+import Alert from "@mui/material/Alert";
 
 const LearningHistory = () => {
   const { t } = useTranslation();
@@ -26,7 +26,7 @@ const LearningHistory = () => {
       setError(null);
       try {
         const _userId = util.userId();
-        const url = `http://localhost:3000/learner/course/v1/user/enrollment/list/${_userId}?orgdetails=orgName,email&licenseDetails=name,description,url&fields=contentType,topic,name,channel,mimeType,appIcon,gradeLevel,resourceType,identifier,medium,pkgVersion,board,subject,trackable,primaryCategory,organisation&batchDetails=name,endDate,startDate,status,enrollmentType,createdBy,certificates`;
+        const url = `/learner/course/v1/user/enrollment/list/${_userId}?orgdetails=orgName,email&licenseDetails=name,description,url&fields=contentType,topic,name,channel,mimeType,appIcon,gradeLevel,resourceType,identifier,medium,pkgVersion,board,subject,trackable,primaryCategory,organisation&batchDetails=name,endDate,startDate,status,enrollmentType,createdBy,certificates`;
         const response = await fetch(url, {
           headers: {
             "Content-Type": "application/json",
@@ -54,7 +54,11 @@ const LearningHistory = () => {
     <div>
       <Header />
       <Container maxWidth="xl" role="main" className="container-pb">
-      {error &&  <Alert severity="error" className="my-10">{error}</Alert> }
+        {error && (
+          <Alert severity="error" className="my-10">
+            {error}
+          </Alert>
+        )}
         <Box textAlign="center" padding="10">
           <Breadcrumbs
             aria-label="breadcrumb"

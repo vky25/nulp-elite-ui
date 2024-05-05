@@ -8,13 +8,12 @@ import { SITE_KEY } from "./Keys";
 import { Navigate } from "react-router-dom";
 import * as Yup from "yup";
 import { ViewIcon, ViewOffIcon } from "@chakra-ui/icons";
-import { useNavigate } from 'react-router-dom'
-
+import { useNavigate } from "react-router-dom";
 
 const DELAY = 1500;
 
 function Registrationold() {
-  const navigate = useNavigate()
+  const navigate = useNavigate();
   const [load, setLoad] = useState(false);
   const [goToOtp, setGoToOtp] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
@@ -74,7 +73,7 @@ function Registrationold() {
         setIsLoading(true);
         setError(null);
 
-        const url = `http://localhost:3000/learner/user/v1/exists/email/${formik.values.email}?captchaResponse=${captchaResponse}`;
+        const url = `/learner/user/v1/exists/email/${formik.values.email}?captchaResponse=${captchaResponse}`;
 
         try {
           const response = await fetch(url, {
@@ -107,7 +106,7 @@ function Registrationold() {
         setIsLoading(true);
         setError(null);
 
-        const url = `http://localhost:3000/learner/anonymous/otp/v1/generate?captchaResponse=${captchaResponse}`;
+        const url = `/learner/anonymous/otp/v1/generate?captchaResponse=${captchaResponse}`;
         const requestBody = {
           request: {
             key: email,
@@ -163,7 +162,7 @@ function Registrationold() {
     setIsLoading(true);
     setError(null);
 
-    const url = `http://localhost:3000/learner/data/v1/system/settings/get/tncConfig`;
+    const url = `/learner/data/v1/system/settings/get/tncConfig`;
 
     try {
       const response = await fetch(url, {

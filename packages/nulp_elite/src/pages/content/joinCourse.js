@@ -44,7 +44,7 @@ const JoinCourse = () => {
     const fetchData = async () => {
       try {
         const response = await fetch(
-          `http://localhost:3000/api/course/v1/hierarchy/${contentId}?orgdetails=orgName,email&licenseDetails=name,description,url`,
+          `/api/course/v1/hierarchy/${contentId}?orgdetails=orgName,email&licenseDetails=name,description,url`,
           {
             headers: {
               "Content-Type": "application/json",
@@ -63,21 +63,18 @@ const JoinCourse = () => {
 
     const fetchBatchData = async () => {
       try {
-        const response = await axios.post(
-          "http://localhost:3000/learner/course/v1/batch/list",
-          {
-            request: {
-              filters: {
-                status: "1",
-                courseId: contentId,
-                enrollmentType: "open",
-              },
-              sort_by: {
-                createdDate: "desc",
-              },
+        const response = await axios.post("/learner/course/v1/batch/list", {
+          request: {
+            filters: {
+              status: "1",
+              courseId: contentId,
+              enrollmentType: "open",
             },
-          }
-        );
+            sort_by: {
+              createdDate: "desc",
+            },
+          },
+        });
         const responseData = response.data;
         if (
           responseData.result.response &&
@@ -101,7 +98,7 @@ const JoinCourse = () => {
     const checkEnrolledCourse = async () => {
       try {
         const response = await fetch(
-          `http://localhost:3000/learner/course/v1/user/enrollment/list/${_userId}?orgdetails=orgName,email&licenseDetails=name,description,url&fields=contentType,topic,name,channel,mimeType,appIcon,gradeLevel,resourceType,identifier,medium,pkgVersion,board,subject,trackable,primaryCategory,organisation&batchDetails=name,endDate,startDate,status,enrollmentType,createdBy,certificates`
+          `/learner/course/v1/user/enrollment/list/${_userId}?orgdetails=orgName,email&licenseDetails=name,description,url&fields=contentType,topic,name,channel,mimeType,appIcon,gradeLevel,resourceType,identifier,medium,pkgVersion,board,subject,trackable,primaryCategory,organisation&batchDetails=name,endDate,startDate,status,enrollmentType,createdBy,certificates`
         );
         if (!response.ok) {
           throw new Error("Failed to fetch user courses");
@@ -238,7 +235,7 @@ const JoinCourse = () => {
 
   const handleJoinCourse = async () => {
     try {
-      const url = "http://localhost:3000/learner/course/v1/enrol";
+      const url = "/learner/course/v1/enrol";
       const requestBody = {
         request: {
           courseId: contentId,
