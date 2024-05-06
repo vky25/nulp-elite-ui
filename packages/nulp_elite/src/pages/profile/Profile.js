@@ -250,6 +250,7 @@ const Profile = () => {
     await updateUserData();
     // Close the edit dialog
     setIsEditing(false);
+    window.location.reload();
     setIsFormDirty(false);
   };
 
@@ -328,7 +329,11 @@ const Profile = () => {
         <SearchBox onSearch={handleSearch} />
       </Box>
       <Container maxWidth="xxl" role="main" className="container-pb">
-              {error &&  <Alert severity="error" className="my-10">{error}</Alert> }
+        {error && (
+          <Alert severity="error" className="my-10">
+            {error}
+          </Alert>
+        )}
 
         <Grid container spacing={2} className="sm-pt-22">
           <Grid item xs={12} md={4} lg={4} className="sm-p-25">
@@ -626,7 +631,7 @@ const Profile = () => {
                         margin: "-10px",
                         borderTopRightRadius: "250px",
                         borderBottomRightRadius: "250px",
-                        cursor:"pointer"
+                        cursor: "pointer",
                       }}
                     >
                       <LibraryAddCheckOutlinedIcon />
@@ -656,7 +661,7 @@ const Profile = () => {
                         margin: "-10px",
                         borderTopRightRadius: "250px",
                         borderBottomRightRadius: "250px",
-                        cursor:"pointer"
+                        cursor: "pointer",
                       }}
                     >
                       <ReceiptLongOutlinedIcon />
@@ -685,7 +690,7 @@ const Profile = () => {
                         margin: "-10px",
                         borderTopRightRadius: "250px",
                         borderBottomRightRadius: "250px",
-                        cursor:"pointer"
+                        cursor: "pointer",
                       }}
                     >
                       <RestoreOutlinedIcon />
@@ -714,7 +719,7 @@ const Profile = () => {
                         margin: "-10px",
                         borderTopRightRadius: "250px",
                         borderBottomRightRadius: "250px",
-                        cursor:"pointer"
+                        cursor: "pointer",
                       }}
                     >
                       <SettingsOutlinedIcon />
