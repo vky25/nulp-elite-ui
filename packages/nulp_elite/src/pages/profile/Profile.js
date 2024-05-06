@@ -25,7 +25,10 @@ import ContinueLearning from "./continueLearning";
 import SelectPreference from "pages/SelectPreference";
 import { Dialog, DialogTitle, DialogContent } from "@mui/material";
 import _ from "lodash";
+import Modal from '@mui/material/Modal';
+
 const designations = require("../../configs/designations.json");
+
 import {
   Button,
   FormControl,
@@ -46,9 +49,7 @@ const CssTextField = styled(TextField)({
   },
   "& .MuiOutlinedInput-root": {
     "& fieldset": {
-      borderColor: "#E0E3E7",
-      border: "1px solid #004367",
-      borderRadius: "12px",
+      borderRadius: "4px",
     },
     "&:hover fieldset": {
       borderColor: "#B2BAC2",
@@ -59,6 +60,17 @@ const CssTextField = styled(TextField)({
     },
   },
 });
+const style = {
+  position: 'absolute',
+  top: '50%',
+  left: '50%',
+  width:'50%',
+  transform: 'translate(-50%, -50%)',
+  bgcolor: 'background.paper',
+  boxShadow: 24,
+  p: 4,
+};
+
 const Profile = () => {
   const { t } = useTranslation();
   const [userData, setUserData] = useState(null);
@@ -360,10 +372,18 @@ const Profile = () => {
                   <ModeEditIcon onClick={handleOpenEditDialog} />
                 </Box>
                 {isEditing && (
-                  <Dialog open={isEditing} onClose={handleCloseEditDialog}>
-                    <DialogTitle>Edit Profile</DialogTitle>
-                    <DialogContent>
-                      <form onSubmit={handleFormSubmit}>
+                  <Modal
+                  // open={open}
+                  // onClose={handleClose}
+                  aria-labelledby="modal-modal-title"
+                  aria-describedby="modal-modal-description"
+                  open={isEditing} onClose={handleCloseEditDialog}
+                >
+                  <Box sx={style}>
+                  <Typography id="modal-modal-title" variant="h6" component="h2" style={{marginBottom:"20px"}}>
+            {t('EDIT_PROFILE')}
+          </Typography>
+                  <form onSubmit={handleFormSubmit}>
                         <Box py={1}>
                           <CssTextField
                             id="firstName"
@@ -399,7 +419,7 @@ const Profile = () => {
 
                         <Box py={1}>
                           <FormControl fullWidth style={{ marginTop: "10px" }}>
-                            <InputLabel id="designation-label">
+                            <InputLabel id="designation-label"  className="year-select">
                               {" "}
                               {t("DESIGNATION")}{" "}
                             </InputLabel>
@@ -476,7 +496,7 @@ const Profile = () => {
                           </Typography>
                         </Box>
 
-                        <Box pt={4}>
+                        <Box pt={4} style={{display:"flex",justifyContent:"space-between"}}>
                           <Button
                             style={{
                               background: "#004367",
@@ -485,31 +505,39 @@ const Profile = () => {
                               padding: "10px 71px",
                               fontWeight: "600",
                               fontSize: "14px",
+                              width: "40%",
                             }}
                             type="submit"
                           >
-                            Save
+                            {t('SAVE')}
                           </Button>
-                        </Box>
-
-                        <Box pt={4}>
+                       
                           <Button
+                            variant="outlined"
                             style={{
-                              background: "#004367",
                               borderRadius: "10px",
-                              color: "#fff",
-                              padding: "10px 71px",
-                              fontWeight: "600",
-                              fontSize: "14px",
+                              color: "#004367",
+                              padding: "10px 12px",
+                              margin: "0 10px",
+                              fontWeight: "500",
+                              fontSize: "12px",
+                              border: "solid 1px #efefea00",
+                              width: "40%",
                             }}
                             onClick={handleCloseEditDialog}
                           >
-                            Cancel
+                            {t('CANCEL')}
                           </Button>
                         </Box>
                       </form>
-                    </DialogContent>
-                  </Dialog>
+                  </Box>
+                </Modal>
+                  // <Dialog open={isEditing} onClose={handleCloseEditDialog}>
+                  //   <DialogTitle>Edit Profile</DialogTitle>
+                  //   <DialogContent>
+                     
+                  //   </DialogContent>
+                  // </Dialog>
                 )}
 
                 <Box
@@ -523,7 +551,7 @@ const Profile = () => {
                     <>
                       <div
                         style={{
-                          width: "80px",
+                          width: "180px",
                           height: "60px",
                           borderRadius: "2px",
                           backgroundColor: "#6D757A",
@@ -540,7 +568,7 @@ const Profile = () => {
                       </div>
                     </>
                   )}
-                  <CardContent style={{ textAlign: "left", paddingTop: "0" }}>
+                  <CardContent style={{ textAlign: "left", paddingTop: "0",width:"60%" }}>
                     {userData && userInfo.length > 0 && (
                       <>
                         <Typography
@@ -560,20 +588,21 @@ const Profile = () => {
                           color="text.secondary"
                           component="div"
                           style={{
-                            fontSize: "12px",
-                            padding: "10px 0",
+                            fontSize: "14px",
+                            padding: "5px 0",
                             display: "flex",
                           }}
                         >
                           {/* {t("DESIGNATION")} |{" "} */}
-                          {userInfo[0]?.designation}
-                          <Box style={{ paddingLeft: "10px" }}>
-                            {" "}
-                            ID: {userData.result.response.userName}{" "}
-                          </Box>{" "}
-                          {userData.result.response.organisations.orgName}
+                          {userInfo[0]?.designation} {" "}
+                          
                         </Typography>
-                        <Typography
+                        <Box style={{ display:"flex",fontSize:"13px",color:'#48484887' }}>
+                            {" "}
+                           <Box> ID:</Box> <Box>{userData.result.response.userName}{" "} {userData.result.response.organisations.orgName}</Box>
+                          </Box>{" "}
+                       
+                          <Typography
                           variant="subtitle1"
                           color="text.secondary"
                           component="div"
@@ -588,15 +617,14 @@ const Profile = () => {
                           color="text.secondary"
                           component="div"
                           style={{
-                            fontSize: "14px",
+                            fontSize: "12px",
                             padding: "10px 0",
                             display: "flex",
                           }}
                         >
                           <Box
-                            style={{ fontWeight: "600", paddingRight: "10px" }}
                           >
-                            {t("Domain")}:{" "}
+                            {t("DOMAIN")}: {" "}
                           </Box>{" "}
                           {userData.result.response.framework.board}
                         </Typography>

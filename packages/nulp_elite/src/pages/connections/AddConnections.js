@@ -1245,7 +1245,7 @@ const AddConnections = () => {
                             fontWeight: "500",
                           }}
                         >
-                          {selectedUser?.firstName}
+                          {selectedUser?.firstName}  {"  "}
                           {selectedUser?.lastName}
                         </div>
                       )}

@@ -371,3 +371,6 @@ width: 99.9% !important;
 .bio .MuiInputBase-formControl{
   padding: 0 !important;
 }
+.MuiButtonBase-root:hover{
+  background: transparent !important;
+}

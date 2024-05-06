@@ -21,6 +21,7 @@ import MenuIcon from "@mui/icons-material/Menu";
 import BlockIcon from "@mui/icons-material/Block";
 import SendIcon from "@mui/icons-material/Send";
 import { t } from "i18next";
+import DoneAllIcon from '@mui/icons-material/DoneAll';
 
 const moment = require("moment");
 const timezone = require("moment-timezone");
@@ -393,7 +394,8 @@ const Message = (props) => {
       </Dialog>
 
       <Alert severity="info" style={{ margin: "10px 0" }}>
-        {t("YOUR_CHAT_WILL_DISAPPEAR")}
+        {t("YOUR_CHAT_WILL_DISAPPEAR")}       
+
       </Alert>
       <div className={classes.chat}>
         {messages.map((msg, index) => (
@@ -413,10 +415,12 @@ const Message = (props) => {
               }
             >
               <div>{msg.message}</div>
-              <div>{getTime(msg.timestamp)}</div>
+              <div style={{fontSize:'10px'}}>{getTime(msg.timestamp)}</div>
               {msg.sender_id === loggedInUserId ? (
-                <div>{msg.is_read ? "Read" : "Delivered"}</div>
-              ) : null}
+                <div style={{display:'flex',alignItems:'center',fontSize:'13px',justifyContent:'flex-end'}}>
+                  {msg.is_read ? <DoneAllIcon style={{color:'#00ebff',fontSize:'18px',paddingRight:'10px'}} /> : <DoneAllIcon style={{color:'#bdbaba',fontSize:'18px',paddingRight:'10px'}} />}
+                  {msg.is_read ? "Read" : "Delivered"}
+                </div>              ) : null}
             </div>
           </div>
         ))}
