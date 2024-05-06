@@ -49,6 +49,10 @@ const SelectPreference = ({ isOpen, onClose }) => {
   const [language, setLanguage] = useState();
   const [topic, setTopic] = useState();
   const [isDisabled, setIsDisabled] = useState(true);
+  const [preCategory, setPreCategory] = useState("");
+  const [preTopic, setPreTopic] = useState("");
+  const [preSubCategory, setPreSubCategory] = useState([]);
+  const [preLanguages, setPreLanguages] = useState([]);
 
   useEffect(() => {
     const fetchUserDataAndSetCustodianOrgData = async () => {
@@ -184,6 +188,13 @@ const SelectPreference = ({ isOpen, onClose }) => {
         );
         setSelectedTopic(responseData?.result?.response?.framework?.subject[0]);
         setSelectedLanguages(responseData?.result?.response?.framework?.medium);
+
+        setPreCategory(responseData?.result?.response?.framework?.board[0]);
+        setPreTopic(responseData?.result?.response?.framework?.subject[0]);
+        setPreLanguages(responseData?.result?.response?.framework?.medium);
+        setPreSubCategory(
+          responseData?.result?.response?.framework?.gradeLevel
+        );
       }
       console.log("getUserData", responseData);
     } catch (error) {
@@ -244,18 +255,38 @@ const SelectPreference = ({ isOpen, onClose }) => {
     onClose();
   };
 
+  const deepEqual = (array1, array2) => {
+    array1 = array1.sort();
+    array2 = array2.sort();
+    var is_same =
+      array1.length == array2.length &&
+      array1.every(function (element, index) {
+        return element === array2[index];
+      });
+    return is_same;
+  };
+
   useEffect(() => {
     if (
-      selectedCategory ||
-      selectedSubCategory.length > 0 ||
-      selectedLanguages.length > 0 ||
-      selectedTopic
+      preCategory == selectedCategory &&
+      preTopic == selectedTopic &&
+      deepEqual(preLanguages, selectedLanguages) &&
+      deepEqual(preSubCategory, selectedSubCategory)
     ) {
-      setIsDisabled(false); // Enable the button
+      setIsDisabled(true);
     } else {
-      setIsDisabled(true); // Disable the button
+      setIsDisabled(false);
     }
-  }, [selectedCategory, selectedSubCategory, selectedLanguages, selectedTopic]);
+  }, [
+    selectedCategory,
+    selectedSubCategory,
+    selectedLanguages,
+    selectedTopic,
+    preCategory,
+    preTopic,
+    preLanguages,
+    preSubCategory,
+  ]);
 
   return (
     <div>
