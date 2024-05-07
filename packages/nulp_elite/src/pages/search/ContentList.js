@@ -18,8 +18,9 @@ import Pagination from "@mui/material/Pagination";
 import ArrowBackOutlinedIcon from "@mui/icons-material/ArrowBackOutlined";
 import NoResult from "pages/content/noResultFound";
 import { t } from "i18next";
-import Alert from '@mui/material/Alert';
+import Alert from "@mui/material/Alert";
 import { useTranslation } from "react-i18next";
+import urlConfig from "../../configs/urlConfig.json";
 
 const ContentList = (props) => {
   const [search, setSearch] = useState(true);
@@ -38,6 +39,9 @@ const ContentList = (props) => {
   const [totalPages, setTotalPages] = useState(1);
   const [currentPage, setCurrentPage] = useState(1);
   const { t } = useTranslation();
+  const userCategoryParams = urlConfig.params.userCategoryParams;
+  const orgDetailsParams = urlConfig.params.orgDetailsParams;
+  const categoryParams = urlConfig.params.categoryParams;
 
   useEffect(() => {
     fetchData();
@@ -100,7 +104,7 @@ const ContentList = (props) => {
       "Content-Type": "application/json",
     };
 
-    const url = `http://localhost:3000/content/${URLSConfig.URLS.CONTENT.SEARCH}?orgdetails=orgName,email`;
+    const url = `http://localhost:3000/content/${URLSConfig.URLS.CONTENT.SEARCH}?orgdetails=${orgDetailsParams}`;
     try {
       const response = await contentService.getAllContents(url, req, headers);
 
@@ -140,7 +144,7 @@ const ContentList = (props) => {
   const fetchGradeLevels = async () => {
     try {
       const response = await fetch(
-        "http://localhost:3000/api/framework/v1/read/nulp?categories=gradeLevel"
+        `http://localhost:3000/api/framework/v1/read/nulp?categories=${categoryParams}`
       );
       const data = await response.json();
       if (
@@ -166,7 +170,7 @@ const ContentList = (props) => {
 
   const Fetchdomain = async () => {
     try {
-      const url = `http://localhost:3000/api/framework/v1/read/nulp?categories=board,gradeLevel,medium,class,subject`;
+      const url = `http://localhost:3000/api/framework/v1/read/nulp?categories=${userCategoryParams}`;
       const response = await fetch(url);
 
       if (response.ok) {
@@ -284,7 +288,7 @@ const ContentList = (props) => {
             {isLoading ? (
               <p>{t("LOADING")}</p>
             ) : error ? (
-              <Alert severity="error" >{error}</Alert>
+              <Alert severity="error">{error}</Alert>
             ) : data && data.content && data.content.length > 0 ? (
               <div>
                 <Grid

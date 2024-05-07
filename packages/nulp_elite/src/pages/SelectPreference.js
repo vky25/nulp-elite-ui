@@ -10,6 +10,7 @@ import {
   ListItemText,
   Box,
 } from "@mui/material";
+import urlConfig from "../configs/urlConfig.json";
 import * as util from "../services/utilService";
 
 const useStyles = makeStyles((theme) => ({
@@ -48,6 +49,7 @@ const SelectPreference = ({ isOpen, onClose }) => {
   const [subDomain, setSubDomain] = useState();
   const [language, setLanguage] = useState();
   const [topic, setTopic] = useState();
+  const userReadParam = urlConfig.params.userReadParam;
 
   useEffect(() => {
     const fetchUserDataAndSetCustodianOrgData = async () => {
@@ -157,7 +159,7 @@ const SelectPreference = ({ isOpen, onClose }) => {
     setIsLoading(true);
     setError(null);
 
-    const url = `http://localhost:3000/learner/user/v5/read/${_userId}?fields=organisations,roles,locations,declarations,externalIds`;
+    const url = `http://localhost:3000/learner/user/v5/read/${_userId}?fields=${userReadParam}`;
 
     try {
       const response = await fetch(url, {

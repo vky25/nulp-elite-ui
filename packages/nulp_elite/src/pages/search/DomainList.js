@@ -20,6 +20,7 @@ import Footer from "../../components/Footer";
 import { object } from "yup";
 import Alert from "@mui/material/Alert";
 // import { useTranslation } from "react-i18next";
+import urlConfig from "../../configs/urlConfig.json";
 
 const Item = styled(Paper)(({ theme }) => ({
   backgroundColor: theme.palette.mode === "dark" ? "#1A2027" : "#fff",
@@ -56,6 +57,7 @@ const DomainList = () => {
   const [category, setCategory] = React.useState();
   const [imgItem, setImgItem] = React.useState(object ? object : {});
   const [itemsArray, setItemsArray] = useState([]);
+  const userCategoryParams = urlConfig.params.userCategoryParams;
   // Example of API Call
 
   useEffect(() => {
@@ -101,7 +103,7 @@ const DomainList = () => {
       setIsLoading(false);
     }
     try {
-      const url = `http://localhost:3000/api/framework/v1/read/nulp?categories=board,gradeLevel,medium,class,subject`;
+      const url = `http://localhost:3000/api/framework/v1/read/nulp?categories=${userCategoryParams}`;
       const response = await frameworkService.getSelectedFrameworkCategories(
         url,
         headers

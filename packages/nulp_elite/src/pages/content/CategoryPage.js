@@ -10,7 +10,7 @@ import URLSConfig from "../../configs/urlConfig.json";
 import ArrowBackOutlinedIcon from "@mui/icons-material/ArrowBackOutlined";
 import Container from "@mui/material/Container";
 import Pagination from "@mui/material/Pagination";
-import Alert from '@mui/material/Alert';
+import Alert from "@mui/material/Alert";
 
 import domainWithImage from "../../assets/domainImgForm.json";
 import DomainCarousel from "components/domainCarousel";
@@ -18,6 +18,7 @@ import * as frameworkService from "../../services/frameworkService";
 
 import SearchBox from "components/search";
 import { t } from "i18next";
+import urlConfig from "../../configs/urlConfig.json";
 
 const CategoryPage = () => {
   // const history = useHistory();
@@ -33,7 +34,8 @@ const CategoryPage = () => {
   const [totalPages, setTotalPages] = useState(1);
 
   const [itemsArray, setItemsArray] = useState([]);
-
+  const orgDetailsParams = urlConfig.params.orgDetailsParams;
+  const userCategoryParams = urlConfig.params.userCategoryParams;
   const handleSearch = (query) => {
     // Implement your search logic here
     console.log("Search query:", query);
@@ -89,7 +91,7 @@ const CategoryPage = () => {
       "Content-Type": "application/json",
     };
 
-    const url = `http://localhost:3000/api/${URLSConfig.URLS.CONTENT.SEARCH}?orgdetails=orgName,email`;
+    const url = `http://localhost:3000/api/${URLSConfig.URLS.CONTENT.SEARCH}?orgdetails=${orgDetailsParams}`;
     try {
       const response = await getAllContents(url, data, headers);
       setData(response.data.result.content);
@@ -120,7 +122,7 @@ const CategoryPage = () => {
     } finally {
     }
     try {
-      const url = `http://localhost:3000/api/framework/v1/read/nulp?categories=board,gradeLevel,medium,class,subject`;
+      const url = `http://localhost:3000/api/framework/v1/read/nulp?categories=${userCategoryParams}`;
       const response = await frameworkService.getSelectedFrameworkCategories(
         url,
         headers
@@ -187,7 +189,7 @@ const CategoryPage = () => {
             margin: "0",
           }}
         >
-         {t("EXPLORE_CONTENT_RELATED_TO_YOUR_DOMAIN")}
+          {t("EXPLORE_CONTENT_RELATED_TO_YOUR_DOMAIN")}
         </p>
         <p
           style={{
@@ -198,12 +200,16 @@ const CategoryPage = () => {
             paddingBottom: "30px",
           }}
         >
-         {t("LEARN_FROM_WELL_CURATED")}
+          {t("LEARN_FROM_WELL_CURATED")}
         </p>
         <SearchBox onSearch={handleSearch} />
       </Box>
       <Container maxWidth="xxl" role="main" className="container-pb">
-      {error &&  <Alert className="my-4" severity="error" >{error}</Alert> }
+        {error && (
+          <Alert className="my-4" severity="error">
+            {error}
+          </Alert>
+        )}
         <Link
           onClick={handleGoBack}
           style={{

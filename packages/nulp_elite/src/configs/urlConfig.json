@@ -1,8 +1,11 @@
 {
   "params": {
-    "userReadParam": {
-      "fields": "organisations,roles,locations,declarations,externalIds"
-    },
+    "userReadParam": "organisations,roles,locations,declarations,externalIds",
+    "userCategoryParams": "board,gradeLevel,medium,class,subject",
+    "userOrgdetailsParams": "orgName,email&licenseDetails=name,description,url",
+    "orgDetailsParams": "orgName,email",
+    "categoryParams": "gradeLevel",
+
     "LibrarySearchField": [
       "name",
       "appIcon",

@@ -18,7 +18,7 @@ import FloatingChatIcon from "../../components/FloatingChatIcon";
 import * as util from "../../services/utilService";
 import axios from "axios";
 import NoResult from "pages/content/noResultFound";
-import Alert from '@mui/material/Alert';
+import Alert from "@mui/material/Alert";
 
 const Certificate = () => {
   const { t } = useTranslation();
@@ -58,7 +58,7 @@ const Certificate = () => {
         setCertData(data);
       } catch (error) {
         console.error("Error fetching user data:", error);
-         setError(error.message);
+        setError(error.message);
       }
 
       try {
@@ -75,7 +75,6 @@ const Certificate = () => {
       } catch (error) {
         console.error("Error fetching user data:", error);
         setError(error.message);
-
       }
     };
 
@@ -92,7 +91,11 @@ const Certificate = () => {
     <div>
       <Header />
       <Container maxWidth="xxl" role="main" className="container-pb mb-20">
-      {error &&  <Alert severity="error" className="my-10">{error}</Alert> }
+        {error && (
+          <Alert severity="error" className="my-10">
+            {error}
+          </Alert>
+        )}
         <Box textAlign="center" padding="10">
           <Breadcrumbs
             aria-label="breadcrumb"

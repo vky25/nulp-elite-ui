@@ -35,6 +35,8 @@ import {
   TextField,
 } from "@mui/material";
 import styled from "styled-components";
+import urlConfig from "../../configs/urlConfig.json";
+
 const DELAY = 1500;
 const MAX_CHARS = 500;
 const CssTextField = styled(TextField)({
@@ -59,6 +61,7 @@ const CssTextField = styled(TextField)({
     },
   },
 });
+
 const Profile = () => {
   const { t } = useTranslation();
   const [userData, setUserData] = useState(null);
@@ -84,6 +87,8 @@ const Profile = () => {
   const [load, setLoad] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState(null);
+  const userReadParam = urlConfig.params.userReadParam;
+
   useEffect(() => {
     setTimeout(() => {
       setLoad(true);
@@ -151,7 +156,7 @@ const Profile = () => {
           }
         );
 
-        setUserInfo(response.data.result);
+        setUserInfo(response?.data?.result);
       } catch (error) {
         console.error(error);
       }
@@ -255,7 +260,7 @@ const Profile = () => {
 
   const fetchData = async () => {
     try {
-      const url = `http://localhost:3000/learner/user/v5/read/${_userId}?fields=organisations,roles,locations,declarations,externalIds`;
+      const url = `http://localhost:3000/learner/user/v5/read/${_userId}?fields=${userReadParam}`;
       const header = "application/json";
       const response = await fetch(url, {
         headers: {
@@ -328,7 +333,11 @@ const Profile = () => {
         <SearchBox onSearch={handleSearch} />
       </Box>
       <Container maxWidth="xxl" role="main" className="container-pb">
-              {error &&  <Alert severity="error" className="my-10">{error}</Alert> }
+        {error && (
+          <Alert severity="error" className="my-10">
+            {error}
+          </Alert>
+        )}
 
         <Grid container spacing={2} className="sm-pt-22">
           <Grid item xs={12} md={4} lg={4} className="sm-p-25">
@@ -541,7 +550,7 @@ const Profile = () => {
                     </>
                   )}
                   <CardContent style={{ textAlign: "left", paddingTop: "0" }}>
-                    {userData && userInfo.length > 0 && (
+                    {userData && userInfo?.length > 0 && (
                       <>
                         <Typography
                           component="div"
@@ -626,7 +635,7 @@ const Profile = () => {
                         margin: "-10px",
                         borderTopRightRadius: "250px",
                         borderBottomRightRadius: "250px",
-                        cursor:"pointer"
+                        cursor: "pointer",
                       }}
                     >
                       <LibraryAddCheckOutlinedIcon />
@@ -656,7 +665,7 @@ const Profile = () => {
                         margin: "-10px",
                         borderTopRightRadius: "250px",
                         borderBottomRightRadius: "250px",
-                        cursor:"pointer"
+                        cursor: "pointer",
                       }}
                     >
                       <ReceiptLongOutlinedIcon />
@@ -685,7 +694,7 @@ const Profile = () => {
                         margin: "-10px",
                         borderTopRightRadius: "250px",
                         borderBottomRightRadius: "250px",
-                        cursor:"pointer"
+                        cursor: "pointer",
                       }}
                     >
                       <RestoreOutlinedIcon />
@@ -714,7 +723,7 @@ const Profile = () => {
                         margin: "-10px",
                         borderTopRightRadius: "250px",
                         borderBottomRightRadius: "250px",
-                        cursor:"pointer"
+                        cursor: "pointer",
                       }}
                     >
                       <SettingsOutlinedIcon />
