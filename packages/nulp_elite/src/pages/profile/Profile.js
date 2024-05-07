@@ -125,7 +125,7 @@ const Profile = () => {
     setDesignationsList(designations);
     const fetchCertificateCount = async () => {
       try {
-        const url = `http://localhost:3000/profilePage/certificateCount?user_id=${_userId}`;
+        const url = `/profilePage/certificateCount?user_id=${_userId}`;
         const response = await fetch(url);
         const data = await response.json();
         setCertificateCountData({
@@ -139,7 +139,7 @@ const Profile = () => {
 
     const fetchCourseCount = async () => {
       try {
-        const url = `http://localhost:3000/profilePage/courseCount?user_id=${_userId}`;
+        const url = `/profilePage/courseCount?user_id=${_userId}`;
         const response = await fetch(url);
         const data = await response.json();
         setCourseCountData({
@@ -153,7 +153,7 @@ const Profile = () => {
     const fetchUserInfo = async () => {
       try {
         const response = await axios.post(
-          "http://localhost:3000/custom/user/read",
+          "/custom/user/read",
           { user_ids: [_userId] },
           {
             withCredentials: true,
@@ -194,7 +194,7 @@ const Profile = () => {
     setIsLoading(true);
     setError(null);
 
-    const url = "http://localhost:3000/learner/user/v3/update";
+    const url = "/learner/user/v3/update";
     const requestBody = {
       params: {},
       request: {
@@ -227,7 +227,7 @@ const Profile = () => {
     }
   };
   const updateUserInfoInCustomDB = async () => {
-    const url = `http://localhost:3000/custom/user/update?user_id=${_userId}`;
+    const url = `/custom/user/update?user_id=${_userId}`;
     const requestBody = {
       designation:
         editedUserInfo.designation === "Other"
@@ -267,7 +267,7 @@ const Profile = () => {
 
   const fetchData = async () => {
     try {
-      const url = `http://localhost:3000/learner/user/v5/read/${_userId}?fields=organisations,roles,locations,declarations,externalIds`;
+      const url = `/learner/user/v5/read/${_userId}?fields=organisations,roles,locations,declarations,externalIds`;
       const header = "application/json";
       const response = await fetch(url, {
         headers: {
@@ -278,7 +278,6 @@ const Profile = () => {
       setUserData(data);
       localStorage.setItem("userRootOrgId", data.result.response.rootOrgId);
       if (_.isEmpty(data?.result?.response.framework)) {
-        setIsEmptyPreference(true);
         setOpenModal(true);
       }
     } catch (error) {
@@ -308,7 +307,7 @@ const Profile = () => {
 
   const handleCloseModal = () => {
     setOpenModal(false);
-    // fetchData();
+    fetchData();
   };
 
   return (
@@ -340,7 +339,11 @@ const Profile = () => {
         <SearchBox onSearch={handleSearch} />
       </Box>
       <Container maxWidth="xxl" role="main" className="container-pb">
-              {error &&  <Alert severity="error" className="my-10">{error}</Alert> }
+        {error && (
+          <Alert severity="error" className="my-10">
+            {error}
+          </Alert>
+        )}
 
         <Grid container spacing={2} className="sm-pt-22">
           <Grid item xs={12} md={4} lg={4} className="sm-p-25">
@@ -552,7 +555,7 @@ const Profile = () => {
                     </>
                   )}
                   <CardContent style={{ textAlign: "left", paddingTop: "0",width:"60%" }}>
-                    {userData && userInfo.length > 0 && (
+                    {userData && userInfo?.length > 0 && (
                       <>
                         <Typography
                           component="div"
@@ -637,7 +640,7 @@ const Profile = () => {
                         margin: "-10px",
                         borderTopRightRadius: "250px",
                         borderBottomRightRadius: "250px",
-                        cursor:"pointer"
+                        cursor: "pointer",
                       }}
                     >
                       <LibraryAddCheckOutlinedIcon />
@@ -667,7 +670,7 @@ const Profile = () => {
                         margin: "-10px",
                         borderTopRightRadius: "250px",
                         borderBottomRightRadius: "250px",
-                        cursor:"pointer"
+                        cursor: "pointer",
                       }}
                     >
                       <ReceiptLongOutlinedIcon />
@@ -696,7 +699,7 @@ const Profile = () => {
                         margin: "-10px",
                         borderTopRightRadius: "250px",
                         borderBottomRightRadius: "250px",
-                        cursor:"pointer"
+                        cursor: "pointer",
                       }}
                     >
                       <RestoreOutlinedIcon />
@@ -725,7 +728,7 @@ const Profile = () => {
                         margin: "-10px",
                         borderTopRightRadius: "250px",
                         borderBottomRightRadius: "250px",
-                        cursor:"pointer"
+                        cursor: "pointer",
                       }}
                     >
                       <SettingsOutlinedIcon />
@@ -741,8 +744,18 @@ const Profile = () => {
                   // onClose={handleClose}
                   aria-labelledby="modal-modal-title"
                   aria-describedby="modal-modal-description"
-                  open={openModal}  onClose={handleCloseModal}
                   isableEscapeKeyDown={!isEmptyPreference}
+                  open={openModal}
+                  onClose={(event, reason) => {
+                    if (
+                      reason === "backdropClick" ||
+                      reason === "escapeKeyDown"
+                    ) {
+                      setOpenModal(true);
+                    } else {
+                      handleCloseModal();
+                    }
+                  }}
                 >
                
                    <Box sx={style}>

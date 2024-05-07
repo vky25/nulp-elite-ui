@@ -10,7 +10,7 @@ import URLSConfig from "../../configs/urlConfig.json";
 import ArrowBackOutlinedIcon from "@mui/icons-material/ArrowBackOutlined";
 import Container from "@mui/material/Container";
 import Pagination from "@mui/material/Pagination";
-import Alert from '@mui/material/Alert';
+import Alert from "@mui/material/Alert";
 
 import domainWithImage from "../../assets/domainImgForm.json";
 import DomainCarousel from "components/domainCarousel";
@@ -90,7 +90,7 @@ const CategoryPage = () => {
       "Content-Type": "application/json",
     };
 
-    const url = `http://localhost:3000/api/${URLSConfig.URLS.CONTENT.SEARCH}?orgdetails=orgName,email`;
+    const url = `/api/${URLSConfig.URLS.CONTENT.SEARCH}?orgdetails=orgName,email`;
     try {
       const response = await getAllContents(url, data, headers);
       setData(response.data.result.content);
@@ -111,7 +111,7 @@ const CategoryPage = () => {
       Cookie: `connect.sid=${getCookieValue("connect.sid")}`,
     };
     try {
-      const url = `http://localhost:3000/api/channel/v1/read/0130701891041689600`;
+      const url = `/api/channel/v1/read/0130701891041689600`;
       const response = await frameworkService.getChannel(url, headers);
       // console.log("channel---",response.data.result);
       setChannelData(response.data.result);
@@ -121,7 +121,7 @@ const CategoryPage = () => {
     } finally {
     }
     try {
-      const url = `http://localhost:3000/api/framework/v1/read/nulp?categories=board,gradeLevel,medium,class,subject`;
+      const url = `/api/framework/v1/read/nulp?categories=board,gradeLevel,medium,class,subject`;
       const response = await frameworkService.getSelectedFrameworkCategories(
         url,
         headers
@@ -188,7 +188,7 @@ const CategoryPage = () => {
             margin: "0",
           }}
         >
-         {t("EXPLORE_CONTENT_RELATED_TO_YOUR_DOMAIN")}
+          {t("EXPLORE_CONTENT_RELATED_TO_YOUR_DOMAIN")}
         </p>
         <p
           style={{
@@ -199,12 +199,16 @@ const CategoryPage = () => {
             paddingBottom: "30px",
           }}
         >
-         {t("LEARN_FROM_WELL_CURATED")}
+          {t("LEARN_FROM_WELL_CURATED")}
         </p>
         <SearchBox onSearch={handleSearch} />
       </Box>
       <Container maxWidth="xxl" role="main" className="container-pb">
-      {error &&  <Alert className="my-4" severity="error" >{error}</Alert> }
+        {error && (
+          <Alert className="my-4" severity="error">
+            {error}
+          </Alert>
+        )}
         <Link
           onClick={handleGoBack}
           style={{

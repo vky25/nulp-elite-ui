@@ -19,7 +19,6 @@ import { generatePath, useNavigate, useLocation } from "react-router-dom";
 import Footer from "../../components/Footer";
 import { object } from "yup";
 import Alert from "@mui/material/Alert";
-// import { useTranslation } from "react-i18next";
 
 const Item = styled(Paper)(({ theme }) => ({
   backgroundColor: theme.palette.mode === "dark" ? "#1A2027" : "#fff",
@@ -47,7 +46,6 @@ const DomainList = () => {
   // console.log(data.result.categories.terms.category);
   // const [search, setSearch] = React.useState(true);
   // const [searchState, setSearchState] = React.useState(false);
-  // const { t } = useTranslation();
   const [data, setData] = React.useState();
   const [channelData, setChannelData] = React.useState(true);
   const [isLoading, setIsLoading] = useState(false);
@@ -90,7 +88,7 @@ const DomainList = () => {
       Cookie: `connect.sid=${getCookieValue("connect.sid")}`,
     };
     try {
-      const url = `http://localhost:3000/api/channel/v1/read/0130701891041689600`;
+      const url = `/api/channel/v1/read/0130701891041689600`;
       const response = await frameworkService.getChannel(url, headers);
       // console.log("channel---",response.data.result);
       setChannelData(response.data.result);
@@ -101,7 +99,7 @@ const DomainList = () => {
       setIsLoading(false);
     }
     try {
-      const url = `http://localhost:3000/api/framework/v1/read/nulp?categories=board,gradeLevel,medium,class,subject`;
+      const url = `/api/framework/v1/read/nulp?categories=board,gradeLevel,medium,class,subject`;
       const response = await frameworkService.getSelectedFrameworkCategories(
         url,
         headers

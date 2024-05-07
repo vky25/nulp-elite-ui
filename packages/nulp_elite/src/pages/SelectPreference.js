@@ -32,7 +32,7 @@ const SelectPreference = ({ isOpen, onClose }) => {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState(null);
   const [frameworkData, setFrameworkData] = useState();
-  const [selectedCategory, setSelectedCategory] = useState([]);
+  const [selectedCategory, setSelectedCategory] = useState("");
   const [selectedSubCategory, setSelectedSubCategory] = useState([]);
   const [selectedTopic, setSelectedTopic] = useState("");
   const [selectedLanguages, setSelectedLanguages] = useState([]);
@@ -50,12 +50,17 @@ const SelectPreference = ({ isOpen, onClose }) => {
   const [subDomain, setSubDomain] = useState();
   const [language, setLanguage] = useState();
   const [topic, setTopic] = useState();
+  const [isDisabled, setIsDisabled] = useState(true);
+  const [preCategory, setPreCategory] = useState("");
+  const [preTopic, setPreTopic] = useState("");
+  const [preSubCategory, setPreSubCategory] = useState([]);
+  const [preLanguages, setPreLanguages] = useState([]);
 
   useEffect(() => {
     const fetchUserDataAndSetCustodianOrgData = async () => {
       try {
         const response = await fetch(
-          "http://localhost:3000/learner/data/v1/system/settings/get/custodianOrgId"
+          "/learner/data/v1/system/settings/get/custodianOrgId"
         );
         if (!response.ok) {
           throw new Error("Failed to fetch custodian organization ID");
@@ -68,15 +73,13 @@ const SelectPreference = ({ isOpen, onClose }) => {
         const rootOrgId = localStorage.getItem("userRootOrgId");
         if (custodianOrgId === rootOrgId) {
           const response = await fetch(
-            `http://localhost:3000/api/channel/v1/read/${custodianOrgId}`
+            `/api/channel/v1/read/${custodianOrgId}`
           );
           const data = await response.json();
           const defaultFramework = data?.result?.channel?.defaultFramework;
           setDefaultFramework(defaultFramework);
         } else {
-          const response = await fetch(
-            `http://localhost:3000/api/channel/v1/read/${rootOrgId}`
-          );
+          const response = await fetch(`/api/channel/v1/read/${rootOrgId}`);
           const data = await response.json();
           const defaultFramework = data?.result?.channel?.defaultFramework;
           setDefaultFramework(defaultFramework);
@@ -122,7 +125,7 @@ const SelectPreference = ({ isOpen, onClose }) => {
     setIsLoading(true);
     setError(null);
 
-    const url = `http://localhost:3000/api/framework/v1/read/${defaultFramework}`;
+    const url = `/api/framework/v1/read/${defaultFramework}`;
 
     try {
       const response = await fetch(url, {
@@ -159,7 +162,7 @@ const SelectPreference = ({ isOpen, onClose }) => {
     setIsLoading(true);
     setError(null);
 
-    const url = `http://localhost:3000/learner/user/v5/read/${_userId}?fields=organisations,roles,locations,declarations,externalIds`;
+    const url = `/learner/user/v5/read/${_userId}?fields=organisations,roles,locations,declarations,externalIds`;
 
     try {
       const response = await fetch(url, {
@@ -185,6 +188,13 @@ const SelectPreference = ({ isOpen, onClose }) => {
         );
         setSelectedTopic(responseData?.result?.response?.framework?.subject[0]);
         setSelectedLanguages(responseData?.result?.response?.framework?.medium);
+
+        setPreCategory(responseData?.result?.response?.framework?.board[0]);
+        setPreTopic(responseData?.result?.response?.framework?.subject[0]);
+        setPreLanguages(responseData?.result?.response?.framework?.medium);
+        setPreSubCategory(
+          responseData?.result?.response?.framework?.gradeLevel
+        );
       }
       console.log("getUserData", responseData);
     } catch (error) {
@@ -199,7 +209,7 @@ const SelectPreference = ({ isOpen, onClose }) => {
     setIsLoading(true);
     setError(null);
 
-    const url = "http://localhost:3000/learner/user/v3/update";
+    const url = "/learner/user/v3/update";
     const requestBody = {
       params: {},
       request: {
@@ -244,6 +254,39 @@ const SelectPreference = ({ isOpen, onClose }) => {
   const handleClose = () => {
     onClose();
   };
+
+  const deepEqual = (array1, array2) => {
+    array1 = array1.sort();
+    array2 = array2.sort();
+    var is_same =
+      array1.length == array2.length &&
+      array1.every(function (element, index) {
+        return element === array2[index];
+      });
+    return is_same;
+  };
+
+  useEffect(() => {
+    if (
+      preCategory == selectedCategory &&
+      preTopic == selectedTopic &&
+      deepEqual(preLanguages, selectedLanguages) &&
+      deepEqual(preSubCategory, selectedSubCategory)
+    ) {
+      setIsDisabled(true);
+    } else {
+      setIsDisabled(false);
+    }
+  }, [
+    selectedCategory,
+    selectedSubCategory,
+    selectedLanguages,
+    selectedTopic,
+    preCategory,
+    preTopic,
+    preLanguages,
+    preSubCategory,
+  ]);
 
   return (
     <div>
@@ -320,8 +363,11 @@ const SelectPreference = ({ isOpen, onClose }) => {
           </Select>
         </FormControl>
       </Box>
-      <Button className="btn-primary" onClick={handleSavePreferences}>{t("SAVE")}</Button>
-      {!isEmptyPreference && <Button className="btn-default" onClick={handleClose}>{t("CANCEL")}</Button>}
+      <Button className="btn-primary" onClick={handleSavePreferences} disabled={isDisabled}>
+        {t('SUBMIT')}
+      </Button>
+
+      {!isEmptyPreference && <Button className="btn-default" onClick={handleClose}>{t('CANCEL')}</Button>}
     </div>
   );
 };

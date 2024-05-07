@@ -13,16 +13,16 @@ import Button from "@mui/material/Button";
 import Typography from "@mui/material/Typography";
 
 const PDFContent = () => {
-//   const { contentId } = useParams();
+  //   const { contentId } = useParams();
   const { t } = useTranslation();
 
   // Now contentId contains the value from the URL parameter
   return (
     <div>
-    <Header />
+      <Header />
 
-    <Container maxWidth="md" role="main" className="container-pb">
-    <Grid container spacing={2}>
+      <Container maxWidth="md" role="main" className="container-pb">
+        <Grid container spacing={2}>
           <Grid item xs={8}>
             <Breadcrumbs
               aria-label="breadcrumb"
@@ -41,7 +41,7 @@ const PDFContent = () => {
                 aria-current="page"
                 color="#484848"
               >
-                 Case of Urban Sanitation in India
+                Case of Urban Sanitation in India
                 {/* {userData?.result?.content?.name} */}
               </Link>
             </Breadcrumbs>
@@ -58,7 +58,8 @@ const PDFContent = () => {
               <ShareOutlinedIcon />
             </Link>
           </Grid>
-        </Grid><Box>
+        </Grid>
+        <Box>
           <Typography
             variant="h7"
             style={{
@@ -76,7 +77,8 @@ const PDFContent = () => {
                 fontSize: "10px",
                 margin: "0 10px",
               }}
-            >SWM
+            >
+              SWM
               {/* {userData?.result?.content?.board} */}
             </Button>
             <Button
@@ -87,18 +89,18 @@ const PDFContent = () => {
                 fontSize: "10px",
               }}
             >
-              {" "}Sanitation
+              {" "}
+              Sanitation
               {/* {userData?.result?.content?.gradeLevel} */}
             </Button>
           </Typography>
         </Box>
-    
-       PDF will be intergrated Here
-    </Container>
-    <FloatingChatIcon />
-    <Footer />
-  </div>
-  )
+        PDF will be intergrated Here
+      </Container>
+      <FloatingChatIcon />
+      <Footer />
+    </div>
+  );
 };
 
 export default PDFContent;
