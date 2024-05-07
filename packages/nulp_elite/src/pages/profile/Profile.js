@@ -266,7 +266,6 @@ const Profile = () => {
       setUserData(data);
       localStorage.setItem("userRootOrgId", data.result.response.rootOrgId);
       if (_.isEmpty(data?.result?.response.framework)) {
-        setIsEmptyPreference(true);
         setOpenModal(true);
       }
     } catch (error) {
@@ -296,7 +295,7 @@ const Profile = () => {
 
   const handleCloseModal = () => {
     setOpenModal(false);
-    // fetchData();
+    fetchData();
   };
 
   return (
@@ -328,7 +327,11 @@ const Profile = () => {
         <SearchBox onSearch={handleSearch} />
       </Box>
       <Container maxWidth="xxl" role="main" className="container-pb">
-              {error &&  <Alert severity="error" className="my-10">{error}</Alert> }
+        {error && (
+          <Alert severity="error" className="my-10">
+            {error}
+          </Alert>
+        )}
 
         <Grid container spacing={2} className="sm-pt-22">
           <Grid item xs={12} md={4} lg={4} className="sm-p-25">
@@ -541,7 +544,7 @@ const Profile = () => {
                     </>
                   )}
                   <CardContent style={{ textAlign: "left", paddingTop: "0" }}>
-                    {userData && userInfo.length > 0 && (
+                    {userData && userInfo?.length > 0 && (
                       <>
                         <Typography
                           component="div"
@@ -626,7 +629,7 @@ const Profile = () => {
                         margin: "-10px",
                         borderTopRightRadius: "250px",
                         borderBottomRightRadius: "250px",
-                        cursor:"pointer"
+                        cursor: "pointer",
                       }}
                     >
                       <LibraryAddCheckOutlinedIcon />
@@ -656,7 +659,7 @@ const Profile = () => {
                         margin: "-10px",
                         borderTopRightRadius: "250px",
                         borderBottomRightRadius: "250px",
-                        cursor:"pointer"
+                        cursor: "pointer",
                       }}
                     >
                       <ReceiptLongOutlinedIcon />
@@ -685,7 +688,7 @@ const Profile = () => {
                         margin: "-10px",
                         borderTopRightRadius: "250px",
                         borderBottomRightRadius: "250px",
-                        cursor:"pointer"
+                        cursor: "pointer",
                       }}
                     >
                       <RestoreOutlinedIcon />
@@ -714,7 +717,7 @@ const Profile = () => {
                         margin: "-10px",
                         borderTopRightRadius: "250px",
                         borderBottomRightRadius: "250px",
-                        cursor:"pointer"
+                        cursor: "pointer",
                       }}
                     >
                       <SettingsOutlinedIcon />
@@ -728,8 +731,16 @@ const Profile = () => {
 
                 <Dialog
                   open={openModal}
-                  onClose={handleCloseModal}
-                  disableEscapeKeyDown={!isEmptyPreference}
+                  onClose={(event, reason) => {
+                    if (
+                      reason === "backdropClick" ||
+                      reason === "escapeKeyDown"
+                    ) {
+                      setOpenModal(true);
+                    } else {
+                      handleCloseModal();
+                    }
+                  }}
                 >
                   <DialogTitle>Select Preference</DialogTitle>
                   <DialogContent>
