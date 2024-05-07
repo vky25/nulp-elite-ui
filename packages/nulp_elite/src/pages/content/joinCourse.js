@@ -9,6 +9,13 @@ import AccordionSummary from "@mui/material/AccordionSummary";
 import AccordionDetails from "@mui/material/AccordionDetails";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import Box from "@mui/material/Box";
+import {
+  Dialog,
+  DialogTitle,
+  DialogContent,
+  DialogContentText,
+  DialogActions,
+} from "@mui/material";
 import Button from "@mui/material/Button";
 import Typography from "@mui/material/Typography";
 import Breadcrumbs from "@mui/material/Breadcrumbs";
@@ -30,9 +37,12 @@ const JoinCourse = () => {
   const { t } = useTranslation();
   const [userData, setUserData] = useState();
   const [batchData, setBatchData] = useState();
+  const [batchDetails, setBatchDetails] = useState();
   const [userCourseData, setUserCourseData] = useState({});
   const [showEnrollmentSnackbar, setShowEnrollmentSnackbar] = useState(false);
   const [enrolled, setEnrolled] = useState(false);
+  const [progress, setCourseProgress] = useState();
+  const [showConfirmation, setShowConfirmation] = useState(false);
 
   const location = useLocation();
   const navigate = useNavigate();
@@ -90,6 +100,7 @@ const JoinCourse = () => {
             enrollmentEndDate: batchDetails.enrollmentEndDate,
             batchId: batchDetails.batchId,
           });
+          setBatchDetails(batchDetails);
         } else {
           console.error("Batch data not found in response");
         }
@@ -117,6 +128,37 @@ const JoinCourse = () => {
     fetchBatchData();
     checkEnrolledCourse();
   }, []);
+
+  useEffect(() => {
+    const getCourseProgress = async () => {
+      if (batchDetails) {
+        const url = `http://localhost:3000/content/course/v1/content/state/read`;
+        const request = {
+          request: {
+            userId: _userId,
+            courseId: contentId,
+            contentIds: [
+              "do_1140201666434088961676",
+              "do_1140158031054356481608",
+              "do_1140159308293570561628",
+              "do_1140158135726735361613",
+            ],
+            batchId: batchDetails.batchId,
+            fields: ["progress", "score"],
+          },
+        };
+        try {
+          const response = await axios.post(url, request);
+          const data = response.data;
+          setCourseProgress(data);
+        } catch (error) {
+          console.error("Error while fetching courses:", error);
+        }
+      }
+    };
+
+    getCourseProgress();
+  }, [batchDetails]);
 
   const handleGoBack = () => {
     navigate(-1); // Navigate back in history
@@ -150,17 +192,100 @@ const JoinCourse = () => {
     );
   };
 
+  const isIncomplete = () => {
+    return (
+      progress &&
+      progress.result &&
+      progress.result.contentList &&
+      progress.result.contentList.some((content) => content.status !== 2)
+    );
+  };
+
+  const handleLeaveCourseClick = () => {
+    setShowConfirmation(true);
+  };
+
+  const handleConfirmationClose = () => {
+    setShowConfirmation(false);
+  };
+
+  const handleLeaveConfirmed = async () => {
+    try {
+      const url = "http://localhost:3000/learner/course/v1/unenrol";
+      const requestBody = {
+        request: {
+          courseId: contentId,
+          userId: _userId,
+          batchId: batchData?.batchId,
+        },
+      };
+      const response = await axios.post(url, requestBody);
+      if (response.status === 200) {
+        setEnrolled(true);
+        setShowEnrollmentSnackbar(true);
+      }
+    } catch (error) {
+      console.error("Error enrolling in the course:", error);
+    }
+    window.location.reload();
+  };
+
   const renderActionButton = () => {
     if (isEnrolled() || enrolled) {
-      return (
-        <Button
-          onClick={handleLinkClick}
-          variant="contained"
-          style={{ background: "#9ACD32", color: "#fff", left: "160px" }}
-        >
-          {t("START_LEARNING")}
-        </Button>
-      );
+      if (isIncomplete()) {
+        return (
+          <Box>
+            <Button
+              onClick={handleLinkClick}
+              variant="contained"
+              style={{ background: "#9ACD32", color: "#fff", left: "160px" }}
+            >
+              {t("START_LEARNING")}
+            </Button>
+            <Button
+              onClick={handleLeaveCourseClick} // Open confirmation dialog
+              variant="contained"
+              style={{ background: "#FF0000", color: "#fff", left: "160px" }}
+            >
+              {t("LEAVE_COURSE")}
+            </Button>
+            {showConfirmation && (
+              <Dialog open={showConfirmation} onClose={handleConfirmationClose}>
+                <DialogTitle>
+                  {t("LEAVE_COURSE_CONFIRMATION_TITLE")}
+                </DialogTitle>
+                <DialogContent>
+                  <DialogContentText>
+                    {t("LEAVE_COURSE_CONFIRMATION_MESSAGE")}
+                  </DialogContentText>
+                </DialogContent>
+                <DialogActions>
+                  <Button onClick={handleConfirmationClose} color="primary">
+                    {t("NO")}
+                  </Button>
+                  <Button
+                    onClick={handleLeaveConfirmed}
+                    color="primary"
+                    autoFocus
+                  >
+                    {t("YES")}
+                  </Button>
+                </DialogActions>
+              </Dialog>
+            )}
+          </Box>
+        );
+      } else {
+        return (
+          <Button
+            onClick={handleLinkClick}
+            variant="contained"
+            style={{ background: "#9ACD32", color: "#fff" }}
+          >
+            {t("START_LEARNING")}
+          </Button>
+        );
+      }
     } else {
       if (
         (batchData?.enrollmentEndDate &&
@@ -244,6 +369,30 @@ const JoinCourse = () => {
           courseId: contentId,
           userId: _userId,
           batchId: batchData?.batchId,
+        },
+      };
+      const response = await axios.post(url, requestBody);
+      if (response.status === 200) {
+        setEnrolled(true);
+        setShowEnrollmentSnackbar(true);
+      }
+    } catch (error) {
+      console.error("Error enrolling in the course:", error);
+    }
+  };
+
+  const consentRead = async () => {
+    try {
+      const url = "http://localhost:3000/learner/user/v1/consent/read";
+      const requestBody = {
+        request: {
+          consent: {
+            filter: {
+              userId: _userId,
+              consumerId: "0130701891041689600",
+              objectId: contentId,
+            },
+          },
         },
       };
       const response = await axios.post(url, requestBody);
