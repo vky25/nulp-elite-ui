@@ -22,7 +22,8 @@ import BlockIcon from "@mui/icons-material/Block";
 import SendIcon from "@mui/icons-material/Send";
 import { useTranslation } from "react-i18next";
 import DoneAllIcon from "@mui/icons-material/DoneAll";
-
+import CheckCircleOutlineIcon from "@mui/icons-material/CheckCircleOutline";
+import Typography from "@mui/material/Typography";
 const moment = require("moment");
 const timezone = require("moment-timezone");
 const useStyles = makeStyles((theme) => ({
@@ -308,12 +309,16 @@ const Message = (props) => {
       <div className={classes.chatHeader}>
         <IconButton onClick={handleGoBack}>
           <ArrowBackIcon />
-          <Box
-            sx={{ fontSize: "22px", fontWeight: "600", paddingLeft: "10px" }}
-          >
-            {dataStore.fullName || localStorage.getItem("chatName")}
-          </Box>
         </IconButton>
+        <Box sx={{ fontSize: "22px", fontWeight: "600", paddingLeft: "10px" }}>
+          <div>
+            {dataStore.fullName || localStorage.getItem("chatName")}
+            <Typography variant="body2" sx={{ fontSize: "12px" }}>
+              {dataStore.designation || localStorage.getItem("designation")}
+            </Typography>
+          </div>
+        </Box>
+
         <Box
           style={{
             display: "flex",
@@ -453,6 +458,17 @@ const Message = (props) => {
                 ) : null}
               </Box>
             </div>
+            {msg.is_accepted ? (
+              <div style={{ textAlign: "center" }}>
+                <Alert
+                  iconMapping={{
+                    success: <CheckCircleOutlineIcon fontSize="inherit" />,
+                  }}
+                >
+                  {t("YOU_CHAT_ACCEPTED")}
+                </Alert>
+              </div>
+            ) : null}
           </div>
         ))}
       </div>
