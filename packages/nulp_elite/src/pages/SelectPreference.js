@@ -58,7 +58,7 @@ const SelectPreference = ({ isOpen, onClose }) => {
     const fetchUserDataAndSetCustodianOrgData = async () => {
       try {
         const response = await fetch(
-          "http://localhost:3000/learner/data/v1/system/settings/get/custodianOrgId"
+          "/learner/data/v1/system/settings/get/custodianOrgId"
         );
         if (!response.ok) {
           throw new Error("Failed to fetch custodian organization ID");
@@ -71,15 +71,13 @@ const SelectPreference = ({ isOpen, onClose }) => {
         const rootOrgId = localStorage.getItem("userRootOrgId");
         if (custodianOrgId === rootOrgId) {
           const response = await fetch(
-            `http://localhost:3000/api/channel/v1/read/${custodianOrgId}`
+            `/api/channel/v1/read/${custodianOrgId}`
           );
           const data = await response.json();
           const defaultFramework = data?.result?.channel?.defaultFramework;
           setDefaultFramework(defaultFramework);
         } else {
-          const response = await fetch(
-            `http://localhost:3000/api/channel/v1/read/${rootOrgId}`
-          );
+          const response = await fetch(`/api/channel/v1/read/${rootOrgId}`);
           const data = await response.json();
           const defaultFramework = data?.result?.channel?.defaultFramework;
           setDefaultFramework(defaultFramework);
@@ -125,7 +123,7 @@ const SelectPreference = ({ isOpen, onClose }) => {
     setIsLoading(true);
     setError(null);
 
-    const url = `http://localhost:3000/api/framework/v1/read/${defaultFramework}`;
+    const url = `/api/framework/v1/read/${defaultFramework}`;
 
     try {
       const response = await fetch(url, {
@@ -162,7 +160,7 @@ const SelectPreference = ({ isOpen, onClose }) => {
     setIsLoading(true);
     setError(null);
 
-    const url = `http://localhost:3000/learner/user/v5/read/${_userId}?fields=organisations,roles,locations,declarations,externalIds`;
+    const url = `/learner/user/v5/read/${_userId}?fields=organisations,roles,locations,declarations,externalIds`;
 
     try {
       const response = await fetch(url, {
@@ -209,7 +207,7 @@ const SelectPreference = ({ isOpen, onClose }) => {
     setIsLoading(true);
     setError(null);
 
-    const url = "http://localhost:3000/learner/user/v3/update";
+    const url = "/learner/user/v3/update";
     const requestBody = {
       params: {},
       request: {

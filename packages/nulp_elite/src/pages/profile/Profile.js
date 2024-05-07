@@ -113,7 +113,7 @@ const Profile = () => {
     setDesignationsList(designations);
     const fetchCertificateCount = async () => {
       try {
-        const url = `http://localhost:3000/profilePage/certificateCount?user_id=${_userId}`;
+        const url = `/profilePage/certificateCount?user_id=${_userId}`;
         const response = await fetch(url);
         const data = await response.json();
         setCertificateCountData({
@@ -127,7 +127,7 @@ const Profile = () => {
 
     const fetchCourseCount = async () => {
       try {
-        const url = `http://localhost:3000/profilePage/courseCount?user_id=${_userId}`;
+        const url = `/profilePage/courseCount?user_id=${_userId}`;
         const response = await fetch(url);
         const data = await response.json();
         setCourseCountData({
@@ -141,7 +141,7 @@ const Profile = () => {
     const fetchUserInfo = async () => {
       try {
         const response = await axios.post(
-          "http://localhost:3000/custom/user/read",
+          "/custom/user/read",
           { user_ids: [_userId] },
           {
             withCredentials: true,
@@ -182,7 +182,7 @@ const Profile = () => {
     setIsLoading(true);
     setError(null);
 
-    const url = "http://localhost:3000/learner/user/v3/update";
+    const url = "/learner/user/v3/update";
     const requestBody = {
       params: {},
       request: {
@@ -215,7 +215,7 @@ const Profile = () => {
     }
   };
   const updateUserInfoInCustomDB = async () => {
-    const url = `http://localhost:3000/custom/user/update?user_id=${_userId}`;
+    const url = `/custom/user/update?user_id=${_userId}`;
     const requestBody = {
       designation:
         editedUserInfo.designation === "Other"
@@ -255,7 +255,7 @@ const Profile = () => {
 
   const fetchData = async () => {
     try {
-      const url = `http://localhost:3000/learner/user/v5/read/${_userId}?fields=organisations,roles,locations,declarations,externalIds`;
+      const url = `/learner/user/v5/read/${_userId}?fields=organisations,roles,locations,declarations,externalIds`;
       const header = "application/json";
       const response = await fetch(url, {
         headers: {

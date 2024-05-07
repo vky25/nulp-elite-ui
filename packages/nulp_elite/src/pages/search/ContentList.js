@@ -18,7 +18,7 @@ import Pagination from "@mui/material/Pagination";
 import ArrowBackOutlinedIcon from "@mui/icons-material/ArrowBackOutlined";
 import NoResult from "pages/content/noResultFound";
 import { t } from "i18next";
-import Alert from '@mui/material/Alert';
+import Alert from "@mui/material/Alert";
 import { useTranslation } from "react-i18next";
 
 const ContentList = (props) => {
@@ -100,7 +100,7 @@ const ContentList = (props) => {
       "Content-Type": "application/json",
     };
 
-    const url = `http://localhost:3000/content/${URLSConfig.URLS.CONTENT.SEARCH}?orgdetails=orgName,email`;
+    const url = `/content/${URLSConfig.URLS.CONTENT.SEARCH}?orgdetails=orgName,email`;
     try {
       const response = await contentService.getAllContents(url, req, headers);
 
@@ -140,7 +140,7 @@ const ContentList = (props) => {
   const fetchGradeLevels = async () => {
     try {
       const response = await fetch(
-        "http://localhost:3000/api/framework/v1/read/nulp?categories=gradeLevel"
+        "/api/framework/v1/read/nulp?categories=gradeLevel"
       );
       const data = await response.json();
       if (
@@ -166,7 +166,7 @@ const ContentList = (props) => {
 
   const Fetchdomain = async () => {
     try {
-      const url = `http://localhost:3000/api/framework/v1/read/nulp?categories=board,gradeLevel,medium,class,subject`;
+      const url = `/api/framework/v1/read/nulp?categories=board,gradeLevel,medium,class,subject`;
       const response = await fetch(url);
 
       if (response.ok) {
@@ -284,7 +284,7 @@ const ContentList = (props) => {
             {isLoading ? (
               <p>{t("LOADING")}</p>
             ) : error ? (
-              <Alert severity="error" >{error}</Alert>
+              <Alert severity="error">{error}</Alert>
             ) : data && data.content && data.content.length > 0 ? (
               <div>
                 <Grid

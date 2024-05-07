@@ -160,7 +160,7 @@ export default function sendOtp({ swPath }) {
       const data = await response.json();
 
       console.log("signupUserresponse:", data.result);
-      navigate('/domainList')
+      navigate("/domainList");
       // setGoToOtp(true);
     } catch (error) {
       setError(error.message);
@@ -175,7 +175,7 @@ export default function sendOtp({ swPath }) {
     setIsLoading(true);
     setError(null);
 
-    const url = `http://localhost:3000/user/v2/accept/tnc`;
+    const url = `/user/v2/accept/tnc`;
     const requestBody = {
       request: {
         version: "v12",
