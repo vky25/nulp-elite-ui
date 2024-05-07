@@ -262,6 +262,7 @@ const Profile = () => {
     await updateUserData();
     // Close the edit dialog
     setIsEditing(false);
+    window.location.reload();
     setIsFormDirty(false);
   };
 
