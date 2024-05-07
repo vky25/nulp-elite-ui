@@ -32,7 +32,7 @@ import { Link as RouterLink } from "react-router-dom";
 import Pagination from "@mui/material/Pagination";
 import Popover from "@mui/material/Popover";
 import { Container } from "@mui/material";
-import Alert from '@mui/material/Alert';
+import Alert from "@mui/material/Alert";
 const axios = require("axios");
 
 // Define modal styles
@@ -93,6 +93,7 @@ const AddConnections = () => {
   const [userQuerySearchData, setUserQuerySearchData] = useState();
   const [anchorEl, setAnchorEl] = React.useState(null);
   const [userInfo, setUserInfo] = useState();
+  const [expandedMessageId, setExpandedMessageId] = useState(null);
   // const handleFilterChange = (selectedOptions) => {
   //   const selectedValues = selectedOptions.map((option) => option.value);
   //   setFilters({ ...filters, firstName: selectedValues });
@@ -129,6 +130,40 @@ const AddConnections = () => {
 
       const responseData = await response.json();
       console.log("getChat", responseData.result);
+      return responseData.result;
+    } catch (error) {
+      setError(error.message);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+  const getChatRequest = async (userId) => {
+    setIsLoading(true);
+    setError(null);
+
+    const params = new URLSearchParams({
+      sender_id: loggedInUserId,
+      receiver_id: userId,
+      is_accepted: false,
+      is_read: false,
+    });
+
+    const url = `http://localhost:3000/directConnect/get-chats?${params.toString()}`;
+
+    try {
+      const response = await fetch(url, {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
+
+      if (!response.ok) {
+        throw new Error("Failed to get chat");
+      }
+
+      const responseData = await response.json();
+      console.log("getChatRequest", responseData.result);
       return responseData.result;
     } catch (error) {
       setError(error.message);
@@ -547,9 +582,6 @@ const AddConnections = () => {
           status: "1",
           userId: userIds,
         },
-        // query: searchQuery,
-        // pageNumber: currentPage,
-        // pageSize: pageSize,
       },
     };
 
@@ -568,16 +600,28 @@ const AddConnections = () => {
 
       const responseData = await response.json();
       const content = responseData?.result?.response?.content || [];
-      const userInfoPromises = content.map((item) => fetchUserInfo(item.id));
+
+      const userListWithChat = await Promise.all(
+        content.map(async (item) => {
+          const userChat = await getChatRequest(item.id);
+          if (userChat?.length > 0) {
+            item = { ...item, messageRequest: userChat[0]?.message };
+          }
+          return item;
+        })
+      );
+
+      const userInfoPromises = userListWithChat.map((item) =>
+        fetchUserInfo(item.id)
+      );
       const userInfoList = await Promise.all(userInfoPromises);
 
-      // Add designation and bio to each item
-      content.forEach((item, index) => {
+      userListWithChat.forEach((item, index) => {
         item.designation = userInfoList[index].designation || "";
         item.bio = userInfoList[index].bio || "";
       });
 
-      setInvitationReceivedUserByIds(content);
+      setInvitationReceivedUserByIds(userListWithChat);
       handleOpen();
       handleClose();
       console.log(
@@ -859,14 +903,20 @@ const AddConnections = () => {
       onUserQuerySearch(searchQuery);
     }
   }, [searchQuery]);
+  const handleShowFullMessage = (itemId) => {
+    setExpandedMessageId(itemId === expandedMessageId ? null : itemId);
+  };
 
   return (
     <Box>
       <Header />
       <Container maxWidth="xxl" role="main" className="container-pb">
-      {error &&  <Alert severity="error" className="my-10">{error}</Alert> }
+        {error && (
+          <Alert severity="error" className="my-10">
+            {error}
+          </Alert>
+        )}
 
-        
         <Box textAlign="center" padding="10" style={{ minHeight: "500px" }}>
           <Box>
             <input
@@ -968,12 +1018,34 @@ const AddConnections = () => {
               {invitationReceiverByUser &&
                 invitationReceiverByUser?.map((item) => (
                   <List sx={{}} style={{ color: "gray", cursor: "pointer" }}>
-                    <ListItem>
+                    <ListItem key={item.userId}>
                       <ListItemText
                         primary={`${item.firstName}${
                           item.lastName ? ` ${item.lastName}` : ""
-                        }`}
-                        secondary={item.designation}
+                        }   | ${item.designation}`}
+                        secondary={
+                          item.messageRequest.length > 20 ? (
+                            <>
+                              {expandedMessageId === item.userId
+                                ? item.messageRequest
+                                : // : `${item.messageRequest.substring(0, 20)}...`}
+                                  `${item.messageRequest.substring(0, 20)}`}
+                              <span
+                                style={{ color: "blue", cursor: "pointer" }}
+                                onClick={() =>
+                                  handleShowFullMessage(item.userId)
+                                }
+                              >
+                                {" "}
+                                {expandedMessageId === item.userId
+                                  ? ""
+                                  : "Show More"}
+                              </span>
+                            </>
+                          ) : (
+                            item.messageRequest
+                          )
+                        }
                       />
                       <div
                         style={{
@@ -1008,6 +1080,7 @@ const AddConnections = () => {
                     <Divider />
                   </List>
                 ))}
+
               {invitationAcceptedUsers &&
                 invitationAcceptedUsers?.map((item) => (
                   <List sx={{}} style={{ color: "green", cursor: "pointer" }}>
@@ -1245,8 +1318,7 @@ const AddConnections = () => {
                             fontWeight: "500",
                           }}
                         >
-                          {selectedUser?.firstName}  {"  "}
-                          {selectedUser?.lastName}
+                          {selectedUser?.firstName} {selectedUser?.lastName}
                         </div>
                       )}
                       {selectedUser && (
