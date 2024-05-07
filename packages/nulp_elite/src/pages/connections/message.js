@@ -350,17 +350,24 @@ const Message = (props) => {
       <Dialog open={dialogOpen} maxWidth="lg" onClose={handleDialogClose}>
         <DialogTitle>{t("BLOCK_USER")}</DialogTitle>
         <DialogContent>
-          <TextareaAutosize
-            autoFocus
-            minRows={6}
-            maxRows={4}
-            margin="dense"
-            id="reason"
-            label="Reason for blocking"
-            fullWidth
-            value={reason}
-            onChange={(e) => setReason(e.target.value)}
-          />
+          <Box py={2}>
+            <TextField
+              id="reason"
+              name="reason"
+              label={
+                <span>
+                  Reason
+                  <span style={{ color: "red", marginLeft: "2px" }}>*</span>
+                </span>
+              }
+              multiline
+              rows={3}
+              variant="outlined"
+              fullWidth
+              value={reason}
+              onChange={(e) => setReason(e.target.value)}
+            />
+          </Box>
         </DialogContent>
         <DialogActions>
           <Button
@@ -381,8 +388,9 @@ const Message = (props) => {
           </Button>
           <Button
             onClick={handleBlockUserConfirmed}
+            disabled={!reason}
             style={{
-              background: "#004367",
+              background: !reason ? "rgba(0, 67, 103, 0.5)" : "#004367",
               borderRadius: "10px",
               color: "#fff",
               padding: "10px 12px",
