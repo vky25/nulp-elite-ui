@@ -20,9 +20,10 @@ import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import MenuIcon from "@mui/icons-material/Menu";
 import BlockIcon from "@mui/icons-material/Block";
 import SendIcon from "@mui/icons-material/Send";
-import { t } from "i18next";
-import DoneAllIcon from '@mui/icons-material/DoneAll';
-
+import { useTranslation } from "react-i18next";
+import DoneAllIcon from "@mui/icons-material/DoneAll";
+import CheckCircleOutlineIcon from "@mui/icons-material/CheckCircleOutline";
+import Typography from "@mui/material/Typography";
 const moment = require("moment");
 const timezone = require("moment-timezone");
 const useStyles = makeStyles((theme) => ({
@@ -60,8 +61,8 @@ const useStyles = makeStyles((theme) => ({
     padding: "8px",
     margin: "15px 0",
     textAlign: "right",
-    background: "linear-gradient(180deg, #004367 0%, #102244 100%)",
-    color: "#fff",
+    background: "#C0E9FF",
+    color: "#212121",
   },
   receiverMessage: {
     margin: "4px 0",
@@ -91,7 +92,7 @@ const Message = (props) => {
   const [dialogOpen, setDialogOpen] = useState(false);
   const [isBlocked, setIsBlocked] = useState(false); // State to track if user is blocked
   const [showUnblockOption, setShowUnblockOption] = useState(false); // State to show/hide unblock option
-
+  const { t } = useTranslation();
   useEffect(() => {
     const _userId = util.userId();
     setLoggedInUserId(_userId);
@@ -308,12 +309,16 @@ const Message = (props) => {
       <div className={classes.chatHeader}>
         <IconButton onClick={handleGoBack}>
           <ArrowBackIcon />
-          <Box
-            sx={{ fontSize: "22px", fontWeight: "600", paddingLeft: "10px" }}
-          >
-            {dataStore.fullName || localStorage.getItem("chatName")}
-          </Box>
         </IconButton>
+        <Box sx={{ fontSize: "22px", fontWeight: "600", paddingLeft: "10px" }}>
+          <div>
+            {dataStore.fullName || localStorage.getItem("chatName")}
+            <Typography variant="body2" sx={{ fontSize: "12px" }}>
+              {dataStore.designation || localStorage.getItem("designation")}
+            </Typography>
+          </div>
+        </Box>
+
         <Box
           style={{
             display: "flex",
@@ -394,8 +399,7 @@ const Message = (props) => {
       </Dialog>
 
       <Alert severity="info" style={{ margin: "10px 0" }}>
-        {t("YOUR_CHAT_WILL_DISAPPEAR")}       
-
+        {t("YOUR_CHAT_WILL_DISAPPEAR")}
       </Alert>
       <div className={classes.chat}>
         {messages.map((msg, index) => (
@@ -415,15 +419,56 @@ const Message = (props) => {
               }
             >
               <div>{msg.message}</div>
-              <Box style={{display:'flex',alignItems:'center',justifyContent:'flex-end'}}>
-              <div style={{fontSize:'10px'}}>{getTime(msg.timestamp)}</div>
-              {msg.sender_id === loggedInUserId ? (
-                <div style={{display:'flex',alignItems:'center',fontSize:'13px',justifyContent:'flex-end'}}>
-                  {msg.is_read ? <DoneAllIcon style={{color:'#00ebff',fontSize:'15px',paddingLeft:'6px'}} /> : <DoneAllIcon style={{color:'#bdbaba',fontSize:'18px',paddingRight:'10px'}} />}
-                  {/* {msg.is_read ? "Read" : "Delivered"} */}
-                </div>              ) : null}
-                </Box>
+              <Box
+                style={{
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "flex-end",
+                }}
+              >
+                <div style={{ fontSize: "10px" }}>{getTime(msg.timestamp)}</div>
+                {msg.sender_id === loggedInUserId ? (
+                  <div
+                    style={{
+                      display: "flex",
+                      alignItems: "center",
+                      fontSize: "13px",
+                      justifyContent: "flex-end",
+                    }}
+                  >
+                    {msg.is_read ? (
+                      <DoneAllIcon
+                        style={{
+                          color: "#00ebff",
+                          fontSize: "15px",
+                          paddingLeft: "6px",
+                        }}
+                      />
+                    ) : (
+                      <DoneAllIcon
+                        style={{
+                          color: "#bdbaba",
+                          fontSize: "18px",
+                          paddingRight: "10px",
+                        }}
+                      />
+                    )}
+                    {/* {msg.is_read ? "Read" : "Delivered"} */}
+                  </div>
+                ) : null}
+              </Box>
             </div>
+            {msg.is_accepted ? (
+              <div style={{ textAlign: "center" }}>
+                <Alert
+                  iconMapping={{
+                    success: <CheckCircleOutlineIcon fontSize="inherit" />,
+                  }}
+                >
+                  {t("YOU_CHAT_ACCEPTED")}
+                </Alert>
+              </div>
+            ) : null}
           </div>
         ))}
       </div>

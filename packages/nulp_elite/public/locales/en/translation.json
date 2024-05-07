@@ -146,6 +146,7 @@
   "CANCEL": "Cancel",
   "BLOCK_USER": "Block User",
   "YOUR_CHAT_WILL_DISAPPEAR": "Your chat will disappear after 7 Days.",
+  "YOU_CHAT_ACCEPTED": "This user has accepted to invitation to connect",
   "USER_BLOCKED_YOU_CANNOT": "User blocked. You cannot send messages to this user.",
   "EXPLORE_CONTENT_RELATED_TO_YOUR_DOMAIN": "Explore content related to your domain.Learn from well curated courses and content.",
   "LEARN_FROM_WELL_CURATED": " Learn from well curated courses and content.",
@@ -160,8 +161,8 @@
   "YOU_ARE_VIEWING_CONTENTS_FOR": "You are viewing contents for :",
   "LOADING": "Loading...",
   "LEARNING_HISTORY": "Learning History",
-  "SAVE":"Save",
-  "DOMAIN":"Domain",
-  "EDIT_PROFILE":"Edit profile",
-  "SELECT_PREFERENCE":"Select Preference"
+  "SAVE": "Save",
+  "DOMAIN": "Domain",
+  "EDIT_PROFILE": "Edit profile",
+  "SELECT_PREFERENCE": "Select Preference"
 }

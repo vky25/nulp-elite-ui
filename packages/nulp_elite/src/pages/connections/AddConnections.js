@@ -654,13 +654,15 @@ const AddConnections = () => {
     }
   };
 
-  const handleAcceptedChatOpen = (userId, name) => {
+  const handleAcceptedChatOpen = (userId, name, designation) => {
     const dataToSend = {
       userId: userId,
       fullName: name,
+      designation: designation,
     };
     localStorage.setItem("userId", userId);
     localStorage.setItem("chatName", name);
+    localStorage.setItem("designation", designation);
     setData(dataToSend);
     setSelectedUserName(name);
     getUserChat(userId);
@@ -1150,8 +1152,8 @@ const AddConnections = () => {
                               >
                                 {" "}
                                 {expandedMessageId === item.userId
-                                  ? ""
-                                  : "Show More"}
+                                  ? "show less"
+                                  : "show more"}
                               </span>
                             </>
                           ) : (
@@ -1226,7 +1228,8 @@ const AddConnections = () => {
                             item.userId,
                             `${item.firstName}${
                               item.lastName ? ` ${item.lastName}` : ""
-                            }`
+                            }`,
+                            item.designation
                           )
                         }
                       />
@@ -1330,7 +1333,7 @@ const AddConnections = () => {
                 userSearchData?.map((item) => (
                   <List
                     key={item.id} // Add key prop to each List element
-                    sx={{ fontSize: "14px" }} // Add styling here if needed
+                    sx={{ fontSize: "14px" }}
                     onClick={() => handleUserClick(item)}
                   >
                     <ListItem>
@@ -1340,19 +1343,21 @@ const AddConnections = () => {
                         }`}
                         secondary={`${item.designation}`}
                       />
-                      <Link
-                        href="#"
-                        underline="none"
-                        color="primary"
-                        onClick={handleOpen}
-                        style={{
-                          fontSize: "14px",
-                          color: "#004367",
-                          fontWeight: "600",
-                        }}
-                      >
-                        {t("INVITE")}
-                      </Link>
+                      {item.id !== loggedInUserId && ( // Conditionally render the link
+                        <Link
+                          href="#"
+                          underline="none"
+                          color="primary"
+                          onClick={handleOpen}
+                          style={{
+                            fontSize: "14px",
+                            color: "#004367",
+                            fontWeight: "600",
+                          }}
+                        >
+                          {t("INVITE")}
+                        </Link>
+                      )}
                     </ListItem>
                     <Divider />
                   </List>
