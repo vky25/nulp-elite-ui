@@ -16,7 +16,7 @@ import FormControlLabel from "@mui/material/FormControlLabel";
 import Checkbox from "@mui/material/Checkbox";
 import FormGroup from "@mui/material/FormGroup";
 import { Dialog, DialogContent, DialogActions } from "@material-ui/core";
-import Alert from '@mui/material/Alert';
+import Alert from "@mui/material/Alert";
 
 const Otp = () => {
   const { t } = useTranslation();
@@ -136,7 +136,7 @@ const Otp = () => {
     setIsLoading(true);
     setError(null);
 
-    const url = "http://localhost:3000/learner/user/v2/signup";
+    const url = "/learner/user/v2/signup";
     const requestBody = {
       params: {
         source: "portal",
@@ -175,7 +175,7 @@ const Otp = () => {
   };
 
   const saveUserInfoInCustomDB = async (userId) => {
-    const url = "http://localhost:3000/custom/user/signup";
+    const url = "/custom/user/signup";
     const requestBody = {
       user_id: userId,
       designation:
@@ -237,7 +237,7 @@ const Otp = () => {
     }
   };
   const generateOtp = async (email) => {
-    const url = `http://localhost:3000/learner/anonymous/otp/v1/generate?captchaResponse=${captchaResponse}`;
+    const url = `/learner/anonymous/otp/v1/generate?captchaResponse=${captchaResponse}`;
     const requestBody = {
       request: {
         key: email,
@@ -297,7 +297,11 @@ const Otp = () => {
           // backgroundSize: "contain",
         }}
       >
-      {error &&  <Alert severity="error" className="my-10">{error}</Alert> }
+        {error && (
+          <Alert severity="error" className="my-10">
+            {error}
+          </Alert>
+        )}
 
         <Box my={4}>
           <img src={require("../../assets/logo.png")} alt="Logo" />
@@ -417,9 +421,7 @@ const Otp = () => {
             }}
           >
             {t("ALREADY_HAVE_AN_ACCOUNT")}{" "}
-            <Link href={`http://localhost:3000/all${window.location.search}`}>
-              {t("LOGIN")}
-            </Link>
+            <Link href={`/all${window.location.search}`}>{t("LOGIN")}</Link>
           </Typography>
         </Box>
       </Container>

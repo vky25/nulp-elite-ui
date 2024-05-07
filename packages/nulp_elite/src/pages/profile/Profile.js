@@ -118,7 +118,7 @@ const Profile = () => {
     setDesignationsList(designations);
     const fetchCertificateCount = async () => {
       try {
-        const url = `http://localhost:3000/profilePage/certificateCount?user_id=${_userId}`;
+        const url = `/profilePage/certificateCount?user_id=${_userId}`;
         const response = await fetch(url);
         const data = await response.json();
         setCertificateCountData({
@@ -132,7 +132,7 @@ const Profile = () => {
 
     const fetchCourseCount = async () => {
       try {
-        const url = `http://localhost:3000/profilePage/courseCount?user_id=${_userId}`;
+        const url = `/profilePage/courseCount?user_id=${_userId}`;
         const response = await fetch(url);
         const data = await response.json();
         setCourseCountData({
@@ -146,7 +146,7 @@ const Profile = () => {
     const fetchUserInfo = async () => {
       try {
         const response = await axios.post(
-          "http://localhost:3000/custom/user/read",
+          "/custom/user/read",
           { user_ids: [_userId] },
           {
             withCredentials: true,
@@ -187,7 +187,7 @@ const Profile = () => {
     setIsLoading(true);
     setError(null);
 
-    const url = "http://localhost:3000/learner/user/v3/update";
+    const url = "/learner/user/v3/update";
     const requestBody = {
       params: {},
       request: {
@@ -220,7 +220,7 @@ const Profile = () => {
     }
   };
   const updateUserInfoInCustomDB = async () => {
-    const url = `http://localhost:3000/custom/user/update?user_id=${_userId}`;
+    const url = `/custom/user/update?user_id=${_userId}`;
     const requestBody = {
       designation:
         editedUserInfo.designation === "Other"
@@ -255,12 +255,13 @@ const Profile = () => {
     await updateUserData();
     // Close the edit dialog
     setIsEditing(false);
+    window.location.reload();
     setIsFormDirty(false);
   };
 
   const fetchData = async () => {
     try {
-      const url = `http://localhost:3000/learner/user/v5/read/${_userId}?fields=${userReadParam}`;
+      const url = `/learner/user/v5/read/${_userId}?fields=${userReadParam}`;
       const header = "application/json";
       const response = await fetch(url, {
         headers: {
@@ -271,7 +272,6 @@ const Profile = () => {
       setUserData(data);
       localStorage.setItem("userRootOrgId", data.result.response.rootOrgId);
       if (_.isEmpty(data?.result?.response.framework)) {
-        setIsEmptyPreference(true);
         setOpenModal(true);
       }
     } catch (error) {
@@ -301,7 +301,7 @@ const Profile = () => {
 
   const handleCloseModal = () => {
     setOpenModal(false);
-    // fetchData();
+    fetchData();
   };
 
   return (
@@ -737,8 +737,16 @@ const Profile = () => {
 
                 <Dialog
                   open={openModal}
-                  onClose={handleCloseModal}
-                  disableEscapeKeyDown={!isEmptyPreference}
+                  onClose={(event, reason) => {
+                    if (
+                      reason === "backdropClick" ||
+                      reason === "escapeKeyDown"
+                    ) {
+                      setOpenModal(true);
+                    } else {
+                      handleCloseModal();
+                    }
+                  }}
                 >
                   <DialogTitle>Select Preference</DialogTitle>
                   <DialogContent>

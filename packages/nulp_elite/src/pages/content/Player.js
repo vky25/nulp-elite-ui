@@ -18,10 +18,10 @@ const Player = () => {
   // Now contentId contains the value from the URL parameter
   return (
     <div>
-    <Header />
+      <Header />
 
-    <Container maxWidth="md" role="main" className="container-pb">
-    <Grid container spacing={2}>
+      <Container maxWidth="md" role="main" className="container-pb">
+        <Grid container spacing={2}>
           <Grid item xs={8}>
             <Breadcrumbs
               aria-label="breadcrumb"
@@ -40,7 +40,7 @@ const Player = () => {
                 aria-current="page"
                 color="#484848"
               >
-                 Case of Urban Sanitation in India
+                Case of Urban Sanitation in India
                 {/* {userData?.result?.content?.name} */}
               </Link>
             </Breadcrumbs>
@@ -57,7 +57,8 @@ const Player = () => {
               <ShareOutlinedIcon />
             </Link>
           </Grid>
-        </Grid><Box>
+        </Grid>
+        <Box>
           <Typography
             variant="h7"
             style={{
@@ -75,7 +76,8 @@ const Player = () => {
                 fontSize: "10px",
                 margin: "0 10px",
               }}
-            >SWM
+            >
+              SWM
               {/* {userData?.result?.content?.board} */}
             </Button>
             <Button
@@ -86,18 +88,18 @@ const Player = () => {
                 fontSize: "10px",
               }}
             >
-              {" "}Sanitation
+              {" "}
+              Sanitation
               {/* {userData?.result?.content?.gradeLevel} */}
             </Button>
           </Typography>
         </Box>
-    
-       PDF will be intergrated Here
-    </Container>
-    <FloatingChatIcon />
-    <Footer />
-  </div>
-  )
+        PDF will be intergrated Here
+      </Container>
+      <FloatingChatIcon />
+      <Footer />
+    </div>
+  );
 };
 
 export default Player;

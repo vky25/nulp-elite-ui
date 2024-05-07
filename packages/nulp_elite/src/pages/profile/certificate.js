@@ -52,7 +52,7 @@ const Certificate = () => {
             },
           },
         };
-        const url = `http://localhost:3000/learner/certreg/v2/certs/search`;
+        const url = `/learner/certreg/v2/certs/search`;
         const response = await axios.post(url, request);
         const data = response.data;
         setCertData(data);
@@ -68,7 +68,7 @@ const Certificate = () => {
             recipient: { id: { eq: _userId } },
           },
         };
-        const url = `http://localhost:3000/learner/rc/certificate/v1/search`;
+        const url = `/learner/rc/certificate/v1/search`;
         const response = await axios.post(url, request);
         const data = response.data;
         setOtherCertData(data);

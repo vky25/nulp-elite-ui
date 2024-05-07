@@ -142,7 +142,7 @@ const AllContent = () => {
     };
     // console.log(data.result.content)
 
-    const url = `http://localhost:3000/api/${URLSConfig.URLS.CONTENT.SEARCH}?orgdetails=${userOrgdetailsParams}`;
+    const url = `/api/${URLSConfig.URLS.CONTENT.SEARCH}?orgdetails=${userOrgdetailsParams}`;
     try {
       const response = await getAllContents(url, data, headers);
       const sortedData = response?.data?.result?.content?.sort((a, b) => {
@@ -183,7 +183,7 @@ const AllContent = () => {
       Cookie: `connect.sid=${getCookieValue("connect.sid")}`,
     };
     try {
-      const url = `http://localhost:3000/api/channel/v1/read/0130701891041689600`;
+      const url = `/api/channel/v1/read/0130701891041689600`;
       const response = await frameworkService.getChannel(url, headers);
       // console.log("channel---",response.data.result);
       setChannelData(response.data.result);
@@ -193,7 +193,7 @@ const AllContent = () => {
     } finally {
     }
     try {
-      const url = `http://localhost:3000/api/framework/v1/read/nulp?categories=${userCategoryParams}`;
+      const url = `/api/framework/v1/read/nulp?categories=${userCategoryParams}`;
       const response = await frameworkService.getSelectedFrameworkCategories(
         url,
         headers

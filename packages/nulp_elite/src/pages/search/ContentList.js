@@ -104,7 +104,7 @@ const ContentList = (props) => {
       "Content-Type": "application/json",
     };
 
-    const url = `http://localhost:3000/content/${URLSConfig.URLS.CONTENT.SEARCH}?orgdetails=${orgDetailsParams}`;
+    const url = `/content/${URLSConfig.URLS.CONTENT.SEARCH}?orgdetails=${orgDetailsParams}`;
     try {
       const response = await contentService.getAllContents(url, req, headers);
 
@@ -144,7 +144,7 @@ const ContentList = (props) => {
   const fetchGradeLevels = async () => {
     try {
       const response = await fetch(
-        `http://localhost:3000/api/framework/v1/read/nulp?categories=${categoryParams}`
+        `/api/framework/v1/read/nulp?categories=${categoryParams}`
       );
       const data = await response.json();
       if (
@@ -170,7 +170,7 @@ const ContentList = (props) => {
 
   const Fetchdomain = async () => {
     try {
-      const url = `http://localhost:3000/api/framework/v1/read/nulp?categories=${userCategoryParams}`;
+      const url = `/api/framework/v1/read/nulp?categories=${userCategoryParams}`;
       const response = await fetch(url);
 
       if (response.ok) {

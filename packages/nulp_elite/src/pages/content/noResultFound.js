@@ -16,19 +16,19 @@ const NoResult = () => {
   return (
     <div>
       {/* <Container maxWidth="md" role="main" className="container-pb"> */}
-        <Box
-          style={{
-            fontSize: "30px",
-            background: "#edece9",
-            padding: "109px",
-            textAlign: "center",
-            margin: "20px 0 60px 0",
-            BorderRadius: "10px",
-          }}
-        >
-          <SearchOffIcon style={{ fontSize: "70px", color: "#ccc" }} />
-          <Box> No result Found</Box>
-        </Box>
+      <Box
+        style={{
+          fontSize: "30px",
+          background: "#edece9",
+          padding: "109px",
+          textAlign: "center",
+          margin: "20px 0 60px 0",
+          BorderRadius: "10px",
+        }}
+      >
+        <SearchOffIcon style={{ fontSize: "70px", color: "#ccc" }} />
+        <Box> No result Found</Box>
+      </Box>
       {/* </Container> */}
       <FloatingChatIcon />
     </div>

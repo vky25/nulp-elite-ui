@@ -33,7 +33,9 @@ import Pagination from "@mui/material/Pagination";
 import Popover from "@mui/material/Popover";
 import { Container } from "@mui/material";
 import Alert from "@mui/material/Alert";
+import Filter from "components/filter";
 const axios = require("axios");
+const designations = require("../../configs/designations.json");
 
 // Define modal styles
 const useStyles = makeStyles((theme) => ({
@@ -93,6 +95,14 @@ const AddConnections = () => {
   const [userQuerySearchData, setUserQuerySearchData] = useState();
   const [anchorEl, setAnchorEl] = React.useState(null);
   const [userInfo, setUserInfo] = useState();
+  const [expandedMessageId, setExpandedMessageId] = useState(null);
+  const [designationsList, setDesignationsList] = useState([]);
+  const [selectedValues, setSelectedValues] = useState([]);
+  const [selectedName, setSelectedName] = useState("");
+  const [selectedDesignation, setSelectedDesignation] = useState("");
+  const [userFilter, setUserFilter] = useState("");
+  const [userIds, setUserIds] = useState([]);
+
   // const handleFilterChange = (selectedOptions) => {
   //   const selectedValues = selectedOptions.map((option) => option.value);
   //   setFilters({ ...filters, firstName: selectedValues });
@@ -113,7 +123,7 @@ const AddConnections = () => {
       is_read: false,
     });
 
-    const url = `http://localhost:3000/directConnect/get-chats?${params.toString()}`;
+    const url = `/directConnect/get-chats?${params.toString()}`;
 
     try {
       const response = await fetch(url, {
@@ -129,6 +139,40 @@ const AddConnections = () => {
 
       const responseData = await response.json();
       console.log("getChat", responseData.result);
+      return responseData.result;
+    } catch (error) {
+      setError(error.message);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+  const getChatRequest = async (userId) => {
+    setIsLoading(true);
+    setError(null);
+
+    const params = new URLSearchParams({
+      sender_id: loggedInUserId,
+      receiver_id: userId,
+      is_accepted: false,
+      is_read: false,
+    });
+
+    const url = `http://localhost:3000/directConnect/get-chats?${params.toString()}`;
+
+    try {
+      const response = await fetch(url, {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
+
+      if (!response.ok) {
+        throw new Error("Failed to get chat");
+      }
+
+      const responseData = await response.json();
+      console.log("getChatRequest", responseData.result);
       return responseData.result;
     } catch (error) {
       setError(error.message);
@@ -153,6 +197,7 @@ const AddConnections = () => {
   };
 
   useEffect(() => {
+    setDesignationsList(designations);
     if (activeTab === "Tab2") {
       handleSearch();
     }
@@ -196,8 +241,9 @@ const AddConnections = () => {
     setIsLoading(true);
     setError(null);
     setUserSearchData([]);
+    setUserFilter([]);
 
-    const url = `http://localhost:3000/learner/user/v3/search`;
+    const url = `/learner/user/v3/search`;
     let filters = {
       status: "1",
     };
@@ -263,6 +309,7 @@ const AddConnections = () => {
       });
       console.log("responseUserData", responseUserData);
       setUserSearchData(responseUserData);
+      setUserFilter(responseUserData);
       console.log("responseSearchData", responseData);
     } catch (error) {
       console.error("Error fetching data:", error);
@@ -277,7 +324,7 @@ const AddConnections = () => {
     setError(null);
     setUserQuerySearchData([]);
 
-    const url = `http://localhost:3000/learner/user/v3/search`;
+    const url = `/learner/user/v3/search`;
     const requestBody = {
       request: {
         filters: {
@@ -355,7 +402,7 @@ const AddConnections = () => {
       is_connection: true,
     });
 
-    const url = `http://localhost:3000/directConnect/get-chats?${params.toString()}`;
+    const url = `/directConnect/get-chats?${params.toString()}`;
 
     try {
       const response = await fetch(url, {
@@ -413,7 +460,7 @@ const AddConnections = () => {
     setError(null);
     setInvitationNotAcceptedUsers([]);
 
-    const url = `http://localhost:3000/learner/user/v3/search`;
+    const url = `/learner/user/v3/search`;
     const requestBody = {
       request: {
         filters: {
@@ -471,7 +518,7 @@ const AddConnections = () => {
     setError(null);
     setInvitationAcceptedUsers([]);
 
-    const url = `http://localhost:3000/learner/user/v3/search`;
+    const url = `/learner/user/v3/search`;
     const requestBody = {
       request: {
         filters: {
@@ -540,16 +587,13 @@ const AddConnections = () => {
     setError(null);
     setInvitationReceivedUserByIds([]);
 
-    const url = `http://localhost:3000/learner/user/v3/search`;
+    const url = `/learner/user/v3/search`;
     const requestBody = {
       request: {
         filters: {
           status: "1",
           userId: userIds,
         },
-        // query: searchQuery,
-        // pageNumber: currentPage,
-        // pageSize: pageSize,
       },
     };
 
@@ -568,16 +612,28 @@ const AddConnections = () => {
 
       const responseData = await response.json();
       const content = responseData?.result?.response?.content || [];
-      const userInfoPromises = content.map((item) => fetchUserInfo(item.id));
+
+      const userListWithChat = await Promise.all(
+        content.map(async (item) => {
+          const userChat = await getChatRequest(item.id);
+          if (userChat?.length > 0) {
+            item = { ...item, messageRequest: userChat[0]?.message };
+          }
+          return item;
+        })
+      );
+
+      const userInfoPromises = userListWithChat.map((item) =>
+        fetchUserInfo(item.id)
+      );
       const userInfoList = await Promise.all(userInfoPromises);
 
-      // Add designation and bio to each item
-      content.forEach((item, index) => {
+      userListWithChat.forEach((item, index) => {
         item.designation = userInfoList[index].designation || "";
         item.bio = userInfoList[index].bio || "";
       });
 
-      setInvitationReceivedUserByIds(content);
+      setInvitationReceivedUserByIds(userListWithChat);
       handleOpen();
       handleClose();
       console.log(
@@ -638,7 +694,7 @@ const AddConnections = () => {
       receiver_id: loggedInUserId,
     };
 
-    const url = `http://localhost:3000/directConnect/accept-invitation`;
+    const url = `/directConnect/accept-invitation`;
 
     try {
       const response = await fetch(url, {
@@ -670,7 +726,7 @@ const AddConnections = () => {
       receiver_id: loggedInUserId,
     };
 
-    const url = `http://localhost:3000/directConnect/reject-invitation`;
+    const url = `/directConnect/reject-invitation`;
 
     try {
       const response = await fetch(url, {
@@ -705,7 +761,7 @@ const AddConnections = () => {
       is_connection: true,
     });
 
-    const url = `http://localhost:3000/directConnect/get-chats?${params.toString()}`;
+    const url = `/directConnect/get-chats?${params.toString()}`;
 
     try {
       const response = await fetch(url, {
@@ -738,7 +794,7 @@ const AddConnections = () => {
     setIsLoading(true);
     setError(null);
 
-    const url = `http://localhost:3000/directConnect/send-chat`;
+    const url = `/directConnect/send-chat`;
     const requestBody = {
       sender_id: loggedInUserId,
       receiver_id: userId,
@@ -837,7 +893,7 @@ const AddConnections = () => {
   const fetchUserInfo = async (userId) => {
     try {
       const response = await axios.post(
-        "http://localhost:3000/custom/user/read",
+        "/custom/user/read",
         { user_ids: [userId] },
         {
           withCredentials: true,
@@ -859,6 +915,109 @@ const AddConnections = () => {
       onUserQuerySearch(searchQuery);
     }
   }, [searchQuery]);
+  const handleShowFullMessage = (itemId) => {
+    setExpandedMessageId(itemId === expandedMessageId ? null : itemId);
+  };
+  const handleDesignationFilter = async (event) => {
+    const userDesignation = await handleFilter(event);
+
+    setUserIds(userDesignation);
+    let filters = {
+      status: "1",
+    };
+    if (userDesignation && userDesignation?.length > 0) {
+      filters.userId = userDesignation;
+    }
+    const responseUserData = await handleFilterChange(filters);
+    setUserSearchData(responseUserData);
+  };
+
+  const handleUserNameFilter = async (event) => {
+    let filters = {
+      status: "1",
+    };
+    if (event) {
+      filters.firstName = event;
+    }
+    const responseUserData = await handleFilterChange(filters);
+    setUserSearchData(responseUserData);
+  };
+
+  const handleFilter = async (event) => {
+    try {
+      const response = await axios.post(
+        "http://localhost:3000/custom/user/read",
+        { designations: event },
+        {
+          withCredentials: true,
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }
+      );
+
+      setUserInfo(response.data.result);
+      const newIds = response.data.result.map((item) => item.user_id);
+      return newIds;
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  const handleFilterChange = async (filters) => {
+    setIsLoading(true);
+    setError(null);
+    setUserSearchData([]);
+
+    const url = `http://localhost:3000/learner/user/v3/search`;
+
+    const requestBody = {
+      request: {
+        filters: filters,
+        limit: 10,
+        offset: 10 * (currentPage - 1),
+        sort_by: {
+          lastUpdatedOn: "desc",
+        },
+      },
+    };
+
+    try {
+      const response = await fetch(url, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(requestBody),
+      });
+
+      if (!response.ok) {
+        throw new Error("Failed to fetch data");
+      }
+
+      let responseData = await response.json();
+      setTotalPages(Math.ceil(responseData?.result?.response?.count / 10));
+      const responseUserData = responseData?.result?.response?.content;
+      const userInfoPromises = responseUserData.map((item) =>
+        fetchUserInfo(item.id)
+      );
+      const userInfoList = await Promise.all(userInfoPromises);
+
+      // Add designation and bio to each item
+      responseUserData.forEach((item, index) => {
+        item.designation = userInfoList[index].designation || "";
+        item.bio = userInfoList[index].bio || "";
+      });
+
+      setUserSearchData(responseUserData);
+      return responseUserData;
+    } catch (error) {
+      console.error("Error fetching data:", error);
+      setError("Failed to fetch data. Please try again.");
+    } finally {
+      setIsLoading(false);
+    }
+  };
 
   return (
     <Box>
@@ -971,12 +1130,34 @@ const AddConnections = () => {
               {invitationReceiverByUser &&
                 invitationReceiverByUser?.map((item) => (
                   <List sx={{}} style={{ color: "gray", cursor: "pointer" }}>
-                    <ListItem>
+                    <ListItem key={item.userId}>
                       <ListItemText
                         primary={`${item.firstName}${
                           item.lastName ? ` ${item.lastName}` : ""
-                        }`}
-                        secondary={item.designation}
+                        }   | ${item.designation}`}
+                        secondary={
+                          item.messageRequest.length > 20 ? (
+                            <>
+                              {expandedMessageId === item.userId
+                                ? item.messageRequest
+                                : // : `${item.messageRequest.substring(0, 20)}...`}
+                                  `${item.messageRequest.substring(0, 20)}`}
+                              <span
+                                style={{ color: "blue", cursor: "pointer" }}
+                                onClick={() =>
+                                  handleShowFullMessage(item.userId)
+                                }
+                              >
+                                {" "}
+                                {expandedMessageId === item.userId
+                                  ? ""
+                                  : "Show More"}
+                              </span>
+                            </>
+                          ) : (
+                            item.messageRequest
+                          )
+                        }
                       />
                       <div
                         style={{
@@ -1011,6 +1192,7 @@ const AddConnections = () => {
                     <Divider />
                   </List>
                 ))}
+
               {invitationAcceptedUsers &&
                 invitationAcceptedUsers?.map((item) => (
                   <List sx={{}} style={{ color: "green", cursor: "pointer" }}>
@@ -1125,6 +1307,25 @@ const AddConnections = () => {
               </div>
             </TabPanel>
             <TabPanel value="2">
+              <Box
+                style={{ display: "flex", justifyContent: "space-between" }}
+                className="filter-domain"
+              >
+                {userFilter && (
+                  <Filter
+                    options={userFilter.map((user) => user.firstName)}
+                    label="Filter by Name"
+                    onChange={handleUserNameFilter}
+                  />
+                )}
+
+                <Filter
+                  options={designationsList}
+                  label="Filter by Designation"
+                  onChange={handleDesignationFilter}
+                  // isMulti={false}
+                />
+              </Box>
               {userSearchData &&
                 userSearchData?.map((item) => (
                   <List
@@ -1154,55 +1355,6 @@ const AddConnections = () => {
                       </Link>
                     </ListItem>
                     <Divider />
-                    {/* <Box
-              style={{
-                display: "flex",
-                alignItems: "center",
-                flexDirection: "column", // Added to align items vertically
-              }}
-            >
-              <TextField
-                label="Search for a user..."
-                value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)}
-                style={{
-                  width: "100%",
-                  marginBottom: "1rem",
-                }}
-              />
-              <Button
-                style={{
-                  padding: "11px 9px",
-                  borderRadius: "4px",
-                  backgroundColor: "#004367",
-                  color: "white",
-                  border: "1px",
-                  cursor: "pointer",
-                  fontSize: "12px",
-                }}
-                onClick={handleSearch}
-              >
-                Search
-              </Button>
-              {!isLoading && !error && (
-                <List>
-                  {filteredUsers &&
-                    filteredUsers.map((user, index) => (
-                      <React.Fragment key={index}>
-                        <ListItem>
-                          <ListItemText
-                            primary={`Name Surname: ${user.firstName} ${user.lastName}`}
-                            secondary={`Designation: ${user.designation}`}
-                          />
-                        </ListItem>
-                        <Divider />
-                      </React.Fragment>
-                    ))}
-                </List>
-              )}
-              {isLoading && <Typography>Loading...</Typography>}
-              {error && <Typography>Error: {error}</Typography>}
-            </Box> */}
                   </List>
                 ))}
 
@@ -1248,8 +1400,7 @@ const AddConnections = () => {
                             fontWeight: "500",
                           }}
                         >
-                          {selectedUser?.firstName}
-                          {selectedUser?.lastName}
+                          {selectedUser?.firstName} {selectedUser?.lastName}
                         </div>
                       )}
                       {selectedUser && (

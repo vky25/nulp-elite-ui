@@ -31,7 +31,7 @@ const LearningHistory = () => {
       setError(null);
       try {
         const _userId = util.userId();
-        const url = `http://localhost:3000/learner/course/v1/user/enrollment/list/${_userId}?orgdetails=${userOrgdetailsParams}&fields=${enrolledCoursesFieldsParams}&batchDetails=${enrolledCoursesBatchDetailsParams}`;
+        const url = `/learner/course/v1/user/enrollment/list/${_userId}?orgdetails=${userOrgdetailsParams}&fields=${enrolledCoursesFieldsParams}&batchDetails=${enrolledCoursesBatchDetailsParams}`;
         const response = await fetch(url, {
           headers: {
             "Content-Type": "application/json",

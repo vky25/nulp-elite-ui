@@ -55,7 +55,7 @@ const ContinueLearning = () => {
       "Content-Type": "application/json",
     };
 
-    const url = `http://localhost:3000/learner/course/v1/user/enrollment/list/${_userId}?orgdetails=${userOrgdetailsParams}&fields=${enrolledCoursesFieldsParams}&batchDetails=${enrolledCoursesBatchDetailsParams}`;
+    const url = `/learner/course/v1/user/enrollment/list/${_userId}?orgdetails=${userOrgdetailsParams}&fields=${enrolledCoursesFieldsParams}&batchDetails=${enrolledCoursesBatchDetailsParams}`;
     try {
       const response = await fetch(url, headers);
       const responseData = await response.json();

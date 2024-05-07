@@ -91,7 +91,7 @@ const CategoryPage = () => {
       "Content-Type": "application/json",
     };
 
-    const url = `http://localhost:3000/api/${URLSConfig.URLS.CONTENT.SEARCH}?orgdetails=${orgDetailsParams}`;
+    const url = `/api/${URLSConfig.URLS.CONTENT.SEARCH}?orgdetails=${orgDetailsParams}`;
     try {
       const response = await getAllContents(url, data, headers);
       setData(response.data.result.content);
@@ -112,7 +112,7 @@ const CategoryPage = () => {
       Cookie: `connect.sid=${getCookieValue("connect.sid")}`,
     };
     try {
-      const url = `http://localhost:3000/api/channel/v1/read/0130701891041689600`;
+      const url = `/api/channel/v1/read/0130701891041689600`;
       const response = await frameworkService.getChannel(url, headers);
       // console.log("channel---",response.data.result);
       setChannelData(response.data.result);
@@ -122,7 +122,7 @@ const CategoryPage = () => {
     } finally {
     }
     try {
-      const url = `http://localhost:3000/api/framework/v1/read/nulp?categories=${userCategoryParams}`;
+      const url = `/api/framework/v1/read/nulp?categories=${userCategoryParams}`;
       const response = await frameworkService.getSelectedFrameworkCategories(
         url,
         headers

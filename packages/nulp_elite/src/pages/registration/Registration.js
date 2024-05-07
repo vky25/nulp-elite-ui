@@ -115,7 +115,7 @@ const Registration = () => {
       setIsLoading(true);
       setError(null);
 
-      const url = `http://localhost:3000/learner/user/v1/exists/email/${formik.values.email}?captchaResponse=${captchaResponse}`;
+      const url = `/learner/user/v1/exists/email/${formik.values.email}?captchaResponse=${captchaResponse}`;
 
       try {
         const response = await fetch(url, {
@@ -149,7 +149,7 @@ const Registration = () => {
       setIsLoading(true);
       setError(null);
 
-      const url = `http://localhost:3000/learner/anonymous/otp/v1/generate?captchaResponse=${captchaResponse}`;
+      const url = `/learner/anonymous/otp/v1/generate?captchaResponse=${captchaResponse}`;
       const requestBody = {
         request: {
           key: email,
@@ -199,7 +199,7 @@ const Registration = () => {
     setIsLoading(true);
     setError(null);
 
-    const url = `http://localhost:3000/learner/data/v1/system/settings/get/tncConfig`;
+    const url = `/learner/data/v1/system/settings/get/tncConfig`;
 
     try {
       const response = await fetch(url, {
@@ -286,13 +286,11 @@ const Registration = () => {
           </Box>
           <Box py={1}>
             <FormControl fullWidth style={{ marginTop: "10px" }}>
-              <InputLabel id="demo-simple-select-label"  className="year-select">
+              <InputLabel id="demo-simple-select-label" className="year-select">
                 {" "}
                 {t("YEAR_OF_BIRTH")} <span className="required">*</span>
               </InputLabel>
               <Select
-                                    
-
                 labelId="demo-simple-select-label"
                 id="demo-simple-select"
                 name="age"
@@ -483,8 +481,7 @@ const Registration = () => {
                 marginTop: "10px",
               }}
             >
-              {t("ALREADY_HAVE_AN_ACCOUNT")}{" "}
-              <Link href="http://localhost:3000/all">Log in</Link>
+              {t("ALREADY_HAVE_AN_ACCOUNT")} <Link href="/all">Log in</Link>
             </Typography>
           </Box>
           <Box py={1}>{error && <p className="form-error">{error}</p>}</Box>
