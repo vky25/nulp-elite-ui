@@ -20,8 +20,7 @@ import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import MenuIcon from "@mui/icons-material/Menu";
 import BlockIcon from "@mui/icons-material/Block";
 import SendIcon from "@mui/icons-material/Send";
-import { t } from "i18next";
-
+import { useTranslation } from "react-i18next";
 const moment = require("moment");
 const timezone = require("moment-timezone");
 const useStyles = makeStyles((theme) => ({
@@ -59,8 +58,8 @@ const useStyles = makeStyles((theme) => ({
     padding: "8px",
     margin: "15px 0",
     textAlign: "right",
-    background: "linear-gradient(180deg, #004367 0%, #102244 100%)",
-    color: "#fff",
+    background: "#C0E9FF",
+    color: "#212121",
   },
   receiverMessage: {
     margin: "4px 0",
@@ -90,7 +89,7 @@ const Message = (props) => {
   const [dialogOpen, setDialogOpen] = useState(false);
   const [isBlocked, setIsBlocked] = useState(false); // State to track if user is blocked
   const [showUnblockOption, setShowUnblockOption] = useState(false); // State to show/hide unblock option
-
+  const { t } = useTranslation();
   useEffect(() => {
     const _userId = util.userId();
     setLoggedInUserId(_userId);
