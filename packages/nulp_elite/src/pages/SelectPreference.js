@@ -11,6 +11,7 @@ import {
   Box,
 } from "@mui/material";
 import * as util from "../services/utilService";
+import { useTranslation } from "react-i18next";
 
 const useStyles = makeStyles((theme) => ({
   formControl: {
@@ -23,6 +24,7 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 const SelectPreference = ({ isOpen, onClose }) => {
+  const { t } = useTranslation();
   const [categories, setCategories] = useState([]);
   const [subCategories, setSubCategories] = useState([]);
   const [languages, setLanguages] = useState([]);
@@ -288,9 +290,9 @@ const SelectPreference = ({ isOpen, onClose }) => {
 
   return (
     <div>
-      <Box sx={{ minWidth: 120 }}>
-        <FormControl fullWidth sx={{ marginBottom: 2 }}>
-          <InputLabel id="category-label">{domain}</InputLabel>
+      <Box sx={{ minWidth: 120 }} className="preference">
+        <FormControl fullWidth sx={{ marginBottom: 2 }} >
+          <InputLabel id="category-label" className="year-select">{domain}</InputLabel>
           <Select
             labelId="category-label"
             value={selectedCategory}
@@ -306,7 +308,7 @@ const SelectPreference = ({ isOpen, onClose }) => {
 
         <Box sx={{ minWidth: 120 }}>
           <FormControl fullWidth sx={{ marginBottom: 2 }}>
-            <InputLabel id="sub-category-label">{subDomain}</InputLabel>
+            <InputLabel id="sub-category-label"  className="year-select">{subDomain}</InputLabel>
             <Select
               labelId="sub-category-label"
               id="sub-category-select"
@@ -327,7 +329,7 @@ const SelectPreference = ({ isOpen, onClose }) => {
         </Box>
         <Box sx={{ minWidth: 120 }}>
           <FormControl fullWidth sx={{ marginBottom: 2 }}>
-            <InputLabel id="language-label">{language}</InputLabel>
+            <InputLabel id="language-label"  className="year-select">{language}</InputLabel>
             <Select
               labelId="language-label"
               id="language-select"
@@ -347,7 +349,7 @@ const SelectPreference = ({ isOpen, onClose }) => {
           </FormControl>
         </Box>
         <FormControl fullWidth sx={{ marginBottom: 2 }}>
-          <InputLabel id="topic-label">{topic}</InputLabel>
+          <InputLabel id="topic-label"  className="year-select">{topic}</InputLabel>
           <Select
             labelId="topic-label"
             value={selectedTopic}
@@ -361,11 +363,11 @@ const SelectPreference = ({ isOpen, onClose }) => {
           </Select>
         </FormControl>
       </Box>
-      <Button onClick={handleSavePreferences} disabled={isDisabled}>
-        Submit
+      <Button className="btn-primary" onClick={handleSavePreferences} disabled={isDisabled}>
+        {t('SUBMIT')}
       </Button>
 
-      {!isEmptyPreference && <Button onClick={handleClose}>Cancel</Button>}
+      {!isEmptyPreference && <Button className="btn-default" onClick={handleClose}>{t('CANCEL')}</Button>}
     </div>
   );
 };
