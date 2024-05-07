@@ -123,7 +123,7 @@ const AddConnections = () => {
       is_read: false,
     });
 
-    const url = `http://localhost:3000/directConnect/get-chats?${params.toString()}`;
+    const url = `/directConnect/get-chats?${params.toString()}`;
 
     try {
       const response = await fetch(url, {
@@ -243,7 +243,7 @@ const AddConnections = () => {
     setUserSearchData([]);
     setUserFilter([]);
 
-    const url = `http://localhost:3000/learner/user/v3/search`;
+    const url = `/learner/user/v3/search`;
     let filters = {
       status: "1",
     };
@@ -324,7 +324,7 @@ const AddConnections = () => {
     setError(null);
     setUserQuerySearchData([]);
 
-    const url = `http://localhost:3000/learner/user/v3/search`;
+    const url = `/learner/user/v3/search`;
     const requestBody = {
       request: {
         filters: {
@@ -402,7 +402,7 @@ const AddConnections = () => {
       is_connection: true,
     });
 
-    const url = `http://localhost:3000/directConnect/get-chats?${params.toString()}`;
+    const url = `/directConnect/get-chats?${params.toString()}`;
 
     try {
       const response = await fetch(url, {
@@ -460,7 +460,7 @@ const AddConnections = () => {
     setError(null);
     setInvitationNotAcceptedUsers([]);
 
-    const url = `http://localhost:3000/learner/user/v3/search`;
+    const url = `/learner/user/v3/search`;
     const requestBody = {
       request: {
         filters: {
@@ -518,7 +518,7 @@ const AddConnections = () => {
     setError(null);
     setInvitationAcceptedUsers([]);
 
-    const url = `http://localhost:3000/learner/user/v3/search`;
+    const url = `/learner/user/v3/search`;
     const requestBody = {
       request: {
         filters: {
@@ -587,7 +587,7 @@ const AddConnections = () => {
     setError(null);
     setInvitationReceivedUserByIds([]);
 
-    const url = `http://localhost:3000/learner/user/v3/search`;
+    const url = `/learner/user/v3/search`;
     const requestBody = {
       request: {
         filters: {
@@ -694,7 +694,7 @@ const AddConnections = () => {
       receiver_id: loggedInUserId,
     };
 
-    const url = `http://localhost:3000/directConnect/accept-invitation`;
+    const url = `/directConnect/accept-invitation`;
 
     try {
       const response = await fetch(url, {
@@ -726,7 +726,7 @@ const AddConnections = () => {
       receiver_id: loggedInUserId,
     };
 
-    const url = `http://localhost:3000/directConnect/reject-invitation`;
+    const url = `/directConnect/reject-invitation`;
 
     try {
       const response = await fetch(url, {
@@ -761,7 +761,7 @@ const AddConnections = () => {
       is_connection: true,
     });
 
-    const url = `http://localhost:3000/directConnect/get-chats?${params.toString()}`;
+    const url = `/directConnect/get-chats?${params.toString()}`;
 
     try {
       const response = await fetch(url, {
@@ -794,7 +794,7 @@ const AddConnections = () => {
     setIsLoading(true);
     setError(null);
 
-    const url = `http://localhost:3000/directConnect/send-chat`;
+    const url = `/directConnect/send-chat`;
     const requestBody = {
       sender_id: loggedInUserId,
       receiver_id: userId,
@@ -893,7 +893,7 @@ const AddConnections = () => {
   const fetchUserInfo = async (userId) => {
     try {
       const response = await axios.post(
-        "http://localhost:3000/custom/user/read",
+        "/custom/user/read",
         { user_ids: [userId] },
         {
           withCredentials: true,

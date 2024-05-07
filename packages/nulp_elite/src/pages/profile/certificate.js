@@ -18,7 +18,7 @@ import FloatingChatIcon from "../../components/FloatingChatIcon";
 import * as util from "../../services/utilService";
 import axios from "axios";
 import NoResult from "pages/content/noResultFound";
-import Alert from '@mui/material/Alert';
+import Alert from "@mui/material/Alert";
 
 const Certificate = () => {
   const { t } = useTranslation();
@@ -52,13 +52,13 @@ const Certificate = () => {
             },
           },
         };
-        const url = `http://localhost:3000/learner/certreg/v2/certs/search`;
+        const url = `/learner/certreg/v2/certs/search`;
         const response = await axios.post(url, request);
         const data = response.data;
         setCertData(data);
       } catch (error) {
         console.error("Error fetching user data:", error);
-         setError(error.message);
+        setError(error.message);
       }
 
       try {
@@ -68,14 +68,13 @@ const Certificate = () => {
             recipient: { id: { eq: _userId } },
           },
         };
-        const url = `http://localhost:3000/learner/rc/certificate/v1/search`;
+        const url = `/learner/rc/certificate/v1/search`;
         const response = await axios.post(url, request);
         const data = response.data;
         setOtherCertData(data);
       } catch (error) {
         console.error("Error fetching user data:", error);
         setError(error.message);
-
       }
     };
 
@@ -92,7 +91,11 @@ const Certificate = () => {
     <div>
       <Header />
       <Container maxWidth="xxl" role="main" className="container-pb mb-20">
-      {error &&  <Alert severity="error" className="my-10">{error}</Alert> }
+        {error && (
+          <Alert severity="error" className="my-10">
+            {error}
+          </Alert>
+        )}
         <Box textAlign="center" padding="10">
           <Breadcrumbs
             aria-label="breadcrumb"

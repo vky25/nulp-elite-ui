@@ -25,7 +25,10 @@ import ContinueLearning from "./continueLearning";
 import SelectPreference from "pages/SelectPreference";
 import { Dialog, DialogTitle, DialogContent } from "@mui/material";
 import _ from "lodash";
+import Modal from '@mui/material/Modal';
+
 const designations = require("../../configs/designations.json");
+
 import {
   Button,
   FormControl,
@@ -46,9 +49,7 @@ const CssTextField = styled(TextField)({
   },
   "& .MuiOutlinedInput-root": {
     "& fieldset": {
-      borderColor: "#E0E3E7",
-      border: "1px solid #004367",
-      borderRadius: "12px",
+      borderRadius: "4px",
     },
     "&:hover fieldset": {
       borderColor: "#B2BAC2",
@@ -59,6 +60,17 @@ const CssTextField = styled(TextField)({
     },
   },
 });
+const style = {
+  position: 'absolute',
+  top: '50%',
+  left: '50%',
+  width:'50%',
+  transform: 'translate(-50%, -50%)',
+  bgcolor: 'background.paper',
+  boxShadow: 24,
+  p: 4,
+};
+
 const Profile = () => {
   const { t } = useTranslation();
   const [userData, setUserData] = useState(null);
@@ -113,7 +125,7 @@ const Profile = () => {
     setDesignationsList(designations);
     const fetchCertificateCount = async () => {
       try {
-        const url = `http://localhost:3000/profilePage/certificateCount?user_id=${_userId}`;
+        const url = `/profilePage/certificateCount?user_id=${_userId}`;
         const response = await fetch(url);
         const data = await response.json();
         setCertificateCountData({
@@ -127,7 +139,7 @@ const Profile = () => {
 
     const fetchCourseCount = async () => {
       try {
-        const url = `http://localhost:3000/profilePage/courseCount?user_id=${_userId}`;
+        const url = `/profilePage/courseCount?user_id=${_userId}`;
         const response = await fetch(url);
         const data = await response.json();
         setCourseCountData({
@@ -141,7 +153,7 @@ const Profile = () => {
     const fetchUserInfo = async () => {
       try {
         const response = await axios.post(
-          "http://localhost:3000/custom/user/read",
+          "/custom/user/read",
           { user_ids: [_userId] },
           {
             withCredentials: true,
@@ -182,7 +194,7 @@ const Profile = () => {
     setIsLoading(true);
     setError(null);
 
-    const url = "http://localhost:3000/learner/user/v3/update";
+    const url = "/learner/user/v3/update";
     const requestBody = {
       params: {},
       request: {
@@ -215,7 +227,7 @@ const Profile = () => {
     }
   };
   const updateUserInfoInCustomDB = async () => {
-    const url = `http://localhost:3000/custom/user/update?user_id=${_userId}`;
+    const url = `/custom/user/update?user_id=${_userId}`;
     const requestBody = {
       designation:
         editedUserInfo.designation === "Other"
@@ -256,7 +268,7 @@ const Profile = () => {
 
   const fetchData = async () => {
     try {
-      const url = `http://localhost:3000/learner/user/v5/read/${_userId}?fields=organisations,roles,locations,declarations,externalIds`;
+      const url = `/learner/user/v5/read/${_userId}?fields=organisations,roles,locations,declarations,externalIds`;
       const header = "application/json";
       const response = await fetch(url, {
         headers: {
@@ -267,7 +279,6 @@ const Profile = () => {
       setUserData(data);
       localStorage.setItem("userRootOrgId", data.result.response.rootOrgId);
       if (_.isEmpty(data?.result?.response.framework)) {
-        setIsEmptyPreference(true);
         setOpenModal(true);
       }
     } catch (error) {
@@ -297,7 +308,7 @@ const Profile = () => {
 
   const handleCloseModal = () => {
     setOpenModal(false);
-    // fetchData();
+    fetchData();
   };
 
   return (
@@ -365,10 +376,18 @@ const Profile = () => {
                   <ModeEditIcon onClick={handleOpenEditDialog} />
                 </Box>
                 {isEditing && (
-                  <Dialog open={isEditing} onClose={handleCloseEditDialog}>
-                    <DialogTitle>Edit Profile</DialogTitle>
-                    <DialogContent>
-                      <form onSubmit={handleFormSubmit}>
+                  <Modal
+                  // open={open}
+                  // onClose={handleClose}
+                  aria-labelledby="modal-modal-title"
+                  aria-describedby="modal-modal-description"
+                  open={isEditing} onClose={handleCloseEditDialog}
+                >
+                  <Box sx={style}>
+                  <Typography id="modal-modal-title" variant="h6" component="h2" style={{marginBottom:"20px"}}>
+            {t('EDIT_PROFILE')}
+          </Typography>
+                  <form onSubmit={handleFormSubmit}>
                         <Box py={1}>
                           <CssTextField
                             id="firstName"
@@ -404,7 +423,7 @@ const Profile = () => {
 
                         <Box py={1}>
                           <FormControl fullWidth style={{ marginTop: "10px" }}>
-                            <InputLabel id="designation-label">
+                            <InputLabel id="designation-label"  className="year-select">
                               {" "}
                               {t("DESIGNATION")}{" "}
                             </InputLabel>
@@ -481,40 +500,31 @@ const Profile = () => {
                           </Typography>
                         </Box>
 
-                        <Box pt={4}>
+                        <Box pt={4} style={{display:"flex",justifyContent:"space-between"}}>
                           <Button
-                            style={{
-                              background: "#004367",
-                              borderRadius: "10px",
-                              color: "#fff",
-                              padding: "10px 71px",
-                              fontWeight: "600",
-                              fontSize: "14px",
-                            }}
+                            className="btn-primary"
                             type="submit"
                           >
-                            Save
+                            {t('SAVE')}
                           </Button>
-                        </Box>
-
-                        <Box pt={4}>
+                       
                           <Button
-                            style={{
-                              background: "#004367",
-                              borderRadius: "10px",
-                              color: "#fff",
-                              padding: "10px 71px",
-                              fontWeight: "600",
-                              fontSize: "14px",
-                            }}
+                            variant="outlined"
+                            className="btn-default"
                             onClick={handleCloseEditDialog}
                           >
-                            Cancel
+                            {t('CANCEL')}
                           </Button>
                         </Box>
                       </form>
-                    </DialogContent>
-                  </Dialog>
+                  </Box>
+                </Modal>
+                  // <Dialog open={isEditing} onClose={handleCloseEditDialog}>
+                  //   <DialogTitle>Edit Profile</DialogTitle>
+                  //   <DialogContent>
+                     
+                  //   </DialogContent>
+                  // </Dialog>
                 )}
 
                 <Box
@@ -528,7 +538,7 @@ const Profile = () => {
                     <>
                       <div
                         style={{
-                          width: "80px",
+                          width: "180px",
                           height: "60px",
                           borderRadius: "2px",
                           backgroundColor: "#6D757A",
@@ -545,8 +555,8 @@ const Profile = () => {
                       </div>
                     </>
                   )}
-                  <CardContent style={{ textAlign: "left", paddingTop: "0" }}>
-                    {userData && userInfo.length > 0 && (
+                  <CardContent style={{ textAlign: "left", paddingTop: "0",width:"60%" }}>
+                    {userData && userInfo?.length > 0 && (
                       <>
                         <Typography
                           component="div"
@@ -565,20 +575,21 @@ const Profile = () => {
                           color="text.secondary"
                           component="div"
                           style={{
-                            fontSize: "12px",
-                            padding: "10px 0",
+                            fontSize: "14px",
+                            padding: "5px 0",
                             display: "flex",
                           }}
                         >
                           {/* {t("DESIGNATION")} |{" "} */}
-                          {userInfo[0]?.designation}
-                          <Box style={{ paddingLeft: "10px" }}>
-                            {" "}
-                            ID: {userData.result.response.userName}{" "}
-                          </Box>{" "}
-                          {userData.result.response.organisations.orgName}
+                          {userInfo[0]?.designation} {" "}
+                          
                         </Typography>
-                        <Typography
+                        <Box style={{ display:"flex",fontSize:"13px",color:'#48484887' }}>
+                            {" "}
+                           <Box> ID:</Box> <Box>{userData.result.response.userName}{" "} {userData.result.response.organisations.orgName}</Box>
+                          </Box>{" "}
+                       
+                          <Typography
                           variant="subtitle1"
                           color="text.secondary"
                           component="div"
@@ -593,15 +604,14 @@ const Profile = () => {
                           color="text.secondary"
                           component="div"
                           style={{
-                            fontSize: "14px",
+                            fontSize: "12px",
                             padding: "10px 0",
                             display: "flex",
                           }}
                         >
                           <Box
-                            style={{ fontWeight: "600", paddingRight: "10px" }}
                           >
-                            {t("Domain")}:{" "}
+                            {t("DOMAIN")}: {" "}
                           </Box>{" "}
                           {userData.result.response.framework.board}
                         </Typography>
@@ -730,17 +740,32 @@ const Profile = () => {
                     </Box>
                   </Card>
                 </Grid>
-
-                <Dialog
+                <Modal
+                  // open={open}
+                  // onClose={handleClose}
+                  aria-labelledby="modal-modal-title"
+                  aria-describedby="modal-modal-description"
+                  isableEscapeKeyDown={!isEmptyPreference}
                   open={openModal}
-                  onClose={handleCloseModal}
-                  disableEscapeKeyDown={!isEmptyPreference}
+                  onClose={(event, reason) => {
+                    if (
+                      reason === "backdropClick" ||
+                      reason === "escapeKeyDown"
+                    ) {
+                      setOpenModal(true);
+                    } else {
+                      handleCloseModal();
+                    }
+                  }}
                 >
-                  <DialogTitle>Select Preference</DialogTitle>
-                  <DialogContent>
+               
+                   <Box sx={style}>
+                  <Typography id="modal-modal-title" variant="h6" component="h2" style={{marginBottom:"20px"}}>
+                 {t("SELECT_PREFERENCE")}
+          </Typography>
                     <SelectPreference onClose={handleCloseModal} />
-                  </DialogContent>
-                </Dialog>
+                    </Box>
+                </Modal>
               </Grid>
 
               {/* <Card sx={{ marginTop: "10px", padding: "10px" }}>

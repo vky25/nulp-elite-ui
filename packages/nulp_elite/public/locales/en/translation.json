@@ -159,5 +159,9 @@
   "A_MANAGER_WITH_THE_DEPARTMENT_OF_REVENUE": "A manager with the department of Revenue and taxes and has actively contributed to the growth and authenticity of the knowledge curated for the betterment of the department.",
   "YOU_ARE_VIEWING_CONTENTS_FOR": "You are viewing contents for :",
   "LOADING": "Loading...",
-  "LEARNING_HISTORY": "Learning History"
+  "LEARNING_HISTORY": "Learning History",
+  "SAVE":"Save",
+  "DOMAIN":"Domain",
+  "EDIT_PROFILE":"Edit profile",
+  "SELECT_PREFERENCE":"Select Preference"
 }

@@ -21,6 +21,8 @@ import MenuIcon from "@mui/icons-material/Menu";
 import BlockIcon from "@mui/icons-material/Block";
 import SendIcon from "@mui/icons-material/Send";
 import { useTranslation } from "react-i18next";
+import DoneAllIcon from "@mui/icons-material/DoneAll";
+
 const moment = require("moment");
 const timezone = require("moment-timezone");
 const useStyles = makeStyles((theme) => ({
@@ -113,7 +115,7 @@ const Message = (props) => {
   const fetchBlockUserStatus = async () => {
     try {
       const response = await axios.get(
-        `http://localhost:3000/directConnect/get-block-user?sender_id=${loggedInUserId}&receiver_id=${receiverUserId}`,
+        `/directConnect/get-block-user?sender_id=${loggedInUserId}&receiver_id=${receiverUserId}`,
         {
           withCredentials: true,
         }
@@ -135,7 +137,7 @@ const Message = (props) => {
       // Check if the user is not blocked before fetching chats
       if (!isBlocked) {
         const response = await axios.get(
-          `http://localhost:3000/directConnect/get-chats?sender_id=${loggedInUserId}&receiver_id=${receiverUserId}&is_accepted=true`,
+          `/directConnect/get-chats?sender_id=${loggedInUserId}&receiver_id=${receiverUserId}&is_accepted=true`,
           {
             withCredentials: true,
           }
@@ -153,7 +155,7 @@ const Message = (props) => {
         console.log("Sending message:", message);
 
         await axios.post(
-          "http://localhost:3000/directConnect/send-chat",
+          "/directConnect/send-chat",
           {
             sender_id: loggedInUserId,
             receiver_id: receiverUserId,
@@ -181,7 +183,7 @@ const Message = (props) => {
       console.log("updating message:", message);
 
       const data = await axios.put(
-        "http://localhost:3000/directConnect/update-chat",
+        "/directConnect/update-chat",
         {
           sender_id: loggedInUserId,
           receiver_id: receiverUserId,
@@ -249,7 +251,7 @@ const Message = (props) => {
       console.log("UnBlocking User");
 
       const data = await axios.post(
-        "http://localhost:3000/directConnect/unblock-user",
+        "/directConnect/unblock-user",
         {
           sender_id: loggedInUserId,
           receiver_id: receiverUserId,
@@ -277,7 +279,7 @@ const Message = (props) => {
       console.log("Blocking User");
 
       await axios.post(
-        "http://localhost:3000/directConnect/block-user",
+        "/directConnect/block-user",
         {
           sender_id: loggedInUserId,
           receiver_id: receiverUserId,
@@ -412,10 +414,44 @@ const Message = (props) => {
               }
             >
               <div>{msg.message}</div>
-              <div>{getTime(msg.timestamp)}</div>
-              {msg.sender_id === loggedInUserId ? (
-                <div>{msg.is_read ? "Read" : "Delivered"}</div>
-              ) : null}
+              <Box
+                style={{
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "flex-end",
+                }}
+              >
+                <div style={{ fontSize: "10px" }}>{getTime(msg.timestamp)}</div>
+                {msg.sender_id === loggedInUserId ? (
+                  <div
+                    style={{
+                      display: "flex",
+                      alignItems: "center",
+                      fontSize: "13px",
+                      justifyContent: "flex-end",
+                    }}
+                  >
+                    {msg.is_read ? (
+                      <DoneAllIcon
+                        style={{
+                          color: "#00ebff",
+                          fontSize: "15px",
+                          paddingLeft: "6px",
+                        }}
+                      />
+                    ) : (
+                      <DoneAllIcon
+                        style={{
+                          color: "#bdbaba",
+                          fontSize: "18px",
+                          paddingRight: "10px",
+                        }}
+                      />
+                    )}
+                    {/* {msg.is_read ? "Read" : "Delivered"} */}
+                  </div>
+                ) : null}
+              </Box>
             </div>
           </div>
         ))}
