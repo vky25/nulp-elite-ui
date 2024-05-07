@@ -162,5 +162,6 @@
   "LEARNING_HISTORY": "Learning History",
   "SAVE":"Save",
   "DOMAIN":"Domain",
-  "EDIT_PROFILE":"Edit profile"
+  "EDIT_PROFILE":"Edit profile",
+  "SELECT_PREFERENCE":"Select Preference"
 }

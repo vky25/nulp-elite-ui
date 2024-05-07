@@ -192,7 +192,7 @@ body {
     border: solid 1px #e1e1e1;
   }
   .profileBox {
-    padding: 40px;
+    padding: 28px;
   }
   .lg-hide {
     display: none !important;
@@ -373,4 +373,21 @@ width: 99.9% !important;
 }
 .MuiButtonBase-root:hover{
   background: transparent !important;
+}
+.btn-primary{
+  background: #004367 !important;
+  border-radius: 10px;
+  color: #fff !important;
+  padding: 10px 71px;
+  font-weight: 600;
+  font-size: 14px;
+}
+.btn-default{
+  border-radius: 10px;
+  color: #004367;
+  padding: 10px 12px;
+  margin: 0 10px;
+  font-weight:500;
+  font-size: 12px;
+  border: solid 1px #efefea00;
 }

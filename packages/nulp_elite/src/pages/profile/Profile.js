@@ -498,15 +498,7 @@ const Profile = () => {
 
                         <Box pt={4} style={{display:"flex",justifyContent:"space-between"}}>
                           <Button
-                            style={{
-                              background: "#004367",
-                              borderRadius: "10px",
-                              color: "#fff",
-                              padding: "10px 71px",
-                              fontWeight: "600",
-                              fontSize: "14px",
-                              width: "40%",
-                            }}
+                            className="btn-primary"
                             type="submit"
                           >
                             {t('SAVE')}
@@ -514,16 +506,7 @@ const Profile = () => {
                        
                           <Button
                             variant="outlined"
-                            style={{
-                              borderRadius: "10px",
-                              color: "#004367",
-                              padding: "10px 12px",
-                              margin: "0 10px",
-                              fontWeight: "500",
-                              fontSize: "12px",
-                              border: "solid 1px #efefea00",
-                              width: "40%",
-                            }}
+                            className="btn-default"
                             onClick={handleCloseEditDialog}
                           >
                             {t('CANCEL')}
@@ -753,17 +736,22 @@ const Profile = () => {
                     </Box>
                   </Card>
                 </Grid>
-
-                <Dialog
-                  open={openModal}
-                  onClose={handleCloseModal}
-                  disableEscapeKeyDown={!isEmptyPreference}
+                <Modal
+                  // open={open}
+                  // onClose={handleClose}
+                  aria-labelledby="modal-modal-title"
+                  aria-describedby="modal-modal-description"
+                  open={openModal}  onClose={handleCloseModal}
+                  isableEscapeKeyDown={!isEmptyPreference}
                 >
-                  <DialogTitle>Select Preference</DialogTitle>
-                  <DialogContent>
+               
+                   <Box sx={style}>
+                  <Typography id="modal-modal-title" variant="h6" component="h2" style={{marginBottom:"20px"}}>
+                 {t("SELECT_PREFERENCE")}
+          </Typography>
                     <SelectPreference onClose={handleCloseModal} />
-                  </DialogContent>
-                </Dialog>
+                    </Box>
+                </Modal>
               </Grid>
 
               {/* <Card sx={{ marginTop: "10px", padding: "10px" }}>
