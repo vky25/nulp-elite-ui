@@ -125,6 +125,7 @@ const AllContent = () => {
           "channel",
           "organisation",
           "trackable",
+          "primaryCategory"
         ],
         facets: [
           "se_boards",

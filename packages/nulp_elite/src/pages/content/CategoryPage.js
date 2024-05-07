@@ -80,6 +80,7 @@ const CategoryPage = () => {
           "se_subjects",
           "se_mediums",
           "se_gradeLevels",
+          "primaryCategory"
         ],
         facets: ["channel", "gradeLevel", "subject", "medium"],
         offset: 0,
