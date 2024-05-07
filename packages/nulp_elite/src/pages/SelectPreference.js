@@ -290,8 +290,8 @@ const SelectPreference = ({ isOpen, onClose }) => {
 
   return (
     <div>
-      <Box sx={{ minWidth: 120 }}>
-        <FormControl fullWidth sx={{ marginBottom: 2 }}>
+      <Box sx={{ minWidth: 120 }} className="preference">
+        <FormControl fullWidth sx={{ marginBottom: 2 }} >
           <InputLabel id="category-label" className="year-select">{domain}</InputLabel>
           <Select
             labelId="category-label"

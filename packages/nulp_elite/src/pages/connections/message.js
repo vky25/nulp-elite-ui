@@ -415,12 +415,14 @@ const Message = (props) => {
               }
             >
               <div>{msg.message}</div>
+              <Box style={{display:'flex',alignItems:'center',justifyContent:'flex-end'}}>
               <div style={{fontSize:'10px'}}>{getTime(msg.timestamp)}</div>
               {msg.sender_id === loggedInUserId ? (
                 <div style={{display:'flex',alignItems:'center',fontSize:'13px',justifyContent:'flex-end'}}>
-                  {msg.is_read ? <DoneAllIcon style={{color:'#00ebff',fontSize:'18px',paddingRight:'10px'}} /> : <DoneAllIcon style={{color:'#bdbaba',fontSize:'18px',paddingRight:'10px'}} />}
-                  {msg.is_read ? "Read" : "Delivered"}
+                  {msg.is_read ? <DoneAllIcon style={{color:'#00ebff',fontSize:'15px',paddingLeft:'6px'}} /> : <DoneAllIcon style={{color:'#bdbaba',fontSize:'18px',paddingRight:'10px'}} />}
+                  {/* {msg.is_read ? "Read" : "Delivered"} */}
                 </div>              ) : null}
+                </Box>
             </div>
           </div>
         ))}

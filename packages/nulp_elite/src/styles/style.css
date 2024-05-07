@@ -46,6 +46,15 @@ body {
   width: 59%;
   text-align: left;
 }
+.ribbonCard{
+  z-index:999;
+  font-size:14px;
+  position:absolute;
+  top:30px;
+  right:0;
+  color:#fff;
+  text-align:center
+}
 .twoLineEllipsis {
   overflow: hidden;
   text-overflow: ellipsis;
@@ -381,6 +390,7 @@ width: 99.9% !important;
   padding: 10px 71px;
   font-weight: 600;
   font-size: 14px;
+  width: 45%;
 }
 .btn-default{
   border-radius: 10px;
@@ -390,4 +400,28 @@ width: 99.9% !important;
   font-weight:500;
   font-size: 12px;
   border: solid 1px #efefea00;
+  width: 45%;
+}
+.preference .MuiSelect-multiple{
+  display: flex !important;
+  align-items: center !important;
+}
+.preference .css-1tsvksn {
+  flex: inherit !important;
+}
+.card-img{
+  height: 74px;
+  max-width: 100%;
+  object-fit: cover;
+  width: 74px;
+  border-radius: 90px;
+  border: solid 5px #efefef;
+  padding: 0px;
+}
+.card-img-container{
+  position: absolute;
+    top: 115px;
+    right: 30px;
+    text-align: center;
+    z-index: 999;
 }
