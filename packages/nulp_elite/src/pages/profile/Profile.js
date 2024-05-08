@@ -384,7 +384,7 @@ const Profile = () => {
                   open={isEditing} onClose={handleCloseEditDialog}
                 >
                   <Box sx={style}>
-                  <Typography id="modal-modal-title" variant="h6" component="h2" style={{marginBottom:"20px"}}>
+                  <Typography id="modal-modal-title" variant="h5" component="h2" style={{marginBottom:"20px"}}>
             {t('EDIT_PROFILE')}
           </Typography>
                   <form onSubmit={handleFormSubmit}>
@@ -500,17 +500,17 @@ const Profile = () => {
                           </Typography>
                         </Box>
 
-                        <Box pt={4} style={{display:"flex",justifyContent:"space-between"}}>
+                        <Box pt={4}>
                           <Button
-                            className="btn-primary"
+                            className="custom-btn-primary"
                             type="submit"
                           >
                             {t('SAVE')}
                           </Button>
                        
                           <Button
-                            variant="outlined"
-                            className="btn-default"
+                           
+                            className="custom-btn-default"
                             onClick={handleCloseEditDialog}
                           >
                             {t('CANCEL')}
@@ -760,7 +760,7 @@ const Profile = () => {
                 >
                
                    <Box sx={style}>
-                  <Typography id="modal-modal-title" variant="h6" component="h2" style={{marginBottom:"20px"}}>
+                  <Typography id="modal-modal-title" variant="h5" component="h2" style={{marginBottom:"20px"}}>
                  {t("SELECT_PREFERENCE")}
           </Typography>
                     <SelectPreference onClose={handleCloseModal} />
@@ -804,7 +804,7 @@ const Profile = () => {
                       {t("COURSES")}
                       <br />
                       <Typography
-                        variant="h7"
+                        variant="h5"
                         style={{
                           fontWeight: "700",
                           margin: "9px 0",
@@ -824,7 +824,7 @@ const Profile = () => {
                       {t("WEBINARS")}
                       <br />
                       <Typography
-                        variant="h7"
+                        variant="h5"
                         style={{
                           fontWeight: "700",
                           margin: "9px 0",

@@ -363,11 +363,11 @@ const SelectPreference = ({ isOpen, onClose }) => {
           </Select>
         </FormControl>
       </Box>
-      <Button className="btn-primary" onClick={handleSavePreferences} disabled={isDisabled}>
+      <Button className="custom-btn-primary my-10" onClick={handleSavePreferences} disabled={isDisabled}>
         {t('SUBMIT')}
       </Button>
 
-      {!isEmptyPreference && <Button className="btn-default" onClick={handleClose}>{t('CANCEL')}</Button>}
+      {!isEmptyPreference && <Button className="custom-btn-default" onClick={handleClose}>{t('CANCEL')}</Button>}
     </div>
   );
 };
