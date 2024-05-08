@@ -1089,7 +1089,7 @@ const AddConnections = () => {
               </Typography>
             </Popover>
           </div>
-          <TabContext value={value}>
+          <TabContext value={value} className="addConnection">
             <Box sx={{ borderBottom: 1, borderColor: "divider" }}>
               <TabList
                 onChange={handleChange}
@@ -1312,7 +1312,7 @@ const AddConnections = () => {
             <TabPanel value="2">
               <Box
                 style={{ display: "flex", justifyContent: "space-between" }}
-                className="filter-domain"
+                className="filter-domain my-20"
               >
                 {userFilter && (
                   <Filter
