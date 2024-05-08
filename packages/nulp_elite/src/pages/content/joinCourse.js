@@ -243,8 +243,7 @@ const JoinCourse = () => {
           <Box>
             <Button
               onClick={handleLinkClick}
-              variant="contained"
-              style={{ background: "#9ACD32", color: "#fff", left: "160px" }}
+             className="custom-btn-primary my-20"
             >
               {t("START_LEARNING")}
             </Button>
@@ -355,10 +354,9 @@ const JoinCourse = () => {
             // onClick={handleOpenModal}
             disabled={isExpired} // Only disable if expired (not on last day)
             variant="contained"
+            className="custom-btn-primary my-20"
             style={{
               background: isExpired ? "#ccc" : "#004367",
-              color: "#fff",
-              left: "160px",
             }}
           >
             {t("JOIN_COURSE")}

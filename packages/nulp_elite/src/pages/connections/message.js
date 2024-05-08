@@ -307,18 +307,19 @@ const Message = (props) => {
   return (
     <div className={classes.chatContainer}>
       <div className={classes.chatHeader}>
+        <Box style={{display:"flex"}}>
         <IconButton onClick={handleGoBack}>
           <ArrowBackIcon />
         </IconButton>
         <Box sx={{ fontSize: "22px", fontWeight: "600", paddingLeft: "10px" }}>
           <div>
             {dataStore.fullName || localStorage.getItem("chatName")}
-            <Typography variant="body2" sx={{ fontSize: "12px" }}>
+            <Typography variant="body2" sx={{ fontSize: "12px",textAlign:"left" }}>
               {dataStore.designation || localStorage.getItem("designation")}
             </Typography>
           </div>
         </Box>
-
+        </Box>
         <Box
           style={{
             display: "flex",
@@ -330,7 +331,7 @@ const Message = (props) => {
           {!isBlocked && (
             <IconButton
               onClick={handleBlockUser}
-              style={{ paddingRight: "10px", cursor: "pointer" }}
+              style={{ paddingRight: "10px", cursor: "pointer",fontSize:"12px" }}
             >
               <BlockIcon />
               {t("BLOCK")}
@@ -372,33 +373,16 @@ const Message = (props) => {
         <DialogActions>
           <Button
             onClick={handleDialogClose}
-            variant="outlined"
-            style={{
-              borderRadius: "10px",
-              color: "#004367",
-              padding: "10px 12px",
-              margin: "0 10px",
-              fontWeight: "500",
-              fontSize: "12px",
-              border: "solid 1px #efefea00",
-              width: "50%",
-            }}
+            className="custom-btn-default"
           >
             {"CANCEL"}
           </Button>
           <Button
             onClick={handleBlockUserConfirmed}
+           className="custom-btn-primary"
             disabled={!reason}
             style={{
               background: !reason ? "rgba(0, 67, 103, 0.5)" : "#004367",
-              borderRadius: "10px",
-              color: "#fff",
-              padding: "10px 12px",
-              margin: "0 10px",
-              fontWeight: "500",
-              fontSize: "12px",
-              border: "solid 1px #004367",
-              width: "50%",
             }}
           >
             {"BLOCK"}
@@ -406,7 +390,7 @@ const Message = (props) => {
         </DialogActions>
       </Dialog>
 
-      <Alert severity="info" style={{ margin: "10px 0" }}>
+      <Alert severity="info" className="my-10">
         {t("YOUR_CHAT_WILL_DISAPPEAR")}
       </Alert>
       <div className={classes.chat}>
@@ -415,8 +399,8 @@ const Message = (props) => {
             {index === 0 ||
             getTimeAgo(msg.timestamp) !==
               getTimeAgo(messages[index - 1].timestamp) ? (
-              <div style={{ textAlign: "center" }}>
-                {getTimeAgo(msg.timestamp)}
+              <div style={{margin:"0 auto", textAlign:"center"}}>
+                <Box className="dayDisplay">{getTimeAgo(msg.timestamp)}</Box>
               </div>
             ) : null}
             <div
@@ -469,6 +453,7 @@ const Message = (props) => {
             {msg.is_accepted ? (
               <div style={{ textAlign: "center" }}>
                 <Alert
+                className="my-10"
                   iconMapping={{
                     success: <CheckCircleOutlineIcon fontSize="inherit" />,
                   }}
