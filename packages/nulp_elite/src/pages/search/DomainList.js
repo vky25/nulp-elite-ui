@@ -20,7 +20,8 @@ import Footer from "../../components/Footer";
 import { object } from "yup";
 import Alert from "@mui/material/Alert";
 // import { useTranslation } from "react-i18next";
-import urlConfig from "../../configs/urlConfig.json";
+import appConfig from "../../configs/appConfig.json";
+const urlConfig = require("../../configs/urlConfig.json");
 
 const Item = styled(Paper)(({ theme }) => ({
   backgroundColor: theme.palette.mode === "dark" ? "#1A2027" : "#fff",
@@ -56,7 +57,7 @@ const DomainList = () => {
   const [category, setCategory] = React.useState();
   const [imgItem, setImgItem] = React.useState(object ? object : {});
   const [itemsArray, setItemsArray] = useState([]);
-  const userCategoryParams = urlConfig.params.userCategoryParams;
+
   // Example of API Call
 
   useEffect(() => {
@@ -91,7 +92,8 @@ const DomainList = () => {
       Cookie: `connect.sid=${getCookieValue("connect.sid")}`,
     };
     try {
-      const url = `/api/channel/v1/read/0130701891041689600`;
+      const url = `${urlConfig.URLS.PUBLIC_PREFIX}${urlConfig.URLS.CHANNEL.READ}/0130701891041689600`;
+
       const response = await frameworkService.getChannel(url, headers);
       // console.log("channel---",response.data.result);
       setChannelData(response.data.result);
@@ -102,7 +104,8 @@ const DomainList = () => {
       setIsLoading(false);
     }
     try {
-      const url = `/api/framework/v1/read/nulp?categories=${userCategoryParams}`;
+      const url = `${urlConfig.URLS.PUBLIC_PREFIX}${urlConfig.URLS.FRAMEWORK.READ}/nulp?categories=${appConfig.ContentPlayer.contentApiQueryParams}`;
+
       const response = await frameworkService.getSelectedFrameworkCategories(
         url,
         headers

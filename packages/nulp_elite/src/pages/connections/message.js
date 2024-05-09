@@ -21,7 +21,8 @@ import MenuIcon from "@mui/icons-material/Menu";
 import BlockIcon from "@mui/icons-material/Block";
 import SendIcon from "@mui/icons-material/Send";
 import { t } from "i18next";
-import DoneAllIcon from '@mui/icons-material/DoneAll';
+import DoneAllIcon from "@mui/icons-material/DoneAll";
+const urlConfig = require("../../configs/urlConfig.json");
 
 const moment = require("moment");
 const timezone = require("moment-timezone");
@@ -114,12 +115,10 @@ const Message = (props) => {
 
   const fetchBlockUserStatus = async () => {
     try {
-      const response = await axios.get(
-        `/directConnect/get-block-user?sender_id=${loggedInUserId}&receiver_id=${receiverUserId}`,
-        {
-          withCredentials: true,
-        }
-      );
+      const url = `${urlConfig.URLS.DIRECT_CONNECT.GET_BLOCK_USER}?sender_id=${loggedInUserId}&receiver_id=${receiverUserId}`;
+      const response = await axios.get(url, {
+        withCredentials: true,
+      });
       const blockedUserId =
         response.data.result.length > 0
           ? response.data.result[0].sender_id
@@ -134,14 +133,15 @@ const Message = (props) => {
 
   const fetchChats = async () => {
     try {
+      const url = `${
+        urlConfig.URLS.DIRECT_CONNECT.GET_CHATS
+      }?sender_id=${loggedInUserId}&receiver_id=${receiverUserId}&is_accepted=${true}`;
+
       // Check if the user is not blocked before fetching chats
       if (!isBlocked) {
-        const response = await axios.get(
-          `/directConnect/get-chats?sender_id=${loggedInUserId}&receiver_id=${receiverUserId}&is_accepted=true`,
-          {
-            withCredentials: true,
-          }
-        );
+        const response = await axios.get(url, {
+          withCredentials: true,
+        });
         setMessages(response.data.result || []);
       }
     } catch (error) {
@@ -152,10 +152,11 @@ const Message = (props) => {
   const sendMessage = async () => {
     if (message.trim() !== "") {
       try {
+        const url = `${urlConfig.URLS.DIRECT_CONNECT.SEND_CHAT}`;
         console.log("Sending message:", message);
 
         await axios.post(
-          "/directConnect/send-chat",
+          url,
           {
             sender_id: loggedInUserId,
             receiver_id: receiverUserId,
@@ -180,10 +181,11 @@ const Message = (props) => {
 
   const updateMessage = async () => {
     try {
+      const url = `${urlConfig.URLS.DIRECT_CONNECT.UPDATE_CHAT}`;
       console.log("updating message:", message);
 
       const data = await axios.put(
-        "/directConnect/update-chat",
+        url,
         {
           sender_id: loggedInUserId,
           receiver_id: receiverUserId,
@@ -248,10 +250,11 @@ const Message = (props) => {
   };
   const handleUnblockUser = async () => {
     try {
+      const url = `${urlConfig.URLS.DIRECT_CONNECT.UNBLOCK}`;
       console.log("UnBlocking User");
 
       const data = await axios.post(
-        "/directConnect/unblock-user",
+        url,
         {
           sender_id: loggedInUserId,
           receiver_id: receiverUserId,
@@ -276,10 +279,11 @@ const Message = (props) => {
 
   const handleBlockUserConfirmed = async () => {
     try {
+      const url = `${urlConfig.URLS.DIRECT_CONNECT.BLOCK}`;
       console.log("Blocking User");
 
       await axios.post(
-        "/directConnect/block-user",
+        url,
         {
           sender_id: loggedInUserId,
           receiver_id: receiverUserId,
@@ -394,8 +398,7 @@ const Message = (props) => {
       </Dialog>
 
       <Alert severity="info" style={{ margin: "10px 0" }}>
-        {t("YOUR_CHAT_WILL_DISAPPEAR")}       
-
+        {t("YOUR_CHAT_WILL_DISAPPEAR")}
       </Alert>
       <div className={classes.chat}>
         {messages.map((msg, index) => (
@@ -415,14 +418,44 @@ const Message = (props) => {
               }
             >
               <div>{msg.message}</div>
-              <Box style={{display:'flex',alignItems:'center',justifyContent:'flex-end'}}>
-              <div style={{fontSize:'10px'}}>{getTime(msg.timestamp)}</div>
-              {msg.sender_id === loggedInUserId ? (
-                <div style={{display:'flex',alignItems:'center',fontSize:'13px',justifyContent:'flex-end'}}>
-                  {msg.is_read ? <DoneAllIcon style={{color:'#00ebff',fontSize:'15px',paddingLeft:'6px'}} /> : <DoneAllIcon style={{color:'#bdbaba',fontSize:'18px',paddingRight:'10px'}} />}
-                  {/* {msg.is_read ? "Read" : "Delivered"} */}
-                </div>              ) : null}
-                </Box>
+              <Box
+                style={{
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "flex-end",
+                }}
+              >
+                <div style={{ fontSize: "10px" }}>{getTime(msg.timestamp)}</div>
+                {msg.sender_id === loggedInUserId ? (
+                  <div
+                    style={{
+                      display: "flex",
+                      alignItems: "center",
+                      fontSize: "13px",
+                      justifyContent: "flex-end",
+                    }}
+                  >
+                    {msg.is_read ? (
+                      <DoneAllIcon
+                        style={{
+                          color: "#00ebff",
+                          fontSize: "15px",
+                          paddingLeft: "6px",
+                        }}
+                      />
+                    ) : (
+                      <DoneAllIcon
+                        style={{
+                          color: "#bdbaba",
+                          fontSize: "18px",
+                          paddingRight: "10px",
+                        }}
+                      />
+                    )}
+                    {/* {msg.is_read ? "Read" : "Delivered"} */}
+                  </div>
+                ) : null}
+              </Box>
             </div>
           </div>
         ))}

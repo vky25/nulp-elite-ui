@@ -36,7 +36,7 @@ import Alert from "@mui/material/Alert";
 import Filter from "components/filter";
 const axios = require("axios");
 const designations = require("../../configs/designations.json");
-
+const urlConfig = require("../../configs/urlConfig.json");
 // Define modal styles
 const useStyles = makeStyles((theme) => ({
   modal: {
@@ -103,15 +103,6 @@ const AddConnections = () => {
   const [userFilter, setUserFilter] = useState("");
   const [userIds, setUserIds] = useState([]);
 
-  // const handleFilterChange = (selectedOptions) => {
-  //   const selectedValues = selectedOptions.map((option) => option.value);
-  //   setFilters({ ...filters, firstName: selectedValues });
-  // };
-
-  // const filteredUsers = userData?.filter(
-  //   (user) => user.name && user.name.includes(searchQuery)
-  // );
-
   const getChat = async (userId) => {
     setIsLoading(true);
     setError(null);
@@ -123,9 +114,10 @@ const AddConnections = () => {
       is_read: false,
     });
 
-    const url = `/directConnect/get-chats?${params.toString()}`;
-
     try {
+      const url = `${
+        urlConfig.URLS.DIRECT_CONNECT.GET_CHATS
+      }?${params.toString()}`;
       const response = await fetch(url, {
         method: "GET",
         headers: {
@@ -157,9 +149,10 @@ const AddConnections = () => {
       is_read: false,
     });
 
-    const url = `http://localhost:3000/directConnect/get-chats?${params.toString()}`;
-
     try {
+      const url = `${
+        urlConfig.URLS.DIRECT_CONNECT.GET_CHATS
+      }?${params.toString()}`;
       const response = await fetch(url, {
         method: "GET",
         headers: {
@@ -243,7 +236,6 @@ const AddConnections = () => {
     setUserSearchData([]);
     setUserFilter([]);
 
-    const url = `/learner/user/v3/search`;
     let filters = {
       status: "1",
     };
@@ -263,6 +255,7 @@ const AddConnections = () => {
     };
 
     try {
+      const url = `${urlConfig.URLS.LEARNER_PREFIX}${urlConfig.URLS.ADMIN.USER_SEARCH}`;
       const response = await fetch(url, {
         method: "POST",
         headers: {
@@ -323,8 +316,6 @@ const AddConnections = () => {
     setIsLoading(true);
     setError(null);
     setUserQuerySearchData([]);
-
-    const url = `/learner/user/v3/search`;
     const requestBody = {
       request: {
         filters: {
@@ -338,6 +329,7 @@ const AddConnections = () => {
     };
 
     try {
+      const url = `${urlConfig.URLS.LEARNER_PREFIX}${urlConfig.URLS.ADMIN.USER_SEARCH}`;
       const response = await fetch(url, {
         method: "POST",
         headers: {
@@ -402,9 +394,10 @@ const AddConnections = () => {
       is_connection: true,
     });
 
-    const url = `/directConnect/get-chats?${params.toString()}`;
-
     try {
+      const url = `${
+        urlConfig.URLS.DIRECT_CONNECT.GET_CHATS
+      }?${params.toString()}`;
       const response = await fetch(url, {
         method: "GET",
         headers: {
@@ -460,7 +453,6 @@ const AddConnections = () => {
     setError(null);
     setInvitationNotAcceptedUsers([]);
 
-    const url = `/learner/user/v3/search`;
     const requestBody = {
       request: {
         filters: {
@@ -474,6 +466,7 @@ const AddConnections = () => {
     };
 
     try {
+      const url = `${urlConfig.URLS.LEARNER_PREFIX}${urlConfig.URLS.ADMIN.USER_SEARCH}`;
       const response = await fetch(url, {
         method: "POST",
         headers: {
@@ -518,7 +511,6 @@ const AddConnections = () => {
     setError(null);
     setInvitationAcceptedUsers([]);
 
-    const url = `/learner/user/v3/search`;
     const requestBody = {
       request: {
         filters: {
@@ -532,6 +524,7 @@ const AddConnections = () => {
     };
 
     try {
+      const url = `${urlConfig.URLS.LEARNER_PREFIX}${urlConfig.URLS.ADMIN.USER_SEARCH}`;
       const response = await fetch(url, {
         method: "POST",
         headers: {
@@ -586,8 +579,6 @@ const AddConnections = () => {
     setIsLoading(true);
     setError(null);
     setInvitationReceivedUserByIds([]);
-
-    const url = `/learner/user/v3/search`;
     const requestBody = {
       request: {
         filters: {
@@ -598,6 +589,7 @@ const AddConnections = () => {
     };
 
     try {
+      const url = `${urlConfig.URLS.LEARNER_PREFIX}${urlConfig.URLS.ADMIN.USER_SEARCH}`;
       const response = await fetch(url, {
         method: "POST",
         headers: {
@@ -694,9 +686,8 @@ const AddConnections = () => {
       receiver_id: loggedInUserId,
     };
 
-    const url = `/directConnect/accept-invitation`;
-
     try {
+      const url = `${urlConfig.URLS.DIRECT_CONNECT.ACCEPT_CHATS}`;
       const response = await fetch(url, {
         method: "POST",
         headers: {
@@ -726,9 +717,8 @@ const AddConnections = () => {
       receiver_id: loggedInUserId,
     };
 
-    const url = `/directConnect/reject-invitation`;
-
     try {
+      const url = `${urlConfig.URLS.DIRECT_CONNECT.REJECT_CHATS}`;
       const response = await fetch(url, {
         method: "POST",
         headers: {
@@ -761,9 +751,10 @@ const AddConnections = () => {
       is_connection: true,
     });
 
-    const url = `/directConnect/get-chats?${params.toString()}`;
-
     try {
+      const url = `${
+        urlConfig.URLS.DIRECT_CONNECT.GET_CHATS
+      }?${params.toString()}`;
       const response = await fetch(url, {
         method: "GET",
         headers: {
@@ -794,16 +785,16 @@ const AddConnections = () => {
     setIsLoading(true);
     setError(null);
 
-    const url = `/directConnect/send-chat`;
     const requestBody = {
       sender_id: loggedInUserId,
       receiver_id: userId,
       message: textValue,
-      sender_email: "snehal.sabade@tekditechnologies.com",
-      receiver_email: "mahesh.mahajan@tekditechnologies.com",
+      sender_email: "sender@gmail.com",
+      receiver_email: "receiver@gmail.com",
     };
 
     try {
+      const url = `${urlConfig.URLS.DIRECT_CONNECT.SEND_CHATS}`;
       const response = await fetch(url, {
         method: "POST",
         headers: {
@@ -892,8 +883,9 @@ const AddConnections = () => {
   };
   const fetchUserInfo = async (userId) => {
     try {
+      const url = `${urlConfig.URLS.POFILE_PAGE.USER_READ}`;
       const response = await axios.post(
-        "/custom/user/read",
+        url,
         { user_ids: [userId] },
         {
           withCredentials: true,
@@ -945,8 +937,9 @@ const AddConnections = () => {
 
   const handleFilter = async (event) => {
     try {
+      const url = `${urlConfig.URLS.POFILE_PAGE.USER_READ}`;
       const response = await axios.post(
-        "http://localhost:3000/custom/user/read",
+        url,
         { designations: event },
         {
           withCredentials: true,
@@ -969,8 +962,6 @@ const AddConnections = () => {
     setError(null);
     setUserSearchData([]);
 
-    const url = `http://localhost:3000/learner/user/v3/search`;
-
     const requestBody = {
       request: {
         filters: filters,
@@ -983,6 +974,7 @@ const AddConnections = () => {
     };
 
     try {
+      const url = `${urlConfig.URLS.LEARNER_PREFIX}${urlConfig.URLS.ADMIN.USER_SEARCH}`;
       const response = await fetch(url, {
         method: "POST",
         headers: {

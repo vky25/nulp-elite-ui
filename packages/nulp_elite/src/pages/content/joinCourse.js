@@ -32,6 +32,8 @@ import MuiAlert from "@mui/material/Alert";
 
 import data from "../../assets/courseHierarchy.json";
 import Alert from "@mui/material/Alert";
+import appConfig from "../../configs/appConfig.json";
+const urlConfig = require("../../configs/urlConfig.json");
 
 const JoinCourse = () => {
   const { t } = useTranslation();
@@ -53,14 +55,12 @@ const JoinCourse = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await fetch(
-          `http://localhost:3000/api/course/v1/hierarchy/${contentId}?orgdetails=orgName,email&licenseDetails=name,description,url`,
-          {
-            headers: {
-              "Content-Type": "application/json",
-            },
-          }
-        );
+        const url = `${urlConfig.URLS.PUBLIC_PREFIX}${urlConfig.URLS.COURSE.HIERARCHY}/${contentId}?orgdetails=${appConfig.ContentPlayer.contentApiQueryParams}`;
+        const response = await fetch(url, {
+          headers: {
+            "Content-Type": "application/json",
+          },
+        });
         if (!response.ok) {
           throw new Error("Failed to fetch course data");
         }
@@ -73,21 +73,19 @@ const JoinCourse = () => {
 
     const fetchBatchData = async () => {
       try {
-        const response = await axios.post(
-          "http://localhost:3000/learner/course/v1/batch/list",
-          {
-            request: {
-              filters: {
-                status: "1",
-                courseId: contentId,
-                enrollmentType: "open",
-              },
-              sort_by: {
-                createdDate: "desc",
-              },
+        const url = `${urlConfig.URLS.LEARNER_PREFIX}${urlConfig.URLS.BATCH.GET_BATCHS}`;
+        const response = await axios.post(url, {
+          request: {
+            filters: {
+              status: "1",
+              courseId: contentId,
+              enrollmentType: "open",
             },
-          }
-        );
+            sort_by: {
+              createdDate: "desc",
+            },
+          },
+        });
         const responseData = response.data;
         if (
           responseData.result.response &&
@@ -111,9 +109,8 @@ const JoinCourse = () => {
 
     const checkEnrolledCourse = async () => {
       try {
-        const response = await fetch(
-          `http://localhost:3000/learner/course/v1/user/enrollment/list/${_userId}?orgdetails=orgName,email&licenseDetails=name,description,url&fields=contentType,topic,name,channel,mimeType,appIcon,gradeLevel,resourceType,identifier,medium,pkgVersion,board,subject,trackable,primaryCategory,organisation&batchDetails=name,endDate,startDate,status,enrollmentType,createdBy,certificates`
-        );
+        const url = `${urlConfig.URLS.LEARNER_PREFIX}${urlConfig.URLS.COURSE.GET_ENROLLED_COURSES}${_userId}?orgdetails=${appConfig.ContentPlayer.contentApiQueryParams}&fields=${urlConfig.params.objectCategory.fields}&batchDetails=${urlConfig.params.enrolledCourses.batchDetails}`;
+        const response = await fetch(url);
         if (!response.ok) {
           throw new Error("Failed to fetch user courses");
         }
@@ -132,7 +129,6 @@ const JoinCourse = () => {
   useEffect(() => {
     const getCourseProgress = async () => {
       if (batchDetails) {
-        const url = `http://localhost:3000/content/course/v1/content/state/read`;
         const request = {
           request: {
             userId: _userId,
@@ -148,6 +144,7 @@ const JoinCourse = () => {
           },
         };
         try {
+          const url = `${urlConfig.URLS.CONTENT_PREFIX}${urlConfig.URLS.COURSE.USER_CONTENT_STATE_READ}`;
           const response = await axios.post(url, request);
           const data = response.data;
           setCourseProgress(data);
@@ -211,7 +208,7 @@ const JoinCourse = () => {
 
   const handleLeaveConfirmed = async () => {
     try {
-      const url = "http://localhost:3000/learner/course/v1/unenrol";
+      const url = `${urlConfig.URLS.LEARNER_PREFIX}${urlConfig.URLS.COURSE.UNENROLL_USER_COURSE}`;
       const requestBody = {
         request: {
           courseId: contentId,
@@ -363,7 +360,7 @@ const JoinCourse = () => {
 
   const handleJoinCourse = async () => {
     try {
-      const url = "http://localhost:3000/learner/course/v1/enrol";
+      const url = `${urlConfig.URLS.LEARNER_PREFIX}${urlConfig.URLS.COURSE.ENROLL_USER_COURSE}`;
       const requestBody = {
         request: {
           courseId: contentId,
@@ -383,7 +380,7 @@ const JoinCourse = () => {
 
   const consentRead = async () => {
     try {
-      const url = "http://localhost:3000/learner/user/v1/consent/read";
+      const url = `${urlConfig.URLS.LEARNER_PREFIX}${urlConfig.URLS.USER.CONSENT_READ}`;
       const requestBody = {
         request: {
           consent: {

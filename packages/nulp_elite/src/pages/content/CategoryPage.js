@@ -6,7 +6,6 @@ import Grid from "@mui/material/Grid";
 import { getAllContents } from "services/contentService";
 import Header from "components/header";
 import Footer from "components/Footer";
-import URLSConfig from "../../configs/urlConfig.json";
 import ArrowBackOutlinedIcon from "@mui/icons-material/ArrowBackOutlined";
 import Container from "@mui/material/Container";
 import Pagination from "@mui/material/Pagination";
@@ -18,7 +17,8 @@ import * as frameworkService from "../../services/frameworkService";
 
 import SearchBox from "components/search";
 import { t } from "i18next";
-import urlConfig from "../../configs/urlConfig.json";
+import appConfig from "../../configs/appConfig.json";
+const urlConfig = require("../../configs/urlConfig.json");
 
 const CategoryPage = () => {
   // const history = useHistory();
@@ -34,8 +34,6 @@ const CategoryPage = () => {
   const [totalPages, setTotalPages] = useState(1);
 
   const [itemsArray, setItemsArray] = useState([]);
-  const orgDetailsParams = urlConfig.params.orgDetailsParams;
-  const userCategoryParams = urlConfig.params.userCategoryParams;
   const handleSearch = (query) => {
     // Implement your search logic here
     console.log("Search query:", query);
@@ -80,7 +78,7 @@ const CategoryPage = () => {
           "se_subjects",
           "se_mediums",
           "se_gradeLevels",
-          "primaryCategory"
+          "primaryCategory",
         ],
         facets: ["channel", "gradeLevel", "subject", "medium"],
         offset: 0,
@@ -92,8 +90,8 @@ const CategoryPage = () => {
       "Content-Type": "application/json",
     };
 
-    const url = `/api/${URLSConfig.URLS.CONTENT.SEARCH}?orgdetails=${orgDetailsParams}`;
     try {
+      const url = `${urlConfig.URLS.PUBLIC_PREFIX}${urlConfig.URLS.CONTENT.SEARCH}?orgdetails=${appConfig.ContentPlayer.contentApiQueryParams}`;
       const response = await getAllContents(url, data, headers);
       setData(response.data.result.content);
     } catch (error) {
@@ -113,7 +111,7 @@ const CategoryPage = () => {
       Cookie: `connect.sid=${getCookieValue("connect.sid")}`,
     };
     try {
-      const url = `/api/channel/v1/read/0130701891041689600`;
+      const url = `${urlConfig.URLS.PUBLIC_PREFIX}${urlConfig.URLS.CHANNEL.READ}/${rootOrgId}`;
       const response = await frameworkService.getChannel(url, headers);
       // console.log("channel---",response.data.result);
       setChannelData(response.data.result);
@@ -123,7 +121,8 @@ const CategoryPage = () => {
     } finally {
     }
     try {
-      const url = `/api/framework/v1/read/nulp?categories=${userCategoryParams}`;
+      const url = `${urlConfig.URLS.PUBLIC_PREFIX}${urlConfig.URLS.FRAMEWORK.READ}/nulp?orgdetails=${appConfig.ContentPlayer.contentApiQueryParams}`;
+
       const response = await frameworkService.getSelectedFrameworkCategories(
         url,
         headers

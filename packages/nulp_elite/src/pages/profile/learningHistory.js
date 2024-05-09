@@ -14,24 +14,22 @@ import * as util from "../../services/utilService";
 import Filter from "components/filter";
 import NoResult from "pages/content/noResultFound";
 import Alert from "@mui/material/Alert";
-import urlConfig from "../../configs/urlConfig.json";
+import appConfig from "../../configs/appConfig.json";
+const urlConfig = require("../../configs/urlConfig.json");
 
 const LearningHistory = () => {
   const { t } = useTranslation();
   const [courseData, setCourseData] = useState(null);
   const [selectedStatus, setSelectedStatus] = useState(null);
   const [error, setError] = useState(null);
-  const enrolledCoursesFieldsParams = urlConfig.params.enrolledCourses.fields;
-  const userOrgdetailsParams = urlConfig.params.userOrgdetailsParams;
-  const enrolledCoursesBatchDetailsParams =
-    urlConfig.params.enrolledCourses.batchDetails;
 
   useEffect(() => {
     const fetchData = async () => {
       setError(null);
       try {
         const _userId = util.userId();
-        const url = `/learner/course/v1/user/enrollment/list/${_userId}?orgdetails=${userOrgdetailsParams}&fields=${enrolledCoursesFieldsParams}&batchDetails=${enrolledCoursesBatchDetailsParams}`;
+        const url = `${urlConfig.URLS.LEARNER_PREFIX}${urlConfig.URLS.COURSE.GET_ENROLLED_COURSES}/${_userId}?orgdetails=${appConfig.ContentPlayer.contentApiQueryParams}&fields=${urlConfig.params.objectCategory.fields}&batchDetails=${urlConfig.params.enrolledCourses.batchDetails}`;
+
         const response = await fetch(url, {
           headers: {
             "Content-Type": "application/json",
