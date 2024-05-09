@@ -20,8 +20,10 @@ import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import MenuIcon from "@mui/icons-material/Menu";
 import BlockIcon from "@mui/icons-material/Block";
 import SendIcon from "@mui/icons-material/Send";
-import { t } from "i18next";
+import { useTranslation } from "react-i18next";
 import DoneAllIcon from "@mui/icons-material/DoneAll";
+import CheckCircleOutlineIcon from "@mui/icons-material/CheckCircleOutline";
+import Typography from "@mui/material/Typography";
 const urlConfig = require("../../configs/urlConfig.json");
 
 const moment = require("moment");
@@ -61,8 +63,8 @@ const useStyles = makeStyles((theme) => ({
     padding: "8px",
     margin: "15px 0",
     textAlign: "right",
-    background: "linear-gradient(180deg, #004367 0%, #102244 100%)",
-    color: "#fff",
+    background: "#C0E9FF",
+    color: "#212121",
   },
   receiverMessage: {
     margin: "4px 0",
@@ -92,7 +94,7 @@ const Message = (props) => {
   const [dialogOpen, setDialogOpen] = useState(false);
   const [isBlocked, setIsBlocked] = useState(false); // State to track if user is blocked
   const [showUnblockOption, setShowUnblockOption] = useState(false); // State to show/hide unblock option
-
+  const { t } = useTranslation();
   useEffect(() => {
     const _userId = util.userId();
     setLoggedInUserId(_userId);
@@ -310,14 +312,24 @@ const Message = (props) => {
   return (
     <div className={classes.chatContainer}>
       <div className={classes.chatHeader}>
-        <IconButton onClick={handleGoBack}>
-          <ArrowBackIcon />
+        <Box style={{ display: "flex" }}>
+          <IconButton onClick={handleGoBack}>
+            <ArrowBackIcon />
+          </IconButton>
           <Box
             sx={{ fontSize: "22px", fontWeight: "600", paddingLeft: "10px" }}
           >
-            {dataStore.fullName || localStorage.getItem("chatName")}
+            <div>
+              {dataStore.fullName || localStorage.getItem("chatName")}
+              <Typography
+                variant="body2"
+                sx={{ fontSize: "12px", textAlign: "left" }}
+              >
+                {dataStore.designation || localStorage.getItem("designation")}
+              </Typography>
+            </div>
           </Box>
-        </IconButton>
+        </Box>
         <Box
           style={{
             display: "flex",
@@ -329,7 +341,11 @@ const Message = (props) => {
           {!isBlocked && (
             <IconButton
               onClick={handleBlockUser}
-              style={{ paddingRight: "10px", cursor: "pointer" }}
+              style={{
+                paddingRight: "10px",
+                cursor: "pointer",
+                fontSize: "12px",
+              }}
             >
               <BlockIcon />
               {t("BLOCK")}
@@ -349,47 +365,35 @@ const Message = (props) => {
       <Dialog open={dialogOpen} maxWidth="lg" onClose={handleDialogClose}>
         <DialogTitle>{t("BLOCK_USER")}</DialogTitle>
         <DialogContent>
-          <TextareaAutosize
-            autoFocus
-            minRows={6}
-            maxRows={4}
-            margin="dense"
-            id="reason"
-            label="Reason for blocking"
-            fullWidth
-            value={reason}
-            onChange={(e) => setReason(e.target.value)}
-          />
+          <Box py={2}>
+            <TextField
+              id="reason"
+              name="reason"
+              label={
+                <span>
+                  Reason
+                  <span style={{ color: "red", marginLeft: "2px" }}>*</span>
+                </span>
+              }
+              multiline
+              rows={3}
+              variant="outlined"
+              fullWidth
+              value={reason}
+              onChange={(e) => setReason(e.target.value)}
+            />
+          </Box>
         </DialogContent>
         <DialogActions>
-          <Button
-            onClick={handleDialogClose}
-            variant="outlined"
-            style={{
-              borderRadius: "10px",
-              color: "#004367",
-              padding: "10px 12px",
-              margin: "0 10px",
-              fontWeight: "500",
-              fontSize: "12px",
-              border: "solid 1px #efefea00",
-              width: "50%",
-            }}
-          >
+          <Button onClick={handleDialogClose} className="custom-btn-default">
             {"CANCEL"}
           </Button>
           <Button
             onClick={handleBlockUserConfirmed}
+            className="custom-btn-primary"
+            disabled={!reason}
             style={{
-              background: "#004367",
-              borderRadius: "10px",
-              color: "#fff",
-              padding: "10px 12px",
-              margin: "0 10px",
-              fontWeight: "500",
-              fontSize: "12px",
-              border: "solid 1px #004367",
-              width: "50%",
+              background: !reason ? "rgba(0, 67, 103, 0.5)" : "#004367",
             }}
           >
             {"BLOCK"}
@@ -406,8 +410,8 @@ const Message = (props) => {
             {index === 0 ||
             getTimeAgo(msg.timestamp) !==
               getTimeAgo(messages[index - 1].timestamp) ? (
-              <div style={{ textAlign: "center" }}>
-                {getTimeAgo(msg.timestamp)}
+              <div style={{ margin: "0 auto", textAlign: "center" }}>
+                <Box className="dayDisplay">{getTimeAgo(msg.timestamp)}</Box>
               </div>
             ) : null}
             <div
@@ -457,6 +461,18 @@ const Message = (props) => {
                 ) : null}
               </Box>
             </div>
+            {msg.is_accepted ? (
+              <div style={{ textAlign: "center" }}>
+                <Alert
+                  className="my-10"
+                  iconMapping={{
+                    success: <CheckCircleOutlineIcon fontSize="inherit" />,
+                  }}
+                >
+                  {t("YOU_CHAT_ACCEPTED")}
+                </Alert>
+              </div>
+            ) : null}
           </div>
         ))}
       </div>

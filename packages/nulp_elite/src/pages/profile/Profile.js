@@ -526,8 +526,7 @@ const Profile = () => {
                           </Button>
 
                           <Button
-                            variant="outlined"
-                            className="btn-default"
+                            className="custom-btn-default"
                             onClick={handleCloseEditDialog}
                           >
                             {t("CANCEL")}
@@ -832,7 +831,7 @@ const Profile = () => {
                       {t("COURSES")}
                       <br />
                       <Typography
-                        variant="h7"
+                        variant="h5"
                         style={{
                           fontWeight: "700",
                           margin: "9px 0",
@@ -852,7 +851,7 @@ const Profile = () => {
                       {t("WEBINARS")}
                       <br />
                       <Typography
-                        variant="h7"
+                        variant="h5"
                         style={{
                           fontWeight: "700",
                           margin: "9px 0",

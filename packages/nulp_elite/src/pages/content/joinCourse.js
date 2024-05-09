@@ -42,9 +42,13 @@ const JoinCourse = () => {
   const [batchDetails, setBatchDetails] = useState();
   const [userCourseData, setUserCourseData] = useState({});
   const [showEnrollmentSnackbar, setShowEnrollmentSnackbar] = useState(false);
+  const [showConsentForm, setShowConsentForm] = useState(false);
   const [enrolled, setEnrolled] = useState(false);
   const [progress, setCourseProgress] = useState();
   const [showConfirmation, setShowConfirmation] = useState(false);
+  const [userInfo, setUserInfo] = useState();
+  const [consentChecked, setConsentChecked] = useState(false);
+  const [shareEnabled, setShareEnabled] = useState(false);
 
   const location = useLocation();
   const navigate = useNavigate();
@@ -124,6 +128,7 @@ const JoinCourse = () => {
     fetchData();
     fetchBatchData();
     checkEnrolledCourse();
+    getUserData();
   }, []);
 
   useEffect(() => {
@@ -194,7 +199,8 @@ const JoinCourse = () => {
       progress &&
       progress.result &&
       progress.result.contentList &&
-      progress.result.contentList.some((content) => content.status !== 2)
+      (progress.result.contentList.length === 0 ||
+        progress.result.contentList.some((content) => content.status !== 2))
     );
   };
 
@@ -234,8 +240,7 @@ const JoinCourse = () => {
           <Box>
             <Button
               onClick={handleLinkClick}
-              variant="contained"
-              style={{ background: "#9ACD32", color: "#fff", left: "160px" }}
+              className="custom-btn-primary my-20"
             >
               {t("START_LEARNING")}
             </Button>
@@ -342,19 +347,28 @@ const JoinCourse = () => {
 
         return (
           <Button
-            onClick={handleJoinCourse}
+            onClick={handleJoinAndOpenModal}
+            // onClick={handleOpenModal}
             disabled={isExpired} // Only disable if expired (not on last day)
             variant="contained"
+            className="custom-btn-primary my-20"
             style={{
               background: isExpired ? "#ccc" : "#004367",
-              color: "#fff",
-              left: "160px",
             }}
           >
             {t("JOIN_COURSE")}
           </Button>
         );
       }
+    }
+  };
+
+  const handleJoinAndOpenModal = async () => {
+    try {
+      await handleJoinCourse(); // Wait for the user to join the course
+      setShowConsentForm(true); // Open the consent form after joining the course
+    } catch (error) {
+      console.error("Error:", error);
     }
   };
 
@@ -378,28 +392,53 @@ const JoinCourse = () => {
     }
   };
 
-  const consentRead = async () => {
+  const consentUpdate = async (status) => {
     try {
       const url = `${urlConfig.URLS.LEARNER_PREFIX}${urlConfig.URLS.USER.CONSENT_READ}`;
       const requestBody = {
         request: {
           consent: {
-            filter: {
-              userId: _userId,
-              consumerId: "0130701891041689600",
-              objectId: contentId,
-            },
+            status: status,
+            userId: _userId,
+            consumerId: userInfo?.rootOrgId,
+            objectId: contentId,
+            objectType: "Collection",
           },
         },
       };
       const response = await axios.post(url, requestBody);
       if (response.status === 200) {
-        setEnrolled(true);
-        setShowEnrollmentSnackbar(true);
+        setShowConsentForm(false);
       }
     } catch (error) {
-      console.error("Error enrolling in the course:", error);
+      console.error("Error updating consent:", error);
     }
+  };
+
+  const handleCheckboxChange = (event) => {
+    setConsentChecked(event.target.checked);
+    setShareEnabled(event.target.checked);
+  };
+
+  const getUserData = async () => {
+    try {
+      const url = `http://localhost:3000/learner/user/v5/read/${_userId}?fields=organisations,roles,locations,declarations,externalIds`;
+      const response = await fetch(url);
+      const data = await response.json();
+      setUserInfo(data.result.response);
+    } catch (error) {
+      console.error("Error while getting user data:", error);
+    }
+  };
+
+  const handleShareClick = () => {
+    consentUpdate("ACTIVE");
+    setShowConsentForm(false);
+  };
+
+  const handleDontShareClick = () => {
+    consentUpdate("REVOKED");
+    setShowConsentForm(false);
   };
 
   return (
@@ -407,7 +446,7 @@ const JoinCourse = () => {
       <Header />
       <Snackbar
         open={showEnrollmentSnackbar}
-        // autoHideDuration={6000}
+        autoHideDuration={6000}
         onClose={handleSnackbarClose}
         anchorOrigin={{ vertical: "top", horizontal: "center" }}
       >
@@ -421,6 +460,77 @@ const JoinCourse = () => {
           {t("ENROLLMENT_SUCCESS_MESSAGE")}
         </MuiAlert>
       </Snackbar>
+      <Dialog
+        open={showConsentForm}
+        onClose={(event, reason) => {
+          if (reason === "backdropClick" || reason === "escapeKeyDown") {
+            setOpenModal(true);
+          } else {
+            handleCloseModal();
+          }
+        }}
+      >
+        <DialogTitle>{t("CONSENT_FORM_TITLE")}</DialogTitle>
+        <DialogContent>
+          <div>
+            <label>{t("USERNAME_LABEL")}:</label>
+            <span>{userInfo?.firstName}</span>
+          </div>
+          <div>
+            <label>{t("State")}:</label>
+            <span>{}</span>
+          </div>
+          <div>
+            <label>{t("User ID")}:</label>
+            <span>{userInfo?.organisations[0]?.userId}</span>
+          </div>
+          <div>
+            <label>{t("External Id")}:</label>
+            <span>{}</span>
+          </div>
+          <div>
+            <label>{t("District")}:</label>
+            <span>{}</span>
+          </div>
+          <div>
+            <label>{t("Block")}:</label>
+            <span>{}</span>
+          </div>
+          <div>
+            <label>{t("School ID")}:</label>
+            <span>{}</span>
+          </div>
+          <div>
+            <label>{t("School or Org name")}:</label>
+            <span>{}</span>
+          </div>
+          <div>
+            <label>{t("MOBILE_NUMBER_LABEL")}:</label>
+            <span>{userInfo?.phone}</span>
+          </div>
+          <div>
+            <label>{t("EMAIL_LABEL")}:</label>
+            <span>{userInfo?.email}</span>
+          </div>
+
+          <div>
+            <input
+              type="checkbox"
+              checked={consentChecked}
+              onChange={handleCheckboxChange}
+            />
+            <label>{t("CONSENT_TEXT")}</label>
+          </div>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={handleDontShareClick}>
+            {t("DONT_SHARE_BUTTON_TEXT")}
+          </Button>
+          <Button onClick={handleShareClick} disabled={!shareEnabled}>
+            {t("SHARE_BUTTON_TEXT")}
+          </Button>
+        </DialogActions>
+      </Dialog>
 
       <Container maxWidth="xxl" role="main" className="container-pb">
         <Grid container spacing={2}>
