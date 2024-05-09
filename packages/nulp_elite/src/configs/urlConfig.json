@@ -3,6 +3,7 @@
     "userReadParam": {
       "fields": "organisations,roles,locations,declarations,externalIds"
     },
+
     "LibrarySearchField": [
       "name",
       "appIcon",
@@ -123,9 +124,14 @@
       "GET_MANAGED_USER": "user/v1/managed",
       "USER_EXISTS_GET_USER_BY_KEY": "isUserExists/user/v1/get",
       "USER_DECLARATION": "user/v1/declarations",
-      "GET_SESSION": "get/user/sessionId"
+      "GET_SESSION": "get/user/sessionId",
+      "CONSENT_READ": "user/v1/consent/read",
+      "EMAIL_EXIST": "v1/exists/email",
+      "USER_SIGNUP": "custom/user/signup"
     },
     "CERTIFICATE": {
+      "CERT_SEARCH": "certreg/v2/certs/search",
+      "CERTIF_SEARCH": "rc/certificate/v1/search",
       "FETCH_CERTIFICATES": "v1/certs/search",
       "FETCH_USER": "v1/user/search",
       "REISSUE_CERTIFICATE": "v1/cert/reissue",
@@ -387,6 +393,22 @@
       "FORMCREATEORG": "data/v1/form/create",
       "MEMBERREMOVE": "org/v1/member/remove",
       "PREFERENCES_CREATE": "org/v2/preferences/create"
+    },
+    "POFILE_PAGE": {
+      "CERTIFICATE_COUNT": "/profilePage/certificateCount",
+      "COURSE_COUNT": "/profilePage/courseCount",
+      "USER_READ": "/custom/user/read",
+      "USER_UPDATE": "/custom/user/update"
+    },
+    "DIRECT_CONNECT": {
+      "SEND_CHATS": "/directConnect/send-chat",
+      "GET_CHATS": "/directConnect/get-chats",
+      "ACCEPT_CHAT": "/directConnect/accept-invitation",
+      "REJECT_CHAT": "/directConnect/reject-invitation",
+      "GET_BLOCK_USER": "/directConnect/get-block-user",
+      "BLOCK": "/directConnect/block-user",
+      "UNBLOCK": "/directConnect/unblock-user",
+      "UPDATE_CHAT": "/directConnect/update-chat"
     }
   }
 }
