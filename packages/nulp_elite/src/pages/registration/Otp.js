@@ -17,6 +17,7 @@ import Checkbox from "@mui/material/Checkbox";
 import FormGroup from "@mui/material/FormGroup";
 import { Dialog, DialogContent, DialogActions } from "@material-ui/core";
 import Alert from "@mui/material/Alert";
+const urlConfig = require("../../configs/urlConfig.json");
 
 const Otp = () => {
   const { t } = useTranslation();
@@ -101,7 +102,6 @@ const Otp = () => {
     setIsLoading(true);
     setError(null);
 
-    const url = `https://nulp.niua.org/learner/otp/v1/verify`;
     const requestBody = {
       request: {
         key: userData && userData.email,
@@ -110,6 +110,8 @@ const Otp = () => {
       },
     };
     try {
+      const url = `${urlConfig.URLS.LEARNER_PREFIX}${urlConfig.URLS.OTP.VERIFY}`;
+
       const response = await fetch(url, {
         method: "POST",
         headers: {
@@ -136,7 +138,6 @@ const Otp = () => {
     setIsLoading(true);
     setError(null);
 
-    const url = "/learner/user/v2/signup";
     const requestBody = {
       params: {
         source: "portal",
@@ -152,6 +153,8 @@ const Otp = () => {
       },
     };
     try {
+      const url = `${urlConfig.URLS.LEARNER_PREFIX}${urlConfig.URLS.USER.SIGN_UP_V1}`;
+
       const response = await fetch(url, {
         method: "POST",
         headers: {
@@ -175,7 +178,6 @@ const Otp = () => {
   };
 
   const saveUserInfoInCustomDB = async (userId) => {
-    const url = "/custom/user/signup";
     const requestBody = {
       user_id: userId,
       designation:
@@ -186,6 +188,7 @@ const Otp = () => {
       created_by: userId,
     };
     try {
+      const url = `${urlConfig.URLS.USER.USER_SIGNUP}`;
       const response = await fetch(url, {
         method: "POST",
         headers: {
@@ -214,15 +217,14 @@ const Otp = () => {
     setError(null);
 
     try {
-      const response = await axios.post(
-        "https://nulp.niua.org/user/v2/accept/tnc",
-        {
-          request: {
-            version: tncConfigVersion,
-            identifier: userData.email,
-          },
-        }
-      );
+      const url = `${urlConfig.URLS.USER.TNC_ACCEPT_LOGIN}`;
+
+      const response = await axios.post(url, {
+        request: {
+          version: tncConfigVersion,
+          identifier: userData.email,
+        },
+      });
 
       if (!response.ok) {
         throw new Error("Failed to verify terms&condition");
@@ -237,7 +239,6 @@ const Otp = () => {
     }
   };
   const generateOtp = async (email) => {
-    const url = `/learner/anonymous/otp/v1/generate?captchaResponse=${captchaResponse}`;
     const requestBody = {
       request: {
         key: email,
@@ -246,6 +247,8 @@ const Otp = () => {
       },
     };
     try {
+      const url = `${urlConfig.URLS.LEARNER_PREFIX}${urlConfig.URLS.OTP.ANONYMOUS.GENERATE}?captchaResponse=${captchaResponse}`;
+
       const response = await axios.post(url, requestBody, {
         headers: {
           "Content-Type": "application/json",

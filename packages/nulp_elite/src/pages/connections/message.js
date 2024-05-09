@@ -24,6 +24,8 @@ import { useTranslation } from "react-i18next";
 import DoneAllIcon from "@mui/icons-material/DoneAll";
 import CheckCircleOutlineIcon from "@mui/icons-material/CheckCircleOutline";
 import Typography from "@mui/material/Typography";
+const urlConfig = require("../../configs/urlConfig.json");
+
 const moment = require("moment");
 const timezone = require("moment-timezone");
 const useStyles = makeStyles((theme) => ({
@@ -115,12 +117,10 @@ const Message = (props) => {
 
   const fetchBlockUserStatus = async () => {
     try {
-      const response = await axios.get(
-        `/directConnect/get-block-user?sender_id=${loggedInUserId}&receiver_id=${receiverUserId}`,
-        {
-          withCredentials: true,
-        }
-      );
+      const url = `${urlConfig.URLS.DIRECT_CONNECT.GET_BLOCK_USER}?sender_id=${loggedInUserId}&receiver_id=${receiverUserId}`;
+      const response = await axios.get(url, {
+        withCredentials: true,
+      });
       const blockedUserId =
         response.data.result.length > 0
           ? response.data.result[0].sender_id
@@ -135,14 +135,15 @@ const Message = (props) => {
 
   const fetchChats = async () => {
     try {
+      const url = `${
+        urlConfig.URLS.DIRECT_CONNECT.GET_CHATS
+      }?sender_id=${loggedInUserId}&receiver_id=${receiverUserId}&is_accepted=${true}`;
+
       // Check if the user is not blocked before fetching chats
       if (!isBlocked) {
-        const response = await axios.get(
-          `/directConnect/get-chats?sender_id=${loggedInUserId}&receiver_id=${receiverUserId}&is_accepted=true`,
-          {
-            withCredentials: true,
-          }
-        );
+        const response = await axios.get(url, {
+          withCredentials: true,
+        });
         setMessages(response.data.result || []);
       }
     } catch (error) {
@@ -153,10 +154,11 @@ const Message = (props) => {
   const sendMessage = async () => {
     if (message.trim() !== "") {
       try {
+        const url = `${urlConfig.URLS.DIRECT_CONNECT.SEND_CHAT}`;
         console.log("Sending message:", message);
 
         await axios.post(
-          "/directConnect/send-chat",
+          url,
           {
             sender_id: loggedInUserId,
             receiver_id: receiverUserId,
@@ -181,10 +183,11 @@ const Message = (props) => {
 
   const updateMessage = async () => {
     try {
+      const url = `${urlConfig.URLS.DIRECT_CONNECT.UPDATE_CHAT}`;
       console.log("updating message:", message);
 
       const data = await axios.put(
-        "/directConnect/update-chat",
+        url,
         {
           sender_id: loggedInUserId,
           receiver_id: receiverUserId,
@@ -249,10 +252,11 @@ const Message = (props) => {
   };
   const handleUnblockUser = async () => {
     try {
+      const url = `${urlConfig.URLS.DIRECT_CONNECT.UNBLOCK}`;
       console.log("UnBlocking User");
 
       const data = await axios.post(
-        "/directConnect/unblock-user",
+        url,
         {
           sender_id: loggedInUserId,
           receiver_id: receiverUserId,
@@ -277,10 +281,11 @@ const Message = (props) => {
 
   const handleBlockUserConfirmed = async () => {
     try {
+      const url = `${urlConfig.URLS.DIRECT_CONNECT.BLOCK}`;
       console.log("Blocking User");
 
       await axios.post(
-        "/directConnect/block-user",
+        url,
         {
           sender_id: loggedInUserId,
           receiver_id: receiverUserId,
@@ -307,18 +312,23 @@ const Message = (props) => {
   return (
     <div className={classes.chatContainer}>
       <div className={classes.chatHeader}>
-        <Box style={{display:"flex"}}>
-        <IconButton onClick={handleGoBack}>
-          <ArrowBackIcon />
-        </IconButton>
-        <Box sx={{ fontSize: "22px", fontWeight: "600", paddingLeft: "10px" }}>
-          <div>
-            {dataStore.fullName || localStorage.getItem("chatName")}
-            <Typography variant="body2" sx={{ fontSize: "12px",textAlign:"left" }}>
-              {dataStore.designation || localStorage.getItem("designation")}
-            </Typography>
-          </div>
-        </Box>
+        <Box style={{ display: "flex" }}>
+          <IconButton onClick={handleGoBack}>
+            <ArrowBackIcon />
+          </IconButton>
+          <Box
+            sx={{ fontSize: "22px", fontWeight: "600", paddingLeft: "10px" }}
+          >
+            <div>
+              {dataStore.fullName || localStorage.getItem("chatName")}
+              <Typography
+                variant="body2"
+                sx={{ fontSize: "12px", textAlign: "left" }}
+              >
+                {dataStore.designation || localStorage.getItem("designation")}
+              </Typography>
+            </div>
+          </Box>
         </Box>
         <Box
           style={{
@@ -331,7 +341,11 @@ const Message = (props) => {
           {!isBlocked && (
             <IconButton
               onClick={handleBlockUser}
-              style={{ paddingRight: "10px", cursor: "pointer",fontSize:"12px" }}
+              style={{
+                paddingRight: "10px",
+                cursor: "pointer",
+                fontSize: "12px",
+              }}
             >
               <BlockIcon />
               {t("BLOCK")}
@@ -371,15 +385,12 @@ const Message = (props) => {
           </Box>
         </DialogContent>
         <DialogActions>
-          <Button
-            onClick={handleDialogClose}
-            className="custom-btn-default"
-          >
+          <Button onClick={handleDialogClose} className="custom-btn-default">
             {"CANCEL"}
           </Button>
           <Button
             onClick={handleBlockUserConfirmed}
-           className="custom-btn-primary"
+            className="custom-btn-primary"
             disabled={!reason}
             style={{
               background: !reason ? "rgba(0, 67, 103, 0.5)" : "#004367",
@@ -390,7 +401,7 @@ const Message = (props) => {
         </DialogActions>
       </Dialog>
 
-      <Alert severity="info" className="my-10">
+      <Alert severity="info" style={{ margin: "10px 0" }}>
         {t("YOUR_CHAT_WILL_DISAPPEAR")}
       </Alert>
       <div className={classes.chat}>
@@ -399,7 +410,7 @@ const Message = (props) => {
             {index === 0 ||
             getTimeAgo(msg.timestamp) !==
               getTimeAgo(messages[index - 1].timestamp) ? (
-              <div style={{margin:"0 auto", textAlign:"center"}}>
+              <div style={{ margin: "0 auto", textAlign: "center" }}>
                 <Box className="dayDisplay">{getTimeAgo(msg.timestamp)}</Box>
               </div>
             ) : null}
@@ -453,7 +464,7 @@ const Message = (props) => {
             {msg.is_accepted ? (
               <div style={{ textAlign: "center" }}>
                 <Alert
-                className="my-10"
+                  className="my-10"
                   iconMapping={{
                     success: <CheckCircleOutlineIcon fontSize="inherit" />,
                   }}

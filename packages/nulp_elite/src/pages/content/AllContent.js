@@ -5,7 +5,6 @@ import { getAllContents } from "services/contentService";
 import Header from "components/header";
 import Footer from "components/Footer";
 import { Link, useNavigate } from "react-router-dom";
-import URLSConfig from "../../configs/urlConfig.json";
 import FloatingChatIcon from "../../components/FloatingChatIcon";
 import Box from "@mui/material/Box";
 import data from "../../assets/contentSerach.json";
@@ -19,6 +18,8 @@ import SummarizeOutlinedIcon from "@mui/icons-material/SummarizeOutlined";
 import domainWithImage from "../../assets/domainImgForm.json";
 import { t } from "i18next";
 import Alert from "@mui/material/Alert";
+import appConfig from "../../configs/appConfig.json";
+const urlConfig = require("../../configs/urlConfig.json");
 
 const responsive = {
   superLargeDesktop: {
@@ -122,7 +123,7 @@ const AllContent = () => {
           "channel",
           "organisation",
           "trackable",
-          "primaryCategory"
+          "primaryCategory",
         ],
         facets: [
           "se_boards",
@@ -140,8 +141,9 @@ const AllContent = () => {
     };
     // console.log(data.result.content)
 
-    const url = `/api/${URLSConfig.URLS.CONTENT.SEARCH}?orgdetails=orgName,email&licenseDetails=name,description,url`;
     try {
+      const url = `${urlConfig.URLS.PUBLIC_PREFIX}${urlConfig.URLS.CONTENT.SEARCH}?orgdetails=${appConfig.ContentPlayer.contentApiQueryParams}`;
+
       const response = await getAllContents(url, data, headers);
       const sortedData = response?.data?.result?.content?.sort((a, b) => {
         // Sort "Course" items first, then by primaryCategory
@@ -181,7 +183,7 @@ const AllContent = () => {
       Cookie: `connect.sid=${getCookieValue("connect.sid")}`,
     };
     try {
-      const url = `/api/channel/v1/read/0130701891041689600`;
+      const url = `${urlConfig.URLS.PUBLIC_PREFIX}${urlConfig.URLS.CHANNEL.READ}/0130701891041689600`;
       const response = await frameworkService.getChannel(url, headers);
       // console.log("channel---",response.data.result);
       setChannelData(response.data.result);
@@ -191,7 +193,8 @@ const AllContent = () => {
     } finally {
     }
     try {
-      const url = `/api/framework/v1/read/nulp?categories=board,gradeLevel,medium,class,subject`;
+      const url = `${urlConfig.URLS.PUBLIC_PREFIX}${urlConfig.URLS.FRAMEWORK.READ}/nulp?categories=${appConfig.ContentPlayer.contentApiQueryParams}`;
+
       const response = await frameworkService.getSelectedFrameworkCategories(
         url,
         headers
