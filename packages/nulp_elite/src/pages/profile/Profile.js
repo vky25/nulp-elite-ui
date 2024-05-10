@@ -25,7 +25,7 @@ import ContinueLearning from "./continueLearning";
 import SelectPreference from "pages/SelectPreference";
 import { Dialog, DialogTitle, DialogContent } from "@mui/material";
 import _ from "lodash";
-import Modal from '@mui/material/Modal';
+import Modal from "@mui/material/Modal";
 
 const designations = require("../../configs/designations.json");
 
@@ -61,12 +61,12 @@ const CssTextField = styled(TextField)({
   },
 });
 const style = {
-  position: 'absolute',
-  top: '50%',
-  left: '50%',
-  width:'50%',
-  transform: 'translate(-50%, -50%)',
-  bgcolor: 'background.paper',
+  position: "absolute",
+  top: "50%",
+  left: "50%",
+  width: "50%",
+  transform: "translate(-50%, -50%)",
+  bgcolor: "background.paper",
   boxShadow: 24,
   p: 4,
 };
@@ -96,6 +96,8 @@ const Profile = () => {
   const [load, setLoad] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState(null);
+  const [rootOrgId, setRootOrgId] = useState();
+
   useEffect(() => {
     setTimeout(() => {
       setLoad(true);
@@ -239,9 +241,9 @@ const Profile = () => {
     try {
       const response = await fetch(url, {
         method: "PUT",
-        headers: {
-          "Content-Type": "application/json",
-        },
+        // headers: {
+        //   "Content-Type": "application/json",
+        // },
         body: JSON.stringify(requestBody),
       });
 
@@ -269,15 +271,17 @@ const Profile = () => {
   const fetchData = async () => {
     try {
       const url = `/learner/user/v5/read/${_userId}?fields=organisations,roles,locations,declarations,externalIds`;
-      const header = "application/json";
+      // const header = "application/json";
       const response = await fetch(url, {
-        headers: {
-          "Content-Type": "application/json",
-        },
+        // headers: {
+        //   "Content-Type": "application/json",
+        // },
       });
       const data = await response.json();
       setUserData(data);
-      localStorage.setItem("userRootOrgId", data.result.response.rootOrgId);
+      sessionStorage.setItem("userRootOrgId", data.result.response.rootOrgId);
+      setRootOrgId(rootOrgId);
+      console.log("rootOrgId", rootOrgId);
       if (_.isEmpty(data?.result?.response.framework)) {
         setOpenModal(true);
       }
@@ -377,17 +381,23 @@ const Profile = () => {
                 </Box>
                 {isEditing && (
                   <Modal
-                  // open={open}
-                  // onClose={handleClose}
-                  aria-labelledby="modal-modal-title"
-                  aria-describedby="modal-modal-description"
-                  open={isEditing} onClose={handleCloseEditDialog}
-                >
-                  <Box sx={style}>
-                  <Typography id="modal-modal-title" variant="h5" component="h2" style={{marginBottom:"20px"}}>
-            {t('EDIT_PROFILE')}
-          </Typography>
-                  <form onSubmit={handleFormSubmit}>
+                    // open={open}
+                    // onClose={handleClose}
+                    aria-labelledby="modal-modal-title"
+                    aria-describedby="modal-modal-description"
+                    open={isEditing}
+                    onClose={handleCloseEditDialog}
+                  >
+                    <Box sx={style}>
+                      <Typography
+                        id="modal-modal-title"
+                        variant="h5"
+                        component="h2"
+                        style={{ marginBottom: "20px" }}
+                      >
+                        {t("EDIT_PROFILE")}
+                      </Typography>
+                      <form onSubmit={handleFormSubmit}>
                         <Box py={1}>
                           <CssTextField
                             id="firstName"
@@ -423,7 +433,10 @@ const Profile = () => {
 
                         <Box py={1}>
                           <FormControl fullWidth style={{ marginTop: "10px" }}>
-                            <InputLabel id="designation-label"  className="year-select">
+                            <InputLabel
+                              id="designation-label"
+                              className="year-select"
+                            >
                               {" "}
                               {t("DESIGNATION")}{" "}
                             </InputLabel>
@@ -501,28 +514,24 @@ const Profile = () => {
                         </Box>
 
                         <Box pt={4}>
-                          <Button
-                            className="custom-btn-primary"
-                            type="submit"
-                          >
-                            {t('SAVE')}
+                          <Button className="custom-btn-primary" type="submit">
+                            {t("SAVE")}
                           </Button>
-                       
+
                           <Button
-                           
                             className="custom-btn-default"
                             onClick={handleCloseEditDialog}
                           >
-                            {t('CANCEL')}
+                            {t("CANCEL")}
                           </Button>
                         </Box>
                       </form>
-                  </Box>
-                </Modal>
+                    </Box>
+                  </Modal>
                   // <Dialog open={isEditing} onClose={handleCloseEditDialog}>
                   //   <DialogTitle>Edit Profile</DialogTitle>
                   //   <DialogContent>
-                     
+
                   //   </DialogContent>
                   // </Dialog>
                 )}
@@ -555,7 +564,9 @@ const Profile = () => {
                       </div>
                     </>
                   )}
-                  <CardContent style={{ textAlign: "left", paddingTop: "0",width:"60%" }}>
+                  <CardContent
+                    style={{ textAlign: "left", paddingTop: "0", width: "60%" }}
+                  >
                     {userData && userInfo?.length > 0 && (
                       <>
                         <Typography
@@ -581,15 +592,23 @@ const Profile = () => {
                           }}
                         >
                           {/* {t("DESIGNATION")} |{" "} */}
-                          {userInfo[0]?.designation} {" "}
-                          
+                          {userInfo[0]?.designation}{" "}
                         </Typography>
-                        <Box style={{ display:"flex",fontSize:"13px",color:'#48484887' }}>
-                            {" "}
-                           <Box> ID:</Box> <Box>{userData.result.response.userName}{" "} {userData.result.response.organisations.orgName}</Box>
-                          </Box>{" "}
-                       
-                          <Typography
+                        <Box
+                          style={{
+                            display: "flex",
+                            fontSize: "13px",
+                            color: "#48484887",
+                          }}
+                        >
+                          {" "}
+                          <Box> ID:</Box>{" "}
+                          <Box>
+                            {userData.result.response.userName}{" "}
+                            {userData.result.response.organisations.orgName}
+                          </Box>
+                        </Box>{" "}
+                        <Typography
                           variant="subtitle1"
                           color="text.secondary"
                           component="div"
@@ -609,10 +628,7 @@ const Profile = () => {
                             display: "flex",
                           }}
                         >
-                          <Box
-                          >
-                            {t("DOMAIN")}: {" "}
-                          </Box>{" "}
+                          <Box>{t("DOMAIN")}: </Box>{" "}
                           {userData.result.response.framework.board}
                         </Typography>
                       </>
@@ -758,13 +774,17 @@ const Profile = () => {
                     }
                   }}
                 >
-               
-                   <Box sx={style}>
-                  <Typography id="modal-modal-title" variant="h5" component="h2" style={{marginBottom:"20px"}}>
-                 {t("SELECT_PREFERENCE")}
-          </Typography>
+                  <Box sx={style}>
+                    <Typography
+                      id="modal-modal-title"
+                      variant="h5"
+                      component="h2"
+                      style={{ marginBottom: "20px" }}
+                    >
+                      {t("SELECT_PREFERENCE")}
+                    </Typography>
                     <SelectPreference onClose={handleCloseModal} />
-                    </Box>
+                  </Box>
                 </Modal>
               </Grid>
 

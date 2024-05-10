@@ -59,6 +59,8 @@ const ContentList = (props) => {
   const handleSearch = (query) => {
     setSearch({ ...search, query });
   };
+  sessionStorage.getItem("defaultFramework", defaultFramework);
+  console.log("defaultFramework", defaultFramework);
 
   const fetchData = async () => {
     setIsLoading(true);

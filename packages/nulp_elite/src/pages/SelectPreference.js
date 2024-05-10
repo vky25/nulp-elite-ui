@@ -55,6 +55,7 @@ const SelectPreference = ({ isOpen, onClose }) => {
   const [preTopic, setPreTopic] = useState("");
   const [preSubCategory, setPreSubCategory] = useState([]);
   const [preLanguages, setPreLanguages] = useState([]);
+  const [defaultFrmwrk, setDefaultFrmewrk] = useState();
 
   useEffect(() => {
     const fetchUserDataAndSetCustodianOrgData = async () => {
@@ -69,8 +70,8 @@ const SelectPreference = ({ isOpen, onClose }) => {
         console.log("Raw API response:", data);
         const custodianOrgId = data?.result?.response?.value;
         setCustodianOrgId(custodianOrgId);
-        setUserRootOrgId(localStorage.getItem("userRootOrgId"));
-        const rootOrgId = localStorage.getItem("userRootOrgId");
+        setUserRootOrgId(sessionStorage.getItem("userRootOrgId"));
+        const rootOrgId = sessionStorage.getItem("userRootOrgId");
         if (custodianOrgId === rootOrgId) {
           const response = await fetch(
             `/api/channel/v1/read/${custodianOrgId}`
@@ -83,6 +84,14 @@ const SelectPreference = ({ isOpen, onClose }) => {
           const data = await response.json();
           const defaultFramework = data?.result?.channel?.defaultFramework;
           setDefaultFramework(defaultFramework);
+          sessionStorage.setItem("defaultFramework", defaultFramework);
+          setDefaultFrmewrk(defaultFramework);
+          console.log("defaultFramework", defaultFramework);
+          // sessionStorage.setItem(
+          //   "defaultFramework",
+          //   JSON.stringify(defaultFrmwrk)
+          // );
+          // setDefaultFrmewrk(defaultFrmwrk);
         }
       } catch (error) {
         console.error("Error fetching user data:", error);
@@ -291,8 +300,10 @@ const SelectPreference = ({ isOpen, onClose }) => {
   return (
     <div>
       <Box sx={{ minWidth: 120 }} className="preference">
-        <FormControl fullWidth sx={{ marginBottom: 2 }} >
-          <InputLabel id="category-label" className="year-select">{domain}</InputLabel>
+        <FormControl fullWidth sx={{ marginBottom: 2 }}>
+          <InputLabel id="category-label" className="year-select">
+            {domain}
+          </InputLabel>
           <Select
             labelId="category-label"
             value={selectedCategory}
@@ -308,7 +319,9 @@ const SelectPreference = ({ isOpen, onClose }) => {
 
         <Box sx={{ minWidth: 120 }}>
           <FormControl fullWidth sx={{ marginBottom: 2 }}>
-            <InputLabel id="sub-category-label"  className="year-select">{subDomain}</InputLabel>
+            <InputLabel id="sub-category-label" className="year-select">
+              {subDomain}
+            </InputLabel>
             <Select
               labelId="sub-category-label"
               id="sub-category-select"
@@ -329,7 +342,9 @@ const SelectPreference = ({ isOpen, onClose }) => {
         </Box>
         <Box sx={{ minWidth: 120 }}>
           <FormControl fullWidth sx={{ marginBottom: 2 }}>
-            <InputLabel id="language-label"  className="year-select">{language}</InputLabel>
+            <InputLabel id="language-label" className="year-select">
+              {language}
+            </InputLabel>
             <Select
               labelId="language-label"
               id="language-select"
@@ -349,7 +364,9 @@ const SelectPreference = ({ isOpen, onClose }) => {
           </FormControl>
         </Box>
         <FormControl fullWidth sx={{ marginBottom: 2 }}>
-          <InputLabel id="topic-label"  className="year-select">{topic}</InputLabel>
+          <InputLabel id="topic-label" className="year-select">
+            {topic}
+          </InputLabel>
           <Select
             labelId="topic-label"
             value={selectedTopic}
@@ -363,11 +380,19 @@ const SelectPreference = ({ isOpen, onClose }) => {
           </Select>
         </FormControl>
       </Box>
-      <Button className="custom-btn-primary my-10" onClick={handleSavePreferences} disabled={isDisabled}>
-        {t('SUBMIT')}
+      <Button
+        className="custom-btn-primary my-10"
+        onClick={handleSavePreferences}
+        disabled={isDisabled}
+      >
+        {t("SUBMIT")}
       </Button>
 
-      {!isEmptyPreference && <Button className="custom-btn-default" onClick={handleClose}>{t('CANCEL')}</Button>}
+      {!isEmptyPreference && (
+        <Button className="custom-btn-default" onClick={handleClose}>
+          {t("CANCEL")}
+        </Button>
+      )}
     </div>
   );
 };

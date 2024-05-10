@@ -54,6 +54,7 @@ const DomainList = () => {
   const [category, setCategory] = React.useState();
   const [imgItem, setImgItem] = React.useState(object ? object : {});
   const [itemsArray, setItemsArray] = useState([]);
+  const [rootOrgId, setRootOrgId] = useState();
   // Example of API Call
 
   useEffect(() => {
@@ -61,17 +62,21 @@ const DomainList = () => {
     // console.log("domainWithImage--",domainWithImage)
   }, []);
 
-  const getCookieValue = (name) => {
-    const cookies = document.cookie.split("; ");
-    for (let i = 0; i < cookies.length; i++) {
-      const cookie = cookies[i];
-      const [cookieName, cookieValue] = cookie.split("=");
-      if (cookieName === name) {
-        return cookieValue;
-      }
-    }
-    return "";
-  };
+  // const getCookieValue = (name) => {
+  //   const cookies = document.cookie.split("; ");
+  //   for (let i = 0; i < cookies.length; i++) {
+  //     const cookie = cookies[i];
+  //     const [cookieName, cookieValue] = cookie.split("=");
+  //     if (cookieName === name) {
+  //       return cookieValue;
+  //     }
+  //   }
+  //   return "";
+  // };
+  sessionStorage.setItem("userRootOrgId", data.result.response.rootOrgId);
+  setRootOrgId(rootOrgId);
+  sessionStorage.getItem("defaultFramework", defaultFramework);
+  console.log("defaultFramework", defaultFramework);
 
   // Function to push data to the array
   const pushData = (term) => {
@@ -83,10 +88,10 @@ const DomainList = () => {
     setError(null);
 
     // Headers
-    const headers = {
-      "Content-Type": "application/json",
-      Cookie: `connect.sid=${getCookieValue("connect.sid")}`,
-    };
+    // const headers = {
+    //   "Content-Type": "application/json",
+    //   Cookie: `connect.sid=${getCookieValue("connect.sid")}`,
+    // };
     try {
       const url = `/api/channel/v1/read/0130701891041689600`;
       const response = await frameworkService.getChannel(url, headers);
