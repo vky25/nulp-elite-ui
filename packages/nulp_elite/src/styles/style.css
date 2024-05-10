@@ -100,6 +100,13 @@ body {
   font-size: 14px !important;
 }
 @media (min-width: 320px) {
+  .preference .MuiListItemText-root{
+    display: inline-block !important;
+  }
+  .preference .css-qiwgdb.MuiSelect-select{
+    white-space: inherit;
+    overflow: inherit;
+  }
   .react-multiple-carousel__arrow {
     background: rgb(3 69 105) !important;
     border-radius: 5px !important;
@@ -177,6 +184,13 @@ body {
  }
  }
  @media(min-width:769px) {
+  .preference .MuiSelect-multiple{
+    display: flex !important;
+    align-items: center !important;
+  }
+  .preference .css-1tsvksn {
+    flex: inherit !important;
+  }
   .mb-20{
     margin-bottom: 20px;
   }
@@ -387,7 +401,7 @@ width: 99.9% !important;
   background: #004367 !important;
   border-radius: 10px !important;
   color: #fff !important;
-  padding: 7px 71px !important;
+  padding: 7px 26px !important;
   font-weight: 600 !important;
   font-size: 14px !important;
   width: 45%;
@@ -405,13 +419,7 @@ width: 99.9% !important;
   border: solid 1px #efefea00;
   width: 45%;
 }
-.preference .MuiSelect-multiple{
-  display: flex !important;
-  align-items: center !important;
-}
-.preference .css-1tsvksn {
-  flex: inherit !important;
-}
+
 .card-img{
   height: 74px;
   max-width: 100%;
@@ -432,7 +440,7 @@ width: 99.9% !important;
   margin: 10px 0;
 }
 .my-20{
-  margin: 20px 0;
+  margin: 20px 0 !important;
 }
 .addConnection .jss3{
   background-color: transparent !important;
@@ -447,4 +455,22 @@ width: 99.9% !important;
     border-radius: 5px;
     padding: 7px;
     font-size: 11px;
+}
+.joinCourse div{
+  margin:10px 0;
+}
+.joinCourse div label{
+  padding-right:18px;
+}
+
+button{
+  text-transform: capitalize !important;
+}
+
+.d-flex{
+  display: flex;
+}
+
+.jc-en{
+  justify-content: flex-end;
 }
