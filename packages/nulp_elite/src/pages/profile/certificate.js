@@ -19,12 +19,12 @@ import * as util from "../../services/utilService";
 import axios from "axios";
 import NoResult from "pages/content/noResultFound";
 import Alert from "@mui/material/Alert";
-
 const Certificate = () => {
   const { t } = useTranslation();
   const [certData, setCertData] = useState(null);
   const [otherCertData, setOtherCertData] = useState([]);
   const [error, setError] = useState(null);
+  const urlConfig = require("../../configs/urlConfig.json");
 
   useEffect(() => {
     const fetchData = async () => {
@@ -52,7 +52,7 @@ const Certificate = () => {
             },
           },
         };
-        const url = `/learner/certreg/v2/certs/search`;
+        const url = `${urlConfig.URLS.LEARNER_PREFIX}${urlConfig.URLS.CERTIFICATE.CERT_SEARCH}`;
         const response = await axios.post(url, request);
         const data = response.data;
         setCertData(data);
@@ -68,7 +68,7 @@ const Certificate = () => {
             recipient: { id: { eq: _userId } },
           },
         };
-        const url = `/learner/rc/certificate/v1/search`;
+        const url = `${urlConfig.URLS.LEARNER_PREFIX}${urlConfig.URLS.CERTIFICATE.CERTIF_SEARCH}`;
         const response = await axios.post(url, request);
         const data = response.data;
         setOtherCertData(data);

@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from "react";
-import URLSConfig from "../../configs/urlConfig.json";
 import { Link, useParams, useNavigate, useLocation } from "react-router-dom";
 import BoxCard from "components/Card";
 import Box from "@mui/material/Box";
@@ -20,6 +19,8 @@ import NoResult from "pages/content/noResultFound";
 import { t } from "i18next";
 import Alert from "@mui/material/Alert";
 import { useTranslation } from "react-i18next";
+import appConfig from "../../configs/appConfig.json";
+const urlConfig = require("../../configs/urlConfig.json");
 
 const ContentList = (props) => {
   const [search, setSearch] = useState(true);
@@ -102,8 +103,9 @@ const ContentList = (props) => {
       "Content-Type": "application/json",
     };
 
-    const url = `/content/${URLSConfig.URLS.CONTENT.SEARCH}?orgdetails=orgName,email`;
     try {
+      const url = `${urlConfig.URLS.LEARNER_PREFIX}${urlConfig.URLS.CONTENT.SEARCH}?orgdetails=${appConfig.ContentPlayer.contentApiQueryParams}`;
+
       const response = await contentService.getAllContents(url, req, headers);
 
       if (response.data.result.content && response.data.result.count <= 20) {
@@ -141,9 +143,8 @@ const ContentList = (props) => {
 
   const fetchGradeLevels = async () => {
     try {
-      const response = await fetch(
-        "/api/framework/v1/read/nulp?categories=gradeLevel"
-      );
+      const url = `${urlConfig.URLS.PUBLIC_PREFIX}${urlConfig.URLS.FRAMEWORK.READ}?categories=${appConfig.ContentPlayer.contentApiQueryParams}`;
+      const response = await fetch(url);
       const data = await response.json();
       if (
         data.result &&
@@ -168,7 +169,8 @@ const ContentList = (props) => {
 
   const Fetchdomain = async () => {
     try {
-      const url = `/api/framework/v1/read/nulp?categories=board,gradeLevel,medium,class,subject`;
+      const url = `${urlConfig.URLS.PUBLIC_PREFIX}${urlConfig.URLS.FRAMEWORK.READ}/nulp?orgdetails=${appConfig.ContentPlayer.contentApiQueryParams}`;
+
       const response = await fetch(url);
 
       if (response.ok) {

@@ -12,11 +12,12 @@ import Filter from "components/filter";
 import BoxCard from "components/Card";
 import FloatingChatIcon from "../../components/FloatingChatIcon";
 import { useParams, useNavigate, useLocation } from "react-router-dom";
-import URLSConfig from "../../configs/urlConfig.json";
 import * as util from "../../services/utilService";
 import Search from "components/search";
 import NoResult from "pages/content/noResultFound";
 import Alert from "@mui/material/Alert";
+import appConfig from "../../configs/appConfig.json";
+const urlConfig = require("../../configs/urlConfig.json");
 
 const ContinueLearning = () => {
   const { t } = useTranslation();
@@ -50,8 +51,9 @@ const ContinueLearning = () => {
       "Content-Type": "application/json",
     };
 
-    const url = `/learner/course/v1/user/enrollment/list/${_userId}?orgdetails=orgName,email&licenseDetails=name,description,url&fields=contentType,topic,name,channel,mimeType,appIcon,gradeLevel,resourceType,identifier,medium,pkgVersion,board,subject,trackable,primaryCategory,organisation&batchDetails=name,endDate,startDate,status,enrollmentType,createdBy,certificates`;
     try {
+      const url = `${urlConfig.URLS.LEARNER_PREFIX}${urlConfig.URLS.COURSE.GET_ENROLLED_COURSES}/${_userId}?orgdetails=${appConfig.ContentPlayer.contentApiQueryParams}&fields=${urlConfig.params.objectCategory.fields}&batchDetails=${urlConfig.params.enrolledCourses.batchDetails}`;
+
       const response = await fetch(url, headers);
       const responseData = await response.json();
       setData(responseData.result.courses);

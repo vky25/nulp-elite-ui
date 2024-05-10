@@ -12,6 +12,7 @@ import {
 } from "@mui/material";
 import * as util from "../services/utilService";
 import { useTranslation } from "react-i18next";
+const urlConfig = require("../configs/urlConfig.json");
 
 const useStyles = makeStyles((theme) => ({
   formControl: {
@@ -60,9 +61,8 @@ const SelectPreference = ({ isOpen, onClose }) => {
   useEffect(() => {
     const fetchUserDataAndSetCustodianOrgData = async () => {
       try {
-        const response = await fetch(
-          "/learner/data/v1/system/settings/get/custodianOrgId"
-        );
+        const url = `${urlConfig.URLS.LEARNER_PREFIX}${urlConfig.URLS.SYSTEM_SETTING.CUSTODIAN_ORG}`;
+        const response = await fetch(url);
         if (!response.ok) {
           throw new Error("Failed to fetch custodian organization ID");
         }
@@ -73,14 +73,15 @@ const SelectPreference = ({ isOpen, onClose }) => {
         setUserRootOrgId(sessionStorage.getItem("userRootOrgId"));
         const rootOrgId = sessionStorage.getItem("userRootOrgId");
         if (custodianOrgId === rootOrgId) {
-          const response = await fetch(
-            `/api/channel/v1/read/${custodianOrgId}`
-          );
+          const url = `${urlConfig.URLS.PUBLIC_PREFIX}${urlConfig.URLS.CHANNEL.READ}/${custodianOrgId}`;
+          const response = await fetch(url);
           const data = await response.json();
           const defaultFramework = data?.result?.channel?.defaultFramework;
           setDefaultFramework(defaultFramework);
+          localStorage.setItem("defaultFramework", defaultFramework);
         } else {
-          const response = await fetch(`/api/channel/v1/read/${rootOrgId}`);
+          const url = `${urlConfig.URLS.PUBLIC_PREFIX}${urlConfig.URLS.CHANNEL.READ}/${rootOrgId}`;
+          const response = await fetch(url);
           const data = await response.json();
           const defaultFramework = data?.result?.channel?.defaultFramework;
           setDefaultFramework(defaultFramework);
@@ -134,9 +135,8 @@ const SelectPreference = ({ isOpen, onClose }) => {
     setIsLoading(true);
     setError(null);
 
-    const url = `/api/framework/v1/read/${defaultFramework}`;
-
     try {
+      const url = `${urlConfig.URLS.PUBLIC_PREFIX}${urlConfig.URLS.FRAMEWORK.READ}/${defaultFramework}`;
       const response = await fetch(url, {
         method: "GET",
         headers: {
@@ -171,9 +171,8 @@ const SelectPreference = ({ isOpen, onClose }) => {
     setIsLoading(true);
     setError(null);
 
-    const url = `/learner/user/v5/read/${_userId}?fields=organisations,roles,locations,declarations,externalIds`;
-
     try {
+      const url = `${urlConfig.URLS.LEARNER_PREFIX}${urlConfig.URLS.USER.GET_PROFILE}${_userId}?fields=${urlConfig.params.userReadParam.fields}`;
       const response = await fetch(url, {
         method: "GET",
         headers: {
@@ -218,7 +217,6 @@ const SelectPreference = ({ isOpen, onClose }) => {
     setIsLoading(true);
     setError(null);
 
-    const url = "/learner/user/v3/update";
     const requestBody = {
       params: {},
       request: {
@@ -234,6 +232,7 @@ const SelectPreference = ({ isOpen, onClose }) => {
     };
 
     try {
+      const url = `${urlConfig.URLS.LEARNER_PREFIX}${urlConfig.URLS.USER.UPDATE_USER_PROFILE}${_userId}`;
       const response = await fetch(url, {
         method: "PATCH",
         headers: {

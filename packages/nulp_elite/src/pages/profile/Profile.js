@@ -26,8 +26,8 @@ import SelectPreference from "pages/SelectPreference";
 import { Dialog, DialogTitle, DialogContent } from "@mui/material";
 import _ from "lodash";
 import Modal from "@mui/material/Modal";
-
 const designations = require("../../configs/designations.json");
+const urlConfig = require("../../configs/urlConfig.json");
 
 import {
   Button,
@@ -38,6 +38,7 @@ import {
   TextField,
 } from "@mui/material";
 import styled from "styled-components";
+
 const DELAY = 1500;
 const MAX_CHARS = 500;
 const CssTextField = styled(TextField)({
@@ -84,8 +85,8 @@ const Profile = () => {
   const axios = require("axios");
   const [isEditing, setIsEditing] = useState(false);
   const [editedUserInfo, setEditedUserInfo] = useState({
-    firstName: userData?.result?.response.firstName || "",
-    lastName: userData?.result?.response.lastName || "",
+    firstName: userData?.result?.response?.firstName || "",
+    lastName: userData?.result?.response?.lastName || "",
     bio: "",
     designation: "",
     otherDesignation: "",
@@ -127,7 +128,8 @@ const Profile = () => {
     setDesignationsList(designations);
     const fetchCertificateCount = async () => {
       try {
-        const url = `/profilePage/certificateCount?user_id=${_userId}`;
+        const url = `${urlConfig.URLS.POFILE_PAGE.CERTIFICATE_COUNT}?user_id=${_userId}`;
+
         const response = await fetch(url);
         const data = await response.json();
         setCertificateCountData({
@@ -141,7 +143,8 @@ const Profile = () => {
 
     const fetchCourseCount = async () => {
       try {
-        const url = `/profilePage/courseCount?user_id=${_userId}`;
+        const url = `${urlConfig.URLS.POFILE_PAGE.COURSE_COUNT}?user_id=${_userId}`;
+
         const response = await fetch(url);
         const data = await response.json();
         setCourseCountData({
@@ -154,8 +157,9 @@ const Profile = () => {
     };
     const fetchUserInfo = async () => {
       try {
+        const url = `${urlConfig.URLS.POFILE_PAGE.USER_READ}`;
         const response = await axios.post(
-          "/custom/user/read",
+          url,
           { user_ids: [_userId] },
           {
             withCredentials: true,
@@ -165,7 +169,7 @@ const Profile = () => {
           }
         );
 
-        setUserInfo(response.data.result);
+        setUserInfo(response?.data?.result);
       } catch (error) {
         console.error(error);
       }
@@ -195,8 +199,6 @@ const Profile = () => {
   const updateUserData = async () => {
     setIsLoading(true);
     setError(null);
-
-    const url = "/learner/user/v3/update";
     const requestBody = {
       params: {},
       request: {
@@ -207,6 +209,7 @@ const Profile = () => {
     };
 
     try {
+      const url = `${urlConfig.URLS.LEARNER_PREFIX}${urlConfig.URLS.USER.UPDATE_USER_PROFILE}`;
       const response = await fetch(url, {
         method: "PATCH",
         headers: {
@@ -229,7 +232,6 @@ const Profile = () => {
     }
   };
   const updateUserInfoInCustomDB = async () => {
-    const url = `/custom/user/update?user_id=${_userId}`;
     const requestBody = {
       designation:
         editedUserInfo.designation === "Other"
@@ -239,6 +241,7 @@ const Profile = () => {
       created_by: _userId,
     };
     try {
+      const url = `${urlConfig.URLS.POFILE_PAGE.USER_UPDATE}?user_id=${_userId}`;
       const response = await fetch(url, {
         method: "PUT",
         // headers: {
@@ -270,8 +273,9 @@ const Profile = () => {
 
   const fetchData = async () => {
     try {
-      const url = `/learner/user/v5/read/${_userId}?fields=organisations,roles,locations,declarations,externalIds`;
-      // const header = "application/json";
+      const url = `${urlConfig.URLS.LEARNER_PREFIX}${urlConfig.URLS.USER.GET_PROFILE}${_userId}?fields=${urlConfig.params.userReadParam.fields}`;
+
+      const header = "application/json";
       const response = await fetch(url, {
         // headers: {
         //   "Content-Type": "application/json",

@@ -14,6 +14,8 @@ import * as util from "../../services/utilService";
 import Filter from "components/filter";
 import NoResult from "pages/content/noResultFound";
 import Alert from "@mui/material/Alert";
+import appConfig from "../../configs/appConfig.json";
+const urlConfig = require("../../configs/urlConfig.json");
 
 const LearningHistory = () => {
   const { t } = useTranslation();
@@ -26,7 +28,8 @@ const LearningHistory = () => {
       setError(null);
       try {
         const _userId = util.userId();
-        const url = `/learner/course/v1/user/enrollment/list/${_userId}?orgdetails=orgName,email&licenseDetails=name,description,url&fields=contentType,topic,name,channel,mimeType,appIcon,gradeLevel,resourceType,identifier,medium,pkgVersion,board,subject,trackable,primaryCategory,organisation&batchDetails=name,endDate,startDate,status,enrollmentType,createdBy,certificates`;
+        const url = `${urlConfig.URLS.LEARNER_PREFIX}${urlConfig.URLS.COURSE.GET_ENROLLED_COURSES}/${_userId}?orgdetails=${appConfig.ContentPlayer.contentApiQueryParams}&fields=${urlConfig.params.objectCategory.fields}&batchDetails=${urlConfig.params.enrolledCourses.batchDetails}`;
+
         const response = await fetch(url, {
           headers: {
             "Content-Type": "application/json",
