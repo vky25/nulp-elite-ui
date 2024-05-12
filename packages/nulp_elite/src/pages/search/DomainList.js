@@ -57,29 +57,14 @@ const DomainList = () => {
   const [category, setCategory] = React.useState();
   const [imgItem, setImgItem] = React.useState(object ? object : {});
   const [itemsArray, setItemsArray] = useState([]);
-  const [rootOrgId, setRootOrgId] = useState();
+
   // Example of API Call
 
   useEffect(() => {
     fetchDataFramework();
+
     // console.log("domainWithImage--",domainWithImage)
   }, []);
-
-  // const getCookieValue = (name) => {
-  //   const cookies = document.cookie.split("; ");
-  //   for (let i = 0; i < cookies.length; i++) {
-  //     const cookie = cookies[i];
-  //     const [cookieName, cookieValue] = cookie.split("=");
-  //     if (cookieName === name) {
-  //       return cookieValue;
-  //     }
-  //   }
-  //   return "";
-  // };
-  sessionStorage.setItem("userRootOrgId", data.result.response.rootOrgId);
-  setRootOrgId(rootOrgId);
-  sessionStorage.getItem("defaultFramework", defaultFramework);
-  console.log("defaultFramework", defaultFramework);
 
   // Function to push data to the array
   const pushData = (term) => {
@@ -89,14 +74,11 @@ const DomainList = () => {
   const fetchDataFramework = async () => {
     setIsLoading(true);
     setError(null);
+    const rootOrgId = sessionStorage.getItem("rootOrgId");
+    const defaultFramework = localStorage.getItem("defaultFramework");
 
-    // Headers
-    // const headers = {
-    //   "Content-Type": "application/json",
-    //   Cookie: `connect.sid=${getCookieValue("connect.sid")}`,
-    // };
     try {
-      const url = `${urlConfig.URLS.PUBLIC_PREFIX}${urlConfig.URLS.CHANNEL.READ}/0130701891041689600`;
+      const url = `${urlConfig.URLS.PUBLIC_PREFIX}${urlConfig.URLS.CHANNEL.READ}/${rootOrgId}`;
 
       const response = await frameworkService.getChannel(url, headers);
       // console.log("channel---",response.data.result);
@@ -108,7 +90,8 @@ const DomainList = () => {
       setIsLoading(false);
     }
     try {
-      const url = `${urlConfig.URLS.PUBLIC_PREFIX}${urlConfig.URLS.FRAMEWORK.READ}/nulp?categories=${appConfig.ContentPlayer.contentApiQueryParams}`;
+      const url = `${urlConfig.URLS.PUBLIC_PREFIX}${urlConfig.URLS.FRAMEWORK.READ}/
+      ${defaultFramework}?categories=${urlConfig.params.framework}`;
 
       const response = await frameworkService.getSelectedFrameworkCategories(
         url,

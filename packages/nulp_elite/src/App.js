@@ -40,6 +40,7 @@ import NoResult from "pages/content/noResultFound";
 import Message from "pages/connections/message";
 import Terms from "pages/terms";
 import SelectPreference from "pages/SelectPreference";
+const urlConfig = require("./configs/urlConfig.json");
 
 function App() {
   // const [t] = useTranslation();
@@ -161,14 +162,11 @@ function App() {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const url = `/learner/user/v5/read/${_userId}`;
-        const header = "application/json";
-        const response = await fetch(url, {
-          headers: {
-            "Content-Type": "application/json",
-          },
-        });
+        const url = `${urlConfig.URLS.LEARNER_PREFIX}${urlConfig.URLS.USER.GET_PROFILE}${_userId}`;
+        const response = await fetch(url);
         const data = await response.json();
+        const rootOrgId = data.result.response.rootOrgId;
+        sessionStorage.setItem("rootOrgId", rootOrgId);
         console.log(data.result.response.framework.board);
         if (data.result.response.framework.board) {
           setCheckPref(true);

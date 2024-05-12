@@ -48,6 +48,7 @@ const CategoryPage = () => {
   const handleGoBack = () => {
     navigate(-1); // Navigate back in history
   };
+
   const fetchMoreItems = async (category) => {
     setError(null);
     // Filters for API
@@ -105,6 +106,8 @@ const CategoryPage = () => {
 
   const fetchDomains = async () => {
     setError(null);
+    const rootOrgId = sessionStorage.getItem("rootOrgId");
+    const defaultFramework = localStorage.getItem("defaultFramework");
     // Headers
     const headers = {
       "Content-Type": "application/json",
@@ -121,7 +124,7 @@ const CategoryPage = () => {
     } finally {
     }
     try {
-      const url = `${urlConfig.URLS.PUBLIC_PREFIX}${urlConfig.URLS.FRAMEWORK.READ}/nulp?orgdetails=${appConfig.ContentPlayer.contentApiQueryParams}`;
+      const url = `${urlConfig.URLS.PUBLIC_PREFIX}${urlConfig.URLS.FRAMEWORK.READ}/${defaultFramework}?orgdetails=${appConfig.ContentPlayer.contentApiQueryParams}`;
 
       const response = await frameworkService.getSelectedFrameworkCategories(
         url,

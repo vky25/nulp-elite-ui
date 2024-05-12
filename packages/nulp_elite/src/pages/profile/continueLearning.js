@@ -52,8 +52,7 @@ const ContinueLearning = () => {
     };
 
     try {
-      const url = `${urlConfig.URLS.LEARNER_PREFIX}${urlConfig.URLS.COURSE.GET_ENROLLED_COURSES}/${_userId}?orgdetails=${appConfig.ContentPlayer.contentApiQueryParams}&fields=${urlConfig.params.objectCategory.fields}&batchDetails=${urlConfig.params.enrolledCourses.batchDetails}`;
-
+      const url = `${urlConfig.URLS.LEARNER_PREFIX}${urlConfig.URLS.COURSE.GET_ENROLLED_COURSES}/${_userId}?orgdetails=${appConfig.Course.contentApiQueryParams.orgdetails}&licenseDetails=${appConfig.Course.contentApiQueryParams.licenseDetails}&fields=${urlConfig.params.enrolledCourses.fields}&batchDetails=${urlConfig.params.enrolledCourses.batchDetails}`;
       const response = await fetch(url, headers);
       const responseData = await response.json();
       setData(responseData.result.courses);
