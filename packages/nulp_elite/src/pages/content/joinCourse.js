@@ -32,6 +32,8 @@ import MuiAlert from "@mui/material/Alert";
 
 import data from "../../assets/courseHierarchy.json";
 import Alert from "@mui/material/Alert";
+import Modal from '@mui/material/Modal';
+
 import appConfig from "../../configs/appConfig.json";
 const urlConfig = require("../../configs/urlConfig.json");
 
@@ -49,13 +51,23 @@ const JoinCourse = () => {
   const [userInfo, setUserInfo] = useState();
   const [consentChecked, setConsentChecked] = useState(false);
   const [shareEnabled, setShareEnabled] = useState(false);
+  const [openModal, setOpenModal] = useState(false);
 
   const location = useLocation();
   const navigate = useNavigate();
 
   const { contentId } = location.state || {};
   const _userId = util.userId(); // Assuming util.userId() is defined
-
+  const style = {
+    position: 'absolute',
+    top: '50%',
+    left: '50%',
+    width:'50%',
+    transform: 'translate(-50%, -50%)',
+    bgcolor: 'background.paper',
+    boxShadow: 24,
+    p: 4,
+  };
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -246,8 +258,7 @@ const JoinCourse = () => {
             </Button>
             <Button
               onClick={handleLeaveCourseClick} // Open confirmation dialog
-              variant="contained"
-              style={{ background: "#FF0000", color: "#fff", left: "160px" }}
+              className="custom-btn-default"            
             >
               {t("LEAVE_COURSE")}
             </Button>
@@ -263,14 +274,14 @@ const JoinCourse = () => {
                 </DialogContent>
                 <DialogActions>
                   <Button onClick={handleConfirmationClose} color="primary">
-                    {t("NO")}
+                    {t("CANCEL")}
                   </Button>
                   <Button
                     onClick={handleLeaveConfirmed}
                     color="primary"
                     autoFocus
                   >
-                    {t("YES")}
+                    {t("LEAVE_COURSE")}
                   </Button>
                 </DialogActions>
               </Dialog>
@@ -461,7 +472,10 @@ const JoinCourse = () => {
           {t("ENROLLMENT_SUCCESS_MESSAGE")}
         </MuiAlert>
       </Snackbar>
-      <Dialog
+      
+      <Modal
+       aria-labelledby="modal-modal-title"
+       aria-describedby="modal-modal-description"
         open={showConsentForm}
         onClose={(event, reason) => {
           if (reason === "backdropClick" || reason === "escapeKeyDown") {
@@ -471,46 +485,47 @@ const JoinCourse = () => {
           }
         }}
       >
-        <DialogTitle>{t("CONSENT_FORM_TITLE")}</DialogTitle>
-        <DialogContent>
+        <Box sx={style} className="joinCourse">
+
+          <Typography id="modal-modal-title" variant="h5" component="h2" style={{marginBottom:"20px"}}>{t("CONSENT_FORM_TITLE")}</Typography>
           <div>
-            <label>{t("USERNAME_LABEL")}:</label>
+            <label>{t("USERNAME")}:</label>
             <span>{userInfo?.firstName}</span>
           </div>
           <div>
-            <label>{t("State")}:</label>
+            <label>{t("STATE")}:</label>
             <span>{}</span>
           </div>
           <div>
-            <label>{t("User ID")}:</label>
+            <label>{t("USER_ID")}:</label>
             <span>{userInfo?.organisations[0]?.userId}</span>
           </div>
           <div>
-            <label>{t("External Id")}:</label>
+            <label>{t("EXTERNAL_ID")}:</label>
             <span>{}</span>
           </div>
           <div>
-            <label>{t("District")}:</label>
+            <label>{t("DISTRICT")}:</label>
             <span>{}</span>
           </div>
           <div>
-            <label>{t("Block")}:</label>
+            <label>{t("BLOCK")}:</label>
             <span>{}</span>
           </div>
           <div>
-            <label>{t("School ID")}:</label>
+            <label>{t("SCHOOL_ID")}:</label>
             <span>{}</span>
           </div>
           <div>
-            <label>{t("School or Org name")}:</label>
+            <label>{t("SCHOOL_OR_ORG_NAME")}:</label>
             <span>{}</span>
           </div>
           <div>
-            <label>{t("MOBILE_NUMBER_LABEL")}:</label>
+            <label>{t("MOBILENUMBER")}:</label>
             <span>{userInfo?.phone}</span>
           </div>
           <div>
-            <label>{t("EMAIL_LABEL")}:</label>
+            <label>{t("EMAIL_ADDRESS")}:</label>
             <span>{userInfo?.email}</span>
           </div>
 
@@ -522,16 +537,16 @@ const JoinCourse = () => {
             />
             <label>{t("CONSENT_TEXT")}</label>
           </div>
-        </DialogContent>
-        <DialogActions>
+          <Box className="d-flex jc-en">
           <Button onClick={handleDontShareClick}>
-            {t("DONT_SHARE_BUTTON_TEXT")}
+            {t("DONT_SHARE")}
           </Button>
           <Button onClick={handleShareClick} disabled={!shareEnabled}>
-            {t("SHARE_BUTTON_TEXT")}
+            {t("SHARE")}
           </Button>
-        </DialogActions>
-      </Dialog>
+          </Box>
+          </Box>
+      </Modal>
 
       <Container maxWidth="xxl" role="main" className="container-pb">
         <Grid container spacing={2}>
