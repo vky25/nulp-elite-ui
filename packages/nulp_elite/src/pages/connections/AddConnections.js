@@ -37,6 +37,7 @@ import Filter from "components/filter";
 const axios = require("axios");
 const designations = require("../../configs/designations.json");
 const urlConfig = require("../../configs/urlConfig.json");
+import Autocomplete from "@mui/material/Autocomplete";
 // Define modal styles
 const useStyles = makeStyles((theme) => ({
   modal: {
@@ -102,6 +103,9 @@ const AddConnections = () => {
   const [selectedDesignation, setSelectedDesignation] = useState("");
   const [userFilter, setUserFilter] = useState("");
   const [userIds, setUserIds] = useState([]);
+  const [autocompleteOpen, setAutocompleteOpen] = useState(false);
+  const [inputValue, setInputValue] = useState("");
+  const [options, setOptions] = useState([]);
 
   const getChat = async (userId) => {
     setIsLoading(true);
@@ -818,7 +822,7 @@ const AddConnections = () => {
   };
 
   const onClickSearchedUser = (selectedUserId) => {
-    handlePopoverClose();
+    // handlePopoverClose();
     const allTypeOfUsers = [
       ...(invitationAcceptedUsers || []),
       ...(invitationNotAcceptedUsers || []),
@@ -1013,6 +1017,69 @@ const AddConnections = () => {
     }
   };
 
+  useEffect(() => {
+    if (!autocompleteOpen) {
+      setOptions([]);
+    }
+  }, [autocompleteOpen]);
+
+  const fetchOptions = async (searchQuery) => {
+    const requestBody = {
+      request: {
+        filters: {
+          status: "1",
+        },
+        query: searchQuery,
+        sort_by: {
+          lastUpdatedOn: "desc",
+        },
+      },
+    };
+
+    try {
+      const url = `${urlConfig.URLS.LEARNER_PREFIX}${urlConfig.URLS.ADMIN.USER_SEARCH}`;
+      const response = await fetch(url, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(requestBody),
+      });
+
+      if (!response.ok) {
+        throw new Error("Failed to fetch data");
+      }
+
+      let responseData = await response.json();
+      return responseData?.result?.response?.content || [];
+    } catch (error) {
+      console.error("Error fetching data:", error);
+      setError("Failed to fetch data. Please try again.");
+      return [];
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  const handleInputChange = async (event, newInputValue) => {
+    setInputValue(newInputValue);
+    if (newInputValue.length >= 3) {
+      const fetchedOptions = await fetchOptions(newInputValue);
+      setOptions(fetchedOptions);
+      setAutocompleteOpen(true);
+    } else {
+      setAutocompleteOpen(false);
+    }
+  };
+
+  const getOptionLabel = (option) =>
+    `${option.firstName}${option.lastName ? ` ${option.lastName}` : ""}`;
+
+  const handleOnSelectSearchedUser = (event, user) => {
+    onClickSearchedUser(user?.userId);
+    console.log("Selected Option:", user);
+  };
+
   return (
     <Box>
       <Header />
@@ -1025,7 +1092,24 @@ const AddConnections = () => {
 
         <Box textAlign="center" padding="10" style={{ minHeight: "500px" }}>
           <Box>
-            <input
+            <Autocomplete
+              id="autocomplete-input"
+              open={autocompleteOpen}
+              onClose={() => {
+                setAutocompleteOpen(false);
+              }}
+              options={options}
+              noOptionsText={t("NO_USERS_FOUND")}
+              getOptionLabel={getOptionLabel} // Adjust this based on your API response structure
+              getOptionKey={(option) => option.userId}
+              onChange={handleOnSelectSearchedUser}
+              inputValue={inputValue}
+              onInputChange={handleInputChange}
+              renderInput={(params) => (
+                <TextField {...params} label="Search" variant="outlined" />
+              )}
+            />
+            {/* <input
               label="Search for a user..."
               type="text"
               onChange={(e) => {
@@ -1043,9 +1127,9 @@ const AddConnections = () => {
                 borderRadius: "4px",
                 border: "1px solid #CACACA",
               }}
-            />
+            /> */}
           </Box>
-          <div>
+          {/* <div>
             <Popover
               id={id}
               open={openPopover}
@@ -1080,7 +1164,7 @@ const AddConnections = () => {
                 )}
               </Typography>
             </Popover>
-          </div>
+          </div> */}
           <TabContext value={value} className="addConnection">
             <Box sx={{ borderBottom: 1, borderColor: "divider" }}>
               <TabList
