@@ -80,7 +80,7 @@ const DomainList = () => {
     try {
       const url = `${urlConfig.URLS.PUBLIC_PREFIX}${urlConfig.URLS.CHANNEL.READ}/${rootOrgId}`;
 
-      const response = await frameworkService.getChannel(url, headers);
+      const response = await frameworkService.getChannel(url);
       // console.log("channel---",response.data.result);
       setChannelData(response.data.result);
     } catch (error) {
@@ -94,8 +94,7 @@ const DomainList = () => {
       ${defaultFramework}?categories=${urlConfig.params.framework}`;
 
       const response = await frameworkService.getSelectedFrameworkCategories(
-        url,
-        headers
+        url
       );
 
       response.data.result.framework.categories[0].terms.map((term) => {
