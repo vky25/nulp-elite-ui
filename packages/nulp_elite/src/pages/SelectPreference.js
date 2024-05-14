@@ -42,7 +42,6 @@ const SelectPreference = ({ isOpen, onClose }) => {
   const _userId = util.userId();
   const [isUserLoggedIn, setIsUserLoggedIn] = useState([]);
   const [isRootOrg, setIsRootOrg] = useState(false);
-  const [userRootOrgId, setUserRootOrgId] = useState();
   const [frameworks, setFrameworks] = useState([]);
   const [defaultFramework, setDefaultFramework] = useState("");
   const [custodianOrgId, setCustodianOrgId] = useState("");
@@ -58,42 +57,8 @@ const SelectPreference = ({ isOpen, onClose }) => {
   const [preLanguages, setPreLanguages] = useState([]);
 
   useEffect(() => {
-    const fetchUserDataAndSetCustodianOrgData = async () => {
-      try {
-        const url = `${urlConfig.URLS.LEARNER_PREFIX}${urlConfig.URLS.SYSTEM_SETTING.CUSTODIAN_ORG}`;
-        const response = await fetch(url);
-        if (!response.ok) {
-          throw new Error("Failed to fetch custodian organization ID");
-        }
-        const data = await response.json();
-        console.log("Raw API response:", data);
-        const custodianOrgId = data?.result?.response?.value;
-        setCustodianOrgId(custodianOrgId);
-        setUserRootOrgId(localStorage.getItem("userRootOrgId"));
-        const rootOrgId = localStorage.getItem("userRootOrgId");
-        if (custodianOrgId === rootOrgId) {
-          const url = `${urlConfig.URLS.PUBLIC_PREFIX}${urlConfig.URLS.CHANNEL.READ}/${custodianOrgId}`;
-          const response = await fetch(url);
-          const data = await response.json();
-          const defaultFramework = data?.result?.channel?.defaultFramework;
-          setDefaultFramework(defaultFramework);
-          localStorage.setItem("defaultFramework", defaultFramework);
-        } else {
-          const url = `${urlConfig.URLS.PUBLIC_PREFIX}${urlConfig.URLS.CHANNEL.READ}/${rootOrgId}`;
-          const response = await fetch(url);
-          const data = await response.json();
-          const defaultFramework = data?.result?.channel?.defaultFramework;
-          setDefaultFramework(defaultFramework);
-        }
-      } catch (error) {
-        console.error("Error fetching user data:", error);
-      }
-    };
-
-    fetchUserDataAndSetCustodianOrgData();
-  }, []);
-
-  useEffect(() => {
+    const defaultFrameworkFromLocal = localStorage.getItem("defaultFramework");
+    setDefaultFramework(defaultFrameworkFromLocal);
     if (defaultFramework) {
       getFramework(defaultFramework);
     }
@@ -185,11 +150,16 @@ const SelectPreference = ({ isOpen, onClose }) => {
         setSelectedSubCategory(
           responseData?.result?.response?.framework?.gradeLevel
         );
-        setSelectedTopic(responseData?.result?.response?.framework?.subject[0]);
+
+        setSelectedTopic(
+          responseData?.result?.response?.framework?.subject &&
+            responseData?.result?.response?.framework?.subject[0]
+        );
         setSelectedLanguages(responseData?.result?.response?.framework?.medium);
 
         setPreCategory(responseData?.result?.response?.framework?.board[0]);
-        setPreTopic(responseData?.result?.response?.framework?.subject[0]);
+        responseData?.result?.response?.framework?.subject &&
+          setPreTopic(responseData?.result?.response?.framework?.subject[0]);
         setPreLanguages(responseData?.result?.response?.framework?.medium);
         setPreSubCategory(
           responseData?.result?.response?.framework?.gradeLevel
@@ -216,7 +186,7 @@ const SelectPreference = ({ isOpen, onClose }) => {
           medium: selectedLanguages,
           gradeLevel: selectedSubCategory,
           subject: [selectedTopic],
-          id: "nulp",
+          id: defaultFramework,
         },
         userId: _userId,
       },
@@ -371,7 +341,7 @@ const SelectPreference = ({ isOpen, onClose }) => {
         </FormControl>
       </Box>
       <Button
-        className="btn-primary"
+        className="custom-btn-primary my-10"
         onClick={handleSavePreferences}
         disabled={isDisabled}
       >
@@ -379,7 +349,7 @@ const SelectPreference = ({ isOpen, onClose }) => {
       </Button>
 
       {!isEmptyPreference && (
-        <Button className="btn-default" onClick={handleClose}>
+        <Button className="custom-btn-default" onClick={handleClose}>
           {t("CANCEL")}
         </Button>
       )}
