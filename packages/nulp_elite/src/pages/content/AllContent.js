@@ -308,14 +308,13 @@ const AllContent = () => {
                 <Box
                   style={{
                     display: "inline-block",
-                    fontSize: "14px",
-                    color: "#1E1E1E",
+                    fontSize: "18px",
+                    color: "#484848",
                   }}
                 >
                   <SummarizeOutlinedIcon style={{ verticalAlign: "top" }} />{" "}
                   <Box
                     style={{
-                      borderBottom: "solid 2px #000",
                       display: "inline-block",
                     }}
                   >
@@ -325,12 +324,7 @@ const AllContent = () => {
                 {items?.length > 4 && (
                   <Link
                     to={`/view-all/${category}`}
-                    style={{
-                      color: "#424242",
-                      fontSize: "12px",
-                      textAlign: "right",
-                      fontWeight: "600",
-                    }}
+                   className="viewAll"
                   >
                     {t("VIEW_ALL")}
                   </Link>
