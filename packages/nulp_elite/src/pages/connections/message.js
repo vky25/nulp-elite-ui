@@ -25,6 +25,7 @@ import DoneAllIcon from "@mui/icons-material/DoneAll";
 import CheckCircleOutlineIcon from "@mui/icons-material/CheckCircleOutline";
 import Typography from "@mui/material/Typography";
 const urlConfig = require("../../configs/urlConfig.json");
+import ToasterCommon from "../ToasterCommon";
 
 const moment = require("moment");
 const timezone = require("moment-timezone");
@@ -94,6 +95,8 @@ const Message = (props) => {
   const [dialogOpen, setDialogOpen] = useState(false);
   const [isBlocked, setIsBlocked] = useState(false); // State to track if user is blocked
   const [showUnblockOption, setShowUnblockOption] = useState(false); // State to show/hide unblock option
+  const [toasterOpen, setToasterOpen] = useState(false);
+  const [toasterMessage, setToasterMessage] = useState("");
   const { t } = useTranslation();
   useEffect(() => {
     const _userId = util.userId();
@@ -107,6 +110,14 @@ const Message = (props) => {
       updateMessage();
     }
   }, [loggedInUserId]);
+
+  const showErrorMessage = (msg) => {
+    setToasterMessage(msg);
+    setTimeout(() => {
+      setToasterMessage("");
+    }, 2000);
+    setToasterOpen(true);
+  };
 
   useEffect(() => {
     if (loggedInUserId && !isBlocked) {
@@ -130,6 +141,7 @@ const Message = (props) => {
       setShowUnblockOption(blockedUserId === loggedInUserId);
     } catch (error) {
       console.error("Error fetching block user status:", error);
+      showErrorMessage("Failed to fetch data. Please try again.");
     }
   };
 
@@ -148,6 +160,7 @@ const Message = (props) => {
       }
     } catch (error) {
       console.error("Error fetching chats:", error);
+      showErrorMessage("Failed to fetch data. Please try again.");
     }
   };
 
@@ -177,6 +190,11 @@ const Message = (props) => {
         fetchChats(); // Fetch messages after sending a message
       } catch (error) {
         console.error("Error saving message:", error);
+        setToasterMessage(" Failed to fetch data. Please try again.");
+        setTimeout(() => {
+          setToasterMessage("");
+        }, 2000);
+        setToasterOpen(true);
       }
     }
   };
@@ -202,6 +220,7 @@ const Message = (props) => {
       );
     } catch (error) {
       console.error("Error updating message:", error);
+      showErrorMessage("Failed to fetch data. Please try again.");
     }
   };
 
@@ -276,6 +295,7 @@ const Message = (props) => {
       }
     } catch (error) {
       console.error("Error unblocking user:", error);
+      showErrorMessage("Failed to fetch data. Please try again.");
     }
   };
 
@@ -305,12 +325,14 @@ const Message = (props) => {
       window.location.reload();
     } catch (error) {
       console.error("Error blocking user:", error);
+      showErrorMessage("Failed to fetch data. Please try again.");
     }
     handleMenuClose(); // Close the menu after the action is completed
   };
 
   return (
     <div className={classes.chatContainer}>
+      {toasterMessage && <ToasterCommon response={toasterMessage} />}
       <div className={classes.chatHeader}>
         <Box style={{ display: "flex" }}>
           <IconButton onClick={handleGoBack}>

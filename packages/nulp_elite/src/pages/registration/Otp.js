@@ -18,6 +18,7 @@ import FormGroup from "@mui/material/FormGroup";
 import { Dialog, DialogContent, DialogActions } from "@material-ui/core";
 import Alert from "@mui/material/Alert";
 const urlConfig = require("../../configs/urlConfig.json");
+import ToasterCommon from "../ToasterCommon";
 
 const Otp = () => {
   const { t } = useTranslation();
@@ -36,6 +37,16 @@ const Otp = () => {
   const [tncConfigVersion, setTncConfigVersion] = useState();
   const [birthYear, setBirthYear] = useState(2000);
   const [isChecked, setIsChecked] = useState(false);
+  const [toasterOpen, setToasterOpen] = useState(false);
+  const [toasterMessage, setToasterMessage] = useState("");
+
+  const showErrorMessage = (msg) => {
+    setToasterMessage(msg);
+    setTimeout(() => {
+      setToasterMessage("");
+    }, 2000);
+    setToasterOpen(true);
+  };
 
   useEffect(() => {
     const storedUserData = dataStore.userData;
@@ -121,6 +132,7 @@ const Otp = () => {
       });
 
       if (!response.ok) {
+        showErrorMessage("Failed to fetch data. Please try again.");
         throw new Error("Failed to verify OTP");
       }
 
@@ -128,7 +140,7 @@ const Otp = () => {
       await signupUser(data.reqData);
       acceptTermsAndConditions();
     } catch (error) {
-      setError(error.message);
+      showErrorMessage("Failed to fetch data. Please try again.");
     } finally {
       setIsLoading(false);
     }
@@ -164,6 +176,7 @@ const Otp = () => {
       });
 
       if (!response.ok) {
+        showErrorMessage("Failed to fetch data. Please try again.");
         throw new Error("Failed to signup");
       }
 
@@ -171,7 +184,7 @@ const Otp = () => {
       await saveUserInfoInCustomDB(data.result.userId);
       setGoToOtp(true);
     } catch (error) {
-      setError(error.message);
+      showErrorMessage("Failed to fetch data. Please try again.");
     } finally {
       setIsLoading(false);
     }
@@ -198,12 +211,13 @@ const Otp = () => {
       });
 
       if (!response.ok) {
+        showErrorMessage("Failed to fetch data. Please try again.");
         throw new Error("Failed to save user data in custom DB");
       }
 
       const data = await response.json();
     } catch (error) {
-      setError(error.message);
+      showErrorMessage("Failed to fetch data. Please try again.");
     } finally {
       setIsLoading(false);
     }
@@ -227,13 +241,14 @@ const Otp = () => {
       });
 
       if (!response.ok) {
+        showErrorMessage("Failed to fetch data. Please try again.");
         throw new Error("Failed to verify terms&condition");
       }
 
       const data = response.data;
       console.log("acceptTermsAndConditionsresponse:", data.result);
     } catch (error) {
-      setError(error.message);
+      showErrorMessage("Failed to fetch data. Please try again.");
     } finally {
       setIsLoading(false);
     }
@@ -256,13 +271,14 @@ const Otp = () => {
       });
 
       if (response.status !== 200) {
+        showErrorMessage("Failed to fetch data. Please try again.");
         throw new Error("Failed to resend OTP");
       }
 
       const data = response.data;
     } catch (error) {
       console.log(error);
-      setError(error.message);
+      showErrorMessage("Failed to fetch data. Please try again.");
       setIsLoading(false);
     }
   };
@@ -289,6 +305,7 @@ const Otp = () => {
 
   return (
     <>
+      {toasterMessage && <ToasterCommon response={toasterMessage} />}
       <Container
         maxWidth="sm"
         style={{
