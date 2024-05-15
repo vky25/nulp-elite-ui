@@ -188,13 +188,15 @@ const AllContent = () => {
 
   const fetchDomains = async () => {
     setError(null);
+    const rootOrgId = sessionStorage.getItem("rootOrgId");
+    const defaultFramework = localStorage.getItem("defaultFramework");
     // Headers
     const headers = {
       "Content-Type": "application/json",
       Cookie: `connect.sid=${getCookieValue("connect.sid")}`,
     };
     try {
-      const url = `${urlConfig.URLS.PUBLIC_PREFIX}${urlConfig.URLS.CHANNEL.READ}/0130701891041689600`;
+      const url = `${urlConfig.URLS.PUBLIC_PREFIX}${urlConfig.URLS.CHANNEL.READ}/${rootOrgId}`;
       const response = await frameworkService.getChannel(url, headers);
       // console.log("channel---",response.data.result);
       setChannelData(response.data.result);
@@ -204,7 +206,7 @@ const AllContent = () => {
     } finally {
     }
     try {
-      const url = `${urlConfig.URLS.PUBLIC_PREFIX}${urlConfig.URLS.FRAMEWORK.READ}/nulp?categories=${appConfig.ContentPlayer.contentApiQueryParams}`;
+      const url = `${urlConfig.URLS.PUBLIC_PREFIX}${urlConfig.URLS.FRAMEWORK.READ}/${defaultFramework}?categories=${urlConfig.params.framework}`;
 
       const response = await frameworkService.getSelectedFrameworkCategories(
         url,

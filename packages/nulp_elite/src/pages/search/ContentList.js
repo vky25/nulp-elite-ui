@@ -152,7 +152,7 @@ const ContentList = (props) => {
 
   const fetchGradeLevels = async () => {
     try {
-      const url = `${urlConfig.URLS.PUBLIC_PREFIX}${urlConfig.URLS.FRAMEWORK.READ}?categories=${appConfig.ContentPlayer.contentApiQueryParams}`;
+      const url = `${urlConfig.URLS.PUBLIC_PREFIX}${urlConfig.URLS.FRAMEWORK.READ}?categories=${urlConfig.params.framework}`;
       const response = await fetch(url);
       const data = await response.json();
       if (
@@ -178,8 +178,9 @@ const ContentList = (props) => {
   };
 
   const Fetchdomain = async () => {
+    const defaultFramework = localStorage.getItem("defaultFramework");
     try {
-      const url = `${urlConfig.URLS.PUBLIC_PREFIX}${urlConfig.URLS.FRAMEWORK.READ}/nulp?orgdetails=${appConfig.ContentPlayer.contentApiQueryParams}`;
+      const url = `${urlConfig.URLS.PUBLIC_PREFIX}${urlConfig.URLS.FRAMEWORK.READ}/${defaultFramework}?orgdetails=${urlConfig.params.framework}`;
 
       const response = await fetch(url);
 

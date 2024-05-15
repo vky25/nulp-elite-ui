@@ -100,6 +100,7 @@ const Profile = () => {
   const [error, setError] = useState(null);
   const [toasterOpen, setToasterOpen] = useState(false);
   const [toasterMessage, setToasterMessage] = useState("");
+  const [rootOrgId, setRootOrgId] = useState();
 
   const showErrorMessage = (msg) => {
     setToasterMessage(msg);
@@ -115,6 +116,7 @@ const Profile = () => {
     }, DELAY);
     setDesignationsList(designations);
   }, []);
+
   useEffect(() => {
     if (userData?.result?.response && userInfo) {
       setEditedUserInfo({
@@ -191,7 +193,37 @@ const Profile = () => {
     fetchCertificateCount();
     fetchCourseCount();
     fetchUserInfo();
+    fetchUserDataAndSetCustodianOrgData();
   }, []);
+
+  const fetchUserDataAndSetCustodianOrgData = async () => {
+    try {
+      const url = `${urlConfig.URLS.LEARNER_PREFIX}${urlConfig.URLS.SYSTEM_SETTING.CUSTODIAN_ORG}`;
+      const response = await fetch(url);
+      if (!response.ok) {
+        throw new Error("Failed to fetch custodian organization ID");
+      }
+      const data = await response.json();
+      const custodianOrgId = data?.result?.response?.value;
+      const rootOrgId = sessionStorage.getItem("rootOrgId");
+
+      if (custodianOrgId === rootOrgId) {
+        const url = `${urlConfig.URLS.PUBLIC_PREFIX}${urlConfig.URLS.CHANNEL.READ}/${custodianOrgId}`;
+        const response = await fetch(url);
+        const data = await response.json();
+        const defaultFramework = data?.result?.channel?.defaultFramework;
+        localStorage.setItem("defaultFramework", defaultFramework);
+      } else {
+        const url = `${urlConfig.URLS.PUBLIC_PREFIX}${urlConfig.URLS.CHANNEL.READ}/${rootOrgId}`;
+        const response = await fetch(url);
+        const data = await response.json();
+        const defaultFramework = data?.result?.channel?.defaultFramework;
+        localStorage.setItem("defaultFramework", defaultFramework);
+      }
+    } catch (error) {
+      console.error("Error fetching user data:", error);
+    }
+  };
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -256,9 +288,9 @@ const Profile = () => {
       const url = `${urlConfig.URLS.POFILE_PAGE.USER_UPDATE}?user_id=${_userId}`;
       const response = await fetch(url, {
         method: "PUT",
-        headers: {
-          "Content-Type": "application/json",
-        },
+        // headers: {
+        //   "Content-Type": "application/json",
+        // },
         body: JSON.stringify(requestBody),
       });
 
@@ -289,13 +321,16 @@ const Profile = () => {
 
       const header = "application/json";
       const response = await fetch(url, {
-        headers: {
-          "Content-Type": "application/json",
-        },
+        // headers: {
+        //   "Content-Type": "application/json",
+        // },
       });
       const data = await response.json();
       setUserData(data);
-      localStorage.setItem("userRootOrgId", data.result.response.rootOrgId);
+      const rootOrgId = data.result.response.rootOrgId;
+      sessionStorage.setItem("rootOrgId", rootOrgId);
+      setRootOrgId(rootOrgId);
+      console.log("rootOrgId", rootOrgId);
       if (_.isEmpty(data?.result?.response.framework)) {
         setOpenModal(true);
       }
@@ -407,7 +442,7 @@ const Profile = () => {
                     <Box sx={style}>
                       <Typography
                         id="modal-modal-title"
-                        variant="h6"
+                        variant="h5"
                         component="h2"
                         style={{ marginBottom: "20px" }}
                       >
@@ -529,14 +564,8 @@ const Profile = () => {
                           </Typography>
                         </Box>
 
-                        <Box
-                          pt={4}
-                          style={{
-                            display: "flex",
-                            justifyContent: "space-between",
-                          }}
-                        >
-                          <Button className="btn-primary" type="submit">
+                        <Box pt={4}>
+                          <Button className="custom-btn-primary" type="submit">
                             {t("SAVE")}
                           </Button>
 
@@ -799,7 +828,7 @@ const Profile = () => {
                   <Box sx={style}>
                     <Typography
                       id="modal-modal-title"
-                      variant="h6"
+                      variant="h5"
                       component="h2"
                       style={{ marginBottom: "20px" }}
                     >

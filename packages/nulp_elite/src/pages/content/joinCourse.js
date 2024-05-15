@@ -139,7 +139,7 @@ const JoinCourse = () => {
 
     const checkEnrolledCourse = async () => {
       try {
-        const url = `${urlConfig.URLS.LEARNER_PREFIX}${urlConfig.URLS.COURSE.GET_ENROLLED_COURSES}${_userId}?orgdetails=${appConfig.ContentPlayer.contentApiQueryParams}&fields=${urlConfig.params.objectCategory.fields}&batchDetails=${urlConfig.params.enrolledCourses.batchDetails}`;
+        const url = `${urlConfig.URLS.LEARNER_PREFIX}${urlConfig.URLS.COURSE.GET_ENROLLED_COURSES}/${_userId}?orgdetails=${appConfig.Course.contentApiQueryParams.orgdetails}&licenseDetails=${appConfig.Course.contentApiQueryParams.licenseDetails}&fields=${urlConfig.params.enrolledCourses.fields}&batchDetails=${urlConfig.params.enrolledCourses.batchDetails}`;
         const response = await fetch(url);
         if (!response.ok) {
           showErrorMessage("Failed to fetch data. Please try again.");
@@ -458,6 +458,7 @@ const JoinCourse = () => {
   const getUserData = async () => {
     try {
       const url = `${urlConfig.URLS.LEARNER_PREFIX}${urlConfig.URLS.USER.GET_PROFILE}${_userId}?fields=${urlConfig.params.userReadParam.fields}`;
+
       const response = await fetch(url);
       const data = await response.json();
       setUserInfo(data.result.response);
