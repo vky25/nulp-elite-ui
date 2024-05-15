@@ -255,7 +255,7 @@ const AllContent = () => {
   return (
     <>
       <Header />
-      <Box sx={{ background: "#2D2D2D", padding: "20px" }} className="xs-hide">
+      {/* <Box sx={{ background: "#2D2D2D", padding: "20px" }} className="xs-hide">
         <p
           style={{
             fontSize: "20px",
@@ -279,13 +279,33 @@ const AllContent = () => {
           {t("LEARN_FROM_WELL_CURATED")}
         </p>
         <SearchBox onSearch={handleSearch} />
-      </Box>
-      <Box sx={{ fontWeight: "600", fontSize: "16px", padding: "10px" }}>
+      </Box> */}
+      {/* <Box sx={{ fontWeight: "600", fontSize: "16px", padding: "10px" }}>
         {t("FILTER_BY_POPULAR_DOMAIN")}
-      </Box>
+      </Box> */}
       {domain && (
-        <DomainCarousel onSelectDomain={handleDomainFilter} domains={domain} />
-      )}
+   
+        <Carousel
+          swipeable={false}
+          draggable={false}
+          showDots={true}
+          responsive={responsive}
+          ssr={true}
+          infinite={true}
+          autoPlaySpeed={1000}
+          keyBoardControl={true}
+          customTransition="all .5"
+          transitionDuration={500}
+          containerClass="carousel-container"
+          removeArrowOnDeviceType={["tablet", "mobile"]}
+          dotListClass="custom-dot-list-style"
+          itemClass="carousel-item-padding-40-px"
+        >
+          <DomainCarousel onSelectDomain={handleDomainFilter} domains={domain} />
+        </Carousel>
+                      
+  )}
+
 
       <Container maxWidth="xxl" role="main" className="container-pb">
         {error && (
@@ -364,7 +384,7 @@ const AllContent = () => {
                         </Grid>
                       ))
                     : items.slice(0, 4).map((item) => (
-                        <Grid item xs={12} md={6} lg={3} key={item.id}>
+                        <Grid item xs={12} md={6} lg={5} key={item.id}>
                           <BoxCard
                             items={item}
                             onClick={() =>
