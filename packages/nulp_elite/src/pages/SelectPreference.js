@@ -13,6 +13,7 @@ import {
 import * as util from "../services/utilService";
 import { useTranslation } from "react-i18next";
 const urlConfig = require("../configs/urlConfig.json");
+import ToasterCommon from "./ToasterCommon";
 
 const useStyles = makeStyles((theme) => ({
   formControl: {
@@ -56,6 +57,8 @@ const SelectPreference = ({ isOpen, onClose }) => {
   const [preTopic, setPreTopic] = useState("");
   const [preSubCategory, setPreSubCategory] = useState([]);
   const [preLanguages, setPreLanguages] = useState([]);
+  const [toasterOpen, setToasterOpen] = useState(false);
+  const [toasterMessage, setToasterMessage] = useState("");
 
   useEffect(() => {
     const fetchUserDataAndSetCustodianOrgData = async () => {
@@ -87,6 +90,11 @@ const SelectPreference = ({ isOpen, onClose }) => {
         }
       } catch (error) {
         console.error("Error fetching user data:", error);
+        setToasterMessage(" Failed to fetch data. Please try again.");
+        setTimeout(() => {
+          setToasterMessage("");
+        }, 2000);
+        setToasterOpen(true);
       }
     };
 
@@ -152,7 +160,11 @@ const SelectPreference = ({ isOpen, onClose }) => {
       setLanguage(data?.result?.framework?.categories[3]?.name);
     } catch (error) {
       console.error("Error fetching data:", error);
-      setError("Failed to fetch data. Please try again.");
+      setToasterMessage(" Failed to fetch data. Please try again.");
+      setTimeout(() => {
+        setToasterMessage("");
+      }, 2000);
+      setToasterOpen(true);
     } finally {
       setIsLoading(false);
     }
@@ -198,7 +210,11 @@ const SelectPreference = ({ isOpen, onClose }) => {
       console.log("getUserData", responseData);
     } catch (error) {
       console.error("Error fetching data:", error);
-      setError("Failed to fetch data. Please try again.");
+      setToasterMessage(" Failed to fetch data. Please try again.");
+      setTimeout(() => {
+        setToasterMessage("");
+      }, 2000);
+      setToasterOpen(true);
     } finally {
       setIsLoading(false);
     }
@@ -239,7 +255,11 @@ const SelectPreference = ({ isOpen, onClose }) => {
       const responseData = await response.json();
       console.log("responseData", responseData);
     } catch (error) {
-      setError(error.message);
+      setToasterMessage(" Failed to fetch data. Please try again.");
+      setTimeout(() => {
+        setToasterMessage("");
+      }, 2000);
+      setToasterOpen(true);
     } finally {
       setIsLoading(false);
     }
@@ -289,6 +309,7 @@ const SelectPreference = ({ isOpen, onClose }) => {
 
   return (
     <div>
+      {toasterMessage && <ToasterCommon response={toasterMessage} />}
       <Box sx={{ minWidth: 120 }} className="preference">
         <FormControl fullWidth sx={{ marginBottom: 2 }}>
           <InputLabel id="category-label" className="year-select">

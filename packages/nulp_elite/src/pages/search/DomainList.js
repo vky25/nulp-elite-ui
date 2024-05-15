@@ -22,6 +22,7 @@ import Alert from "@mui/material/Alert";
 // import { useTranslation } from "react-i18next";
 import appConfig from "../../configs/appConfig.json";
 const urlConfig = require("../../configs/urlConfig.json");
+import ToasterCommon from "../ToasterCommon";
 
 const Item = styled(Paper)(({ theme }) => ({
   backgroundColor: theme.palette.mode === "dark" ? "#1A2027" : "#fff",
@@ -57,6 +58,8 @@ const DomainList = () => {
   const [category, setCategory] = React.useState();
   const [imgItem, setImgItem] = React.useState(object ? object : {});
   const [itemsArray, setItemsArray] = useState([]);
+  const [toasterOpen, setToasterOpen] = useState(false);
+  const [toasterMessage, setToasterMessage] = useState("");
 
   // Example of API Call
 
@@ -99,7 +102,11 @@ const DomainList = () => {
       setChannelData(response.data.result);
     } catch (error) {
       console.log("error---", error);
-      setError(error.message);
+      setToasterMessage(" Failed to fetch data. Please try again.");
+      setTimeout(() => {
+        setToasterMessage("");
+      }, 2000);
+      setToasterOpen(true);
     } finally {
       setIsLoading(false);
     }
@@ -127,7 +134,11 @@ const DomainList = () => {
       setData(itemsArray);
     } catch (error) {
       console.log("nulp--  error-", error);
-      setError(error.message);
+      setToasterMessage(" Failed to fetch data. Please try again.");
+      setTimeout(() => {
+        setToasterMessage("");
+      }, 2000);
+      setToasterOpen(true);
     } finally {
       console.log("nulp finally---");
 
@@ -148,6 +159,7 @@ const DomainList = () => {
   return (
     <div>
       <Header />
+      {toasterMessage && <ToasterCommon response={toasterMessage} />}
       <Box sx={{ background: "#2D2D2D", padding: "20px" }}>
         <p
           style={{

@@ -32,10 +32,11 @@ import MuiAlert from "@mui/material/Alert";
 
 import data from "../../assets/courseHierarchy.json";
 import Alert from "@mui/material/Alert";
-import Modal from '@mui/material/Modal';
+import Modal from "@mui/material/Modal";
 
 import appConfig from "../../configs/appConfig.json";
 const urlConfig = require("../../configs/urlConfig.json");
+import ToasterCommon from "../ToasterCommon";
 
 const JoinCourse = () => {
   const { t } = useTranslation();
@@ -55,16 +56,18 @@ const JoinCourse = () => {
 
   const location = useLocation();
   const navigate = useNavigate();
+  const [toasterOpen, setToasterOpen] = useState(false);
+  const [toasterMessage, setToasterMessage] = useState("");
 
   const { contentId } = location.state || {};
   const _userId = util.userId(); // Assuming util.userId() is defined
   const style = {
-    position: 'absolute',
-    top: '50%',
-    left: '50%',
-    width:'50%',
-    transform: 'translate(-50%, -50%)',
-    bgcolor: 'background.paper',
+    position: "absolute",
+    top: "50%",
+    left: "50%",
+    width: "50%",
+    transform: "translate(-50%, -50%)",
+    bgcolor: "background.paper",
     boxShadow: 24,
     p: 4,
   };
@@ -84,6 +87,11 @@ const JoinCourse = () => {
         setUserData(data);
       } catch (error) {
         console.error("Error fetching course data:", error);
+        setToasterMessage(" Failed to fetch data. Please try again.");
+        setTimeout(() => {
+          setToasterMessage("");
+        }, 2000);
+        setToasterOpen(true);
       }
     };
 
@@ -120,6 +128,11 @@ const JoinCourse = () => {
         }
       } catch (error) {
         console.error("Error fetching batch data:", error);
+        setToasterMessage(" Failed to fetch data. Please try again.");
+        setTimeout(() => {
+          setToasterMessage("");
+        }, 2000);
+        setToasterOpen(true);
       }
     };
 
@@ -134,6 +147,11 @@ const JoinCourse = () => {
         setUserCourseData(data.result);
       } catch (error) {
         console.error("Error while fetching courses:", error);
+        setToasterMessage(" Failed to fetch data. Please try again.");
+        setTimeout(() => {
+          setToasterMessage("");
+        }, 2000);
+        setToasterOpen(true);
       }
     };
 
@@ -167,6 +185,11 @@ const JoinCourse = () => {
           setCourseProgress(data);
         } catch (error) {
           console.error("Error while fetching courses:", error);
+          setToasterMessage(" Failed to fetch data. Please try again.");
+          setTimeout(() => {
+            setToasterMessage("");
+          }, 2000);
+          setToasterOpen(true);
         }
       }
     };
@@ -241,6 +264,11 @@ const JoinCourse = () => {
       }
     } catch (error) {
       console.error("Error enrolling in the course:", error);
+      setToasterMessage(" Failed to fetch data. Please try again.");
+      setTimeout(() => {
+        setToasterMessage("");
+      }, 2000);
+      setToasterOpen(true);
     }
     window.location.reload();
   };
@@ -258,7 +286,7 @@ const JoinCourse = () => {
             </Button>
             <Button
               onClick={handleLeaveCourseClick} // Open confirmation dialog
-              className="custom-btn-default"            
+              className="custom-btn-default"
             >
               {t("LEAVE_COURSE")}
             </Button>
@@ -400,6 +428,11 @@ const JoinCourse = () => {
       }
     } catch (error) {
       console.error("Error enrolling in the course:", error);
+      setToasterMessage(" Failed to fetch data. Please try again.");
+      setTimeout(() => {
+        setToasterMessage("");
+      }, 2000);
+      setToasterOpen(true);
     }
   };
 
@@ -423,6 +456,11 @@ const JoinCourse = () => {
       }
     } catch (error) {
       console.error("Error updating consent:", error);
+      setToasterMessage(" Failed to fetch data. Please try again.");
+      setTimeout(() => {
+        setToasterMessage("");
+      }, 2000);
+      setToasterOpen(true);
     }
   };
 
@@ -433,12 +471,17 @@ const JoinCourse = () => {
 
   const getUserData = async () => {
     try {
-      const url = `http://localhost:3000/learner/user/v5/read/${_userId}?fields=organisations,roles,locations,declarations,externalIds`;
+      const url = `${urlConfig.URLS.LEARNER_PREFIX}${urlConfig.URLS.USER.GET_PROFILE}${_userId}?fields=${urlConfig.params.userReadParam.fields}`;
       const response = await fetch(url);
       const data = await response.json();
       setUserInfo(data.result.response);
     } catch (error) {
       console.error("Error while getting user data:", error);
+      setToasterMessage(" Failed to fetch data. Please try again.");
+      setTimeout(() => {
+        setToasterMessage("");
+      }, 2000);
+      setToasterOpen(true);
     }
   };
 
@@ -455,6 +498,7 @@ const JoinCourse = () => {
   return (
     <div>
       <Header />
+      {toasterMessage && <ToasterCommon response={toasterMessage} />}
       <Snackbar
         open={showEnrollmentSnackbar}
         autoHideDuration={6000}
@@ -471,10 +515,10 @@ const JoinCourse = () => {
           {t("ENROLLMENT_SUCCESS_MESSAGE")}
         </MuiAlert>
       </Snackbar>
-      
+
       <Modal
-       aria-labelledby="modal-modal-title"
-       aria-describedby="modal-modal-description"
+        aria-labelledby="modal-modal-title"
+        aria-describedby="modal-modal-description"
         open={showConsentForm}
         onClose={(event, reason) => {
           if (reason === "backdropClick" || reason === "escapeKeyDown") {
@@ -485,8 +529,14 @@ const JoinCourse = () => {
         }}
       >
         <Box sx={style} className="joinCourse">
-
-          <Typography id="modal-modal-title" variant="h5" component="h2" style={{marginBottom:"20px"}}>{t("CONSENT_FORM_TITLE")}</Typography>
+          <Typography
+            id="modal-modal-title"
+            variant="h5"
+            component="h2"
+            style={{ marginBottom: "20px" }}
+          >
+            {t("CONSENT_FORM_TITLE")}
+          </Typography>
           <div>
             <label>{t("USERNAME")}:</label>
             <span>{userInfo?.firstName}</span>
@@ -537,14 +587,12 @@ const JoinCourse = () => {
             <label>{t("CONSENT_TEXT")}</label>
           </div>
           <Box className="d-flex jc-en">
-          <Button onClick={handleDontShareClick}>
-            {t("DONT_SHARE")}
-          </Button>
-          <Button onClick={handleShareClick} disabled={!shareEnabled}>
-            {t("SHARE")}
-          </Button>
+            <Button onClick={handleDontShareClick}>{t("DONT_SHARE")}</Button>
+            <Button onClick={handleShareClick} disabled={!shareEnabled}>
+              {t("SHARE")}
+            </Button>
           </Box>
-          </Box>
+        </Box>
       </Modal>
 
       <Container maxWidth="xxl" role="main" className="container-pb">

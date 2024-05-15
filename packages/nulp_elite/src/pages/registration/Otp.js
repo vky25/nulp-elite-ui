@@ -18,6 +18,7 @@ import FormGroup from "@mui/material/FormGroup";
 import { Dialog, DialogContent, DialogActions } from "@material-ui/core";
 import Alert from "@mui/material/Alert";
 const urlConfig = require("../../configs/urlConfig.json");
+import ToasterCommon from "../ToasterCommon";
 
 const Otp = () => {
   const { t } = useTranslation();
@@ -36,6 +37,8 @@ const Otp = () => {
   const [tncConfigVersion, setTncConfigVersion] = useState();
   const [birthYear, setBirthYear] = useState(2000);
   const [isChecked, setIsChecked] = useState(false);
+  const [toasterOpen, setToasterOpen] = useState(false);
+  const [toasterMessage, setToasterMessage] = useState("");
 
   useEffect(() => {
     const storedUserData = dataStore.userData;
@@ -128,7 +131,11 @@ const Otp = () => {
       await signupUser(data.reqData);
       acceptTermsAndConditions();
     } catch (error) {
-      setError(error.message);
+      setToasterMessage(" Failed to fetch data. Please try again.");
+      setTimeout(() => {
+        setToasterMessage("");
+      }, 2000);
+      setToasterOpen(true);
     } finally {
       setIsLoading(false);
     }
@@ -171,7 +178,11 @@ const Otp = () => {
       await saveUserInfoInCustomDB(data.result.userId);
       setGoToOtp(true);
     } catch (error) {
-      setError(error.message);
+      setToasterMessage(" Failed to fetch data. Please try again.");
+      setTimeout(() => {
+        setToasterMessage("");
+      }, 2000);
+      setToasterOpen(true);
     } finally {
       setIsLoading(false);
     }
@@ -203,7 +214,11 @@ const Otp = () => {
 
       const data = await response.json();
     } catch (error) {
-      setError(error.message);
+      setToasterMessage(" Failed to fetch data. Please try again.");
+      setTimeout(() => {
+        setToasterMessage("");
+      }, 2000);
+      setToasterOpen(true);
     } finally {
       setIsLoading(false);
     }
@@ -233,7 +248,11 @@ const Otp = () => {
       const data = response.data;
       console.log("acceptTermsAndConditionsresponse:", data.result);
     } catch (error) {
-      setError(error.message);
+      setToasterMessage(" Failed to fetch data. Please try again.");
+      setTimeout(() => {
+        setToasterMessage("");
+      }, 2000);
+      setToasterOpen(true);
     } finally {
       setIsLoading(false);
     }
@@ -262,7 +281,11 @@ const Otp = () => {
       const data = response.data;
     } catch (error) {
       console.log(error);
-      setError(error.message);
+      setToasterMessage(" Failed to fetch data. Please try again.");
+      setTimeout(() => {
+        setToasterMessage("");
+      }, 2000);
+      setToasterOpen(true);
       setIsLoading(false);
     }
   };
@@ -289,6 +312,7 @@ const Otp = () => {
 
   return (
     <>
+      {toasterMessage && <ToasterCommon response={toasterMessage} />}
       <Container
         maxWidth="sm"
         style={{

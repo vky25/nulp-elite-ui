@@ -21,6 +21,7 @@ import Alert from "@mui/material/Alert";
 import { useTranslation } from "react-i18next";
 import appConfig from "../../configs/appConfig.json";
 const urlConfig = require("../../configs/urlConfig.json");
+import ToasterCommon from "../ToasterCommon";
 
 const ContentList = (props) => {
   const [search, setSearch] = useState(true);
@@ -39,6 +40,8 @@ const ContentList = (props) => {
   const [totalPages, setTotalPages] = useState(1);
   const [currentPage, setCurrentPage] = useState(1);
   const { t } = useTranslation();
+  const [toasterOpen, setToasterOpen] = useState(false);
+  const [toasterMessage, setToasterMessage] = useState("");
 
   useEffect(() => {
     fetchData();
@@ -114,7 +117,11 @@ const ContentList = (props) => {
 
       setData(response.data.result);
     } catch (error) {
-      setError(error.message);
+      setToasterMessage(" Failed to fetch data. Please try again.");
+      setTimeout(() => {
+        setToasterMessage("");
+      }, 2000);
+      setToasterOpen(true);
     } finally {
       setIsLoading(false);
     }
@@ -162,6 +169,11 @@ const ContentList = (props) => {
       }
     } catch (error) {
       console.error("Error fetching grade levels:", error);
+      setToasterMessage(" Failed to fetch data. Please try again.");
+      setTimeout(() => {
+        setToasterMessage("");
+      }, 2000);
+      setToasterOpen(true);
     }
   };
 
@@ -192,7 +204,11 @@ const ContentList = (props) => {
       }
     } catch (error) {
       console.log("Error fetching domain data:", error);
-      setError(error.message);
+      setToasterMessage(" Failed to fetch data. Please try again.");
+      setTimeout(() => {
+        setToasterMessage("");
+      }, 2000);
+      setToasterOpen(true);
     } finally {
       setIsLoading(false);
     }
@@ -209,6 +225,7 @@ const ContentList = (props) => {
   return (
     <div>
       <Header />
+      {toasterMessage && <ToasterCommon response={toasterMessage} />}
       <Box sx={{ background: "#2D2D2D", padding: "20px" }}>
         <p
           style={{

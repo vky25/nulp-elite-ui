@@ -28,6 +28,7 @@ import _ from "lodash";
 import Modal from "@mui/material/Modal";
 const designations = require("../../configs/designations.json");
 const urlConfig = require("../../configs/urlConfig.json");
+import ToasterCommon from "../ToasterCommon";
 
 import {
   Button,
@@ -97,6 +98,8 @@ const Profile = () => {
   const [load, setLoad] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState(null);
+  const [toasterOpen, setToasterOpen] = useState(false);
+  const [toasterMessage, setToasterMessage] = useState("");
 
   useEffect(() => {
     setTimeout(() => {
@@ -137,6 +140,11 @@ const Profile = () => {
         });
       } catch (error) {
         console.error("Error fetching certificate count:", error);
+        setToasterMessage(" Failed to fetch data. Please try again.");
+        setTimeout(() => {
+          setToasterMessage("");
+        }, 2000);
+        setToasterOpen(true);
       }
     };
 
@@ -152,6 +160,11 @@ const Profile = () => {
         });
       } catch (error) {
         console.error(error);
+        setToasterMessage(" Failed to fetch data. Please try again.");
+        setTimeout(() => {
+          setToasterMessage("");
+        }, 2000);
+        setToasterOpen(true);
       }
     };
     const fetchUserInfo = async () => {
@@ -167,10 +180,14 @@ const Profile = () => {
             },
           }
         );
-
         setUserInfo(response?.data?.result);
       } catch (error) {
         console.error(error);
+        setToasterMessage(" Failed to fetch data. Please try again.");
+        setTimeout(() => {
+          setToasterMessage("");
+        }, 2000);
+        setToasterOpen(true);
       }
     };
 
@@ -225,7 +242,11 @@ const Profile = () => {
       await updateUserInfoInCustomDB();
       console.log("responseData", responseData);
     } catch (error) {
-      setError(error.message);
+      setToasterMessage(" Failed to fetch data. Please try again.");
+      setTimeout(() => {
+        setToasterMessage("");
+      }, 2000);
+      setToasterOpen(true);
     } finally {
       setIsLoading(false);
     }
@@ -255,7 +276,11 @@ const Profile = () => {
 
       const data = await response.json();
     } catch (error) {
-      setError(error.message);
+      setToasterMessage(" Failed to fetch data. Please try again.");
+      setTimeout(() => {
+        setToasterMessage("");
+      }, 2000);
+      setToasterOpen(true);
     } finally {
       setIsLoading(false);
     }
@@ -288,6 +313,11 @@ const Profile = () => {
       }
     } catch (error) {
       console.error("Error fetching user data:", error);
+      setToasterMessage(" Failed to fetch data. Please try again.");
+      setTimeout(() => {
+        setToasterMessage("");
+      }, 2000);
+      setToasterOpen(true);
     }
   };
 
@@ -319,6 +349,7 @@ const Profile = () => {
   return (
     <div>
       <Header />
+      {toasterMessage && <ToasterCommon response={toasterMessage} />}
       <Box sx={{ background: "#2D2D2D", padding: "20px" }} className="xs-hide">
         <p
           style={{

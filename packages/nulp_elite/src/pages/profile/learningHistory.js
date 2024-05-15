@@ -16,12 +16,15 @@ import NoResult from "pages/content/noResultFound";
 import Alert from "@mui/material/Alert";
 import appConfig from "../../configs/appConfig.json";
 const urlConfig = require("../../configs/urlConfig.json");
+import ToasterCommon from "../ToasterCommon";
 
 const LearningHistory = () => {
   const { t } = useTranslation();
   const [courseData, setCourseData] = useState(null);
   const [selectedStatus, setSelectedStatus] = useState(null);
   const [error, setError] = useState(null);
+  const [toasterOpen, setToasterOpen] = useState(false);
+  const [toasterMessage, setToasterMessage] = useState("");
 
   useEffect(() => {
     const fetchData = async () => {
@@ -39,7 +42,11 @@ const LearningHistory = () => {
         setCourseData(data);
       } catch (error) {
         console.error("Error fetching user data:", error);
-        setError(error.message);
+        setToasterMessage(" Failed to fetch data. Please try again.");
+        setTimeout(() => {
+          setToasterMessage("");
+        }, 2000);
+        setToasterOpen(true);
       }
     };
     fetchData();
@@ -56,6 +63,7 @@ const LearningHistory = () => {
   return (
     <div>
       <Header />
+      {toasterMessage && <ToasterCommon response={toasterMessage} />}
       <Container maxWidth="xl" role="main" className="container-pb">
         {error && (
           <Alert severity="error" className="my-10">

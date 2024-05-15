@@ -19,6 +19,7 @@ import SearchBox from "components/search";
 import { t } from "i18next";
 import appConfig from "../../configs/appConfig.json";
 const urlConfig = require("../../configs/urlConfig.json");
+import ToasterCommon from "../ToasterCommon";
 
 const CategoryPage = () => {
   // const history = useHistory();
@@ -34,6 +35,9 @@ const CategoryPage = () => {
   const [totalPages, setTotalPages] = useState(1);
 
   const [itemsArray, setItemsArray] = useState([]);
+  const [toasterOpen, setToasterOpen] = useState(false);
+  const [toasterMessage, setToasterMessage] = useState("");
+
   const handleSearch = (query) => {
     // Implement your search logic here
     console.log("Search query:", query);
@@ -95,7 +99,11 @@ const CategoryPage = () => {
       const response = await getAllContents(url, data, headers);
       setData(response.data.result.content);
     } catch (error) {
-      setError(error.message);
+      setToasterMessage(" Failed to fetch data. Please try again.");
+      setTimeout(() => {
+        setToasterMessage("");
+      }, 2000);
+      setToasterOpen(true);
     }
   };
   // Function to push data to the array
@@ -117,7 +125,11 @@ const CategoryPage = () => {
       setChannelData(response.data.result);
     } catch (error) {
       console.log("error---", error);
-      setError(error.message);
+      setToasterMessage(" Failed to fetch data. Please try again.");
+      setTimeout(() => {
+        setToasterMessage("");
+      }, 2000);
+      setToasterOpen(true);
     } finally {
     }
     try {
@@ -144,7 +156,11 @@ const CategoryPage = () => {
       setDomain(response.data.result.framework.categories[0].terms);
     } catch (error) {
       console.log("nulp--  error-", error);
-      setError(error.message);
+      setToasterMessage(" Failed to fetch data. Please try again.");
+      setTimeout(() => {
+        setToasterMessage("");
+      }, 2000);
+      setToasterOpen(true);
     } finally {
       console.log("nulp finally---");
     }
@@ -176,6 +192,7 @@ const CategoryPage = () => {
   return (
     <>
       <Header />
+      {toasterMessage && <ToasterCommon response={toasterMessage} />}
       {domain && (
         <DomainCarousel onSelectDomain={handleDomainFilter} domains={domain} />
       )}

@@ -20,6 +20,7 @@ import { t } from "i18next";
 import Alert from "@mui/material/Alert";
 import appConfig from "../../configs/appConfig.json";
 const urlConfig = require("../../configs/urlConfig.json");
+import ToasterCommon from "../ToasterCommon";
 
 const responsive = {
   superLargeDesktop: {
@@ -51,6 +52,8 @@ const AllContent = () => {
   const [isMobile, setIsMobile] = useState(window.innerWidth <= 767);
   const [itemsArray, setItemsArray] = useState([]);
   const navigate = useNavigate();
+  const [toasterOpen, setToasterOpen] = useState(false);
+  const [toasterMessage, setToasterMessage] = useState("");
 
   const handleResize = () => {
     setIsMobile(window.innerWidth <= 767);
@@ -160,7 +163,11 @@ const AllContent = () => {
       });
       setData(sortedData);
     } catch (error) {
-      setError(error.message);
+      setToasterMessage(" Failed to fetch data. Please try again.");
+      setTimeout(() => {
+        setToasterMessage("");
+      }, 2000);
+      setToasterOpen(true);
     }
   };
   const getCookieValue = (name) => {
@@ -189,7 +196,11 @@ const AllContent = () => {
       setChannelData(response.data.result);
     } catch (error) {
       console.log("error---", error);
-      setError(error.message);
+      setToasterMessage(" Failed to fetch data. Please try again.");
+      setTimeout(() => {
+        setToasterMessage("");
+      }, 2000);
+      setToasterOpen(true);
     } finally {
     }
     try {
@@ -200,7 +211,7 @@ const AllContent = () => {
         headers
       );
 
-      response.data.result.framework.categories[0].terms.map((term) => {
+      response.data.result.framework.categories[0].terms?.map((term) => {
         if (domainWithImage) {
           domainWithImage.result.form.data.fields.map((imgItem) => {
             if ((term && term.code) === (imgItem && imgItem.code)) {
@@ -214,7 +225,11 @@ const AllContent = () => {
       setDomain(response.data.result.framework.categories[0].terms);
     } catch (error) {
       console.log("nulp--  error-", error);
-      setError(error.message);
+      setToasterMessage(" Failed to fetch data. Please try again.");
+      setTimeout(() => {
+        setToasterMessage("");
+      }, 2000);
+      setToasterOpen(true);
     } finally {
       console.log("nulp finally---");
     }
@@ -253,6 +268,7 @@ const AllContent = () => {
   return (
     <>
       <Header />
+      {toasterMessage && <ToasterCommon response={toasterMessage} />}
       <Box sx={{ background: "#2D2D2D", padding: "20px" }} className="xs-hide">
         <p
           style={{
