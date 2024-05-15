@@ -11,6 +11,8 @@ import Link from '@mui/material/Link';
 import Grid from '@mui/material/Grid';
 import { useTranslation } from "react-i18next";
 import { useParams,useNavigate } from "react-router-dom";
+import MenuBookOutlinedIcon from '@mui/icons-material/MenuBookOutlined';
+import ChatOutlinedIcon from '@mui/icons-material/ChatOutlined';
 
 // const styles = {
 //   BottomNavigation: {
@@ -38,7 +40,7 @@ export default function Footer() {
 
   return (
     <>
-    <Box maxWidth="xl" className='lg-hide'>
+    <Box maxWidth="xl" className='lg-hide bg-blue'>
     <Box sx={{  position: 'fixed', bottom: 0, left: 0, right: 0 ,width:'100%',zIndex:'9999' }}>
     <BottomNavigation
             sx={{ width: '100%', display: 'flex', position: 'relative', paddingTop: '10px' }}
@@ -58,14 +60,14 @@ export default function Footer() {
               label={t("CONTENTS")}
               className={location.pathname === '/all' ? 'navigateActive' : ''}
 
-              icon={<EditNoteOutlinedIcon />}
+              icon={<MenuBookOutlinedIcon />}
             />
             <BottomNavigationAction
               onClick={() => navigate('/addConnections')}
               label={t("CONNECTION")}
               className={location.pathname === '/addConnections' ? 'navigateActive' : ''}
 
-              icon={<GroupsOutlinedIcon />}
+              icon={<ChatOutlinedIcon />}
             />
             <BottomNavigationAction
               onClick={() => navigate('/profile')}
@@ -77,7 +79,7 @@ export default function Footer() {
 </Box>
 
 </Box>
-<Box className='xs-hide' style={{background:'#2D2D2D', color:'#fff',padding:'30px 15px 20px 15px'}}>
+<Box className='xs-hide' style={{background:'#065872', color:'#fff',padding:'15px 15px 13px'}}>
   {/* <Box>dfgdfgsg */}
   
 
@@ -92,7 +94,7 @@ export default function Footer() {
 
   </Grid>
   <Grid item xs={4} md={3} style={{fontSize:'14px', lineHeight:'2.4',fontWeight:'400'}}>
-  <Link underline="none" target="_blank" href="https://niua.org/cdg/" style={{padding:'10px 0 2px',color:'#fff', fontSize:'14px'}}>{t("CENTER_FOR_DIGITAL_GOVERNANCE")}</Link><br/>
+  {/* <Link underline="none" target="_blank" href="https://niua.org/cdg/" style={{padding:'10px 0 2px',color:'#fff', fontSize:'14px'}}>{t("CENTER_FOR_DIGITAL_GOVERNANCE")}</Link><br/> */}
     <Link  underline="none" target="_blank" href="https://nudm.mohua.gov.in/" style={{padding:'10px 0 2px',color:'#fff', fontSize:'14px'}}>{t("NATIONAL_URBAN_DIGITAL_MISSION")}</Link>
 </Grid>
   <Grid item xs={4} md={3} style={{fontSize:'14px', lineHeight:'1.5', fontWeight:'400'}}>
