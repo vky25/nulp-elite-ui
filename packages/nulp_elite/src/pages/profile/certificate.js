@@ -19,12 +19,16 @@ import * as util from "../../services/utilService";
 import axios from "axios";
 import NoResult from "pages/content/noResultFound";
 import Alert from "@mui/material/Alert";
+import ToasterCommon from "../ToasterCommon";
+
 const Certificate = () => {
   const { t } = useTranslation();
   const [certData, setCertData] = useState(null);
   const [otherCertData, setOtherCertData] = useState([]);
   const [error, setError] = useState(null);
   const urlConfig = require("../../configs/urlConfig.json");
+  const [toasterOpen, setToasterOpen] = useState(false);
+  const [toasterMessage, setToasterMessage] = useState("");
 
   useEffect(() => {
     const fetchData = async () => {
@@ -58,7 +62,11 @@ const Certificate = () => {
         setCertData(data);
       } catch (error) {
         console.error("Error fetching user data:", error);
-        setError(error.message);
+        setToasterMessage(" Failed to fetch data. Please try again.");
+        setTimeout(() => {
+          setToasterMessage("");
+        }, 2000);
+        setToasterOpen(true);
       }
 
       try {
@@ -74,7 +82,11 @@ const Certificate = () => {
         setOtherCertData(data);
       } catch (error) {
         console.error("Error fetching user data:", error);
-        setError(error.message);
+        setToasterMessage(" Failed to fetch data. Please try again.");
+        setTimeout(() => {
+          setToasterMessage("");
+        }, 2000);
+        setToasterOpen(true);
       }
     };
 
@@ -90,6 +102,7 @@ const Certificate = () => {
   return (
     <div>
       <Header />
+      {toasterMessage && <ToasterCommon response={toasterMessage} />}
       <Container maxWidth="xxl" role="main" className="container-pb mb-20">
         {error && (
           <Alert severity="error" className="my-10">
