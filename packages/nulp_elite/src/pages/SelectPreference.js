@@ -13,6 +13,7 @@ import {
 import * as util from "../services/utilService";
 import { useTranslation } from "react-i18next";
 const urlConfig = require("../configs/urlConfig.json");
+import ToasterCommon from "./ToasterCommon";
 
 const useStyles = makeStyles((theme) => ({
   formControl: {
@@ -55,6 +56,57 @@ const SelectPreference = ({ isOpen, onClose }) => {
   const [preTopic, setPreTopic] = useState("");
   const [preSubCategory, setPreSubCategory] = useState([]);
   const [preLanguages, setPreLanguages] = useState([]);
+  const [toasterOpen, setToasterOpen] = useState(false);
+  const [toasterMessage, setToasterMessage] = useState("");
+
+  const showErrorMessage = (msg) => {
+    setToasterMessage(msg);
+    setTimeout(() => {
+      setToasterMessage("");
+    }, 2000);
+    setToasterOpen(true);
+  };
+
+  useEffect(() => {
+    const fetchUserDataAndSetCustodianOrgData = async () => {
+      try {
+        const url = `${urlConfig.URLS.LEARNER_PREFIX}${urlConfig.URLS.SYSTEM_SETTING.CUSTODIAN_ORG}`;
+        const response = await fetch(url);
+        if (!response.ok) {
+          throw new Error("Failed to fetch custodian organization ID");
+        }
+        const data = await response.json();
+        console.log("Raw API response:", data);
+        const custodianOrgId = data?.result?.response?.value;
+        setCustodianOrgId(custodianOrgId);
+        setUserRootOrgId(localStorage.getItem("userRootOrgId"));
+        const rootOrgId = localStorage.getItem("userRootOrgId");
+        if (custodianOrgId === rootOrgId) {
+          const url = `${urlConfig.URLS.PUBLIC_PREFIX}${urlConfig.URLS.CHANNEL.READ}/${custodianOrgId}`;
+          const response = await fetch(url);
+          const data = await response.json();
+          const defaultFramework = data?.result?.channel?.defaultFramework;
+          setDefaultFramework(defaultFramework);
+          localStorage.setItem("defaultFramework", defaultFramework);
+        } else {
+          const url = `${urlConfig.URLS.PUBLIC_PREFIX}${urlConfig.URLS.CHANNEL.READ}/${rootOrgId}`;
+          const response = await fetch(url);
+          const data = await response.json();
+          const defaultFramework = data?.result?.channel?.defaultFramework;
+          setDefaultFramework(defaultFramework);
+        }
+      } catch (error) {
+        console.error("Error fetching user data:", error);
+        setToasterMessage(" Failed to fetch data. Please try again.");
+        setTimeout(() => {
+          setToasterMessage("");
+        }, 2000);
+        setToasterOpen(true);
+      }
+    };
+
+    fetchUserDataAndSetCustodianOrgData();
+  }, []);
 
   useEffect(() => {
     const defaultFrameworkFromLocal = localStorage.getItem("defaultFramework");
@@ -101,6 +153,7 @@ const SelectPreference = ({ isOpen, onClose }) => {
       });
 
       if (!response.ok) {
+        showErrorMessage("Failed to fetch data. Please try again.");
         throw new Error("Failed to fetch data");
       }
 
@@ -117,7 +170,7 @@ const SelectPreference = ({ isOpen, onClose }) => {
       setLanguage(data?.result?.framework?.categories[3]?.name);
     } catch (error) {
       console.error("Error fetching data:", error);
-      setError("Failed to fetch data. Please try again.");
+      showErrorMessage("Failed to fetch data. Please try again.");
     } finally {
       setIsLoading(false);
     }
@@ -137,6 +190,7 @@ const SelectPreference = ({ isOpen, onClose }) => {
       });
 
       if (!response.ok) {
+        showErrorMessage("Failed to fetch data. Please try again.");
         throw new Error("Failed to fetch data");
       }
 
@@ -168,7 +222,7 @@ const SelectPreference = ({ isOpen, onClose }) => {
       console.log("getUserData", responseData);
     } catch (error) {
       console.error("Error fetching data:", error);
-      setError("Failed to fetch data. Please try again.");
+      showErrorMessage("Failed to fetch data. Please try again.");
     } finally {
       setIsLoading(false);
     }
@@ -203,13 +257,14 @@ const SelectPreference = ({ isOpen, onClose }) => {
       });
 
       if (!response.ok) {
+        showErrorMessage("Failed to fetch data. Please try again.");
         throw new Error("Failed to fetch data");
       }
 
       const responseData = await response.json();
       console.log("responseData", responseData);
     } catch (error) {
-      setError(error.message);
+      showErrorMessage("Failed to fetch data. Please try again.");
     } finally {
       setIsLoading(false);
     }
@@ -259,6 +314,7 @@ const SelectPreference = ({ isOpen, onClose }) => {
 
   return (
     <div>
+      {toasterMessage && <ToasterCommon response={toasterMessage} />}
       <Box sx={{ minWidth: 120 }} className="preference">
         <FormControl fullWidth sx={{ marginBottom: 2 }}>
           <InputLabel id="category-label" className="year-select">

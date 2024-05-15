@@ -29,6 +29,7 @@ import Visibility from "@mui/icons-material/Visibility";
 import VisibilityOff from "@mui/icons-material/VisibilityOff";
 import { t } from "i18next";
 const urlConfig = require("../../configs/urlConfig.json");
+import ToasterCommon from "../ToasterCommon";
 
 const DELAY = 1500;
 const MAX_CHARS = 500;
@@ -67,6 +68,8 @@ const Registration = () => {
   const setData = useStore((state) => state.setData);
   const designations = require("../../configs/designations.json");
   const [bio, setBio] = useState("");
+  const [toasterOpen, setToasterOpen] = useState(false);
+  const [toasterMessage, setToasterMessage] = useState("");
 
   const formik = useFormik({
     initialValues: {
@@ -105,6 +108,13 @@ const Registration = () => {
   });
   const [designationsList, setDesignationsList] = useState([]);
 
+  const showErrorMessage = (msg) => {
+    setToasterMessage(msg);
+    setTimeout(() => {
+      setToasterMessage("");
+    }, 2000);
+    setToasterOpen(true);
+  };
   useEffect(() => {
     setTimeout(() => {
       setLoad(true);
@@ -127,7 +137,8 @@ const Registration = () => {
         });
 
         if (!response.ok) {
-          throw new Error("Failed to check email");
+          showErrorMessage(" Email already exist. Please try again.");
+          throw new Error(" Email already exist. Please try again.");
         }
 
         const data = await response.json();
@@ -138,7 +149,7 @@ const Registration = () => {
           generateOtp(formik.values.email);
         }
       } catch (error) {
-        setError(error.message);
+        showErrorMessage(" Email already exist. Please try again.");
       } finally {
         setIsLoading(false);
       }
@@ -168,6 +179,7 @@ const Registration = () => {
         });
 
         if (response.status !== 200) {
+          showErrorMessage(" Failed to generate OTP. Please try again.");
           throw new Error("Failed to generate OTP");
         }
 
@@ -184,7 +196,8 @@ const Registration = () => {
 
         setGoToOtp(true);
       } catch (error) {
-        setError(error.message);
+        setToasterMessage(" Failed to generate OTP. Please try again.");
+
         setIsLoading(false);
       }
     };
@@ -212,6 +225,8 @@ const Registration = () => {
       });
 
       if (!response.ok) {
+        setToasterMessage("Failed to get terms and conditions");
+
         throw new Error("Failed to get terms and conditions");
       }
 
@@ -219,7 +234,9 @@ const Registration = () => {
       console.log("response:", data.result.response.value);
       return data.result.response.value;
     } catch (error) {
-      setError(error.message);
+      setToasterMessage(
+        " Failed to get terms and conditions. Please try again."
+      );
     } finally {
       setIsLoading(false);
     }
@@ -241,6 +258,7 @@ const Registration = () => {
 
   return (
     <>
+      {toasterMessage && <ToasterCommon response={toasterMessage} />}
       <Container
         maxWidth="sm"
         className="register"
