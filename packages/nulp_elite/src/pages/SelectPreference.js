@@ -60,6 +60,14 @@ const SelectPreference = ({ isOpen, onClose }) => {
   const [toasterOpen, setToasterOpen] = useState(false);
   const [toasterMessage, setToasterMessage] = useState("");
 
+  const showErrorMessage = (msg) => {
+    setToasterMessage(msg);
+    setTimeout(() => {
+      setToasterMessage("");
+    }, 2000);
+    setToasterOpen(true);
+  };
+
   useEffect(() => {
     const fetchUserDataAndSetCustodianOrgData = async () => {
       try {
@@ -144,6 +152,7 @@ const SelectPreference = ({ isOpen, onClose }) => {
       });
 
       if (!response.ok) {
+        showErrorMessage("Failed to fetch data. Please try again.");
         throw new Error("Failed to fetch data");
       }
 
@@ -160,11 +169,7 @@ const SelectPreference = ({ isOpen, onClose }) => {
       setLanguage(data?.result?.framework?.categories[3]?.name);
     } catch (error) {
       console.error("Error fetching data:", error);
-      setToasterMessage(" Failed to fetch data. Please try again.");
-      setTimeout(() => {
-        setToasterMessage("");
-      }, 2000);
-      setToasterOpen(true);
+      showErrorMessage("Failed to fetch data. Please try again.");
     } finally {
       setIsLoading(false);
     }
@@ -184,6 +189,7 @@ const SelectPreference = ({ isOpen, onClose }) => {
       });
 
       if (!response.ok) {
+        showErrorMessage("Failed to fetch data. Please try again.");
         throw new Error("Failed to fetch data");
       }
 
@@ -210,11 +216,7 @@ const SelectPreference = ({ isOpen, onClose }) => {
       console.log("getUserData", responseData);
     } catch (error) {
       console.error("Error fetching data:", error);
-      setToasterMessage(" Failed to fetch data. Please try again.");
-      setTimeout(() => {
-        setToasterMessage("");
-      }, 2000);
-      setToasterOpen(true);
+      showErrorMessage("Failed to fetch data. Please try again.");
     } finally {
       setIsLoading(false);
     }
@@ -249,17 +251,14 @@ const SelectPreference = ({ isOpen, onClose }) => {
       });
 
       if (!response.ok) {
+        showErrorMessage("Failed to fetch data. Please try again.");
         throw new Error("Failed to fetch data");
       }
 
       const responseData = await response.json();
       console.log("responseData", responseData);
     } catch (error) {
-      setToasterMessage(" Failed to fetch data. Please try again.");
-      setTimeout(() => {
-        setToasterMessage("");
-      }, 2000);
-      setToasterOpen(true);
+      showErrorMessage("Failed to fetch data. Please try again.");
     } finally {
       setIsLoading(false);
     }

@@ -74,6 +74,14 @@ const AllContent = () => {
     fetchDomains();
   }, []);
 
+  const showErrorMessage = (msg) => {
+    setToasterMessage(msg);
+    setTimeout(() => {
+      setToasterMessage("");
+    }, 2000);
+    setToasterOpen(true);
+  };
+
   const fetchData = async () => {
     setError(null);
     let data = JSON.stringify({
@@ -163,11 +171,7 @@ const AllContent = () => {
       });
       setData(sortedData);
     } catch (error) {
-      setToasterMessage(" Failed to fetch data. Please try again.");
-      setTimeout(() => {
-        setToasterMessage("");
-      }, 2000);
-      setToasterOpen(true);
+      showErrorMessage("Failed to fetch data. Please try again.");
     }
   };
   const getCookieValue = (name) => {
@@ -196,11 +200,7 @@ const AllContent = () => {
       setChannelData(response.data.result);
     } catch (error) {
       console.log("error---", error);
-      setToasterMessage(" Failed to fetch data. Please try again.");
-      setTimeout(() => {
-        setToasterMessage("");
-      }, 2000);
-      setToasterOpen(true);
+      showErrorMessage("Failed to fetch data. Please try again.");
     } finally {
     }
     try {
@@ -225,11 +225,7 @@ const AllContent = () => {
       setDomain(response.data.result.framework.categories[0].terms);
     } catch (error) {
       console.log("nulp--  error-", error);
-      setToasterMessage(" Failed to fetch data. Please try again.");
-      setTimeout(() => {
-        setToasterMessage("");
-      }, 2000);
-      setToasterOpen(true);
+      showErrorMessage("Failed to fetch data. Please try again.");
     } finally {
       console.log("nulp finally---");
     }

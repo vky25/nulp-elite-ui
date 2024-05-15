@@ -61,7 +61,13 @@ const DomainList = () => {
   const [toasterOpen, setToasterOpen] = useState(false);
   const [toasterMessage, setToasterMessage] = useState("");
 
-  // Example of API Call
+  const showErrorMessage = (msg) => {
+    setToasterMessage(msg);
+    setTimeout(() => {
+      setToasterMessage("");
+    }, 2000);
+    setToasterOpen(true);
+  };
 
   useEffect(() => {
     fetchDataFramework();
@@ -102,11 +108,7 @@ const DomainList = () => {
       setChannelData(response.data.result);
     } catch (error) {
       console.log("error---", error);
-      setToasterMessage(" Failed to fetch data. Please try again.");
-      setTimeout(() => {
-        setToasterMessage("");
-      }, 2000);
-      setToasterOpen(true);
+      showErrorMessage("Failed to fetch data. Please try again.");
     } finally {
       setIsLoading(false);
     }
@@ -134,11 +136,7 @@ const DomainList = () => {
       setData(itemsArray);
     } catch (error) {
       console.log("nulp--  error-", error);
-      setToasterMessage(" Failed to fetch data. Please try again.");
-      setTimeout(() => {
-        setToasterMessage("");
-      }, 2000);
-      setToasterOpen(true);
+      showErrorMessage("Failed to fetch data. Please try again.");
     } finally {
       console.log("nulp finally---");
 

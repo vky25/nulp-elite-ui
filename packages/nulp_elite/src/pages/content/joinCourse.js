@@ -81,6 +81,7 @@ const JoinCourse = () => {
           },
         });
         if (!response.ok) {
+          showErrorMessage("Failed to fetch data. Please try again.");
           throw new Error("Failed to fetch course data");
         }
         const data = await response.json();
@@ -141,6 +142,7 @@ const JoinCourse = () => {
         const url = `${urlConfig.URLS.LEARNER_PREFIX}${urlConfig.URLS.COURSE.GET_ENROLLED_COURSES}${_userId}?orgdetails=${appConfig.ContentPlayer.contentApiQueryParams}&fields=${urlConfig.params.objectCategory.fields}&batchDetails=${urlConfig.params.enrolledCourses.batchDetails}`;
         const response = await fetch(url);
         if (!response.ok) {
+          showErrorMessage("Failed to fetch data. Please try again.");
           throw new Error("Failed to fetch user courses");
         }
         const data = await response.json();
@@ -185,11 +187,7 @@ const JoinCourse = () => {
           setCourseProgress(data);
         } catch (error) {
           console.error("Error while fetching courses:", error);
-          setToasterMessage(" Failed to fetch data. Please try again.");
-          setTimeout(() => {
-            setToasterMessage("");
-          }, 2000);
-          setToasterOpen(true);
+          showErrorMessage("Failed to fetch data. Please try again.");
         }
       }
     };
@@ -264,11 +262,7 @@ const JoinCourse = () => {
       }
     } catch (error) {
       console.error("Error enrolling in the course:", error);
-      setToasterMessage(" Failed to fetch data. Please try again.");
-      setTimeout(() => {
-        setToasterMessage("");
-      }, 2000);
-      setToasterOpen(true);
+      showErrorMessage("Failed to fetch data. Please try again.");
     }
     window.location.reload();
   };
@@ -428,11 +422,7 @@ const JoinCourse = () => {
       }
     } catch (error) {
       console.error("Error enrolling in the course:", error);
-      setToasterMessage(" Failed to fetch data. Please try again.");
-      setTimeout(() => {
-        setToasterMessage("");
-      }, 2000);
-      setToasterOpen(true);
+      showErrorMessage("Failed to fetch data. Please try again.");
     }
   };
 
@@ -456,11 +446,7 @@ const JoinCourse = () => {
       }
     } catch (error) {
       console.error("Error updating consent:", error);
-      setToasterMessage(" Failed to fetch data. Please try again.");
-      setTimeout(() => {
-        setToasterMessage("");
-      }, 2000);
-      setToasterOpen(true);
+      showErrorMessage("Failed to fetch data. Please try again.");
     }
   };
 
@@ -477,11 +463,7 @@ const JoinCourse = () => {
       setUserInfo(data.result.response);
     } catch (error) {
       console.error("Error while getting user data:", error);
-      setToasterMessage(" Failed to fetch data. Please try again.");
-      setTimeout(() => {
-        setToasterMessage("");
-      }, 2000);
-      setToasterOpen(true);
+      showErrorMessage("Failed to fetch data. Please try again.");
     }
   };
 

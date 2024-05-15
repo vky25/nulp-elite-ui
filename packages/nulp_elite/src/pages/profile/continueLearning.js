@@ -34,6 +34,14 @@ const ContinueLearning = () => {
   const [toasterOpen, setToasterOpen] = useState(false);
   const [toasterMessage, setToasterMessage] = useState("");
 
+  const showErrorMessage = (msg) => {
+    setToasterMessage(msg);
+    setTimeout(() => {
+      setToasterMessage("");
+    }, 2000);
+    setToasterOpen(true);
+  };
+
   useEffect(() => {
     fetchData();
     fetchGradeLevels();
@@ -61,11 +69,7 @@ const ContinueLearning = () => {
       const responseData = await response.json();
       setData(responseData.result.courses);
     } catch (error) {
-      setToasterMessage(" Failed to fetch data. Please try again.");
-      setTimeout(() => {
-        setToasterMessage("");
-      }, 2000);
-      setToasterOpen(true);
+      showErrorMessage("Failed to fetch data. Please try again.");
     } finally {
       setIsLoading(false);
     }

@@ -38,6 +38,14 @@ const CategoryPage = () => {
   const [toasterOpen, setToasterOpen] = useState(false);
   const [toasterMessage, setToasterMessage] = useState("");
 
+  const showErrorMessage = (msg) => {
+    setToasterMessage(msg);
+    setTimeout(() => {
+      setToasterMessage("");
+    }, 2000);
+    setToasterOpen(true);
+  };
+
   const handleSearch = (query) => {
     // Implement your search logic here
     console.log("Search query:", query);
@@ -99,11 +107,7 @@ const CategoryPage = () => {
       const response = await getAllContents(url, data, headers);
       setData(response.data.result.content);
     } catch (error) {
-      setToasterMessage(" Failed to fetch data. Please try again.");
-      setTimeout(() => {
-        setToasterMessage("");
-      }, 2000);
-      setToasterOpen(true);
+      showErrorMessage("Failed to fetch data. Please try again.");
     }
   };
   // Function to push data to the array
@@ -125,11 +129,7 @@ const CategoryPage = () => {
       setChannelData(response.data.result);
     } catch (error) {
       console.log("error---", error);
-      setToasterMessage(" Failed to fetch data. Please try again.");
-      setTimeout(() => {
-        setToasterMessage("");
-      }, 2000);
-      setToasterOpen(true);
+      showErrorMessage("Failed to fetch data. Please try again.");
     } finally {
     }
     try {
@@ -156,11 +156,7 @@ const CategoryPage = () => {
       setDomain(response.data.result.framework.categories[0].terms);
     } catch (error) {
       console.log("nulp--  error-", error);
-      setToasterMessage(" Failed to fetch data. Please try again.");
-      setTimeout(() => {
-        setToasterMessage("");
-      }, 2000);
-      setToasterOpen(true);
+      showErrorMessage("Failed to fetch data. Please try again.");
     } finally {
       console.log("nulp finally---");
     }

@@ -101,6 +101,14 @@ const Profile = () => {
   const [toasterOpen, setToasterOpen] = useState(false);
   const [toasterMessage, setToasterMessage] = useState("");
 
+  const showErrorMessage = (msg) => {
+    setToasterMessage(msg);
+    setTimeout(() => {
+      setToasterMessage("");
+    }, 2000);
+    setToasterOpen(true);
+  };
+
   useEffect(() => {
     setTimeout(() => {
       setLoad(true);
@@ -140,11 +148,7 @@ const Profile = () => {
         });
       } catch (error) {
         console.error("Error fetching certificate count:", error);
-        setToasterMessage(" Failed to fetch data. Please try again.");
-        setTimeout(() => {
-          setToasterMessage("");
-        }, 2000);
-        setToasterOpen(true);
+        showErrorMessage("Failed to fetch data. Please try again.");
       }
     };
 
@@ -160,11 +164,7 @@ const Profile = () => {
         });
       } catch (error) {
         console.error(error);
-        setToasterMessage(" Failed to fetch data. Please try again.");
-        setTimeout(() => {
-          setToasterMessage("");
-        }, 2000);
-        setToasterOpen(true);
+        showErrorMessage("Failed to fetch data. Please try again.");
       }
     };
     const fetchUserInfo = async () => {
@@ -183,11 +183,7 @@ const Profile = () => {
         setUserInfo(response?.data?.result);
       } catch (error) {
         console.error(error);
-        setToasterMessage(" Failed to fetch data. Please try again.");
-        setTimeout(() => {
-          setToasterMessage("");
-        }, 2000);
-        setToasterOpen(true);
+        showErrorMessage("Failed to fetch data. Please try again.");
       }
     };
 
@@ -242,11 +238,7 @@ const Profile = () => {
       await updateUserInfoInCustomDB();
       console.log("responseData", responseData);
     } catch (error) {
-      setToasterMessage(" Failed to fetch data. Please try again.");
-      setTimeout(() => {
-        setToasterMessage("");
-      }, 2000);
-      setToasterOpen(true);
+      showErrorMessage("Failed to fetch data. Please try again.");
     } finally {
       setIsLoading(false);
     }
@@ -276,11 +268,7 @@ const Profile = () => {
 
       const data = await response.json();
     } catch (error) {
-      setToasterMessage(" Failed to fetch data. Please try again.");
-      setTimeout(() => {
-        setToasterMessage("");
-      }, 2000);
-      setToasterOpen(true);
+      showErrorMessage("Failed to fetch data. Please try again.");
     } finally {
       setIsLoading(false);
     }
@@ -313,11 +301,7 @@ const Profile = () => {
       }
     } catch (error) {
       console.error("Error fetching user data:", error);
-      setToasterMessage(" Failed to fetch data. Please try again.");
-      setTimeout(() => {
-        setToasterMessage("");
-      }, 2000);
-      setToasterOpen(true);
+      showErrorMessage("Failed to fetch data. Please try again.");
     }
   };
 

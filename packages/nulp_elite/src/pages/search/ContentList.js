@@ -43,6 +43,14 @@ const ContentList = (props) => {
   const [toasterOpen, setToasterOpen] = useState(false);
   const [toasterMessage, setToasterMessage] = useState("");
 
+  const showErrorMessage = (msg) => {
+    setToasterMessage(msg);
+    setTimeout(() => {
+      setToasterMessage("");
+    }, 2000);
+    setToasterOpen(true);
+  };
+
   useEffect(() => {
     fetchData();
     fetchGradeLevels();
@@ -117,11 +125,7 @@ const ContentList = (props) => {
 
       setData(response.data.result);
     } catch (error) {
-      setToasterMessage(" Failed to fetch data. Please try again.");
-      setTimeout(() => {
-        setToasterMessage("");
-      }, 2000);
-      setToasterOpen(true);
+      showErrorMessage("Failed to fetch data. Please try again.");
     } finally {
       setIsLoading(false);
     }
@@ -169,11 +173,7 @@ const ContentList = (props) => {
       }
     } catch (error) {
       console.error("Error fetching grade levels:", error);
-      setToasterMessage(" Failed to fetch data. Please try again.");
-      setTimeout(() => {
-        setToasterMessage("");
-      }, 2000);
-      setToasterOpen(true);
+      showErrorMessage("Failed to fetch data. Please try again.");
     }
   };
 
@@ -204,11 +204,7 @@ const ContentList = (props) => {
       }
     } catch (error) {
       console.log("Error fetching domain data:", error);
-      setToasterMessage(" Failed to fetch data. Please try again.");
-      setTimeout(() => {
-        setToasterMessage("");
-      }, 2000);
-      setToasterOpen(true);
+      showErrorMessage("Failed to fetch data. Please try again.");
     } finally {
       setIsLoading(false);
     }

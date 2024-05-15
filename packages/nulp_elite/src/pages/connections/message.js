@@ -111,6 +111,14 @@ const Message = (props) => {
     }
   }, [loggedInUserId]);
 
+  const showErrorMessage = (msg) => {
+    setToasterMessage(msg);
+    setTimeout(() => {
+      setToasterMessage("");
+    }, 2000);
+    setToasterOpen(true);
+  };
+
   useEffect(() => {
     if (loggedInUserId && !isBlocked) {
       const intervalId = setInterval(fetchChats, 5000);
@@ -133,11 +141,7 @@ const Message = (props) => {
       setShowUnblockOption(blockedUserId === loggedInUserId);
     } catch (error) {
       console.error("Error fetching block user status:", error);
-      setToasterMessage(" Failed to fetch data. Please try again.");
-      setTimeout(() => {
-        setToasterMessage("");
-      }, 2000);
-      setToasterOpen(true);
+      showErrorMessage("Failed to fetch data. Please try again.");
     }
   };
 
@@ -156,11 +160,7 @@ const Message = (props) => {
       }
     } catch (error) {
       console.error("Error fetching chats:", error);
-      setToasterMessage(" Failed to fetch data. Please try again.");
-      setTimeout(() => {
-        setToasterMessage("");
-      }, 2000);
-      setToasterOpen(true);
+      showErrorMessage("Failed to fetch data. Please try again.");
     }
   };
 
@@ -220,11 +220,7 @@ const Message = (props) => {
       );
     } catch (error) {
       console.error("Error updating message:", error);
-      setToasterMessage(" Failed to fetch data. Please try again.");
-      setTimeout(() => {
-        setToasterMessage("");
-      }, 2000);
-      setToasterOpen(true);
+      showErrorMessage("Failed to fetch data. Please try again.");
     }
   };
 
@@ -299,11 +295,7 @@ const Message = (props) => {
       }
     } catch (error) {
       console.error("Error unblocking user:", error);
-      setToasterMessage(" Failed to fetch data. Please try again.");
-      setTimeout(() => {
-        setToasterMessage("");
-      }, 2000);
-      setToasterOpen(true);
+      showErrorMessage("Failed to fetch data. Please try again.");
     }
   };
 
@@ -333,11 +325,7 @@ const Message = (props) => {
       window.location.reload();
     } catch (error) {
       console.error("Error blocking user:", error);
-      setToasterMessage(" Failed to fetch data. Please try again.");
-      setTimeout(() => {
-        setToasterMessage("");
-      }, 2000);
-      setToasterOpen(true);
+      showErrorMessage("Failed to fetch data. Please try again.");
     }
     handleMenuClose(); // Close the menu after the action is completed
   };
