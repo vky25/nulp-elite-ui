@@ -144,7 +144,7 @@ const DomainList = () => {
     <div>
       <Header />
       {toasterMessage && <ToasterCommon response={toasterMessage} />}
-      <Box sx={{ background: "#2D2D2D", padding: "20px" }}>
+      {/* <Box sx={{ background: "#2D2D2D", padding: "20px" }}>
         <p
           style={{
             fontSize: "20px",
@@ -168,7 +168,7 @@ const DomainList = () => {
           {t("LEARN_FROM_WELL_CURATED")}
         </p>
         <SearchBox onSearch={handleSearch} />
-      </Box>
+      </Box>  */}
 
       <Container maxWidth="xxl" role="main" className="container-pb">
         {error && <Alert severity="error">{error}</Alert>}

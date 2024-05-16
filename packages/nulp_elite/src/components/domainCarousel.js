@@ -35,6 +35,27 @@ export default function DomainCarousel({ domains ,onSelectDomain}) {
   const [activeStates, setActiveStates] = useState(() => (
     domains.map(() => false) // Initialize all items as inactive
   ));
+  const [isMobile, setIsMobile] = useState(window.innerWidth <= 767);
+  const [activeDomain, setActiveDomain] = useState(null);
+  const [scrolled, setScrolled] = useState(false);
+
+  const handleResize = () => {
+    setIsMobile(window.innerWidth <= 767);
+  };
+  useEffect(() => {
+    const handleScroll = () => {
+      if (window.scrollY > 0) {
+        setScrolled(true);
+      } else {
+        setScrolled(false);
+      }
+    };
+
+    window.addEventListener('scroll', handleScroll);
+    return () => {
+      window.removeEventListener('scroll', handleScroll);
+    };
+  }, []);
   useEffect(() => {
     domains.map((term) => {
       if (domainWithImage) {
@@ -47,7 +68,8 @@ export default function DomainCarousel({ domains ,onSelectDomain}) {
         });
       }
     });
-    setData(itemsArray);
+    const croppedArray = itemsArray.slice(0, 10);
+    setData(croppedArray);
     console.log("itemsArray---",itemsArray)
     console.log("data---",data)
   }, []);
@@ -62,11 +84,21 @@ export default function DomainCarousel({ domains ,onSelectDomain}) {
     onSelectDomain(query);
     // setIsActive(!isActive);
   };
+  const handleMouseEnter = (domain) => {
+    setActiveDomain(domain);
+  };
+
+  const handleMouseLeave = () => {
+    setActiveDomain(null);
+  };
+
+ 
   return (
    
-   <Box style={{position:'relative'}}>
+   <Box style={{position:'relative'}} className="bg-blue">
    
-      
+   {isMobile ? (
+    <>
           <Carousel swipeable={false}
           draggable={false}
           showDots={["mobile"]} // Show dots only if there are more than 4 items
@@ -99,8 +131,36 @@ export default function DomainCarousel({ domains ,onSelectDomain}) {
                  ))}
 
           </Carousel>
-          <Box className="leftshade"></Box>
-          <Box className="rightshade"></Box>
+            <Box className="leftshade"></Box>
+            <Box className="rightshade"></Box>
+            </>
+          ) : (
+            <Box sx={{display:"flex"}}  className={scrolled ? "bg-blue scrolled" : "bg-blue"}>
+                                {itemsArray && itemsArray.map((domain, index) => (
+
+               <Box  className={`my-class ${activeStates[index] ? 'carousel-active-ui' : ''}`} onClick={(e) => handleDomainClick(domain.code,index)}  key={index} orientation="horizontal" size="sm" variant="outlined" style={{display:'flex',margin:"0 4px"}}>
+              <Box className="imgBorder" style={{background:'#fff',padding:'10px',borderRadius:'10px',height:'45px',width:'45px'}}>
+              {/* {(domain.image != undefined) && <img src={require(baseImgUrl+domain.image)}  style={{width:'40px',objectFit:'contain'}} alt={domain.name} />}
+                {(domain.image == undefined)&& <img src={require("../assets/swm.png")}  style={{width:'40px',objectFit:'contain'}} alt={domain.name} />} */}
+                <img
+                        src={require(`../assets/domainImgs${domain.image}`)}
+                        style={{width:'40px',objectFit:'contain'}} alt={domain.name}
+                      />
+                {/* <img src={require("../assets/swm.png")}  style={{width:'40px',objectFit:'contain'}} alt={domain.name} /> */}
+                </Box>
+                {activeDomain === domain && (
+
+            <Box className="domainText" sx={{ alignSelf:'center',padding:'0 19px 0 5px' }}>
+              <Typography level="title-md" style={{fontSize:'12px',opacity: isActive ? 1 : 0,}}>{domain.name}</Typography>
+            </Box>
+                          )}
+
+          </Box>
+                           ))}
+
+            </Box>
+)}
+        
 
       
     </Box>
