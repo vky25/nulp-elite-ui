@@ -41,7 +41,7 @@ export default function BoxCard({ items, index ,onClick}) {
 
 
   return (
-    <Card sx={{  position: "relative",cursor:'pointer' }}>
+    <Card className="cardBox" sx={{  position: "relative",cursor:'pointer' }}>
       <CardMedia
         sx={{
           height: 140,
@@ -64,7 +64,7 @@ export default function BoxCard({ items, index ,onClick}) {
     left: 0,
     right:'0',
     width: '100%',
-    height: '49%',
+    height: '38%',
     background: 'linear-gradient(45deg, RGBA(28, 25, 25, 0.46) 7%, RGBA(20, 18, 18, 0.57) 45%)',
     zIndex: 999,
     margin: '0',
@@ -72,9 +72,7 @@ export default function BoxCard({ items, index ,onClick}) {
     borderTopRightRadius:'20px'
   }}></div>
       <CardContent>
-        <Typography gutterBottom variant="h5" component="div" className="cardTitle">
-           {items.name}
-        </Typography>
+       
         <Typography gutterBottom variant="h7" component="div" className="ribbonCard">
         {items.primaryCategory && (
                   <Box className="cardCourses"> {items.primaryCategory}</Box>
@@ -84,11 +82,13 @@ export default function BoxCard({ items, index ,onClick}) {
           <img src={items.appIcon ? items.appIcon : require("assets/default.png")} className="card-img"/>
 
           </Box>
-
+          <Typography gutterBottom variant="h5" component="div" className="cardTitle mt-40">
+           {items.name}
+        </Typography>
         <Typography
           variant="body2"
           color="#5B5B5B"
-          style={{ fontSize: "11px", padding: "20px 0", textAlign: "left" }}
+          style={{ fontSize: "11px", padding: "10px 0", textAlign: "left" }}
         >
           {items.organisation && (items.organisation.length=1)&&
                     <Box>{items.organisation[0] } </Box>
@@ -100,17 +100,15 @@ export default function BoxCard({ items, index ,onClick}) {
         </Typography>
       </CardContent>
       {/* {items.board || items.gradeLevel ? ( */}
-    <CardActions style={{paddingBottom:'20px', height:'30px'}}>
     <Divider></Divider>
-        <Box>
-        {items.se_boards && (
-          <Button size="small" style={{background: '#F4D46261',color:'#484848',fontSize:'10px'}}> {items.se_boards}</Button>
-        )}
-        {items.se_gradeLevels && (
-          <Button size="small" style={{background: '#F4D46261',color:'#484848',fontSize:'10px'}}> {items.se_gradeLevels}</Button>
-        )}
+        <Box className="my-10 textLeft">
+        {/* {items.se_boards && ( */}
+          <Button size="small" className="labelOne">label1 {items.se_boards}</Button>
+         {/* )}  */}
+         {/* {items.se_gradeLevels && (  */}
+          <Button size="small" className="labeltwo"> label1l1{items.se_gradeLevels}</Button>
+         {/* )}  */}
         </Box>
-      </CardActions>
 {/* ) : null} */}
 
     </Card>

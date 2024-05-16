@@ -44,7 +44,8 @@
     },
     "objectCategory": {
       "fields": "objectMetadata,forms,name"
-    }
+    },
+    "framework": "board,gradeLevel,medium,class,subject"
   },
   "URLS": {
     "LEARNER_PREFIX": "/learner/",

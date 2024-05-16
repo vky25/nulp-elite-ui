@@ -38,6 +38,8 @@ const axios = require("axios");
 const designations = require("../../configs/designations.json");
 const urlConfig = require("../../configs/urlConfig.json");
 import Autocomplete from "@mui/material/Autocomplete";
+import ToasterCommon from "../ToasterCommon";
+
 // Define modal styles
 const useStyles = makeStyles((theme) => ({
   modal: {
@@ -106,6 +108,16 @@ const AddConnections = () => {
   const [autocompleteOpen, setAutocompleteOpen] = useState(false);
   const [inputValue, setInputValue] = useState("");
   const [options, setOptions] = useState([]);
+  const [toasterOpen, setToasterOpen] = useState(false);
+  const [toasterMessage, setToasterMessage] = useState("");
+
+  const showErrorMessage = (msg) => {
+    setToasterMessage(msg);
+    setTimeout(() => {
+      setToasterMessage("");
+    }, 2000);
+    setToasterOpen(true);
+  };
 
   const getChat = async (userId) => {
     setIsLoading(true);
@@ -130,6 +142,7 @@ const AddConnections = () => {
       });
 
       if (!response.ok) {
+        showErrorMessage("Failed to fetch data. Please try again.");
         throw new Error("Failed to get chat");
       }
 
@@ -137,11 +150,16 @@ const AddConnections = () => {
       console.log("getChat", responseData.result);
       return responseData.result;
     } catch (error) {
-      setError(error.message);
+      console.error("Error fetching data:", error);
+
+      showErrorMessage("Failed to fetch data. Please try again.");
+
+      // Open the toaster
     } finally {
       setIsLoading(false);
     }
   };
+
   const getChatRequest = async (userId) => {
     setIsLoading(true);
     setError(null);
@@ -165,6 +183,7 @@ const AddConnections = () => {
       });
 
       if (!response.ok) {
+        showErrorMessage("Failed to fetch data. Please try again.");
         throw new Error("Failed to get chat");
       }
 
@@ -172,7 +191,9 @@ const AddConnections = () => {
       console.log("getChatRequest", responseData.result);
       return responseData.result;
     } catch (error) {
-      setError(error.message);
+      showErrorMessage("Failed to fetch data. Please try again.");
+
+      // Open the toaster
     } finally {
       setIsLoading(false);
     }
@@ -236,7 +257,6 @@ const AddConnections = () => {
 
   const handleSearch = async (selectedUserId = "") => {
     setIsLoading(true);
-    setError(null);
     setUserSearchData([]);
     setUserFilter([]);
 
@@ -269,6 +289,7 @@ const AddConnections = () => {
       });
 
       if (!response.ok) {
+        showErrorMessage("Failed to fetch data. Please try again.");
         throw new Error("Failed to fetch data");
       }
 
@@ -309,8 +330,8 @@ const AddConnections = () => {
       setUserFilter(responseUserData);
       console.log("responseSearchData", responseData);
     } catch (error) {
-      console.error("Error fetching data:", error);
-      setError("Failed to fetch data. Please try again.");
+      showErrorMessage("Failed to fetch data. Please try again.");
+      // Open the toaster
     } finally {
       setIsLoading(false);
     }
@@ -343,6 +364,7 @@ const AddConnections = () => {
       });
 
       if (!response.ok) {
+        showErrorMessage("Failed to fetch data. Please try again.");
         throw new Error("Failed to fetch data");
       }
 
@@ -361,7 +383,7 @@ const AddConnections = () => {
       setUserQuerySearchData(content);
     } catch (error) {
       console.error("Error fetching data:", error);
-      setError("Failed to fetch data. Please try again.");
+      showErrorMessage("Failed to fetch data. Please try again.");
     } finally {
       setIsLoading(false);
     }
@@ -381,6 +403,7 @@ const AddConnections = () => {
       setShowModal(true);
     } catch (error) {
       console.error("Error sending chat request:", error);
+      showErrorMessage("Failed to fetch data. Please try again.");
     }
   };
 
@@ -410,6 +433,7 @@ const AddConnections = () => {
       });
 
       if (!response.ok) {
+        showErrorMessage("Failed to fetch data. Please try again.");
         throw new Error("Failed to get connected user chat");
       }
       setInvitationReceivedUserByIds([]);
@@ -446,7 +470,11 @@ const AddConnections = () => {
       invitationAcceptedUserIds.length > 0 &&
         getInvitationAcceptedUserByIds(invitationAcceptedUserIds);
     } catch (error) {
-      setError(error.message);
+      console.error("Error fetching data:", error);
+
+      showErrorMessage("Failed to fetch data. Please try again.");
+
+      // Open the toaster
     } finally {
       setIsLoading(false);
     }
@@ -480,6 +508,7 @@ const AddConnections = () => {
       });
 
       if (!response.ok) {
+        showErrorMessage("Failed to fetch data. Please try again.");
         throw new Error("Failed to search data");
       }
 
@@ -502,8 +531,8 @@ const AddConnections = () => {
         responseData.result.response.content
       );
     } catch (error) {
-      console.log("error", error);
-      setError(error.message);
+      console.error("Error fetching data:", error);
+      showErrorMessage("Failed to fetch data. Please try again.");
     } finally {
       setIsLoading(false);
     }
@@ -538,6 +567,7 @@ const AddConnections = () => {
       });
 
       if (!response.ok) {
+        showErrorMessage("Failed to fetch data. Please try again.");
         throw new Error("Failed to search data");
       }
 
@@ -572,8 +602,9 @@ const AddConnections = () => {
         responseData.result.response.content
       );
     } catch (error) {
-      console.log("error", error);
-      setError(error.message);
+      showErrorMessage("Failed to fetch data. Please try again.");
+
+      // Open the toaster
     } finally {
       setIsLoading(false);
     }
@@ -603,6 +634,7 @@ const AddConnections = () => {
       });
 
       if (!response.ok) {
+        showErrorMessage("Failed to fetch data. Please try again.");
         throw new Error("Failed to search data");
       }
 
@@ -637,8 +669,9 @@ const AddConnections = () => {
         responseData.result.response.content
       );
     } catch (error) {
-      console.log("error", error);
-      setError(error.message);
+      showErrorMessage("Failed to fetch data. Please try again.");
+
+      // Open the toaster
     } finally {
       setIsLoading(false);
     }
@@ -702,6 +735,7 @@ const AddConnections = () => {
         body: JSON.stringify(requestBody),
       });
       if (!response.ok) {
+        showErrorMessage("Failed to fetch data. Please try again.");
         throw new Error("Failed to accept chat");
       }
 
@@ -709,7 +743,9 @@ const AddConnections = () => {
       console.log("acceptChatInvitation", responseData.result);
       onMyConnection();
     } catch (error) {
-      setError(error.message);
+      showErrorMessage("Failed to fetch data. Please try again.");
+
+      // Open the toaster
     } finally {
       setIsLoading(false);
     }
@@ -733,6 +769,7 @@ const AddConnections = () => {
         body: JSON.stringify(requestBody),
       });
       if (!response.ok) {
+        showErrorMessage("Failed to fetch data. Please try again.");
         throw new Error("Failed to block chat");
       }
 
@@ -740,7 +777,11 @@ const AddConnections = () => {
       console.log("rejectChatInvitation", responseData.result);
       onMyConnection();
     } catch (error) {
-      setError(error.message);
+      console.error("Error fetching data:", error);
+
+      showErrorMessage("Failed to fetch data. Please try again.");
+
+      // Open the toaster
     } finally {
       setIsLoading(false);
     }
@@ -769,6 +810,7 @@ const AddConnections = () => {
       });
 
       if (!response.ok) {
+        showErrorMessage("Failed to fetch data. Please try again.");
         throw new Error("Failed to get user chat");
       }
 
@@ -781,7 +823,11 @@ const AddConnections = () => {
       );
       setUserChat(userChats);
     } catch (error) {
-      setError(error.message);
+      console.error("Error fetching data:", error);
+
+      showErrorMessage("Failed to fetch data. Please try again.");
+
+      // Open the toaster
     } finally {
       setIsLoading(false);
     }
@@ -810,12 +856,17 @@ const AddConnections = () => {
       });
 
       if (!response.ok) {
+        showErrorMessage("Failed to fetch data. Please try again.");
         throw new Error("Failed to send chat");
       }
       setSelectedUser("");
       console.log("sentChatRequest", response);
     } catch (error) {
-      setError(error.message);
+      console.error("Error fetching data:", error);
+
+      showErrorMessage("Failed to fetch data. Please try again.");
+
+      // Open the toaster
     } finally {
       setIsLoading(false);
     }
@@ -904,6 +955,7 @@ const AddConnections = () => {
       setUserInfo(response.data.result);
       return response.data.result[0] || {};
     } catch (error) {
+      showErrorMessage("Failed to fetch data. Please try again.");
       console.error(error);
     }
   };
@@ -960,6 +1012,7 @@ const AddConnections = () => {
       return newIds;
     } catch (error) {
       console.error(error);
+      showErrorMessage("Failed to fetch data. Please try again.");
     }
   };
 
@@ -990,6 +1043,7 @@ const AddConnections = () => {
       });
 
       if (!response.ok) {
+        showErrorMessage("Failed to fetch data. Please try again.");
         throw new Error("Failed to fetch data");
       }
 
@@ -1010,8 +1064,7 @@ const AddConnections = () => {
       setUserSearchData(responseUserData);
       return responseUserData;
     } catch (error) {
-      console.error("Error fetching data:", error);
-      setError("Failed to fetch data. Please try again.");
+      showErrorMessage("Failed to fetch data. Please try again.");
     } finally {
       setIsLoading(false);
     }
@@ -1082,7 +1135,7 @@ const AddConnections = () => {
 
   return (
     <Box>
-      <Header />
+      {toasterMessage && <ToasterCommon response={toasterMessage} />}
       <Container maxWidth="xxl" role="main" className="container-pb">
         {error && (
           <Alert severity="error" className="my-10">

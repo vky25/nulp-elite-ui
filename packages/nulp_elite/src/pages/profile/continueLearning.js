@@ -18,6 +18,7 @@ import NoResult from "pages/content/noResultFound";
 import Alert from "@mui/material/Alert";
 import appConfig from "../../configs/appConfig.json";
 const urlConfig = require("../../configs/urlConfig.json");
+import ToasterCommon from "../ToasterCommon";
 
 const ContinueLearning = () => {
   const { t } = useTranslation();
@@ -30,6 +31,16 @@ const ContinueLearning = () => {
   const navigate = useNavigate();
   const location = useLocation();
   const { domain } = location.state || {};
+  const [toasterOpen, setToasterOpen] = useState(false);
+  const [toasterMessage, setToasterMessage] = useState("");
+
+  const showErrorMessage = (msg) => {
+    setToasterMessage(msg);
+    setTimeout(() => {
+      setToasterMessage("");
+    }, 2000);
+    setToasterOpen(true);
+  };
 
   useEffect(() => {
     fetchData();
@@ -52,13 +63,12 @@ const ContinueLearning = () => {
     };
 
     try {
-      const url = `${urlConfig.URLS.LEARNER_PREFIX}${urlConfig.URLS.COURSE.GET_ENROLLED_COURSES}/${_userId}?orgdetails=${appConfig.ContentPlayer.contentApiQueryParams}&fields=${urlConfig.params.objectCategory.fields}&batchDetails=${urlConfig.params.enrolledCourses.batchDetails}`;
-
+      const url = `${urlConfig.URLS.LEARNER_PREFIX}${urlConfig.URLS.COURSE.GET_ENROLLED_COURSES}/${_userId}?orgdetails=${appConfig.Course.contentApiQueryParams.orgdetails}&licenseDetails=${appConfig.Course.contentApiQueryParams.licenseDetails}&fields=${urlConfig.params.enrolledCourses.fields}&batchDetails=${urlConfig.params.enrolledCourses.batchDetails}`;
       const response = await fetch(url, headers);
       const responseData = await response.json();
       setData(responseData.result.courses);
     } catch (error) {
-      setError(error.message);
+      showErrorMessage("Failed to fetch data. Please try again.");
     } finally {
       setIsLoading(false);
     }
@@ -89,6 +99,7 @@ const ContinueLearning = () => {
   return (
     <div>
       {/* <Header /> */}
+      {toasterMessage && <ToasterCommon response={toasterMessage} />}
       <Container maxWidth="xxl" role="main" className="container-pb">
         {error && (
           <Alert severity="error" className="my-10">

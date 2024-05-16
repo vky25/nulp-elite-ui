@@ -19,6 +19,7 @@ import SearchBox from "components/search";
 import { t } from "i18next";
 import appConfig from "../../configs/appConfig.json";
 const urlConfig = require("../../configs/urlConfig.json");
+import ToasterCommon from "../ToasterCommon";
 
 const CategoryPage = () => {
   // const history = useHistory();
@@ -34,6 +35,17 @@ const CategoryPage = () => {
   const [totalPages, setTotalPages] = useState(1);
 
   const [itemsArray, setItemsArray] = useState([]);
+  const [toasterOpen, setToasterOpen] = useState(false);
+  const [toasterMessage, setToasterMessage] = useState("");
+
+  const showErrorMessage = (msg) => {
+    setToasterMessage(msg);
+    setTimeout(() => {
+      setToasterMessage("");
+    }, 2000);
+    setToasterOpen(true);
+  };
+
   const handleSearch = (query) => {
     // Implement your search logic here
     console.log("Search query:", query);
@@ -48,6 +60,7 @@ const CategoryPage = () => {
   const handleGoBack = () => {
     navigate(-1); // Navigate back in history
   };
+
   const fetchMoreItems = async (category) => {
     setError(null);
     // Filters for API
@@ -95,7 +108,7 @@ const CategoryPage = () => {
       const response = await getAllContents(url, data, headers);
       setData(response.data.result.content);
     } catch (error) {
-      setError(error.message);
+      showErrorMessage("Failed to fetch data. Please try again.");
     }
   };
   // Function to push data to the array
@@ -105,6 +118,8 @@ const CategoryPage = () => {
 
   const fetchDomains = async () => {
     setError(null);
+    const rootOrgId = sessionStorage.getItem("rootOrgId");
+    const defaultFramework = localStorage.getItem("defaultFramework");
     // Headers
     const headers = {
       "Content-Type": "application/json",
@@ -117,11 +132,11 @@ const CategoryPage = () => {
       setChannelData(response.data.result);
     } catch (error) {
       console.log("error---", error);
-      setError(error.message);
+      showErrorMessage("Failed to fetch data. Please try again.");
     } finally {
     }
     try {
-      const url = `${urlConfig.URLS.PUBLIC_PREFIX}${urlConfig.URLS.FRAMEWORK.READ}/nulp?orgdetails=${appConfig.ContentPlayer.contentApiQueryParams}`;
+      const url = `${urlConfig.URLS.PUBLIC_PREFIX}${urlConfig.URLS.FRAMEWORK.READ}/${defaultFramework}?orgdetails=${appConfig.ContentPlayer.contentApiQueryParams}`;
 
       const response = await frameworkService.getSelectedFrameworkCategories(
         url,
@@ -144,7 +159,7 @@ const CategoryPage = () => {
       setDomain(response.data.result.framework.categories[0].terms);
     } catch (error) {
       console.log("nulp--  error-", error);
-      setError(error.message);
+      showErrorMessage("Failed to fetch data. Please try again.");
     } finally {
       console.log("nulp finally---");
     }
@@ -176,6 +191,7 @@ const CategoryPage = () => {
   return (
     <>
       <Header />
+      {toasterMessage && <ToasterCommon response={toasterMessage} />}
       {domain && (
         <DomainCarousel onSelectDomain={handleDomainFilter} domains={domain} />
       )}

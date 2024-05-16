@@ -16,20 +16,30 @@ import NoResult from "pages/content/noResultFound";
 import Alert from "@mui/material/Alert";
 import appConfig from "../../configs/appConfig.json";
 const urlConfig = require("../../configs/urlConfig.json");
+import ToasterCommon from "../ToasterCommon";
 
 const LearningHistory = () => {
   const { t } = useTranslation();
   const [courseData, setCourseData] = useState(null);
   const [selectedStatus, setSelectedStatus] = useState(null);
   const [error, setError] = useState(null);
+  const [toasterOpen, setToasterOpen] = useState(false);
+  const [toasterMessage, setToasterMessage] = useState("");
+
+  const showErrorMessage = (msg) => {
+    setToasterMessage(msg);
+    setTimeout(() => {
+      setToasterMessage("");
+    }, 2000);
+    setToasterOpen(true);
+  };
+  const _userId = util.userId();
 
   useEffect(() => {
     const fetchData = async () => {
       setError(null);
       try {
-        const _userId = util.userId();
-        const url = `${urlConfig.URLS.LEARNER_PREFIX}${urlConfig.URLS.COURSE.GET_ENROLLED_COURSES}/${_userId}?orgdetails=${appConfig.ContentPlayer.contentApiQueryParams}&fields=${urlConfig.params.objectCategory.fields}&batchDetails=${urlConfig.params.enrolledCourses.batchDetails}`;
-
+        const url = `${urlConfig.URLS.LEARNER_PREFIX}${urlConfig.URLS.COURSE.GET_ENROLLED_COURSES}/${_userId}?orgdetails=${appConfig.Course.contentApiQueryParams.orgdetails}&licenseDetails=${appConfig.Course.contentApiQueryParams.licenseDetails}&fields=${urlConfig.params.enrolledCourses.fields}&batchDetails=${urlConfig.params.enrolledCourses.batchDetails}`;
         const response = await fetch(url, {
           headers: {
             "Content-Type": "application/json",
@@ -39,7 +49,7 @@ const LearningHistory = () => {
         setCourseData(data);
       } catch (error) {
         console.error("Error fetching user data:", error);
-        setError(error.message);
+        showErrorMessage("Failed to fetch data. Please try again.");
       }
     };
     fetchData();
@@ -56,6 +66,7 @@ const LearningHistory = () => {
   return (
     <div>
       <Header />
+      {toasterMessage && <ToasterCommon response={toasterMessage} />}
       <Container maxWidth="xl" role="main" className="container-pb">
         {error && (
           <Alert severity="error" className="my-10">

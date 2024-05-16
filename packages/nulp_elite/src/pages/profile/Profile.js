@@ -28,6 +28,7 @@ import _ from "lodash";
 import Modal from "@mui/material/Modal";
 const designations = require("../../configs/designations.json");
 const urlConfig = require("../../configs/urlConfig.json");
+import ToasterCommon from "../ToasterCommon";
 
 import {
   Button,
@@ -97,6 +98,17 @@ const Profile = () => {
   const [load, setLoad] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState(null);
+  const [toasterOpen, setToasterOpen] = useState(false);
+  const [toasterMessage, setToasterMessage] = useState("");
+  const [rootOrgId, setRootOrgId] = useState();
+
+  const showErrorMessage = (msg) => {
+    setToasterMessage(msg);
+    setTimeout(() => {
+      setToasterMessage("");
+    }, 2000);
+    setToasterOpen(true);
+  };
 
   useEffect(() => {
     setTimeout(() => {
@@ -104,6 +116,7 @@ const Profile = () => {
     }, DELAY);
     setDesignationsList(designations);
   }, []);
+
   useEffect(() => {
     if (userData?.result?.response && userInfo) {
       setEditedUserInfo({
@@ -137,6 +150,7 @@ const Profile = () => {
         });
       } catch (error) {
         console.error("Error fetching certificate count:", error);
+        showErrorMessage("Failed to fetch data. Please try again.");
       }
     };
 
@@ -152,6 +166,7 @@ const Profile = () => {
         });
       } catch (error) {
         console.error(error);
+        showErrorMessage("Failed to fetch data. Please try again.");
       }
     };
     const fetchUserInfo = async () => {
@@ -167,10 +182,10 @@ const Profile = () => {
             },
           }
         );
-
         setUserInfo(response?.data?.result);
       } catch (error) {
         console.error(error);
+        showErrorMessage("Failed to fetch data. Please try again.");
       }
     };
 
@@ -178,7 +193,37 @@ const Profile = () => {
     fetchCertificateCount();
     fetchCourseCount();
     fetchUserInfo();
+    fetchUserDataAndSetCustodianOrgData();
   }, []);
+
+  const fetchUserDataAndSetCustodianOrgData = async () => {
+    try {
+      const url = `${urlConfig.URLS.LEARNER_PREFIX}${urlConfig.URLS.SYSTEM_SETTING.CUSTODIAN_ORG}`;
+      const response = await fetch(url);
+      if (!response.ok) {
+        throw new Error("Failed to fetch custodian organization ID");
+      }
+      const data = await response.json();
+      const custodianOrgId = data?.result?.response?.value;
+      const rootOrgId = sessionStorage.getItem("rootOrgId");
+
+      if (custodianOrgId === rootOrgId) {
+        const url = `${urlConfig.URLS.PUBLIC_PREFIX}${urlConfig.URLS.CHANNEL.READ}/${custodianOrgId}`;
+        const response = await fetch(url);
+        const data = await response.json();
+        const defaultFramework = data?.result?.channel?.defaultFramework;
+        localStorage.setItem("defaultFramework", defaultFramework);
+      } else {
+        const url = `${urlConfig.URLS.PUBLIC_PREFIX}${urlConfig.URLS.CHANNEL.READ}/${rootOrgId}`;
+        const response = await fetch(url);
+        const data = await response.json();
+        const defaultFramework = data?.result?.channel?.defaultFramework;
+        localStorage.setItem("defaultFramework", defaultFramework);
+      }
+    } catch (error) {
+      console.error("Error fetching user data:", error);
+    }
+  };
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -225,7 +270,7 @@ const Profile = () => {
       await updateUserInfoInCustomDB();
       console.log("responseData", responseData);
     } catch (error) {
-      setError(error.message);
+      showErrorMessage("Failed to fetch data. Please try again.");
     } finally {
       setIsLoading(false);
     }
@@ -243,9 +288,9 @@ const Profile = () => {
       const url = `${urlConfig.URLS.POFILE_PAGE.USER_UPDATE}?user_id=${_userId}`;
       const response = await fetch(url, {
         method: "PUT",
-        headers: {
-          "Content-Type": "application/json",
-        },
+        // headers: {
+        //   "Content-Type": "application/json",
+        // },
         body: JSON.stringify(requestBody),
       });
 
@@ -255,7 +300,7 @@ const Profile = () => {
 
       const data = await response.json();
     } catch (error) {
-      setError(error.message);
+      showErrorMessage("Failed to fetch data. Please try again.");
     } finally {
       setIsLoading(false);
     }
@@ -276,18 +321,22 @@ const Profile = () => {
 
       const header = "application/json";
       const response = await fetch(url, {
-        headers: {
-          "Content-Type": "application/json",
-        },
+        // headers: {
+        //   "Content-Type": "application/json",
+        // },
       });
       const data = await response.json();
       setUserData(data);
-      localStorage.setItem("userRootOrgId", data.result.response.rootOrgId);
+      const rootOrgId = data.result.response.rootOrgId;
+      sessionStorage.setItem("rootOrgId", rootOrgId);
+      setRootOrgId(rootOrgId);
+      console.log("rootOrgId", rootOrgId);
       if (_.isEmpty(data?.result?.response.framework)) {
         setOpenModal(true);
       }
     } catch (error) {
       console.error("Error fetching user data:", error);
+      showErrorMessage("Failed to fetch data. Please try again.");
     }
   };
 
@@ -319,6 +368,7 @@ const Profile = () => {
   return (
     <div>
       <Header />
+      {toasterMessage && <ToasterCommon response={toasterMessage} />}
       <Box sx={{ background: "#2D2D2D", padding: "20px" }} className="xs-hide">
         <p
           style={{
@@ -392,7 +442,7 @@ const Profile = () => {
                     <Box sx={style}>
                       <Typography
                         id="modal-modal-title"
-                        variant="h6"
+                        variant="h5"
                         component="h2"
                         style={{ marginBottom: "20px" }}
                       >
@@ -514,14 +564,8 @@ const Profile = () => {
                           </Typography>
                         </Box>
 
-                        <Box
-                          pt={4}
-                          style={{
-                            display: "flex",
-                            justifyContent: "space-between",
-                          }}
-                        >
-                          <Button className="btn-primary" type="submit">
+                        <Box pt={4}>
+                          <Button className="custom-btn-primary" type="submit">
                             {t("SAVE")}
                           </Button>
 
@@ -784,7 +828,7 @@ const Profile = () => {
                   <Box sx={style}>
                     <Typography
                       id="modal-modal-title"
-                      variant="h6"
+                      variant="h5"
                       component="h2"
                       style={{ marginBottom: "20px" }}
                     >

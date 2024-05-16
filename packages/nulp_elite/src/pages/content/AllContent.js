@@ -20,6 +20,7 @@ import { t } from "i18next";
 import Alert from "@mui/material/Alert";
 import appConfig from "../../configs/appConfig.json";
 const urlConfig = require("../../configs/urlConfig.json");
+import ToasterCommon from "../ToasterCommon";
 
 const responsive = {
   superLargeDesktop: {
@@ -51,6 +52,8 @@ const AllContent = () => {
   const [isMobile, setIsMobile] = useState(window.innerWidth <= 767);
   const [itemsArray, setItemsArray] = useState([]);
   const navigate = useNavigate();
+  const [toasterOpen, setToasterOpen] = useState(false);
+  const [toasterMessage, setToasterMessage] = useState("");
 
   const handleResize = () => {
     setIsMobile(window.innerWidth <= 767);
@@ -70,6 +73,14 @@ const AllContent = () => {
     fetchData();
     fetchDomains();
   }, []);
+
+  const showErrorMessage = (msg) => {
+    setToasterMessage(msg);
+    setTimeout(() => {
+      setToasterMessage("");
+    }, 2000);
+    setToasterOpen(true);
+  };
 
   const fetchData = async () => {
     setError(null);
@@ -160,7 +171,7 @@ const AllContent = () => {
       });
       setData(sortedData);
     } catch (error) {
-      setError(error.message);
+      showErrorMessage("Failed to fetch data. Please try again.");
     }
   };
   const getCookieValue = (name) => {
@@ -177,30 +188,32 @@ const AllContent = () => {
 
   const fetchDomains = async () => {
     setError(null);
+    const rootOrgId = sessionStorage.getItem("rootOrgId");
+    const defaultFramework = localStorage.getItem("defaultFramework");
     // Headers
     const headers = {
       "Content-Type": "application/json",
       Cookie: `connect.sid=${getCookieValue("connect.sid")}`,
     };
     try {
-      const url = `${urlConfig.URLS.PUBLIC_PREFIX}${urlConfig.URLS.CHANNEL.READ}/0130701891041689600`;
+      const url = `${urlConfig.URLS.PUBLIC_PREFIX}${urlConfig.URLS.CHANNEL.READ}/${rootOrgId}`;
       const response = await frameworkService.getChannel(url, headers);
       // console.log("channel---",response.data.result);
       setChannelData(response.data.result);
     } catch (error) {
       console.log("error---", error);
-      setError(error.message);
+      showErrorMessage("Failed to fetch data. Please try again.");
     } finally {
     }
     try {
-      const url = `${urlConfig.URLS.PUBLIC_PREFIX}${urlConfig.URLS.FRAMEWORK.READ}/nulp?categories=${appConfig.ContentPlayer.contentApiQueryParams}`;
+      const url = `${urlConfig.URLS.PUBLIC_PREFIX}${urlConfig.URLS.FRAMEWORK.READ}/${defaultFramework}?categories=${urlConfig.params.framework}`;
 
       const response = await frameworkService.getSelectedFrameworkCategories(
         url,
         headers
       );
 
-      response.data.result.framework.categories[0].terms.map((term) => {
+      response.data.result.framework.categories[0].terms?.map((term) => {
         if (domainWithImage) {
           domainWithImage.result.form.data.fields.map((imgItem) => {
             if ((term && term.code) === (imgItem && imgItem.code)) {
@@ -214,7 +227,7 @@ const AllContent = () => {
       setDomain(response.data.result.framework.categories[0].terms);
     } catch (error) {
       console.log("nulp--  error-", error);
-      setError(error.message);
+      showErrorMessage("Failed to fetch data. Please try again.");
     } finally {
       console.log("nulp finally---");
     }
@@ -253,7 +266,8 @@ const AllContent = () => {
   return (
     <>
       <Header />
-      <Box sx={{ background: "#2D2D2D", padding: "20px" }} className="xs-hide">
+      {toasterMessage && <ToasterCommon response={toasterMessage} />}
+      {/* <Box sx={{ background: "#2D2D2D", padding: "20px" }} className="xs-hide">
         <p
           style={{
             fontSize: "20px",
@@ -277,13 +291,33 @@ const AllContent = () => {
           {t("LEARN_FROM_WELL_CURATED")}
         </p>
         <SearchBox onSearch={handleSearch} />
-      </Box>
-      <Box sx={{ fontWeight: "600", fontSize: "16px", padding: "10px" }}>
+      </Box>  */}
+      {/* <Box sx={{ fontWeight: "600", fontSize: "16px", padding: "10px" }}>
         {t("FILTER_BY_POPULAR_DOMAIN")}
-      </Box>
+      </Box> */}
       {domain && (
-        <DomainCarousel onSelectDomain={handleDomainFilter} domains={domain} />
-      )}
+   
+        <Carousel
+          swipeable={false}
+          draggable={false}
+          showDots={true}
+          responsive={responsive}
+          ssr={true}
+          infinite={true}
+          autoPlaySpeed={1000}
+          keyBoardControl={true}
+          customTransition="all .5"
+          transitionDuration={500}
+          containerClass="carousel-container"
+          removeArrowOnDeviceType={["tablet", "mobile"]}
+          dotListClass="custom-dot-list-style"
+          itemClass="carousel-item-padding-40-px"
+        >
+          <DomainCarousel onSelectDomain={handleDomainFilter} domains={domain} />
+        </Carousel>
+                      
+  )}
+
 
       <Container maxWidth="xxl" role="main" className="container-pb">
         {error && (
@@ -308,14 +342,13 @@ const AllContent = () => {
                 <Box
                   style={{
                     display: "inline-block",
-                    fontSize: "14px",
-                    color: "#1E1E1E",
+                    fontSize: "18px",
+                    color: "#484848",
                   }}
                 >
                   <SummarizeOutlinedIcon style={{ verticalAlign: "top" }} />{" "}
                   <Box
                     style={{
-                      borderBottom: "solid 2px #000",
                       display: "inline-block",
                     }}
                   >
@@ -325,12 +358,7 @@ const AllContent = () => {
                 {items?.length > 4 && (
                   <Link
                     to={`/view-all/${category}`}
-                    style={{
-                      color: "#424242",
-                      fontSize: "12px",
-                      textAlign: "right",
-                      fontWeight: "600",
-                    }}
+                   className="viewAll"
                   >
                     {t("VIEW_ALL")}
                   </Link>
@@ -368,7 +396,7 @@ const AllContent = () => {
                         </Grid>
                       ))
                     : items.slice(0, 4).map((item) => (
-                        <Grid item xs={12} md={6} lg={3} key={item.id}>
+                        <Grid item xs={12} md={6} lg={5} key={item.id}>
                           <BoxCard
                             items={item}
                             onClick={() =>
