@@ -79,7 +79,7 @@ const SelectPreference = ({ isOpen, onClose }) => {
         console.log("Raw API response:", data);
         const custodianOrgId = data?.result?.response?.value;
         setCustodianOrgId(custodianOrgId);
-        setUserRootOrgId(localStorage.getItem("userRootOrgId"));
+        // setUserRootOrgId(localStorage.getItem("userRootOrgId"));
         const rootOrgId = localStorage.getItem("userRootOrgId");
         if (custodianOrgId === rootOrgId) {
           const url = `${urlConfig.URLS.PUBLIC_PREFIX}${urlConfig.URLS.CHANNEL.READ}/${custodianOrgId}`;
