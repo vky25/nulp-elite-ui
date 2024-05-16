@@ -97,10 +97,7 @@ const SelectPreference = ({ isOpen, onClose }) => {
         }
       } catch (error) {
         console.error("Error fetching user data:", error);
-        setToasterMessage(" Failed to fetch data. Please try again.");
-        setTimeout(() => {
-          setToasterMessage("");
-        }, 2000);
+        showErrorMessage(t("FAILED_TO_FETCH_DATA"));
         setToasterOpen(true);
       }
     };
@@ -153,8 +150,8 @@ const SelectPreference = ({ isOpen, onClose }) => {
       });
 
       if (!response.ok) {
-        showErrorMessage("Failed to fetch data. Please try again.");
-        throw new Error("Failed to fetch data");
+        showErrorMessage(t("FAILED_TO_FETCH_DATA"));
+        throw new Error(t("FAILED_TO_FETCH_DATA"));
       }
 
       const data = await response.json();
@@ -170,7 +167,7 @@ const SelectPreference = ({ isOpen, onClose }) => {
       setLanguage(data?.result?.framework?.categories[3]?.name);
     } catch (error) {
       console.error("Error fetching data:", error);
-      showErrorMessage("Failed to fetch data. Please try again.");
+      showErrorMessage(t("FAILED_TO_FETCH_DATA"));
     } finally {
       setIsLoading(false);
     }
@@ -190,8 +187,8 @@ const SelectPreference = ({ isOpen, onClose }) => {
       });
 
       if (!response.ok) {
-        showErrorMessage("Failed to fetch data. Please try again.");
-        throw new Error("Failed to fetch data");
+        showErrorMessage(t("FAILED_TO_FETCH_DATA"));
+        throw new Error(t("FAILED_TO_FETCH_DATA"));
       }
 
       const responseData = await response.json();
@@ -257,8 +254,8 @@ const SelectPreference = ({ isOpen, onClose }) => {
       });
 
       if (!response.ok) {
-        showErrorMessage("Failed to fetch data. Please try again.");
-        throw new Error("Failed to fetch data");
+        showErrorMessage(t("FAILED_TO_FETCH_DATA"));
+        throw new Error(t("FAILED_TO_FETCH_DATA"));
       }
 
       const responseData = await response.json();

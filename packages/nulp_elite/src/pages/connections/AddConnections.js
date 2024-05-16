@@ -138,8 +138,8 @@ const AddConnections = () => {
       });
 
       if (!response.ok) {
-        showErrorMessage("Failed to fetch data. Please try again.");
-        throw new Error("Failed to get chat");
+        showErrorMessage(t("FAILED_TO_FETCH_CHAT"));
+        throw new Error(t("FAILED_TO_FETCH_CHAT"));
       }
 
       const responseData = await response.json();
@@ -147,10 +147,7 @@ const AddConnections = () => {
       return responseData.result;
     } catch (error) {
       console.error("Error fetching data:", error);
-
-      showErrorMessage("Failed to fetch data. Please try again.");
-
-      // Open the toaster
+      showErrorMessage(t("FAILED_TO_FETCH_CHAT"));
     } finally {
       setIsLoading(false);
     }
@@ -179,17 +176,15 @@ const AddConnections = () => {
       });
 
       if (!response.ok) {
-        showErrorMessage("Failed to fetch data. Please try again.");
-        throw new Error("Failed to get chat");
+        showErrorMessage(t("FAILED_TO_FETCH_CHAT"));
+        throw new Error(t("FAILED_TO_FETCH_CHAT"));
       }
 
       const responseData = await response.json();
       console.log("getChatRequest", responseData.result);
       return responseData.result;
     } catch (error) {
-      showErrorMessage("Failed to fetch data. Please try again.");
-
-      // Open the toaster
+      showErrorMessage(t("FAILED_TO_FETCH_CHAT"));
     } finally {
       setIsLoading(false);
     }
@@ -285,8 +280,8 @@ const AddConnections = () => {
       });
 
       if (!response.ok) {
-        showErrorMessage("Failed to fetch data. Please try again.");
-        throw new Error("Failed to fetch data");
+        showErrorMessage(t("FAILED_TO_FETCH_DATA"));
+        throw new Error(t("FAILED_TO_FETCH_DATA"));
       }
 
       let responseData = await response.json();
@@ -326,8 +321,7 @@ const AddConnections = () => {
       setUserFilter(responseUserData);
       console.log("responseSearchData", responseData);
     } catch (error) {
-      showErrorMessage("Failed to fetch data. Please try again.");
-      // Open the toaster
+      showErrorMessage(t("FAILED_TO_FETCH_DATA"));
     } finally {
       setIsLoading(false);
     }
@@ -360,8 +354,8 @@ const AddConnections = () => {
       });
 
       if (!response.ok) {
-        showErrorMessage("Failed to fetch data. Please try again.");
-        throw new Error("Failed to fetch data");
+        showErrorMessage(t("FAILED_TO_FETCH_DATA"));
+        throw new Error(t("FAILED_TO_FETCH_DATA"));
       }
 
       let responseData = await response.json();
@@ -379,7 +373,7 @@ const AddConnections = () => {
       setUserQuerySearchData(content);
     } catch (error) {
       console.error("Error fetching data:", error);
-      showErrorMessage("Failed to fetch data. Please try again.");
+      showErrorMessage(t("FAILED_TO_FETCH_DATA"));
     } finally {
       setIsLoading(false);
     }
@@ -399,7 +393,7 @@ const AddConnections = () => {
       setShowModal(true);
     } catch (error) {
       console.error("Error sending chat request:", error);
-      showErrorMessage("Failed to fetch data. Please try again.");
+      showErrorMessage(t("FAILED_TO_FETCH_DATA"));
     }
   };
 
@@ -429,8 +423,8 @@ const AddConnections = () => {
       });
 
       if (!response.ok) {
-        showErrorMessage("Failed to fetch data. Please try again.");
-        throw new Error("Failed to get connected user chat");
+        showErrorMessage(t("FAILED_TO_FETCH_CHAT"));
+        throw new Error(t("FAILED_TO_FETCH_CHAT"));
       }
       setInvitationReceivedUserByIds([]);
       setInvitationAcceptedUsers([]);
@@ -468,9 +462,7 @@ const AddConnections = () => {
     } catch (error) {
       console.error("Error fetching data:", error);
 
-      showErrorMessage("Failed to fetch data. Please try again.");
-
-      // Open the toaster
+      showErrorMessage(t("FAILED_TO_FETCH_CHAT"));
     } finally {
       setIsLoading(false);
     }
@@ -504,8 +496,8 @@ const AddConnections = () => {
       });
 
       if (!response.ok) {
-        showErrorMessage("Failed to fetch data. Please try again.");
-        throw new Error("Failed to search data");
+        showErrorMessage(t("FAILED_TO_FETCH_DATA"));
+        throw new Error(t("FAILED_TO_FETCH_DATA"));
       }
 
       const responseData = await response.json();
@@ -528,7 +520,7 @@ const AddConnections = () => {
       );
     } catch (error) {
       console.error("Error fetching data:", error);
-      showErrorMessage("Failed to fetch data. Please try again.");
+      showErrorMessage(t("FAILED_TO_FETCH_DATA"));
     } finally {
       setIsLoading(false);
     }
@@ -563,8 +555,8 @@ const AddConnections = () => {
       });
 
       if (!response.ok) {
-        showErrorMessage("Failed to fetch data. Please try again.");
-        throw new Error("Failed to search data");
+        showErrorMessage(t("FAILED_TO_FETCH_DATA"));
+        throw new Error(t("FAILED_TO_FETCH_DATA"));
       }
 
       const responseData = await response.json();
@@ -598,9 +590,7 @@ const AddConnections = () => {
         responseData.result.response.content
       );
     } catch (error) {
-      showErrorMessage("Failed to fetch data. Please try again.");
-
-      // Open the toaster
+      showErrorMessage(t("FAILED_TO_FETCH_DATA"));
     } finally {
       setIsLoading(false);
     }
@@ -630,8 +620,8 @@ const AddConnections = () => {
       });
 
       if (!response.ok) {
-        showErrorMessage("Failed to fetch data. Please try again.");
-        throw new Error("Failed to search data");
+        showErrorMessage(t("FAILED_TO_FETCH_DATA"));
+        throw new Error(t("FAILED_TO_FETCH_DATA"));
       }
 
       const responseData = await response.json();
@@ -665,9 +655,7 @@ const AddConnections = () => {
         responseData.result.response.content
       );
     } catch (error) {
-      showErrorMessage("Failed to fetch data. Please try again.");
-
-      // Open the toaster
+      showErrorMessage(t("FAILED_TO_FETCH_DATA"));
     } finally {
       setIsLoading(false);
     }
@@ -731,17 +719,15 @@ const AddConnections = () => {
         body: JSON.stringify(requestBody),
       });
       if (!response.ok) {
-        showErrorMessage("Failed to fetch data. Please try again.");
-        throw new Error("Failed to accept chat");
+        showErrorMessage(t("FAILED_TO_FETCH_DATA"));
+        throw new Error(t("FAILED_TO_FETCH_DATA"));
       }
 
       const responseData = await response.json();
       console.log("acceptChatInvitation", responseData.result);
       onMyConnection();
     } catch (error) {
-      showErrorMessage("Failed to fetch data. Please try again.");
-
-      // Open the toaster
+      showErrorMessage(t("FAILED_TO_FETCH_DATA"));
     } finally {
       setIsLoading(false);
     }
@@ -765,8 +751,8 @@ const AddConnections = () => {
         body: JSON.stringify(requestBody),
       });
       if (!response.ok) {
-        showErrorMessage("Failed to fetch data. Please try again.");
-        throw new Error("Failed to block chat");
+        showErrorMessage(t("FAILED_TO_FETCH_DATA"));
+        throw new Error(t("FAILED_TO_FETCH_DATA"));
       }
 
       const responseData = await response.json();
@@ -774,10 +760,7 @@ const AddConnections = () => {
       onMyConnection();
     } catch (error) {
       console.error("Error fetching data:", error);
-
-      showErrorMessage("Failed to fetch data. Please try again.");
-
-      // Open the toaster
+      showErrorMessage(t("FAILED_TO_FETCH_DATA"));
     } finally {
       setIsLoading(false);
     }
@@ -806,8 +789,8 @@ const AddConnections = () => {
       });
 
       if (!response.ok) {
-        showErrorMessage("Failed to fetch data. Please try again.");
-        throw new Error("Failed to get user chat");
+        showErrorMessage(t("FAILED_TO_FETCH_CHAT"));
+        throw new Error(t("FAILED_TO_FETCH_CHAT"));
       }
 
       const responseData = await response.json();
@@ -821,7 +804,7 @@ const AddConnections = () => {
     } catch (error) {
       console.error("Error fetching data:", error);
 
-      showErrorMessage("Failed to fetch data. Please try again.");
+      showErrorMessage(t("FAILED_TO_FETCH_CHAT"));
 
       // Open the toaster
     } finally {
@@ -852,17 +835,14 @@ const AddConnections = () => {
       });
 
       if (!response.ok) {
-        showErrorMessage("Failed to fetch data. Please try again.");
-        throw new Error("Failed to send chat");
+        showErrorMessage(t("FAILED_TO_FETCH_DATA"));
+        throw new Error(t("FAILED_TO_FETCH_DATA"));
       }
       setSelectedUser("");
       console.log("sentChatRequest", response);
     } catch (error) {
       console.error("Error fetching data:", error);
-
-      showErrorMessage("Failed to fetch data. Please try again.");
-
-      // Open the toaster
+      showErrorMessage(t("FAILED_TO_FETCH_DATA"));
     } finally {
       setIsLoading(false);
     }
@@ -951,7 +931,7 @@ const AddConnections = () => {
       setUserInfo(response.data.result);
       return response.data.result[0] || {};
     } catch (error) {
-      showErrorMessage("Failed to fetch data. Please try again.");
+      showErrorMessage(t("FAILED_TO_FETCH_DATA"));
       console.error(error);
     }
   };
@@ -1008,7 +988,7 @@ const AddConnections = () => {
       return newIds;
     } catch (error) {
       console.error(error);
-      showErrorMessage("Failed to fetch data. Please try again.");
+      showErrorMessage(t("FAILED_TO_FETCH_DATA"));
     }
   };
 
@@ -1039,8 +1019,8 @@ const AddConnections = () => {
       });
 
       if (!response.ok) {
-        showErrorMessage("Failed to fetch data. Please try again.");
-        throw new Error("Failed to fetch data");
+        showErrorMessage(t("FAILED_TO_FETCH_DATA"));
+        throw new Error(t("FAILED_TO_FETCH_DATA"));
       }
 
       let responseData = await response.json();
@@ -1060,7 +1040,7 @@ const AddConnections = () => {
       setUserSearchData(responseUserData);
       return responseUserData;
     } catch (error) {
-      showErrorMessage("Failed to fetch data. Please try again.");
+      showErrorMessage(t("FAILED_TO_FETCH_DATA"));
     } finally {
       setIsLoading(false);
     }

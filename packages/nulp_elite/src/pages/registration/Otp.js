@@ -132,15 +132,15 @@ const Otp = () => {
       });
 
       if (!response.ok) {
-        showErrorMessage("Failed to fetch data. Please try again.");
-        throw new Error("Failed to verify OTP");
+        showErrorMessage(t("FAILED_TO_VERIFY_OTP"));
+        throw new Error(t("FAILED_TO_VERIFY_OTP"));
       }
 
       const data = await response.json();
       await signupUser(data.reqData);
       acceptTermsAndConditions();
     } catch (error) {
-      showErrorMessage("Failed to fetch data. Please try again.");
+      showErrorMessage(t("FAILED_TO_VERIFY_OTP"));
     } finally {
       setIsLoading(false);
     }
@@ -176,15 +176,15 @@ const Otp = () => {
       });
 
       if (!response.ok) {
-        showErrorMessage("Failed to fetch data. Please try again.");
-        throw new Error("Failed to signup");
+        showErrorMessage(t("FAILED_TO_SIGNUP"));
+        throw new Error(t("FAILED_TO_SIGNUP"));
       }
 
       const data = await response.json();
       await saveUserInfoInCustomDB(data.result.userId);
       setGoToOtp(true);
     } catch (error) {
-      showErrorMessage("Failed to fetch data. Please try again.");
+      showErrorMessage(t("FAILED_TO_SIGNUP"));
     } finally {
       setIsLoading(false);
     }
@@ -211,13 +211,13 @@ const Otp = () => {
       });
 
       if (!response.ok) {
-        showErrorMessage("Failed to fetch data. Please try again.");
-        throw new Error("Failed to save user data in custom DB");
+        showErrorMessage(t("FAILED_TO_FETCH_DATA"));
+        throw new Error(t("FAILED_TO_FETCH_DATA"));
       }
 
       const data = await response.json();
     } catch (error) {
-      showErrorMessage("Failed to fetch data. Please try again.");
+      showErrorMessage(t("FAILED_TO_FETCH_DATA"));
     } finally {
       setIsLoading(false);
     }
@@ -241,14 +241,14 @@ const Otp = () => {
       });
 
       if (!response.ok) {
-        showErrorMessage("Failed to fetch data. Please try again.");
-        throw new Error("Failed to verify terms&condition");
+        showErrorMessage(t("FAILED_TO_FETCH_DATA"));
+        throw new Error(t("FAILED_TO_FETCH_DATA"));
       }
 
       const data = response.data;
       console.log("acceptTermsAndConditionsresponse:", data.result);
     } catch (error) {
-      showErrorMessage("Failed to fetch data. Please try again.");
+      showErrorMessage(t("FAILED_TO_FETCH_DATA"));
     } finally {
       setIsLoading(false);
     }
@@ -271,14 +271,14 @@ const Otp = () => {
       });
 
       if (response.status !== 200) {
-        showErrorMessage("Failed to fetch data. Please try again.");
-        throw new Error("Failed to resend OTP");
+        showErrorMessage(t("FAILED_TO_VERIFY_OTP"));
+        throw new Error(t("FAILED_TO_VERIFY_OTP"));
       }
 
       const data = response.data;
     } catch (error) {
       console.log(error);
-      showErrorMessage("Failed to fetch data. Please try again.");
+      showErrorMessage(t("FAILED_TO_VERIFY_OTP"));
       setIsLoading(false);
     }
   };

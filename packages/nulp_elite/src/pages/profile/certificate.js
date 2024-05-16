@@ -30,6 +30,14 @@ const Certificate = () => {
   const [toasterOpen, setToasterOpen] = useState(false);
   const [toasterMessage, setToasterMessage] = useState("");
 
+  const showErrorMessage = (msg) => {
+    setToasterMessage(msg);
+    setTimeout(() => {
+      setToasterMessage("");
+    }, 2000);
+    setToasterOpen(true);
+  };
+
   useEffect(() => {
     const fetchData = async () => {
       setError(null);
@@ -62,11 +70,7 @@ const Certificate = () => {
         setCertData(data);
       } catch (error) {
         console.error("Error fetching user data:", error);
-        setToasterMessage(" Failed to fetch data. Please try again.");
-        setTimeout(() => {
-          setToasterMessage("");
-        }, 2000);
-        setToasterOpen(true);
+        showErrorMessage(t("FAILED_TO_FETCH_DATA"));
       }
 
       try {
@@ -82,11 +86,7 @@ const Certificate = () => {
         setOtherCertData(data);
       } catch (error) {
         console.error("Error fetching user data:", error);
-        setToasterMessage(" Failed to fetch data. Please try again.");
-        setTimeout(() => {
-          setToasterMessage("");
-        }, 2000);
-        setToasterOpen(true);
+        showErrorMessage(t("FAILED_TO_FETCH_DATA"));
       }
     };
 
