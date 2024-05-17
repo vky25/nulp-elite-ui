@@ -94,7 +94,7 @@ const DomainList = () => {
       setChannelData(response.data.result);
     } catch (error) {
       console.log("error---", error);
-      showErrorMessage("Failed to fetch data. Please try again.");
+      showErrorMessage(t("FAILED_TO_FETCH_DATA"));
     } finally {
       setIsLoading(false);
     }
@@ -122,7 +122,7 @@ const DomainList = () => {
       setData(itemsArray);
     } catch (error) {
       console.log("nulp--  error-", error);
-      showErrorMessage("Failed to fetch data. Please try again.");
+      showErrorMessage(t("FAILED_TO_FETCH_DATA"));
     } finally {
       console.log("nulp finally---");
 

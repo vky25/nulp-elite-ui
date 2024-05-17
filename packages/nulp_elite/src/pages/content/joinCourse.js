@@ -71,6 +71,14 @@ const JoinCourse = () => {
     boxShadow: 24,
     p: 4,
   };
+  const showErrorMessage = (msg) => {
+    setToasterMessage(msg);
+    setTimeout(() => {
+      setToasterMessage("");
+    }, 2000);
+    setToasterOpen(true);
+  };
+
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -81,18 +89,14 @@ const JoinCourse = () => {
           },
         });
         if (!response.ok) {
-          showErrorMessage("Failed to fetch data. Please try again.");
-          throw new Error("Failed to fetch course data");
+          showErrorMessage(t("FAILED_TO_FETCH_DATA"));
+          throw new Error(t("FAILED_TO_FETCH_DATA"));
         }
         const data = await response.json();
         setUserData(data);
       } catch (error) {
         console.error("Error fetching course data:", error);
-        setToasterMessage(" Failed to fetch data. Please try again.");
-        setTimeout(() => {
-          setToasterMessage("");
-        }, 2000);
-        setToasterOpen(true);
+        showErrorMessage(t("FAILED_TO_FETCH_DATA"));
       }
     };
 
@@ -129,11 +133,7 @@ const JoinCourse = () => {
         }
       } catch (error) {
         console.error("Error fetching batch data:", error);
-        setToasterMessage(" Failed to fetch data. Please try again.");
-        setTimeout(() => {
-          setToasterMessage("");
-        }, 2000);
-        setToasterOpen(true);
+        showErrorMessage(t("FAILED_TO_FETCH_DATA"));
       }
     };
 
@@ -142,18 +142,14 @@ const JoinCourse = () => {
         const url = `${urlConfig.URLS.LEARNER_PREFIX}${urlConfig.URLS.COURSE.GET_ENROLLED_COURSES}/${_userId}?orgdetails=${appConfig.Course.contentApiQueryParams.orgdetails}&licenseDetails=${appConfig.Course.contentApiQueryParams.licenseDetails}&fields=${urlConfig.params.enrolledCourses.fields}&batchDetails=${urlConfig.params.enrolledCourses.batchDetails}`;
         const response = await fetch(url);
         if (!response.ok) {
-          showErrorMessage("Failed to fetch data. Please try again.");
-          throw new Error("Failed to fetch user courses");
+          showErrorMessage(t("FAILED_TO_FETCH_DATA"));
+          throw new Error(t("FAILED_TO_FETCH_DATA"));
         }
         const data = await response.json();
         setUserCourseData(data.result);
       } catch (error) {
         console.error("Error while fetching courses:", error);
-        setToasterMessage(" Failed to fetch data. Please try again.");
-        setTimeout(() => {
-          setToasterMessage("");
-        }, 2000);
-        setToasterOpen(true);
+        showErrorMessage(t("FAILED_TO_FETCH_DATA"));
       }
     };
 
@@ -187,7 +183,7 @@ const JoinCourse = () => {
           setCourseProgress(data);
         } catch (error) {
           console.error("Error while fetching courses:", error);
-          showErrorMessage("Failed to fetch data. Please try again.");
+          showErrorMessage(t("FAILED_TO_FETCH_DATA"));
         }
       }
     };
@@ -262,7 +258,7 @@ const JoinCourse = () => {
       }
     } catch (error) {
       console.error("Error enrolling in the course:", error);
-      showErrorMessage("Failed to fetch data. Please try again.");
+      showErrorMessage(t("FAILED_TO_ENROLL_INTO_COURSE"));
     }
     window.location.reload();
   };
@@ -422,7 +418,7 @@ const JoinCourse = () => {
       }
     } catch (error) {
       console.error("Error enrolling in the course:", error);
-      showErrorMessage("Failed to fetch data. Please try again.");
+      showErrorMessage(t("FAILED_TO_ENROLL_INTO_COURSE"));
     }
   };
 
@@ -446,7 +442,7 @@ const JoinCourse = () => {
       }
     } catch (error) {
       console.error("Error updating consent:", error);
-      showErrorMessage("Failed to fetch data. Please try again.");
+      showErrorMessage(t("FAILED_TO_FETCH_DATA"));
     }
   };
 
@@ -464,7 +460,7 @@ const JoinCourse = () => {
       setUserInfo(data.result.response);
     } catch (error) {
       console.error("Error while getting user data:", error);
-      showErrorMessage("Failed to fetch data. Please try again.");
+      showErrorMessage(t("FAILED_TO_FETCH_DATA"));
     }
   };
 
