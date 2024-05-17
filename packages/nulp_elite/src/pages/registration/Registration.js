@@ -137,8 +137,8 @@ const Registration = () => {
         });
 
         if (!response.ok) {
-          showErrorMessage(" Email already exist. Please try again.");
-          throw new Error(" Email already exist. Please try again.");
+          showErrorMessage(t("EMAIL_ALREADY_EXIST"));
+          throw new Error(t("EMAIL_ALREADY_EXIST"));
         }
 
         const data = await response.json();
@@ -149,7 +149,7 @@ const Registration = () => {
           generateOtp(formik.values.email);
         }
       } catch (error) {
-        showErrorMessage(" Email already exist. Please try again.");
+        showErrorMessage(t("EMAIL_ALREADY_EXIST"));
       } finally {
         setIsLoading(false);
       }
@@ -179,8 +179,8 @@ const Registration = () => {
         });
 
         if (response.status !== 200) {
-          showErrorMessage(" Failed to generate OTP. Please try again.");
-          throw new Error("Failed to generate OTP");
+          showErrorMessage(t("FAILED_TO_GENERATE_OTP"));
+          throw new Error(t("FAILED_TO_GENERATE_OTP"));
         }
 
         const data = response.data;
@@ -196,7 +196,7 @@ const Registration = () => {
 
         setGoToOtp(true);
       } catch (error) {
-        setToasterMessage(" Failed to generate OTP. Please try again.");
+        showErrorMessage(t("FAILED_TO_GENERATE_OTP"));
 
         setIsLoading(false);
       }
@@ -225,18 +225,14 @@ const Registration = () => {
       });
 
       if (!response.ok) {
-        setToasterMessage("Failed to get terms and conditions");
-
-        throw new Error("Failed to get terms and conditions");
+        showErrorMessage(t("FAILED_TO_FETCH_DATA"));
+        throw new Error(t("FAILED_TO_FETCH_DATA"));
       }
-
       const data = await response.json();
       console.log("response:", data.result.response.value);
       return data.result.response.value;
     } catch (error) {
-      setToasterMessage(
-        " Failed to get terms and conditions. Please try again."
-      );
+      showErrorMessage(t("FAILED_TO_FETCH_DATA"));
     } finally {
       setIsLoading(false);
     }

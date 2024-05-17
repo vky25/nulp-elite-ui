@@ -69,7 +69,8 @@ export default function DomainCarousel({ domains ,onSelectDomain}) {
       }
     });
     const croppedArray = itemsArray.slice(0, 10);
-    setData(croppedArray);
+    setData(itemsArray);
+    
     console.log("itemsArray---",itemsArray)
     console.log("data---",data)
   }, []);

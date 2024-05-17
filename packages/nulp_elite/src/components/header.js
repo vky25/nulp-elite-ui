@@ -276,7 +276,7 @@ function Header() {
               className="xs-hide d-flex header-bg w-40"
              
             >
-              <Box className="h1-title px-10 pr-20">Explore</Box>
+              <Box className="h1-title px-10 pr-20">{t('EXPLORE')}</Box>
               <TextField
                 placeholder={t("What do you want to learn today?  ")}
                 variant="outlined"
