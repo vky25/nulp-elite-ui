@@ -68,7 +68,7 @@ const ContinueLearning = () => {
       const responseData = await response.json();
       setData(responseData.result.courses);
     } catch (error) {
-      showErrorMessage("Failed to fetch data. Please try again.");
+      showErrorMessage(t("FAILED_TO_FETCH_DATA"));
     } finally {
       setIsLoading(false);
     }

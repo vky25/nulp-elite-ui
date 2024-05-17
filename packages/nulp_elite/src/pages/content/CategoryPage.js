@@ -108,7 +108,7 @@ const CategoryPage = () => {
       const response = await getAllContents(url, data, headers);
       setData(response.data.result.content);
     } catch (error) {
-      showErrorMessage("Failed to fetch data. Please try again.");
+      showErrorMessage(t("FAILED_TO_FETCH_DATA"));
     }
   };
   // Function to push data to the array
@@ -132,7 +132,7 @@ const CategoryPage = () => {
       setChannelData(response.data.result);
     } catch (error) {
       console.log("error---", error);
-      showErrorMessage("Failed to fetch data. Please try again.");
+      showErrorMessage(t("FAILED_TO_FETCH_DATA"));
     } finally {
     }
     try {
@@ -159,7 +159,7 @@ const CategoryPage = () => {
       setDomain(response.data.result.framework.categories[0].terms);
     } catch (error) {
       console.log("nulp--  error-", error);
-      showErrorMessage("Failed to fetch data. Please try again.");
+      showErrorMessage(t("FAILED_TO_FETCH_DATA"));
     } finally {
       console.log("nulp finally---");
     }

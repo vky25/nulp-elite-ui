@@ -53,14 +53,14 @@ const FloatingChatIcon = () => {
         <HeadsetMicOutlinedIcon
           onClick={handleOpenPopover}
           style={{
-            paddingTop: "13px",
+            paddingRight: "8px",
             borderRadius: "50%",
             width: "30px", // Adjust the size as needed
             height: "3  2px", // Adjust the size as needed
            
           }}
         />
-        {t('NULP_ASSIST')}
+        {t("NULP_ASSIST")}
       </Link>
     </>
   );

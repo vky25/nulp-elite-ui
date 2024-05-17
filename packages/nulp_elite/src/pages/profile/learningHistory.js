@@ -49,7 +49,7 @@ const LearningHistory = () => {
         setCourseData(data);
       } catch (error) {
         console.error("Error fetching user data:", error);
-        showErrorMessage("Failed to fetch data. Please try again.");
+        showErrorMessage(t("FAILED_TO_FETCH_DATA"));
       }
     };
     fetchData();

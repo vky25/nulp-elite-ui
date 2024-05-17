@@ -150,7 +150,7 @@ const Message = (props) => {
       setShowUnblockOption(blockedUserId === loggedInUserId);
     } catch (error) {
       console.error("Error fetching block user status:", error);
-      showErrorMessage("Failed to fetch data. Please try again.");
+      showErrorMessage(t("FAILED_TO_BLOCK_USER"));
     }
   };
 
@@ -169,7 +169,7 @@ const Message = (props) => {
       }
     } catch (error) {
       console.error("Error fetching chats:", error);
-      showErrorMessage("Failed to fetch data. Please try again.");
+      showErrorMessage(t("FAILED_TO_FETCH_CHAT"));
     }
   };
 
@@ -199,11 +199,7 @@ const Message = (props) => {
         fetchChats(); // Fetch messages after sending a message
       } catch (error) {
         console.error("Error saving message:", error);
-        setToasterMessage(" Failed to fetch data. Please try again.");
-        setTimeout(() => {
-          setToasterMessage("");
-        }, 2000);
-        setToasterOpen(true);
+        showErrorMessage(t("FAILED_TO_SEND_CHAT"));
       }
     }
   };
@@ -229,7 +225,7 @@ const Message = (props) => {
       );
     } catch (error) {
       console.error("Error updating message:", error);
-      showErrorMessage("Failed to fetch data. Please try again.");
+      showErrorMessage(t("FAILED_TO_FETCH_DATA"));
     }
   };
 
@@ -305,7 +301,7 @@ const Message = (props) => {
       }
     } catch (error) {
       console.error("Error unblocking user:", error);
-      showErrorMessage("Failed to fetch data. Please try again.");
+      showErrorMessage(t("FAILED_TO_UNBLOCK_USER"));
     }
   };
 
@@ -335,7 +331,7 @@ const Message = (props) => {
       window.location.reload();
     } catch (error) {
       console.error("Error blocking user:", error);
-      showErrorMessage("Failed to fetch data. Please try again.");
+      showErrorMessage(t("FAILED_TO_BLOCK_USER"));
     }
     handleMenuClose(); // Close the menu after the action is completed
   };

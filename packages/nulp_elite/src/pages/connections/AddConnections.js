@@ -33,6 +33,7 @@ import Filter from "components/filter";
 const axios = require("axios");
 const designations = require("../../configs/designations.json");
 const urlConfig = require("../../configs/urlConfig.json");
+import Autocomplete from "@mui/material/Autocomplete";
 import ToasterCommon from "../ToasterCommon";
 import ForumOutlinedIcon from '@mui/icons-material/ForumOutlined';
 import Grid from "@mui/material/Grid";
@@ -102,6 +103,9 @@ const AddConnections = () => {
   const [selectedDesignation, setSelectedDesignation] = useState("");
   const [userFilter, setUserFilter] = useState("");
   const [userIds, setUserIds] = useState([]);
+  const [autocompleteOpen, setAutocompleteOpen] = useState(false);
+  const [inputValue, setInputValue] = useState("");
+  const [options, setOptions] = useState([]);
   const [toasterOpen, setToasterOpen] = useState(false);
   const [toasterMessage, setToasterMessage] = useState("");
 
@@ -136,8 +140,8 @@ const AddConnections = () => {
       });
 
       if (!response.ok) {
-        showErrorMessage("Failed to fetch data. Please try again.");
-        throw new Error("Failed to get chat");
+        showErrorMessage(t("FAILED_TO_FETCH_CHAT"));
+        throw new Error(t("FAILED_TO_FETCH_CHAT"));
       }
 
       const responseData = await response.json();
@@ -145,10 +149,7 @@ const AddConnections = () => {
       return responseData.result;
     } catch (error) {
       console.error("Error fetching data:", error);
-
-      showErrorMessage("Failed to fetch data. Please try again.");
-
-      // Open the toaster
+      showErrorMessage(t("FAILED_TO_FETCH_CHAT"));
     } finally {
       setIsLoading(false);
     }
@@ -177,17 +178,15 @@ const AddConnections = () => {
       });
 
       if (!response.ok) {
-        showErrorMessage("Failed to fetch data. Please try again.");
-        throw new Error("Failed to get chat");
+        showErrorMessage(t("FAILED_TO_FETCH_CHAT"));
+        throw new Error(t("FAILED_TO_FETCH_CHAT"));
       }
 
       const responseData = await response.json();
       console.log("getChatRequest", responseData.result);
       return responseData.result;
     } catch (error) {
-      showErrorMessage("Failed to fetch data. Please try again.");
-
-      // Open the toaster
+      showErrorMessage(t("FAILED_TO_FETCH_CHAT"));
     } finally {
       setIsLoading(false);
     }
@@ -283,8 +282,8 @@ const AddConnections = () => {
       });
 
       if (!response.ok) {
-        showErrorMessage("Failed to fetch data. Please try again.");
-        throw new Error("Failed to fetch data");
+        showErrorMessage(t("FAILED_TO_FETCH_DATA"));
+        throw new Error(t("FAILED_TO_FETCH_DATA"));
       }
 
       let responseData = await response.json();
@@ -324,8 +323,7 @@ const AddConnections = () => {
       setUserFilter(responseUserData);
       console.log("responseSearchData", responseData);
     } catch (error) {
-      showErrorMessage("Failed to fetch data. Please try again.");
-      // Open the toaster
+      showErrorMessage(t("FAILED_TO_FETCH_DATA"));
     } finally {
       setIsLoading(false);
     }
@@ -358,8 +356,8 @@ const AddConnections = () => {
       });
 
       if (!response.ok) {
-        showErrorMessage("Failed to fetch data. Please try again.");
-        throw new Error("Failed to fetch data");
+        showErrorMessage(t("FAILED_TO_FETCH_DATA"));
+        throw new Error(t("FAILED_TO_FETCH_DATA"));
       }
 
       let responseData = await response.json();
@@ -377,7 +375,7 @@ const AddConnections = () => {
       setUserQuerySearchData(content);
     } catch (error) {
       console.error("Error fetching data:", error);
-      showErrorMessage("Failed to fetch data. Please try again.");
+      showErrorMessage(t("FAILED_TO_FETCH_DATA"));
     } finally {
       setIsLoading(false);
     }
@@ -397,7 +395,7 @@ const AddConnections = () => {
       setShowModal(true);
     } catch (error) {
       console.error("Error sending chat request:", error);
-      showErrorMessage("Failed to fetch data. Please try again.");
+      showErrorMessage(t("FAILED_TO_FETCH_DATA"));
     }
   };
 
@@ -427,8 +425,8 @@ const AddConnections = () => {
       });
 
       if (!response.ok) {
-        showErrorMessage("Failed to fetch data. Please try again.");
-        throw new Error("Failed to get connected user chat");
+        showErrorMessage(t("FAILED_TO_FETCH_CHAT"));
+        throw new Error(t("FAILED_TO_FETCH_CHAT"));
       }
       setInvitationReceivedUserByIds([]);
       setInvitationAcceptedUsers([]);
@@ -466,9 +464,7 @@ const AddConnections = () => {
     } catch (error) {
       console.error("Error fetching data:", error);
 
-      showErrorMessage("Failed to fetch data. Please try again.");
-
-      // Open the toaster
+      showErrorMessage(t("FAILED_TO_FETCH_CHAT"));
     } finally {
       setIsLoading(false);
     }
@@ -502,8 +498,8 @@ const AddConnections = () => {
       });
 
       if (!response.ok) {
-        showErrorMessage("Failed to fetch data. Please try again.");
-        throw new Error("Failed to search data");
+        showErrorMessage(t("FAILED_TO_FETCH_DATA"));
+        throw new Error(t("FAILED_TO_FETCH_DATA"));
       }
 
       const responseData = await response.json();
@@ -526,7 +522,7 @@ const AddConnections = () => {
       );
     } catch (error) {
       console.error("Error fetching data:", error);
-      showErrorMessage("Failed to fetch data. Please try again.");
+      showErrorMessage(t("FAILED_TO_FETCH_DATA"));
     } finally {
       setIsLoading(false);
     }
@@ -561,8 +557,8 @@ const AddConnections = () => {
       });
 
       if (!response.ok) {
-        showErrorMessage("Failed to fetch data. Please try again.");
-        throw new Error("Failed to search data");
+        showErrorMessage(t("FAILED_TO_FETCH_DATA"));
+        throw new Error(t("FAILED_TO_FETCH_DATA"));
       }
 
       const responseData = await response.json();
@@ -596,9 +592,7 @@ const AddConnections = () => {
         responseData.result.response.content
       );
     } catch (error) {
-      showErrorMessage("Failed to fetch data. Please try again.");
-
-      // Open the toaster
+      showErrorMessage(t("FAILED_TO_FETCH_DATA"));
     } finally {
       setIsLoading(false);
     }
@@ -628,8 +622,8 @@ const AddConnections = () => {
       });
 
       if (!response.ok) {
-        showErrorMessage("Failed to fetch data. Please try again.");
-        throw new Error("Failed to search data");
+        showErrorMessage(t("FAILED_TO_FETCH_DATA"));
+        throw new Error(t("FAILED_TO_FETCH_DATA"));
       }
 
       const responseData = await response.json();
@@ -663,9 +657,7 @@ const AddConnections = () => {
         responseData.result.response.content
       );
     } catch (error) {
-      showErrorMessage("Failed to fetch data. Please try again.");
-
-      // Open the toaster
+      showErrorMessage(t("FAILED_TO_FETCH_DATA"));
     } finally {
       setIsLoading(false);
     }
@@ -729,17 +721,15 @@ const AddConnections = () => {
         body: JSON.stringify(requestBody),
       });
       if (!response.ok) {
-        showErrorMessage("Failed to fetch data. Please try again.");
-        throw new Error("Failed to accept chat");
+        showErrorMessage(t("FAILED_TO_FETCH_DATA"));
+        throw new Error(t("FAILED_TO_FETCH_DATA"));
       }
 
       const responseData = await response.json();
       console.log("acceptChatInvitation", responseData.result);
       onMyConnection();
     } catch (error) {
-      showErrorMessage("Failed to fetch data. Please try again.");
-
-      // Open the toaster
+      showErrorMessage(t("FAILED_TO_FETCH_DATA"));
     } finally {
       setIsLoading(false);
     }
@@ -763,8 +753,8 @@ const AddConnections = () => {
         body: JSON.stringify(requestBody),
       });
       if (!response.ok) {
-        showErrorMessage("Failed to fetch data. Please try again.");
-        throw new Error("Failed to block chat");
+        showErrorMessage(t("FAILED_TO_FETCH_DATA"));
+        throw new Error(t("FAILED_TO_FETCH_DATA"));
       }
 
       const responseData = await response.json();
@@ -772,10 +762,7 @@ const AddConnections = () => {
       onMyConnection();
     } catch (error) {
       console.error("Error fetching data:", error);
-
-      showErrorMessage("Failed to fetch data. Please try again.");
-
-      // Open the toaster
+      showErrorMessage(t("FAILED_TO_FETCH_DATA"));
     } finally {
       setIsLoading(false);
     }
@@ -804,8 +791,8 @@ const AddConnections = () => {
       });
 
       if (!response.ok) {
-        showErrorMessage("Failed to fetch data. Please try again.");
-        throw new Error("Failed to get user chat");
+        showErrorMessage(t("FAILED_TO_FETCH_CHAT"));
+        throw new Error(t("FAILED_TO_FETCH_CHAT"));
       }
 
       const responseData = await response.json();
@@ -819,7 +806,7 @@ const AddConnections = () => {
     } catch (error) {
       console.error("Error fetching data:", error);
 
-      showErrorMessage("Failed to fetch data. Please try again.");
+      showErrorMessage(t("FAILED_TO_FETCH_CHAT"));
 
       // Open the toaster
     } finally {
@@ -850,24 +837,21 @@ const AddConnections = () => {
       });
 
       if (!response.ok) {
-        showErrorMessage("Failed to fetch data. Please try again.");
-        throw new Error("Failed to send chat");
+        showErrorMessage(t("FAILED_TO_FETCH_DATA"));
+        throw new Error(t("FAILED_TO_FETCH_DATA"));
       }
       setSelectedUser("");
       console.log("sentChatRequest", response);
     } catch (error) {
       console.error("Error fetching data:", error);
-
-      showErrorMessage("Failed to fetch data. Please try again.");
-
-      // Open the toaster
+      showErrorMessage(t("FAILED_TO_FETCH_DATA"));
     } finally {
       setIsLoading(false);
     }
   };
 
   const onClickSearchedUser = (selectedUserId) => {
-    handlePopoverClose();
+    // handlePopoverClose();
     const allTypeOfUsers = [
       ...(invitationAcceptedUsers || []),
       ...(invitationNotAcceptedUsers || []),
@@ -949,7 +933,7 @@ const AddConnections = () => {
       setUserInfo(response.data.result);
       return response.data.result[0] || {};
     } catch (error) {
-      showErrorMessage("Failed to fetch data. Please try again.");
+      showErrorMessage(t("FAILED_TO_FETCH_DATA"));
       console.error(error);
     }
   };
@@ -1006,7 +990,7 @@ const AddConnections = () => {
       return newIds;
     } catch (error) {
       console.error(error);
-      showErrorMessage("Failed to fetch data. Please try again.");
+      showErrorMessage(t("FAILED_TO_FETCH_DATA"));
     }
   };
 
@@ -1037,8 +1021,8 @@ const AddConnections = () => {
       });
 
       if (!response.ok) {
-        showErrorMessage("Failed to fetch data. Please try again.");
-        throw new Error("Failed to fetch data");
+        showErrorMessage(t("FAILED_TO_FETCH_DATA"));
+        throw new Error(t("FAILED_TO_FETCH_DATA"));
       }
 
       let responseData = await response.json();
@@ -1058,10 +1042,73 @@ const AddConnections = () => {
       setUserSearchData(responseUserData);
       return responseUserData;
     } catch (error) {
-      showErrorMessage("Failed to fetch data. Please try again.");
+      showErrorMessage(t("FAILED_TO_FETCH_DATA"));
     } finally {
       setIsLoading(false);
     }
+  };
+
+  useEffect(() => {
+    if (!autocompleteOpen) {
+      setOptions([]);
+    }
+  }, [autocompleteOpen]);
+
+  const fetchOptions = async (searchQuery) => {
+    const requestBody = {
+      request: {
+        filters: {
+          status: "1",
+        },
+        query: searchQuery,
+        sort_by: {
+          lastUpdatedOn: "desc",
+        },
+      },
+    };
+
+    try {
+      const url = `${urlConfig.URLS.LEARNER_PREFIX}${urlConfig.URLS.ADMIN.USER_SEARCH}`;
+      const response = await fetch(url, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(requestBody),
+      });
+
+      if (!response.ok) {
+        throw new Error("Failed to fetch data");
+      }
+
+      let responseData = await response.json();
+      return responseData?.result?.response?.content || [];
+    } catch (error) {
+      console.error("Error fetching data:", error);
+      setError("Failed to fetch data. Please try again.");
+      return [];
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  const handleInputChange = async (event, newInputValue) => {
+    setInputValue(newInputValue);
+    if (newInputValue.length >= 3) {
+      const fetchedOptions = await fetchOptions(newInputValue);
+      setOptions(fetchedOptions);
+      setAutocompleteOpen(true);
+    } else {
+      setAutocompleteOpen(false);
+    }
+  };
+
+  const getOptionLabel = (option) =>
+    `${option.firstName}${option.lastName ? ` ${option.lastName}` : ""}`;
+
+  const handleOnSelectSearchedUser = (event, user) => {
+    onClickSearchedUser(user?.userId);
+    console.log("Selected Option:", user);
   };
 
   return (
@@ -1076,8 +1123,25 @@ const AddConnections = () => {
         )}
 
         <Box textAlign="center" padding="10" style={{ minHeight: "500px" }}>
-          {/* <Box>
-            <input
+          <Box>
+            <Autocomplete
+              id="autocomplete-input"
+              open={autocompleteOpen}
+              onClose={() => {
+                setAutocompleteOpen(false);
+              }}
+              options={options}
+              noOptionsText={t("NO_USERS_FOUND")}
+              getOptionLabel={getOptionLabel} // Adjust this based on your API response structure
+              getOptionKey={(option) => option.userId}
+              onChange={handleOnSelectSearchedUser}
+              inputValue={inputValue}
+              onInputChange={handleInputChange}
+              renderInput={(params) => (
+                <TextField {...params} label="Search" variant="outlined" />
+              )}
+            />
+            {/* <input
               label="Search for a user..."
               type="text"
               onChange={(e) => {
@@ -1627,6 +1691,7 @@ const AddConnections = () => {
           </Grid>
           </Grid>
          
+        </Box>
         </Box>
       </Container>
       <Footer />
