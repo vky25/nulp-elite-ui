@@ -179,5 +179,11 @@
   "BATCH_EXPIRED_MESSAGE":"You cannot enrol into this batch, as it is closed",
   "LEAVE_COURSE_CONFIRMATION_TITLE":"Batch Unenrolment",
   "LEAVE_COURSE_CONFIRMATION_MESSAGE":"Do you want to unenrol from this batch?",
-  "ENROLLMENT_SUCCESS_MESSAGE":"Couse enroled for this batch Successfully"
+  "ENROLLMENT_SUCCESS_MESSAGE":"Couse enroled for this batch Successfully",
+  "NULP_ASSIST":"NULP Assist",
+  "EXPLORE": " Explore",
+  "REQUEST_SENT":"Request Sent",
+  "START_A_CONVERSATION":"Start a conversation!",
+  "CLICK_ON_ANY_CONTACT":"Click on any contact and send them a connection request!",
+  "REASON":"Reason"
 }

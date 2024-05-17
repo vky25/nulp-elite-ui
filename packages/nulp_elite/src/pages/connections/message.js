@@ -26,6 +26,7 @@ import CheckCircleOutlineIcon from "@mui/icons-material/CheckCircleOutline";
 import Typography from "@mui/material/Typography";
 const urlConfig = require("../../configs/urlConfig.json");
 import ToasterCommon from "../ToasterCommon";
+import Modal from "@mui/material/Modal";
 
 const moment = require("moment");
 const timezone = require("moment-timezone");
@@ -35,12 +36,12 @@ const useStyles = makeStyles((theme) => ({
     flexDirection: "column",
     height: "100vh",
     overflow: "hidden",
-    background: "#fff",
+    background: "#FFF5E9",
   },
   chatHeader: {
     padding: "8px 16px",
-    backgroundColor: "#e7e9e9",
-    color: "#000",
+    backgroundColor: "#FFE6C8",
+    color: "#484848",
     display: "flex",
     alignItems: "center",
     justifyContent: "space-between",
@@ -50,32 +51,38 @@ const useStyles = makeStyles((theme) => ({
     flex: 1,
     overflowY: "auto",
     padding: "16px",
+    borderBottom: "1px solid #DDDDDD",
   },
   messageInput: {
     display: "flex",
     alignItems: "center",
     padding: "8px",
-    borderTop: "1px solid #ccc",
-    backgroundColor: "#ffffff",
+    backgroundColor: "#f9fafc",
     marginTop: "10px",
   },
   senderMessage: {
     borderRadius: "5px",
     padding: "8px",
-    margin: "15px 0",
+    margin: "25px 0",
     textAlign: "right",
-    background: "#C0E9FF",
-    color: "#212121",
+    background: "#F1FAFF",
+    color: "#484848",
+    fontSize:"16px",
+    fontWeight:"400",
+    marginLeft: "auto",
+    width: "16%",
   },
   receiverMessage: {
-    margin: "4px 0",
-    padding: "8px",
+    margin: "13px 0",
+    padding: "8px 12px",
     clear: "both",
     alignSelf: "flex-end",
     display: "table",
     borderRadius: "5px",
     color: "#212121",
-    backgroundColor: "#F1F1F1",
+    backgroundColor: "#fff",
+    fontSize:"16px",
+    fontWeight:"400"
   },
 }));
 
@@ -97,6 +104,8 @@ const Message = (props) => {
   const [showUnblockOption, setShowUnblockOption] = useState(false); // State to show/hide unblock option
   const [toasterOpen, setToasterOpen] = useState(false);
   const [toasterMessage, setToasterMessage] = useState("");
+  // const [openModal, setDialogOpen] = useState(false);
+
   const { t } = useTranslation();
   useEffect(() => {
     const _userId = util.userId();
@@ -269,6 +278,7 @@ const Message = (props) => {
   const handleBlockUser = () => {
     handleDialogOpen();
   };
+ 
   const handleUnblockUser = async () => {
     try {
       const url = `${urlConfig.URLS.DIRECT_CONNECT.UNBLOCK}`;
@@ -334,12 +344,12 @@ const Message = (props) => {
     <div className={classes.chatContainer}>
       {toasterMessage && <ToasterCommon response={toasterMessage} />}
       <div className={classes.chatHeader}>
-        <Box style={{ display: "flex" }}>
+        <Box style={{ display: "flex",alignItems:"center" }}>
           <IconButton onClick={handleGoBack}>
             <ArrowBackIcon />
           </IconButton>
           <Box
-            sx={{ fontSize: "22px", fontWeight: "600", paddingLeft: "10px" }}
+            sx={{ fontSize: "20px", fontWeight: "500", paddingLeft: "10px" ,color:"#484848"}}
           >
             <div>
               {dataStore.fullName || localStorage.getItem("chatName")}
@@ -363,37 +373,41 @@ const Message = (props) => {
           {!isBlocked && (
             <IconButton
               onClick={handleBlockUser}
-              style={{
-                paddingRight: "10px",
-                cursor: "pointer",
-                fontSize: "12px",
-              }}
+             className="block-btn"
             >
-              <BlockIcon />
+              <BlockIcon style={{fontSize:"16px",paddingRight:"8px"}}/>
               {t("BLOCK")}
             </IconButton>
           )}
           {showUnblockOption && (
             <IconButton
               onClick={handleUnblockUser}
-              style={{ paddingRight: "10px", cursor: "pointer" }}
+             className="unblock-btn"
             >
-              <BlockIcon />
+              <BlockIcon style={{fontSize:"16px",paddingRight:"8px"}}/>
               {t("UNBLOCK")}
             </IconButton>
           )}
         </Box>
       </div>
-      <Dialog open={dialogOpen} maxWidth="lg" onClose={handleDialogClose}>
-        <DialogTitle>{t("BLOCK_USER")}</DialogTitle>
-        <DialogContent>
+      <Dialog
+                    // open={open}
+                    // onClose={handleClose}
+                   
+                    open={dialogOpen}
+                    onClose={handleDialogClose}
+                  >
+       <DialogTitle> <Box className="h5-title">{t("BLOCK_USER")}</Box></DialogTitle>
+       <DialogContent>
+
+        <Box className="h5-title">Are you sure you want to block this user?</Box>
           <Box py={2}>
             <TextField
               id="reason"
               name="reason"
               label={
                 <span>
-                  Reason
+                  {t("REASON")}
                   <span style={{ color: "red", marginLeft: "2px" }}>*</span>
                 </span>
               }
@@ -404,9 +418,10 @@ const Message = (props) => {
               value={reason}
               onChange={(e) => setReason(e.target.value)}
             />
-          </Box>
-        </DialogContent>
-        <DialogActions>
+          </Box>             </DialogContent>
+          <DialogActions>
+
+
           <Button onClick={handleDialogClose} className="custom-btn-default">
             {"CANCEL"}
           </Button>
@@ -420,7 +435,9 @@ const Message = (props) => {
           >
             {"BLOCK"}
           </Button>
-        </DialogActions>
+
+          </DialogActions>
+
       </Dialog>
 
       <Alert severity="info" style={{ margin: "10px 0" }}>
@@ -451,7 +468,7 @@ const Message = (props) => {
                   justifyContent: "flex-end",
                 }}
               >
-                <div style={{ fontSize: "10px" }}>{getTime(msg.timestamp)}</div>
+                <div style={{ fontSize: "10px",color:"#484848",fontWeight:"400" }}>{getTime(msg.timestamp)}</div>
                 {msg.sender_id === loggedInUserId ? (
                   <div
                     style={{
@@ -510,16 +527,15 @@ const Message = (props) => {
               variant="outlined"
               placeholder="Type your message..."
               fullWidth
-              style={{ background: "#fff", border: "none" }}
+              className="border-none"
+              style={{ background: "#fff", border: "none",borderRadius:"5px" }}
               value={message}
               onChange={(e) => setMessage(e.target.value)}
               disabled={isBlocked} // Disable input field if user is blocked
             />
             <Button
-              variant="contained"
-              style={{ padding: "15px" }}
-              color="primary"
               onClick={sendMessage}
+              style={{color:"#484848"}}
               disabled={isBlocked} // Disable send button if user is blocked
             >
               <SendIcon />
@@ -528,6 +544,75 @@ const Message = (props) => {
         </>
       )}
     </div>
+//      <div className={classes.chatContainer}>
+//      <div className={classes.chatHeader} style={{ display: "flex",alignItems:"center" ,justifyContent:"space-between"}}>
+//        <Box  className="d-flex" style={{alignItems:"center"}}>
+//          <IconButton onClick={handleGoBack}>
+//            <ArrowBackIcon />
+//          </IconButton>
+//          <Box
+//            sx={{ fontSize: "20px", fontWeight: "500", paddingLeft: "10px" ,color:"#484848",textAlign:"left"}}
+//          >
+//            <div>
+//              <Typography
+//               className="h2-title"
+//              >
+//               Anya Gupta
+//            </Typography>
+//            <Box  className="h5-title">Content creator, commisioner</Box>
+//            </div>
+//          </Box>
+//          </Box>
+//          <Box
+//           style={{
+//             display: "flex",
+//             alignItems: "center",
+//             fontSize: "18px",
+//             cursor: "pointer",
+//           }}
+//         >
+//           {!isBlocked && (
+//             <IconButton
+//               onClick={handleBlockUser}
+//              className="block-btn"
+//             >
+//               <BlockIcon style={{fontSize:"16px",paddingRight:"8px"}}/>
+//               {t("BLOCK")}
+//             </IconButton>
+//           )}
+//           {showUnblockOption && (
+//             <IconButton
+//               onClick={handleUnblockUser}
+//              className="unblock-btn"
+//             >
+//               <BlockIcon style={{fontSize:"16px",paddingRight:"8px"}}/>
+//               {t("UNBLOCK")}
+//             </IconButton>
+//           )}
+//         </Box>
+      
+//      </div>
+//        <div className={classes.chat}>
+//         <Box className="h5-title my-15" style={{color:"#484848"}}>
+//        Anya Gupta is a manager with the department of Revenue and taxes and has actively contributed to the growth and authenticity of the knowledge curated for the betterment of the department.
+// <Box className="my-15">Connect with them to get insights on what they do or simply answers to your question!</Box>
+// </Box>
+//        </div>
+//            <TextField
+//              variant="outlined"
+//              placeholder="Hello Anya Gupta, I would like to connect with you regarding some queries i had in your course."
+//              fullWidth
+//              className="border-none"
+//              style={{ background: "#fff", border: "none",borderRadius:"5px" }}
+            
+//            />
+//            <Button
+//              style={{color:"#484848"}}
+//            >
+//              <SendIcon />
+//            </Button>
+      
+//    </div>
   );
 };
 

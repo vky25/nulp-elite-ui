@@ -18,10 +18,6 @@ import Typography from "@mui/material/Typography";
 import Search from "components/search";
 import { useLocation, Navigate } from "react-router-dom";
 import * as util from "../../services/utilService";
-import Dialog from "@material-ui/core/Dialog";
-import DialogTitle from "@material-ui/core/DialogTitle";
-import DialogContent from "@material-ui/core/DialogContent";
-import DialogActions from "@material-ui/core/DialogActions";
 import Header from "components/header";
 import Footer from "components/Footer";
 import CheckCircleOutlineIcon from "@mui/icons-material/CheckCircleOutline";
@@ -38,6 +34,8 @@ const axios = require("axios");
 const designations = require("../../configs/designations.json");
 const urlConfig = require("../../configs/urlConfig.json");
 import ToasterCommon from "../ToasterCommon";
+import ForumOutlinedIcon from '@mui/icons-material/ForumOutlined';
+import Grid from "@mui/material/Grid";
 
 // Define modal styles
 const useStyles = makeStyles((theme) => ({
@@ -1068,8 +1066,9 @@ const AddConnections = () => {
 
   return (
     <Box>
+      <Header/>
       {toasterMessage && <ToasterCommon response={toasterMessage} />}
-      <Container maxWidth="xxl" role="main" className="container-pb">
+      <Container maxWidth="xxl" role="main" className="container-pb pt-0 xs-p-0">
         {error && (
           <Alert severity="error" className="my-10">
             {error}
@@ -1077,7 +1076,7 @@ const AddConnections = () => {
         )}
 
         <Box textAlign="center" padding="10" style={{ minHeight: "500px" }}>
-          <Box>
+          {/* <Box>
             <input
               label="Search for a user..."
               type="text"
@@ -1097,7 +1096,7 @@ const AddConnections = () => {
                 border: "1px solid #CACACA",
               }}
             />
-          </Box>
+          </Box> */}
           <div>
             <Popover
               id={id}
@@ -1134,6 +1133,12 @@ const AddConnections = () => {
               </Typography>
             </Popover>
           </div>
+          <Grid container spacing={2} className="pt-8 xs-p-0">
+          <Grid item xs={12} md={4} lg={4} className="sm-p-25 left-container">
+            <Box className="d-flex my-15" style={{justifyContent:"space-between"}}>
+                  <Box className="h4-title">Connections</Box>
+                  <Button type="button" className="custom-btn-default xs-mr-10">Add New</Button>
+            </Box>
           <TabContext value={value} className="addConnection">
             <Box sx={{ borderBottom: 1, borderColor: "divider" }}>
               <TabList
@@ -1163,6 +1168,7 @@ const AddConnections = () => {
               </TabList>
             </Box>
             <TabPanel value="1" style={{ padding: "0" }}>
+              <Box className="scroll-45">
               {invitationReceiverByUser &&
                 invitationReceiverByUser.length === 0 &&
                 invitationAcceptedUsers &&
@@ -1177,7 +1183,7 @@ const AddConnections = () => {
               {invitationReceiverByUser &&
                 invitationReceiverByUser?.map((item) => (
                   <List sx={{}} style={{ color: "gray", cursor: "pointer" }}>
-                    <ListItem key={item.userId}>
+                    <ListItem key={item.userId} className="connection-tab">
                       <ListItemText
                         primary={`${item.firstName}${
                           item.lastName ? ` ${item.lastName}` : ""
@@ -1221,7 +1227,7 @@ const AddConnections = () => {
                           style={{ marginLeft: "10px" }}
                         >
                           <CheckCircleOutlineIcon
-                            style={{ fontSize: "28px" }}
+                            style={{ fontSize: "22px",color:"#484848" }}
                           />
                         </Link>
                         <span style={{ margin: "0 5px" }}></span>
@@ -1231,7 +1237,7 @@ const AddConnections = () => {
                           color="#7d7a7a"
                           onClick={() => rejectChat(item.userId)}
                         >
-                          <CancelOutlinedIcon style={{ fontSize: "28px" }} />
+                          <CancelOutlinedIcon style={{ fontSize: "22px",color:"#484848" }} />
                         </Link>
                       </div>
                     </ListItem>
@@ -1242,12 +1248,13 @@ const AddConnections = () => {
 
               {invitationAcceptedUsers &&
                 invitationAcceptedUsers?.map((item) => (
-                  <List sx={{}} style={{ color: "green", cursor: "pointer" }}>
+                  <List sx={{}} style={{ color: "green", cursor: "pointer" }} className="connection-tab">
                     <ListItem
                       component={RouterLink}
                       to={{
                         pathname: "/message",
                       }}
+                      className="bg-blue"
                     >
                       <ListItemText
                         primary={
@@ -1278,7 +1285,10 @@ const AddConnections = () => {
                           )
                         }
                       />
+
                     </ListItem>
+                    <Box className="left-bx"><custom-chip>{t('REQUEST_SENT')}</custom-chip></Box>
+
                     <Divider />
                   </List>
                 ))}
@@ -1289,6 +1299,7 @@ const AddConnections = () => {
                     sx={{}}
                     style={{ fontSize: "14px", cursor: "pointer" }}
                     onClick={() => userClick(item)}
+                    className="connection-tab"
                   >
                     <ListItem>
                       <ListItemText
@@ -1353,17 +1364,19 @@ const AddConnections = () => {
                   </Modal>
                 )}
               </div>
+              </Box>
             </TabPanel>
             <TabPanel value="2">
               <Box
                 style={{ display: "flex", justifyContent: "space-between" }}
-                className="filter-domain my-20"
+                className="filter-domain my-20 connection-tab"
               >
                 {userFilter && (
                   <Filter
                     options={userFilter.map((user) => user.firstName)}
                     label="Filter by Name"
                     onChange={handleUserNameFilter}
+                    className="w-30"
                   />
                 )}
 
@@ -1372,8 +1385,11 @@ const AddConnections = () => {
                   label="Filter by Designation"
                   onChange={handleDesignationFilter}
                   // isMulti={false}
+                  className="w-30"
                 />
               </Box>
+              <Box className="scroll">
+
               {userSearchData &&
                 userSearchData?.map((item) => (
                   <List
@@ -1395,8 +1411,8 @@ const AddConnections = () => {
                           color="primary"
                           onClick={handleOpen}
                           style={{
-                            fontSize: "14px",
-                            color: "#004367",
+                            fontSize: "12px",
+                            color: "#0E7A9C",
                             fontWeight: "600",
                           }}
                         >
@@ -1407,7 +1423,7 @@ const AddConnections = () => {
                     <Divider />
                   </List>
                 ))}
-
+              </Box>
               <Pagination
                 count={totalPages}
                 page={currentPage}
@@ -1599,6 +1615,18 @@ const AddConnections = () => {
               </div>
             </TabPanel>
           </TabContext>
+          </Grid>
+          <Grid item xs={12} md={4} lg={4} className="sm-p-25 pt-8 pb-20 xs-hide">
+            <Box className="text-center center-container">
+              <Box>
+              <ForumOutlinedIcon style={{fontSize:"100px"}}/>
+                <Box className="demo-chat">{t("START_A_CONVERSATION")}</Box>
+                <Box className="demo-text">{t("CLICK_ON_ANY_CONTACT")}</Box>
+              </Box>
+            </Box>
+          </Grid>
+          </Grid>
+         
         </Box>
       </Container>
       <Footer />
