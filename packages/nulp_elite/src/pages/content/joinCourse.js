@@ -37,6 +37,7 @@ import Modal from "@mui/material/Modal";
 import appConfig from "../../configs/appConfig.json";
 const urlConfig = require("../../configs/urlConfig.json");
 import ToasterCommon from "../ToasterCommon";
+import { TextField } from "@mui/material";
 
 const JoinCourse = () => {
   const { t } = useTranslation();
@@ -58,6 +59,12 @@ const JoinCourse = () => {
   const navigate = useNavigate();
   const [toasterOpen, setToasterOpen] = useState(false);
   const [toasterMessage, setToasterMessage] = useState("");
+  const [creatorId, setCreatorId] = useState("");
+  const [open, setOpen] = useState(false);
+  const [chat, setChat] = useState([]);
+  const [formData, setFormData] = useState({
+    message: "",
+  });
 
   const { contentId } = location.state || {};
   const _userId = util.userId(); // Assuming util.userId() is defined
@@ -85,6 +92,7 @@ const JoinCourse = () => {
           throw new Error("Failed to fetch course data");
         }
         const data = await response.json();
+        setCreatorId(data?.result?.content?.createdBy);
         setUserData(data);
       } catch (error) {
         console.error("Error fetching course data:", error);
@@ -164,6 +172,21 @@ const JoinCourse = () => {
   }, []);
 
   useEffect(() => {
+    const fetchChats = async () => {
+      try {
+        const url = `${
+          urlConfig.URLS.DIRECT_CONNECT.GET_CHATS
+        }?sender_id=${_userId}&receiver_id=${creatorId}&is_connection=${true}`;
+
+        const response = await axios.get(url, {
+          withCredentials: true,
+        });
+        console.log("chatResponse", response.data.result || []);
+        setChat(response.data.result || []);
+      } catch (error) {
+        console.error("Error fetching chats:", error);
+      }
+    };
     const getCourseProgress = async () => {
       if (batchDetails) {
         const request = {
@@ -191,9 +214,17 @@ const JoinCourse = () => {
         }
       }
     };
-
+    fetchChats();
     getCourseProgress();
-  }, [batchDetails]);
+  }, [batchDetails, creatorId]);
+
+  const handleDirectConnect = () => {
+    if (chat.length === 0) {
+      setOpen(true);
+    } else {
+      navigate("/message");
+    }
+  };
 
   const handleGoBack = () => {
     navigate(-1); // Navigate back in history
@@ -476,6 +507,40 @@ const JoinCourse = () => {
   const handleDontShareClick = () => {
     consentUpdate("REVOKED");
     setShowConsentForm(false);
+  };
+  const handleInputChange = (event) => {
+    const { name, value } = event.target;
+    setFormData({
+      ...formData,
+      [name]: value,
+    });
+  };
+
+  const handleSubmit = async () => {
+    const requestBody = {
+      sender_id: _userId,
+      receiver_id: creatorId,
+      message: formData.message,
+    };
+
+    try {
+      const url = `${urlConfig.URLS.DIRECT_CONNECT.SEND_CHATS}`;
+      const response = await fetch(url, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(requestBody),
+      });
+
+      if (!response.ok) {
+        throw new Error("Failed to send chat");
+      }
+      setOpen(false);
+      console.log("sentChatRequest", response);
+    } catch (error) {
+      console.error("Error fetching data:", error);
+    }
   };
 
   return (
@@ -903,6 +968,79 @@ const JoinCourse = () => {
                 </Typography>
               </AccordionDetails>
             </Accordion>
+            <div>
+              <React.Fragment>
+                {chat.length === 0 && (
+                  <Button
+                    onClick={handleDirectConnect}
+                    variant="contained"
+                    className="custom-btn-primary my-20"
+                    style={{
+                      background: "#004367",
+                    }}
+                  >
+                    {t("CONNECT_WITH_CREATOR")}
+                  </Button>
+                )}
+                {chat.length > 0 && chat[0]?.is_accepted === false && (
+                  <React.Fragment>
+                    <Alert severity="warning" style={{ margin: "10px 0" }}>
+                      {t("YOUR_CHAT_REQUEST_IS_PENDING")}
+                    </Alert>
+                    <Button
+                      variant="contained"
+                      className="custom-btn-primary my-20"
+                      style={{
+                        background:
+                          chat.length > 0 && chat[0]?.is_accepted === false
+                            ? "#a9b3f5"
+                            : "#004367",
+                      }}
+                      disabled
+                    >
+                      {t("CHAT_WITH_CREATOR")}
+                    </Button>
+                  </React.Fragment>
+                )}
+                {chat.length > 0 && chat[0].is_accepted === true && (
+                  <Button
+                    onClick={handleDirectConnect}
+                    variant="contained"
+                    className="custom-btn-primary my-20"
+                    style={{
+                      background: "#004367",
+                    }}
+                  >
+                    {t("CHAT_WITH_CREATOR")}
+                  </Button>
+                )}
+              </React.Fragment>
+              <Modal open={open} onClose={() => setOpen(false)}>
+                <div
+                  style={{
+                    position: "absolute",
+                    top: "50%",
+                    left: "50%",
+                    transform: "translate(-50%, -50%)",
+                    width: 400,
+                    bgcolor: "background.paper",
+                    boxShadow: 24,
+                    p: 4,
+                  }}
+                >
+                  <TextField
+                    name="message"
+                    value={formData.message}
+                    onChange={handleInputChange}
+                    label="Message"
+                    multiline
+                    rows={4}
+                    fullWidth
+                  />
+                  <Button onClick={handleSubmit}>Send</Button>
+                </div>
+              </Modal>
+            </div>
           </Grid>
           <Grid
             item
