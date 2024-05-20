@@ -153,7 +153,7 @@ const AllContent = () => {
     // console.log(data.result.content)
 
     try {
-      const url = `${urlConfig.URLS.PUBLIC_PREFIX}${urlConfig.URLS.CONTENT.SEARCH}?orgdetails=${appConfig.ContentPlayer.contentApiQueryParams}`;
+      const url = `${urlConfig.URLS.PUBLIC_PREFIX}${urlConfig.URLS.CONTENT.SEARCH}?orgdetails=${appConfig.ContentPlayer.contentApiQueryParams.licenseDetails}${appConfig.ContentPlayer.contentApiQueryParams.orgdetails}`;
 
       const response = await getAllContents(url, data, headers);
       const sortedData = response?.data?.result?.content?.sort((a, b) => {
