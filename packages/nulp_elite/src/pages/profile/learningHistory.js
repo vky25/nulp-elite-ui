@@ -74,7 +74,7 @@ const LearningHistory = () => {
           </Alert>
         )}
         <Box textAlign="center" padding="10">
-          <Breadcrumbs
+          {/* <Breadcrumbs
             aria-label="breadcrumb"
             style={{
               padding: "25px 0",
@@ -88,7 +88,7 @@ const LearningHistory = () => {
             <Typography color="#484848" aria-current="page">
               {t("LEARNING_HISTORY")}
             </Typography>
-          </Breadcrumbs>
+          </Breadcrumbs> */}
           <Box style={{ margin: "20px 0" }}>
             {/* Define static filter options */}
             <Filter
