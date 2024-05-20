@@ -38,6 +38,7 @@ import appConfig from "../../configs/appConfig.json";
 const urlConfig = require("../../configs/urlConfig.json");
 import ToasterCommon from "../ToasterCommon";
 import { TextField } from "@mui/material";
+import Chat from "pages/connections/chat";
 
 const JoinCourse = () => {
   const { t } = useTranslation();
@@ -65,6 +66,7 @@ const JoinCourse = () => {
   const [formData, setFormData] = useState({
     message: "",
   });
+  const [showChat, setShowChat] = useState(false);
 
   const { contentId } = location.state || {};
   const _userId = util.userId(); // Assuming util.userId() is defined
@@ -218,7 +220,9 @@ const JoinCourse = () => {
     if (chat.length === 0) {
       setOpen(true);
     } else {
-      navigate("/message");
+      navigate("/chat", {
+        state: { senderUserId: _userId, receiverUserId: creatorId },
+      });
     }
   };
 
@@ -538,7 +542,14 @@ const JoinCourse = () => {
       console.error("Error fetching data:", error);
     }
   };
+  const handleOpen = () => {
+    setOpen(true);
+  };
 
+  const handleClose = () => {
+    setOpen(false);
+    window.location.reload();
+  };
   return (
     <div>
       <Header />
@@ -1011,31 +1022,32 @@ const JoinCourse = () => {
                   </Button>
                 )}
               </React.Fragment>
-              <Modal open={open} onClose={() => setOpen(false)}>
-                <div
-                  style={{
-                    position: "absolute",
-                    top: "50%",
-                    left: "50%",
-                    transform: "translate(-50%, -50%)",
-                    width: 400,
-                    bgcolor: "background.paper",
-                    boxShadow: 24,
-                    p: 4,
-                  }}
-                >
-                  <TextField
-                    name="message"
-                    value={formData.message}
-                    onChange={handleInputChange}
-                    label="Message"
-                    multiline
-                    rows={4}
-                    fullWidth
-                  />
-                  <Button onClick={handleSubmit}>Send</Button>
-                </div>
-              </Modal>
+              {_userId && creatorId && (
+                <Modal open={open} onClose={handleClose}>
+                  <div
+                    style={{
+                      position: "absolute",
+                      top: "50%",
+                      left: "50%",
+                      padding: "20px",
+                      boxShadow: "0 3px 5px rgba(0, 0, 0, 0.3)",
+                      outline: "none",
+                      borderRadius: 8,
+                      width: "90%", // Relative width
+                      maxWidth: "500px", // Maximum width
+                      height: "80%", // Relative height
+                      maxHeight: "90vh", // Maximum height
+                      overflowY: "auto", // Scroll if content overflows
+                    }}
+                  >
+                    <Chat
+                      senderUserId={_userId}
+                      receiverUserId={creatorId}
+                      onChatSent={handleClose}
+                    />{" "}
+                  </div>
+                </Modal>
+              )}
             </div>
           </Grid>
           <Grid

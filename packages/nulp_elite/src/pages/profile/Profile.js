@@ -290,9 +290,9 @@ const Profile = () => {
       const url = `${urlConfig.URLS.POFILE_PAGE.USER_UPDATE}?user_id=${_userId}`;
       const response = await fetch(url, {
         method: "PUT",
-        // headers: {
-        //   "Content-Type": "application/json",
-        // },
+        headers: {
+          "Content-Type": "application/json",
+        },
         body: JSON.stringify(requestBody),
       });
 
