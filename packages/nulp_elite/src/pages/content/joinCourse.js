@@ -863,24 +863,14 @@ const JoinCourse = () => {
             </Box> */}
              <Box>
               <Typography
-                variant="h7"
-                style={{
-                  fontWeight: "700",
-                  margin: "9px 0",
-                  display: "block",
-                  fontSize: "14px",
-                }}
+                className="h5-title"
+                style={{fontWeight:"600"}}
               >
                 {t("DESCRIPTION")}:
               </Typography>
               <Typography
-                variant="h7"
-                className="twoLineEllipsis"
-                style={{
-                  margin: "9px 0",
-                  display: "block",
-                  fontSize: "14px",
-                }}
+                className="twoLineEllipsis h5-title mb-15"
+                style={{fontWeight:"600"}}
               >
                 {userData?.result?.content?.description}
               </Typography>
@@ -898,6 +888,8 @@ const JoinCourse = () => {
                 expandIcon={<ExpandMoreIcon />}
                 aria-controls="panel1-content"
                 id="panel1-header"
+                className="h4-title"
+                style={{fontWeight:"500"}}
               >
                 {t("COURSES_MODULE")}
               </AccordionSummary>
@@ -911,11 +903,12 @@ const JoinCourse = () => {
                       expandIcon={<ExpandMoreIcon />}
                       aria-controls={`panel${faqIndex.id}-content`}
                       id={`panel${faqIndex.id}-header`}
+                      className="h5-title"
                     >
                       {faqIndex.name}
                     </AccordionSummary>
                     {faqIndex.children.map((faqIndexname) => (
-                      <AccordionDetails style={{ paddingLeft: "35px" }}>
+                      <AccordionDetails style={{ paddingLeft: "35px",borderBottom:"solid 1px #484848" }}>
                         <SummarizeOutlinedIcon />
 
                         <Link
@@ -923,6 +916,7 @@ const JoinCourse = () => {
                           key={faqIndexname.id}
                           style={{ verticalAlign: "super" }}
                           onClick={handleLinkClick}
+                          className="h6-title"
                         >
                           {faqIndexname.name}
                         </Link>
