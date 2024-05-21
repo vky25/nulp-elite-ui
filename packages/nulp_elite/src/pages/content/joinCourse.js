@@ -652,7 +652,7 @@ const JoinCourse = () => {
 
       <Container maxWidth="xxl" role="main" className="container-pb">
         <Grid container spacing={2}>
-          <Grid item xs={12} md={4} lg={4} className="sm-p-25">
+          <Grid item xs={12} md={4} lg={4} className="sm-p-25 left-container">
             <Grid container spacing={2}>
               <Grid item xs={8} className="xs-p-0">
                 <Link
@@ -682,7 +682,7 @@ const JoinCourse = () => {
                     underline="hover"
                     href=""
                     aria-current="page"
-                    color="#484848"
+                   className="h3-title"
                   >
                     {userData?.result?.content?.name}
                   </Link>
@@ -709,7 +709,7 @@ const JoinCourse = () => {
                   fontSize: "13px",
                 }}
               >
-                {t("RELEVANT_FOR")}:
+                {t("CONTENT_TAGS")}:
                 <Button
                   size="small"
                   style={{
@@ -739,7 +739,7 @@ const JoinCourse = () => {
             </Box>
             <Box
               style={{
-                background: "#fee9dd",
+                background: "#F9FAFC",
                 padding: "10px",
                 borderRadius: "10px",
                 color: "#484848",
@@ -798,81 +798,9 @@ const JoinCourse = () => {
                 </Typography>
               </Box>
             </Box>
-            {renderActionButton()}
-            <Box>
-              <Typography
-                variant="h7"
-                style={{
-                  fontWeight: "700",
-                  margin: "9px 0",
-                  display: "block",
-                  fontSize: "14px",
-                }}
-              >
-                {t("DESCRIPTION")}:
-              </Typography>
-              <Typography
-                variant="h7"
-                className="twoLineEllipsis"
-                style={{
-                  margin: "9px 0",
-                  display: "block",
-                  fontSize: "14px",
-                }}
-              >
-                {userData?.result?.content?.description}
-              </Typography>
-            </Box>
-
-            <Accordion
-              defaultExpanded
-              style={{
-                background: "#fee9dd",
-                borderRadius: "10px",
-                marginTop: "10px",
-              }}
-            >
-              <AccordionSummary
-                expandIcon={<ExpandMoreIcon />}
-                aria-controls="panel1-content"
-                id="panel1-header"
-              >
-                {t("COURSES_MODULE")}
-              </AccordionSummary>
-              <AccordionDetails>
-                {userData?.result?.content?.children.map((faqIndex) => (
-                  <Accordion
-                    key={faqIndex.id}
-                    style={{ borderRadius: "10px", margin: "10px 0" }}
-                  >
-                    <AccordionSummary
-                      expandIcon={<ExpandMoreIcon />}
-                      aria-controls={`panel${faqIndex.id}-content`}
-                      id={`panel${faqIndex.id}-header`}
-                    >
-                      {faqIndex.name}
-                    </AccordionSummary>
-                    {faqIndex.children.map((faqIndexname) => (
-                      <AccordionDetails style={{ paddingLeft: "35px" }}>
-                        <SummarizeOutlinedIcon />
-
-                        <Link
-                          href="#"
-                          key={faqIndexname.id}
-                          style={{ verticalAlign: "super" }}
-                          onClick={handleLinkClick}
-                        >
-                          {faqIndexname.name}
-                        </Link>
-                      </AccordionDetails>
-                    ))}
-                  </Accordion>
-                ))}
-              </AccordionDetails>
-            </Accordion>
             <Accordion
               style={{
-                background: "#fee9dd",
+                background: "#F9FAFC",
                 borderRadius: "10px",
                 marginTop: "10px",
               }}
@@ -899,7 +827,7 @@ const JoinCourse = () => {
             </Accordion>
             <Accordion
               style={{
-                background: "#fee9dd",
+                background: "#F9FAFC",
                 borderRadius: "10px",
                 marginTop: "10px",
               }}
@@ -1048,15 +976,25 @@ const JoinCourse = () => {
                   </div>
                 </Modal>
               )}
-            </div>
+            </div>            <Box className="my-20">
+                 <Link href="#" className="pr-5"> <img src={require("../../assets/fb.png")} alt=""/></Link>
+                 <Link  href="#" className="pr-5">  <img src={require("../../assets/whatsapp.png")} alt=""/></Link>
+                 <Link  href="#" className="pr-5">  <img src={require("../../assets/linkedin.png")} alt=""/></Link>
+                 <Link  href="#" className="pr-5">  <img src={require("../../assets/twitter.png")} alt=""/></Link>
+
+            </Box>
+           
           </Grid>
           <Grid
             item
-            xs={8}
-            className="xs-hide"
-            style={{ borderLeft: "solid 1px #898989" }}
+            xs={12}
+            md={8}
+            lg={8}
+            className="mb-20"
           >
-            <Box
+            <Box style={{textAlign:"right"}}> {renderActionButton()}</Box>
+
+            {/* <Box
               sx={{
                 background: "#EEEEEE",
                 textAlign: "center",
@@ -1071,7 +1009,73 @@ const JoinCourse = () => {
                   {t("JOIN_COURSE_MESSAGE")}
                 </Box>
               </Box>
+            </Box> */}
+             <Box>
+              <Typography
+                className="h5-title"
+                style={{fontWeight:"600"}}
+              >
+                {t("DESCRIPTION")}:
+              </Typography>
+              <Typography
+                className="twoLineEllipsis h5-title mb-15"
+                style={{fontWeight:"600"}}
+              >
+                {userData?.result?.content?.description}
+              </Typography>
             </Box>
+
+            <Accordion
+              defaultExpanded
+              style={{
+                background: "#F9FAFC",
+                borderRadius: "10px",
+                marginTop: "10px",
+              }}
+            >
+              <AccordionSummary
+                expandIcon={<ExpandMoreIcon />}
+                aria-controls="panel1-content"
+                id="panel1-header"
+                className="h4-title"
+                style={{fontWeight:"500"}}
+              >
+                {t("COURSES_MODULE")}
+              </AccordionSummary>
+              <AccordionDetails>
+                {userData?.result?.content?.children.map((faqIndex) => (
+                  <Accordion
+                    key={faqIndex.id}
+                    style={{ borderRadius: "10px", margin: "10px 0" }}
+                  >
+                    <AccordionSummary
+                      expandIcon={<ExpandMoreIcon />}
+                      aria-controls={`panel${faqIndex.id}-content`}
+                      id={`panel${faqIndex.id}-header`}
+                      className="h5-title"
+                    >
+                      {faqIndex.name}
+                    </AccordionSummary>
+                    {faqIndex.children.map((faqIndexname) => (
+                      <AccordionDetails style={{ paddingLeft: "35px",borderBottom:"solid 1px #484848" }}>
+                        <SummarizeOutlinedIcon />
+
+                        <Link
+                          href="#"
+                          key={faqIndexname.id}
+                          style={{ verticalAlign: "super" }}
+                          onClick={handleLinkClick}
+                          className="h6-title"
+                        >
+                          {faqIndexname.name}
+                        </Link>
+                      </AccordionDetails>
+                    ))}
+                  </Accordion>
+                ))}
+              </AccordionDetails>
+            </Accordion>
+          
           </Grid>
         </Grid>
       </Container>

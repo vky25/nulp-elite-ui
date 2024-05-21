@@ -29,7 +29,10 @@ import Modal from "@mui/material/Modal";
 const designations = require("../../configs/designations.json");
 const urlConfig = require("../../configs/urlConfig.json");
 import ToasterCommon from "../ToasterCommon";
-
+import Tab from "@mui/material/Tab";
+import TabContext from "@material-ui/lab/TabContext";
+import TabList from "@material-ui/lab/TabList";
+import TabPanel from "@material-ui/lab/TabPanel";
 import {
   Button,
   FormControl,
@@ -39,6 +42,7 @@ import {
   TextField,
 } from "@mui/material";
 import styled from "styled-components";
+import LearningHistory from "./learningHistory";
 
 const DELAY = 1500;
 const MAX_CHARS = 500;
@@ -74,6 +78,10 @@ const style = {
 };
 
 const Profile = () => {
+  const [value, setValue] = React.useState("1");
+  const handleChange = (event, newValue) => {
+    setValue(newValue);
+  };
   const { t } = useTranslation();
   const [userData, setUserData] = useState(null);
   const [certData, setCertificateCountData] = useState({});
@@ -372,67 +380,181 @@ const Profile = () => {
     <div>
       <Header />
       {toasterMessage && <ToasterCommon response={toasterMessage} />}
-      <Box sx={{ background: "#2D2D2D", padding: "20px" }} className="xs-hide">
-        <p
-          style={{
-            fontSize: "20px",
-            fontWeight: "700",
-            color: "#fff",
-            paddingBottom: "5px",
-            margin: "0",
-          }}
-        >
-          {t("EXPLORE_CONTENT_RELATED_TO_YOUR_DOMAIN")}
-        </p>
-        <p
-          style={{
-            fontSize: "16px",
-            fontWeight: "700",
-            color: "#C1C1C1",
-            margin: "0",
-            paddingBottom: "30px",
-          }}
-        >
-          {t("LEARN_FROM_WELL_CURATED")}
-        </p>
-        <SearchBox onSearch={handleSearch} />
-      </Box>
-      <Container maxWidth="xxl" role="main" className="container-pb">
+     
+      <Container maxWidth="xxl" role="main" className="container-pb xs-p-0">
         {error && (
           <Alert severity="error" className="my-10">
             {error}
           </Alert>
         )}
 
-        <Grid container spacing={2} className="sm-pt-22">
-          <Grid item xs={12} md={4} lg={4} className="sm-p-25">
+        <Grid container spacing={2} className="pt-8">
+          <Grid item xs={12} md={4} lg={4} className="sm-p-25 left-container">
             <Box sx={{ fontSize: "18px", color: "#484848" }}>
               {t("MY_PROFILE")}
             </Box>
 
-            <Box textAlign="center" padding="10" sx={{ marginTop: "22px" }}>
-              <Card
-                sx={{
-                  marginTop: "10px",
-                  padding: "10px",
-                  boxShadow: "0px 4px 4px 0px #00000040",
-                }}
-              >
-                <Box
+            <Box textAlign="center" padding="10" sx={{ marginTop: "22px" }} className="xs-pr-16">
+              <Box className="grey-bx">
+              
+                  <Box
                   sx={{
                     display: "flex",
                     flexDirection: "row",
-                    justifyContent: "space-between",
+                    padding: "20px 10px",
                   }}
                 >
-                  <Box style={{ display: "flex", alignItems: "center" }}>
-                    <PersonIcon
-                      style={{ paddingRight: "10px", fontSize: "28px" }}
-                    />
-                    {t("ABOUT_ME")}
-                  </Box>
-                  <ModeEditIcon onClick={handleOpenEditDialog} />
+                  {userData && (
+                    <>
+                      <div className="img-text-circle" >
+                        {userData?.result?.response?.firstName[0]}
+                      </div>
+                    </>
+                  )}
+                  <CardContent
+                    style={{ textAlign: "left", paddingTop: "0", width: "83%" }}
+                  >
+                    {userData && userInfo?.length > 0 && (
+                      <>
+                      <Box className="d-flex">
+                        <Box>
+                          <Typography className="h4-title">
+                            {userData.result.response.firstName}{" "}
+                            {userData.result.response.lastName}
+                          </Typography>
+                          <Typography className="h6-title d-flex">
+                            {/* {t("DESIGNATION")} |{" "} */}
+                            {userInfo[0]?.designation} {" "}   <Box className="twoLineEllipsis"> | ID:  {userData.result.response.userName}{" "}                             {userData.result.response.organisations.orgName}
+                              </Box>
+                          </Typography>
+                        </Box>
+                        {/* <Box
+                          style={{
+                            display: "flex",
+                            fontSize: "13px",
+                            color: "#48484887",
+                          }}
+                        >
+                          {" "}
+                          <Box> ID:</Box>{" "}
+                          <Box>
+                            {userData.result.response.userName}{" "}
+                            {userData.result.response.organisations.orgName}
+                          </Box>
+                        </Box>{" "} */}
+                        <ModeEditIcon onClick={handleOpenEditDialog} />
+                        </Box>  
+                        <Typography
+                          variant="subtitle1"
+                          color="text.secondary"
+                          component="div"
+                          style={{ fontSize: "12px" }}
+                        >
+                          {/* {t("A_MANAGER_WITH_THE_DEPARTMENT_OF_REVENUE")} */}
+                          {userInfo[0]?.bio}
+                        </Typography>
+                        {/* Displaying the framework.board field */}
+                        {/* <Typography
+                          variant="subtitle1"
+                          color="text.secondary"
+                          component="div"
+                          style={{
+                            fontSize: "12px",
+                            padding: "10px 0",
+                            display: "flex",
+                          }}
+                        >
+                          <Box>{t("DOMAIN")}: </Box>{" "}
+                          {userData.result.response.framework.board}
+                        </Typography> */}
+                      </>
+                    )}
+
+                  </CardContent>
                 </Box>
+
+                 
+                <Box className="mb-15">
+                  <Box
+                    sx={{
+                      display: "flex",
+                      flexDirection: "row",
+                      justifyContent: "space-between",
+                      padding: "0 0 12px 15px",
+                    }}
+                  >
+                    <Box style={{ display: "flex", alignItems: "center" }} className="h4-title">
+                      <EmojiEventsOutlinedIcon
+                        style={{ paddingRight: "10px" }}
+                      />{" "}
+                      {t("PERFORMANCE")}
+                    </Box>
+                  </Box>
+
+                  <Grid container spacing={2}>
+                    <Grid
+                      item
+                      xs={3}
+                      md={3}
+                      className="circular"
+                      style={{ paddingRight: "0", textAlign: "right" }}
+                    >
+                      {certData &&
+                        certData.certificatesReceived &&
+                        certData.totalCourses && (
+                          <CircularProgressWithLabel
+                            received={certData.certificatesReceived}
+                            total={certData.totalCourses}
+                            className="circular"
+                            style={{ width: "80px", height: "80px" }}
+                          />
+                        )}
+                    </Grid>
+                    <Grid item xs={3} md={3} className="circular">
+                      <Typography
+                        style={{
+                          margin: "9px 0",
+                          display: "block",
+                          textAlign: "left",
+                          
+                        }}
+                        className="fs-14 text-yellow"
+                      >
+                        {t("CERTIFICATIONS_RECEIVED")}
+                      </Typography>
+                    </Grid>
+                    <Grid
+                      item
+                      xs={3}
+                      md={3}
+                      style={{ paddingRight: "0", textAlign: "right" }}
+                    >
+                      {courseData && (
+                        <CircularProgressWithLabel
+                          received={courseData.enrolledThisMonth}
+                          total={courseData.enrolledLastMonth}
+                          className="circular"
+                          style={{ width: "80px", height: "80px" }}
+                        />
+                      )}
+                    </Grid>
+                    <Grid item xs={3} md={3}>
+                      <Typography
+                        variant="h7"
+                        style={{
+                          margin: "9px 0",
+                          display: "block",
+                          textAlign: "left",
+                        }}
+                        className="fs-14 text-blueShade0"
+
+                      >
+                        {t("COURSES_THAN_LAST_MONTH")}
+                      </Typography>
+                    </Grid>
+                  </Grid>
+                </Box>
+
                 {isEditing && (
                   <Modal
                     // open={open}
@@ -445,8 +567,7 @@ const Profile = () => {
                     <Box sx={style}>
                       <Typography
                         id="modal-modal-title"
-                        variant="h5"
-                        component="h2"
+                        className="h4-title"
                         style={{ marginBottom: "20px" }}
                       >
                         {t("EDIT_PROFILE")}
@@ -568,7 +689,7 @@ const Profile = () => {
                         </Box>
 
                         <Box pt={4}>
-                          <Button className="custom-btn-primary" type="submit">
+                          <Button className="custom-btn-primary mr-5" type="submit">
                             {t("SAVE")}
                           </Button>
 
@@ -582,117 +703,16 @@ const Profile = () => {
                       </form>
                     </Box>
                   </Modal>
-                  // <Dialog open={isEditing} onClose={handleCloseEditDialog}>
-                  //   <DialogTitle>Edit Profile</DialogTitle>
-                  //   <DialogContent>
-
-                  //   </DialogContent>
-                  // </Dialog>
+                  
                 )}
 
-                <Box
-                  sx={{
-                    display: "flex",
-                    flexDirection: "row",
-                    padding: "20px 10px",
-                  }}
-                >
-                  {userData && (
-                    <>
-                      <div
-                        style={{
-                          width: "180px",
-                          height: "60px",
-                          borderRadius: "2px",
-                          backgroundColor: "#6D757A",
-                          color: "#fff",
-                          display: "flex",
-                          justifyContent: "center",
-                          alignItems: "center",
-                          fontSize: "58px",
-                          fontWeight: "bold",
-                          marginRight: "10px",
-                        }}
-                      >
-                        {userData?.result?.response?.firstName[0]}
-                      </div>
-                    </>
-                  )}
-                  <CardContent
-                    style={{ textAlign: "left", paddingTop: "0", width: "60%" }}
-                  >
-                    {userData && userInfo?.length > 0 && (
-                      <>
-                        <Typography
-                          component="div"
-                          variant="h5"
-                          style={{
-                            color: "#004367",
-                            fontSize: "16px",
-                            fontWeight: "600",
-                          }}
-                        >
-                          {userData.result.response.firstName}{" "}
-                          {userData.result.response.lastName}
-                        </Typography>
-                        <Typography
-                          variant="subtitle1"
-                          color="text.secondary"
-                          component="div"
-                          style={{
-                            fontSize: "14px",
-                            padding: "5px 0",
-                            display: "flex",
-                          }}
-                        >
-                          {/* {t("DESIGNATION")} |{" "} */}
-                          {userInfo[0]?.designation}{" "}
-                        </Typography>
-                        <Box
-                          style={{
-                            display: "flex",
-                            fontSize: "13px",
-                            color: "#48484887",
-                          }}
-                        >
-                          {" "}
-                          <Box> ID:</Box>{" "}
-                          <Box>
-                            {userData.result.response.userName}{" "}
-                            {userData.result.response.organisations.orgName}
-                          </Box>
-                        </Box>{" "}
-                        <Typography
-                          variant="subtitle1"
-                          color="text.secondary"
-                          component="div"
-                          style={{ fontSize: "12px" }}
-                        >
-                          {/* {t("A_MANAGER_WITH_THE_DEPARTMENT_OF_REVENUE")} */}
-                          {userInfo[0]?.bio}
-                        </Typography>
-                        {/* Displaying the framework.board field */}
-                        <Typography
-                          variant="subtitle1"
-                          color="text.secondary"
-                          component="div"
-                          style={{
-                            fontSize: "12px",
-                            padding: "10px 0",
-                            display: "flex",
-                          }}
-                        >
-                          <Box>{t("DOMAIN")}: </Box>{" "}
-                          {userData.result.response.framework.board}
-                        </Typography>
-                      </>
-                    )}
-                  </CardContent>
-                </Box>
-              </Card>
+              
+              </Box>
+              <Button type="buttom" className="custom-btn-primary my-30"  onClick={handleDownloadCertificateClick}><ReceiptLongOutlinedIcon className="pr-5"/>{t('Download Certificates')}</Button>
 
-              <Grid container spacing={2} style={{ padding: "5px 0" }}>
-                <Grid item xs={6} md={6}>
+
+              {/* <Grid container spacing={2} style={{ padding: "5px 0" }}> */}
+                {/* <Grid item xs={6} md={6}>
                   <Card
                     sx={{
                       marginTop: "10px",
@@ -723,6 +743,7 @@ const Profile = () => {
                   </Card>
                 </Grid>
                 <Grid item xs={6} md={6}>
+              
                   <Card
                     sx={{
                       marginTop: "10px",
@@ -805,42 +826,43 @@ const Profile = () => {
                       <SettingsOutlinedIcon />
                     </Box>
 
-                    <Box style={{ paddingLeft: "20px" }}>
-                      {t("CHANGE_PREFERENCES")}
+                    <Box style={{ paddingLeft: "20px" }} className="text-center">
+                      <Button type="button" className="custom-btn-primary" onClick={handleDownloadCertificateClick} >{t("CHANGE_PREFERENCES")}</Button>
                     </Box>
                   </Card>
-                </Grid>
-                <Modal
-                  // open={open}
-                  // onClose={handleClose}
-                  aria-labelledby="modal-modal-title"
-                  aria-describedby="modal-modal-description"
-                  isableEscapeKeyDown={!isEmptyPreference}
-                  open={openModal}
-                  onClose={(event, reason) => {
-                    if (
-                      reason === "backdropClick" ||
-                      reason === "escapeKeyDown"
-                    ) {
-                      setOpenModal(true);
-                    } else {
-                      handleCloseModal();
-                    }
-                  }}
-                >
-                  <Box sx={style}>
-                    <Typography
-                      id="modal-modal-title"
-                      variant="h5"
-                      component="h2"
-                      style={{ marginBottom: "20px" }}
-                    >
-                      {t("SELECT_PREFERENCE")}
-                    </Typography>
-                    <SelectPreference onClose={handleCloseModal} />
-                  </Box>
-                </Modal>
-              </Grid>
+                </Grid> */}
+               
+              {/* </Grid> */}
+
+              <Modal
+                // open={open}
+                // onClose={handleClose}
+                aria-labelledby="modal-modal-title"
+                aria-describedby="modal-modal-description"
+                isableEscapeKeyDown={!isEmptyPreference}
+                open={openModal}
+                onClose={(event, reason) => {
+                  if (
+                    reason === "backdropClick" ||
+                    reason === "escapeKeyDown"
+                  ) {
+                    setOpenModal(true);
+                  } else {
+                    handleCloseModal();
+                  }
+                }}
+              >
+                <Box sx={style}>
+                  <Typography
+                    id="modal-modal-title"
+                   className="h4-title"
+                    style={{ marginBottom: "20px" }}
+                  >
+                    {t("SELECT_PREFERENCE")}
+                  </Typography>
+                  <SelectPreference onClose={handleCloseModal} />
+                </Box>
+              </Modal>
 
               {/* <Card sx={{ marginTop: "10px", padding: "10px" }}>
                 <Box>
@@ -911,95 +933,32 @@ const Profile = () => {
                   </Box>
                 </Box>
               </Card> */}
-
-              <Card sx={{ margin: "15px 0 40px 0", padding: "10px" }}>
-                <Box>
-                  <Box
-                    sx={{
-                      display: "flex",
-                      flexDirection: "row",
-                      justifyContent: "space-between",
-                      padding: "0 0 12px 0",
-                    }}
-                  >
-                    <Box style={{ display: "flex", alignItems: "center" }}>
-                      <EmojiEventsOutlinedIcon
-                        style={{ paddingRight: "10px" }}
-                      />{" "}
-                      {t("PERFORMANCE")}
-                    </Box>
-                  </Box>
-
-                  <Grid container spacing={2}>
-                    <Grid
-                      item
-                      xs={3}
-                      md={3}
-                      className="circular"
-                      style={{ paddingRight: "0", textAlign: "right" }}
-                    >
-                      {certData &&
-                        certData.certificatesReceived &&
-                        certData.totalCourses && (
-                          <CircularProgressWithLabel
-                            received={certData.certificatesReceived}
-                            total={certData.totalCourses}
-                            className="circular"
-                            style={{ width: "80px", height: "80px" }}
-                          />
-                        )}
-                    </Grid>
-                    <Grid item xs={3} md={3} className="circular">
-                      <Typography
-                        variant="h7"
-                        style={{
-                          margin: "9px 0",
-                          display: "block",
-                          textAlign: "left",
-                        }}
-                      >
-                        {t("CERTIFICATIONS_RECEIVED")}
-                      </Typography>
-                    </Grid>
-                    <Grid
-                      item
-                      xs={3}
-                      md={3}
-                      style={{ paddingRight: "0", textAlign: "right" }}
-                    >
-                      {courseData && (
-                        <CircularProgressWithLabel
-                          received={courseData.enrolledThisMonth}
-                          total={courseData.enrolledLastMonth}
-                          className="circular"
-                          style={{ width: "80px", height: "80px" }}
-                        />
-                      )}
-                    </Grid>
-                    <Grid item xs={3} md={3}>
-                      <Typography
-                        variant="h7"
-                        style={{
-                          margin: "9px 0",
-                          display: "block",
-                          textAlign: "left",
-                        }}
-                      >
-                        {t("COURSES_THAN_LAST_MONTH")}
-                      </Typography>
-                    </Grid>
-                  </Grid>
+              <Box className="grey-bx p-10">
+                <Box className="h4-title d-flex"><SettingsOutlinedIcon className="pr-5"/>User Preferences</Box>
+                <Box className="mb-20">
+                <Box className="h5-title mt-15 mb-10">Domain :<Box></Box></Box>
+                <Box className="h5-title">Sub-Domain:</Box>
                 </Box>
-              </Card>
+
+              </Box>
+              <Button type="button" className="custom-btn-primary my-30"  onClick={handleOpenModal}>{t('CHANGE_PREFERENCES')}</Button>
+
             </Box>
           </Grid>
           <Grid
-            item
-            xs={8}
-            className="xs-hide"
-            style={{ borderLeft: "solid 1px #898989" }}
+            item xs={12} md={8} lg={8} className="xs-pl-0"
+           
           >
-            <ContinueLearning />
+              <TabContext  value={value}>
+                  <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
+                    <TabList  aria-label="lab API tabs example">
+                      <Tab label="Continue learning" className="tab-text" value="1" />
+                      <Tab label="Learning History" className="tab-text" value="2" onClick={handleLearningHistoryClick}/>
+                    </TabList>
+                  </Box>
+                <TabPanel value="1"><ContinueLearning /></TabPanel>
+                  <TabPanel value="2"><LearningHistory/></TabPanel>
+                </TabContext>
           </Grid>
         </Grid>
       </Container>

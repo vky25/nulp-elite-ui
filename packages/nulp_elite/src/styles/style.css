@@ -148,11 +148,22 @@ body {
   }
 }
 @media (max-width: 768px) {
-  .left-container{
+
+.custom-dot-list-style{
+  height: 30px;
+}
+.left-container{
     height: 100% !important;
   }
  .xs-p-0{
   padding-right: 0 !important;
+ }
+ .xs-pl-0{
+  padding-left: 0 !important;
+ }
+ .xs-pr-16{
+  padding-right: 16px !important;
+
  }
  .xs-mr-10{
   margin-right: 10px !important;
@@ -206,6 +217,9 @@ body {
   .lg-d-flex{
     display: flex;
   }
+  .lg-mt-10{
+    margin-top: 10px !important;
+  }
   .scroll{
     height: 25vh;
     overflow-y: auto;
@@ -218,7 +232,7 @@ body {
     margin: 10px 0;
   }
   .mt-65{
-    margin-top: 85px;
+    margin-top: 92px;
   } 
   .scrolled{
     position: fixed !important;
@@ -233,8 +247,14 @@ body {
   .preference .css-1tsvksn {
     flex: inherit !important;
   }
+  .mb-10{
+    margin-bottom: 10px;
+  }
   .mb-20{
-    margin-bottom: 20px;
+    margin-bottom: 20px !important;
+  }
+  .mb-15{
+    margin-bottom: 15px !important;
   }
   .footer{
     margin-top: 20px !important;
@@ -414,6 +434,7 @@ Footer {
   background: #fff !important;
   padding: 20px;
   list-style-type: none;
+  border: 1px solid #D3D3D3;
 }
 .bg-white li {
   padding: 10px;
@@ -492,13 +513,19 @@ border-radius: 10px 10px 0px 0px;
   margin: 10px 0;
 }
 .my-15{
-  margin: 15px 0;
+  margin: 15px 0 !important;
 }
 .my-20{
   margin: 20px 0 !important;
 }
+.my-30{
+  margin: 30px 0 !important;
+}
 .mt-40{
   margin: 40px 0 0 0 !important;
+}
+.mt-15{
+  margin-top: 15px;
 }
 .addConnection .jss3{
   background-color: transparent !important;
@@ -586,17 +613,22 @@ button{
 .h3-title{
   color:#484848;
   font-size: 18px;
-  font-weight: 600;
+  font-weight: 600 !important;
 }
 .h4-title{
   color:#484848;
-  font-size: 18px;
-  font-weight: 600;
+  font-size: 16px !important;
+  font-weight: 600 !important;
 }
 .h5-title{
   color:#4F4F4F;
   font-size: 14px;
   font-weight: 500;
+}
+.h6-title{
+  color:#484848;
+  font-size: 12px !important;
+  font-weight: 400 !important;
 }
 .text-heading{
   font-size: 16px;
@@ -618,6 +650,9 @@ button{
 .p-0{
   padding: 0 !important;
 }
+.p-10{
+  padding: 10px !important;
+}
 .px-0{
   padding-left: 0 !important;
   padding-right: 0 !important;
@@ -631,6 +666,9 @@ button{
 }
 .pr-20{
   padding-right: 20px !important;
+}
+.pr-5{
+  padding-right: 5px !important;
 }
 .w-40{
   width: 68%;
@@ -691,7 +729,7 @@ button{
   border-radius:3px;
   box-shadow: 0px 4px 4px 0px #00000040;
   background: #fff;
-  height: 65vh;
+  /* height: 65vh; */
 }
 .left-container ul{
   padding: 0 !important;
@@ -758,4 +796,54 @@ custom-chip{
 .left-bx{
   text-align: left;
   margin: 7px 0 10px 0;
+}
+.mr-30{
+  margin-right: 30px;
+}
+.mr-5{
+  margin-right: 5px;
+}
+
+
+.grey-bx{
+  box-shadow: 0px 4px 4px 0px #00000040;
+  border: solid 1px #EFEFEF;
+  background: #F9FAFC;
+  border-radius: 10px;
+  text-align: left;
+}
+
+.img-text-circle{
+   width: 60px;
+    height: 60px;
+    border-radius: 2px;
+    background-color: #D9D9D9;
+    color: rgb(255, 255, 255);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 54px;
+    font-weight: 500;
+    border-radius: 100%;
+}
+.text-yellow{
+  color: #DCAB00;
+}
+.text-blueShade0{
+  color: #065872;
+}
+.text-blueShade1{
+  color: #00A2D5;
+}
+.fs-14{
+  font-size: 14px !important;
+}
+
+.tab-text{
+  font-size: 16px !important;
+  color: #212121 !important;
+  text-align: center !important;
+}
+.tab-text.Mui-selected{
+  color: #0E7A9C  !important;
 }
