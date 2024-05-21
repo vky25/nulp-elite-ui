@@ -180,6 +180,9 @@
   "LEAVE_COURSE_CONFIRMATION_TITLE": "Batch Unenrolment",
   "LEAVE_COURSE_CONFIRMATION_MESSAGE": "Do you want to unenrol from this batch?",
   "ENROLLMENT_SUCCESS_MESSAGE": "Couse enroled for this batch Successfully",
+  "YOUR_CHAT_REQUEST_IS_PENDING": "Your chat request is pending. Please wait for the creator to accept the chat invitation",
+  "CHAT_WITH_CREATOR": "Chat with creator",
+  "CONNECT_WITH_CREATOR": "Connect with creator",
   "FAILED_TO_FETCH_DATA": "Failed to fetch data. Please try again.",
   "FAILED_TO_VERIFY_OTP": "Failed to verify OTP. Please try again.",
   "FAILED_TO_GENERATE_OTP": "Failed to generate OTP. Please try again.",
@@ -193,10 +196,10 @@
   "FAILED_TO_ENROLL_INTO_COURSE": "Failed to enroll into course. Please try again.",
   "FAILED_TO_BLOCK_USER": "Failed to block user.",
   "FAILED_TO_UNBLOCK_USER": "Failed to unblock user.",
-  "NULP_ASSIST":"NULP Assist",
+  "NULP_ASSIST": "NULP Assist",
   "EXPLORE": " Explore",
-  "REQUEST_SENT":"Request Sent",
-  "START_A_CONVERSATION":"Start a conversation!",
-  "CLICK_ON_ANY_CONTACT":"Click on any contact and send them a connection request!",
-  "REASON":"Reason"
+  "REQUEST_SENT": "Request Sent",
+  "START_A_CONVERSATION": "Start a conversation!",
+  "CLICK_ON_ANY_CONTACT": "Click on any contact and send them a connection request!",
+  "REASON": "Reason"
 }
