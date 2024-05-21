@@ -171,7 +171,7 @@ const AllContent = () => {
       });
       setData(sortedData);
     } catch (error) {
-      showErrorMessage("Failed to fetch data. Please try again.");
+      showErrorMessage(t("FAILED_TO_FETCH_DATA"));
     }
   };
   const getCookieValue = (name) => {
@@ -202,7 +202,7 @@ const AllContent = () => {
       setChannelData(response.data.result);
     } catch (error) {
       console.log("error---", error);
-      showErrorMessage("Failed to fetch data. Please try again.");
+      showErrorMessage(t("FAILED_TO_FETCH_DATA"));
     } finally {
     }
     try {
@@ -227,7 +227,7 @@ const AllContent = () => {
       setDomain(response.data.result.framework.categories[0].terms);
     } catch (error) {
       console.log("nulp--  error-", error);
-      showErrorMessage("Failed to fetch data. Please try again.");
+      showErrorMessage(t("FAILED_TO_FETCH_DATA"));
     } finally {
       console.log("nulp finally---");
     }
@@ -319,7 +319,11 @@ const AllContent = () => {
   )}
 
 
-      <Container maxWidth="xxl" role="main" className="container-pb">
+      <Container maxWidth="xxl" role="main" className="container-pb pb-30">
+      <Box className="text-heading lg-d-flex my-20">
+                  You are viewing content for :
+                  <Box className="text-primary">Mobility and accessibliy</Box>
+                </Box>
         {error && (
           <Alert severity="error" className="my-10">
             {error}
@@ -338,32 +342,37 @@ const AllContent = () => {
             // console.log(data,"hi"),
 
             <React.Fragment key={category}>
-              <p style={{ display: "flex", justifyContent: "space-between" }}>
+               
+            <Box className="d-flex" style={{justifyContent:"space-between"}}>
                 <Box
                   style={{
                     display: "inline-block",
-                    fontSize: "18px",
-                    color: "#484848",
+                    margin:"30px 0"
                   }}
+                  className="h4-title"
                 >
                   <SummarizeOutlinedIcon style={{ verticalAlign: "top" }} />{" "}
                   <Box
                     style={{
                       display: "inline-block",
                     }}
+                    className="h3-title"
                   >
                     {category}{" "}
                   </Box>{" "}
                 </Box>
+                    <Box>
                 {items?.length > 4 && (
-                  <Link
+                 
+                 <Link
                     to={`/view-all/${category}`}
                    className="viewAll"
                   >
                     {t("VIEW_ALL")}
                   </Link>
                 )}
-              </p>
+                </Box>
+                </Box>
               {isMobile ? (
                 <Carousel
                   swipeable={false}

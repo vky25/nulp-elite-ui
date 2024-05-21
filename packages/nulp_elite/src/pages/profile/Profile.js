@@ -150,7 +150,7 @@ const Profile = () => {
         });
       } catch (error) {
         console.error("Error fetching certificate count:", error);
-        showErrorMessage("Failed to fetch data. Please try again.");
+        showErrorMessage(t("FAILED_TO_FETCH_CERT_COUNT"));
       }
     };
 
@@ -166,7 +166,7 @@ const Profile = () => {
         });
       } catch (error) {
         console.error(error);
-        showErrorMessage("Failed to fetch data. Please try again.");
+        showErrorMessage(t("FAILED_TO_FETCH_COURSE_COUNT"));
       }
     };
     const fetchUserInfo = async () => {
@@ -185,7 +185,7 @@ const Profile = () => {
         setUserInfo(response?.data?.result);
       } catch (error) {
         console.error(error);
-        showErrorMessage("Failed to fetch data. Please try again.");
+        showErrorMessage(t("FAILED_TO_FETCH_DATA"));
       }
     };
 
@@ -221,6 +221,7 @@ const Profile = () => {
         localStorage.setItem("defaultFramework", defaultFramework);
       }
     } catch (error) {
+      showErrorMessage(t("FAILED_TO_FETCH_DATA"));
       console.error("Error fetching user data:", error);
     }
   };
@@ -263,14 +264,15 @@ const Profile = () => {
       });
 
       if (!response.ok) {
-        throw new Error("Failed to fetch data");
+        showErrorMessage(t("FAILED_TO_FETCH_DATA"));
+        throw new Error(t("FAILED_TO_FETCH_DATA"));
       }
 
       const responseData = await response.json();
       await updateUserInfoInCustomDB();
       console.log("responseData", responseData);
     } catch (error) {
-      showErrorMessage("Failed to fetch data. Please try again.");
+      showErrorMessage(t("FAILED_TO_FETCH_DATA"));
     } finally {
       setIsLoading(false);
     }
@@ -288,19 +290,20 @@ const Profile = () => {
       const url = `${urlConfig.URLS.POFILE_PAGE.USER_UPDATE}?user_id=${_userId}`;
       const response = await fetch(url, {
         method: "PUT",
-        // headers: {
-        //   "Content-Type": "application/json",
-        // },
+        headers: {
+          "Content-Type": "application/json",
+        },
         body: JSON.stringify(requestBody),
       });
 
       if (!response.ok) {
-        throw new Error("Failed to update user data in custom DB");
+        showErrorMessage(t("SOMETHING_WENT_WRONG"));
+        throw new Error(t("SOMETHING_WENT_WRONG"));
       }
 
       const data = await response.json();
     } catch (error) {
-      showErrorMessage("Failed to fetch data. Please try again.");
+      showErrorMessage(t("SOMETHING_WENT_WRONG"));
     } finally {
       setIsLoading(false);
     }
@@ -336,7 +339,7 @@ const Profile = () => {
       }
     } catch (error) {
       console.error("Error fetching user data:", error);
-      showErrorMessage("Failed to fetch data. Please try again.");
+      showErrorMessage(t("FAILED_TO_FETCH_DATA"));
     }
   };
 

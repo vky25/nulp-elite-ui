@@ -125,7 +125,7 @@ const ContentList = (props) => {
 
       setData(response.data.result);
     } catch (error) {
-      showErrorMessage("Failed to fetch data. Please try again.");
+      showErrorMessage(t("FAILED_TO_FETCH_DATA"));
     } finally {
       setIsLoading(false);
     }
@@ -174,7 +174,7 @@ const ContentList = (props) => {
       }
     } catch (error) {
       console.error("Error fetching grade levels:", error);
-      showErrorMessage("Failed to fetch data. Please try again.");
+      showErrorMessage(t("FAILED_TO_FETCH_DATA"));
     }
   };
 
@@ -202,11 +202,12 @@ const ContentList = (props) => {
           setCategory(domainOptions);
         }
       } else {
-        throw new Error("Failed to fetch domain data");
+        showErrorMessage(t("FAILED_TO_FETCH_DATA"));
+        throw new Error(t("FAILED_TO_FETCH_DATA"));
       }
     } catch (error) {
       console.log("Error fetching domain data:", error);
-      showErrorMessage("Failed to fetch data. Please try again.");
+      showErrorMessage(t("FAILED_TO_FETCH_DATA"));
     } finally {
       setIsLoading(false);
     }
