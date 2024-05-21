@@ -33,7 +33,7 @@ export default function DomainCarousel({ domains ,onSelectDomain}) {
   const [itemsArray, setItemsArray] = useState([]);
   const [data, setData] = React.useState();
   const [activeStates, setActiveStates] = useState(() => (
-    domains.map(() => false) // Initialize all items as inactive
+    domains?.map(() => false) // Initialize all items as inactive
   ));
   const [isMobile, setIsMobile] = useState(window.innerWidth <= 767);
   const [activeDomain, setActiveDomain] = useState(null);
@@ -57,19 +57,19 @@ export default function DomainCarousel({ domains ,onSelectDomain}) {
     };
   }, []);
   useEffect(() => {
-    domains.map((term) => {
+    domains?.map((term) => {
       if (domainWithImage) {
-        domainWithImage.result.form.data.fields.map((imgItem) => {
+        domainWithImage?.result?.form?.data?.fields?.map((imgItem) => {
           if ((term && term.code) === (imgItem && imgItem.code)) {
             term["image"] = imgItem.image ? imgItem.image : "";
             pushData(term);
-            itemsArray.push(term);
+            itemsArray?.push(term);
           }
         });
       }
     });
-    const croppedArray = itemsArray.slice(0, 10);
-    setData(itemsArray);
+    const croppedArray = itemsArray?.slice(0, 10);
+    setData(croppedArray);
     
     console.log("itemsArray---",itemsArray)
     console.log("data---",data)
@@ -113,7 +113,7 @@ export default function DomainCarousel({ domains ,onSelectDomain}) {
           containerClass="carousel-container"
           dotListClass="custom-dot-list-style"
           itemClass="carousel-item-padding-40-px">
-                  {itemsArray && itemsArray.map((domain, index) => (
+                  {itemsArray && itemsArray?.map((domain, index) => (
 
           <Box  className={`my-class ${activeStates[index] ? 'carousel-active-ui' : ''}`} onClick={(e) => handleDomainClick(domain.code,index)}  key={index} orientation="horizontal" size="sm" variant="outlined" style={{display:'flex'}}>
               <Box className="imgBorder" style={{background:'#fff',padding:'10px',borderRadius:'10px',height:'45px',width:'45px'}}>
@@ -137,7 +137,7 @@ export default function DomainCarousel({ domains ,onSelectDomain}) {
             </>
           ) : (
             <Box sx={{display:"flex"}}  className={scrolled ? "bg-blue scrolled" : "bg-blue"}>
-                                {itemsArray && itemsArray.map((domain, index) => (
+                                {itemsArray && itemsArray?.map((domain, index) => (
 
                <Box  className={`my-class ${activeStates[index] ? 'carousel-active-ui' : ''}`} onClick={(e) => handleDomainClick(domain.code,index)}  key={index} orientation="horizontal" size="sm" variant="outlined" style={{display:'flex',margin:"0 4px"}}>
               <Box className="imgBorder" style={{background:'#fff',padding:'10px',borderRadius:'10px',height:'45px',width:'45px'}}>

@@ -23,6 +23,8 @@ import Alert from "@mui/material/Alert";
 import appConfig from "../../configs/appConfig.json";
 const urlConfig = require("../../configs/urlConfig.json");
 import ToasterCommon from "../ToasterCommon";
+import Carousel from "react-multi-carousel";
+import DomainCarousel from "components/domainCarousel";
 
 const Item = styled(Paper)(({ theme }) => ({
   backgroundColor: theme.palette.mode === "dark" ? "#1A2027" : "#fff",
@@ -45,6 +47,25 @@ theme.typography.h3 = {
   },
 };
 
+const responsive = {
+  superLargeDesktop: {
+    breakpoint: { max: 4000, min: 3000 },
+    items: 5,
+  },
+  desktop: {
+    breakpoint: { max: 3000, min: 1024 },
+    items: 8,
+  },
+  tablet: {
+    breakpoint: { max: 1024, min: 464 },
+    items: 2,
+  },
+  mobile: {
+    breakpoint: { max: 464, min: 0 },
+    items: 1,
+  },
+};
+
 const DomainList = () => {
   const { t } = useTranslation();
   // console.log(data.result.categories.terms.category);
@@ -60,6 +81,8 @@ const DomainList = () => {
   const [itemsArray, setItemsArray] = useState([]);
   const [toasterOpen, setToasterOpen] = useState(false);
   const [toasterMessage, setToasterMessage] = useState("");
+  const [isMobile, setIsMobile] = useState(window.innerWidth <= 767);
+  const [domain, setDomain] = useState();
 
   const showErrorMessage = (msg) => {
     setToasterMessage(msg);
@@ -118,7 +141,7 @@ const DomainList = () => {
           });
         }
       });
-
+      setDomain(response.data.result.framework.categories[0].terms);
       setData(itemsArray);
     } catch (error) {
       console.log("nulp--  error-", error);
@@ -138,6 +161,9 @@ const DomainList = () => {
   const handleSearch = async (domainquery) => {
     console.log(domainquery);
     navigate("/contentList/1", { state: { domainquery } });
+  };
+  const handleDomainFilter = (query) => {
+    navigate("/contentList/1", { state: { domain: query } });
   };
   // console.log(frameworkHardCodedData.result.framework.categories[0].terms);
   return (
@@ -170,73 +196,99 @@ const DomainList = () => {
         <SearchBox onSearch={handleSearch} />
       </Box>  */}
 
-      <Container maxWidth="xxl" role="main" className="container-pb">
-        {error && <Alert severity="error">{error}</Alert>}
-        {/* <Box sx={{background:'#fff',padding:'20px 10px 30px 10px', margin:'25px 0'}}>
-   <ThemeProvider theme={theme}>
-   <Typography variant="h3" sx={{ margin: '10px 0 10px 0' }}>Filter by popular domain</Typography>
-   <Box sx={{boxShadow:'0px 4px 4px 0px #00000040',padding:'10px 10px',background:'#F4FBFF'}}>
-   {/* <DomainCarousel  domain={frameworkHardCodedData.result.framework.categories[0].terms}></DomainCarousel> 
-   </Box>
+      {isMobile ? (
+        <Container maxWidth="xxl" role="main" className="container-pb">
+          {error && <Alert severity="error">{error}</Alert>}
+          {/* <Box sx={{background:'#fff',padding:'20px 10px 30px 10px', margin:'25px 0'}}>
+<ThemeProvider theme={theme}>
+<Typography variant="h3" sx={{ margin: '10px 0 10px 0' }}>Filter by popular domain</Typography>
+<Box sx={{boxShadow:'0px 4px 4px 0px #00000040',padding:'10px 10px',background:'#F4FBFF'}}>
+{/* <DomainCarousel  domain={frameworkHardCodedData.result.framework.categories[0].terms}></DomainCarousel> 
+</Box>
 
-   </ThemeProvider> 
-   </Box> */}
-        {/* <DomainCarousel data={data.framework.categories[0].terms}></DomainCarousel> */}
+</ThemeProvider> 
+</Box> */}
+          {/* <DomainCarousel data={data?.framework?.categories[0].terms}></DomainCarousel> */}
 
-        <Box sx={{ paddingTop: "30px" }}>
-          <Grid
-            container
-            spacing={2}
-            style={{ margin: "20px 0", marginBottom: "10px" }}
-          >
-            {data &&
-              data.map((term) => (
-                <Grid
-                  item
-                  xs={12}
-                  md={6}
-                  lg={3}
-                  style={{ marginBottom: "10px" }}
-                >
-                  <Box
-                    onClick={() => loadContents(term)}
-                    style={{
-                      display: "flex",
-                      flexDirection: "row",
-                      alignItems: "center",
-                    }}
+          <Box sx={{ paddingTop: "30px" }}>
+            <Grid
+              container
+              spacing={2}
+              style={{ margin: "20px 0", marginBottom: "10px" }}
+            >
+              {data &&
+                data.map((term) => (
+                  <Grid
+                    item
+                    xs={12}
+                    md={6}
+                    lg={3}
+                    style={{ marginBottom: "10px" }}
                   >
                     <Box
+                      onClick={() => loadContents(term)}
                       style={{
-                        background: "#fff",
-                        padding: "10px",
-                        borderRadius: "10px",
-                        height: "48px",
-                        width: "48px",
-                        border: "solid 1px #E1E1E1",
+                        display: "flex",
+                        flexDirection: "row",
+                        alignItems: "center",
                       }}
                     >
-                      <img
-                        src={require(`../../assets/domainImgs${term.image}`)}
-                        style={{ width: "100%" }}
-                      />
+                      <Box
+                        style={{
+                          background: "#fff",
+                          padding: "10px",
+                          borderRadius: "10px",
+                          height: "48px",
+                          width: "48px",
+                          border: "solid 1px #E1E1E1",
+                        }}
+                      >
+                        <img
+                          src={require(`../../assets/domainImgs${term.image}`)}
+                          style={{ width: "100%" }}
+                        />
+                      </Box>
+                      <h5
+                        style={{
+                          fontSize: "14px",
+                          fontWeight: "500",
+                          paddingLeft: "10px",
+                          margin: "0",
+                        }}
+                      >
+                        {term.name}
+                      </h5>
                     </Box>
-                    <h5
-                      style={{
-                        fontSize: "14px",
-                        fontWeight: "500",
-                        paddingLeft: "10px",
-                        margin: "0",
-                      }}
-                    >
-                      {term.name}
-                    </h5>
-                  </Box>
-                </Grid>
-              ))}
-          </Grid>
-        </Box>
-      </Container>
+                  </Grid>
+                ))}
+            </Grid>
+          </Box>
+        </Container>
+      ) : domain ? (
+        <Carousel
+          swipeable={false}
+          draggable={false}
+          showDots={true}
+          responsive={responsive}
+          ssr={true}
+          infinite={true}
+          autoPlaySpeed={1000}
+          keyBoardControl={true}
+          customTransition="all .5"
+          transitionDuration={500}
+          containerClass="carousel-container"
+          removeArrowOnDeviceType={["tablet", "mobile"]}
+          dotListClass="custom-dot-list-style"
+          itemClass="carousel-item-padding-40-px"
+        >
+          <DomainCarousel
+            onSelectDomain={handleDomainFilter}
+            domains={domain}
+          />
+        </Carousel>
+      ) : (
+        " No result"
+      )}
       <Footer />
     </div>
   );
