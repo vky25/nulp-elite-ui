@@ -25,6 +25,7 @@ const urlConfig = require("../../configs/urlConfig.json");
 import ToasterCommon from "../ToasterCommon";
 import Carousel from "react-multi-carousel";
 import DomainCarousel from "components/domainCarousel";
+import NoResult from "pages/content/noResultFound";
 
 const Item = styled(Paper)(({ theme }) => ({
   backgroundColor: theme.palette.mode === "dark" ? "#1A2027" : "#fff",
@@ -287,7 +288,7 @@ const DomainList = () => {
           />
         </Carousel>
       ) : (
-        " No result"
+        <NoResult />
       )}
       <Footer />
     </div>
