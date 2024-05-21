@@ -903,14 +903,6 @@ const JoinCourse = () => {
                 </Typography>
               </AccordionDetails>
             </Accordion>
-            <Button type="button" className="custom-btn-primary my-15">Connect with Creator</Button>
-            <Box className="my-20">
-                 <Link href="#" className="pr-5"> <img src={require("../../assets/fb.png")} alt=""/></Link>
-                 <Link  href="#" className="pr-5">  <img src={require("../../assets/whatsapp.png")} alt=""/></Link>
-                 <Link  href="#" className="pr-5">  <img src={require("../../assets/linkedin.png")} alt=""/></Link>
-                 <Link  href="#" className="pr-5">  <img src={require("../../assets/twitter.png")} alt=""/></Link>
-
-            </Box>
             <div>
               <React.Fragment>
                 {chat.length === 0 && (
@@ -984,7 +976,14 @@ const JoinCourse = () => {
                   </div>
                 </Modal>
               )}
-            </div>
+            </div>            <Box className="my-20">
+                 <Link href="#" className="pr-5"> <img src={require("../../assets/fb.png")} alt=""/></Link>
+                 <Link  href="#" className="pr-5">  <img src={require("../../assets/whatsapp.png")} alt=""/></Link>
+                 <Link  href="#" className="pr-5">  <img src={require("../../assets/linkedin.png")} alt=""/></Link>
+                 <Link  href="#" className="pr-5">  <img src={require("../../assets/twitter.png")} alt=""/></Link>
+
+            </Box>
+           
           </Grid>
           <Grid
             item
