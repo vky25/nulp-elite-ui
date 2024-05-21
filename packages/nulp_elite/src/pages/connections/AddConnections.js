@@ -35,7 +35,7 @@ const designations = require("../../configs/designations.json");
 const urlConfig = require("../../configs/urlConfig.json");
 import Autocomplete from "@mui/material/Autocomplete";
 import ToasterCommon from "../ToasterCommon";
-import ForumOutlinedIcon from '@mui/icons-material/ForumOutlined';
+import ForumOutlinedIcon from "@mui/icons-material/ForumOutlined";
 import Grid from "@mui/material/Grid";
 
 // Define modal styles
@@ -108,6 +108,7 @@ const AddConnections = () => {
   const [options, setOptions] = useState([]);
   const [toasterOpen, setToasterOpen] = useState(false);
   const [toasterMessage, setToasterMessage] = useState("");
+  const [showTableTwo, setShowTableTwo] = useState(false);
 
   const showErrorMessage = (msg) => {
     setToasterMessage(msg);
@@ -1110,12 +1111,19 @@ const AddConnections = () => {
     onClickSearchedUser(user?.userId);
     console.log("Selected Option:", user);
   };
+  const handleButtonClick = () => {
+    setShowTableTwo(true);
+  };
 
   return (
     <Box>
-      <Header/>
+      <Header />
       {toasterMessage && <ToasterCommon response={toasterMessage} />}
-      <Container maxWidth="xxl" role="main" className="container-pb pt-0 xs-p-0">
+      <Container
+        maxWidth="xxl"
+        role="main"
+        className="container-pb pt-0 xs-p-0"
+      >
         {error && (
           <Alert severity="error" className="my-10">
             {error}
@@ -1124,23 +1132,6 @@ const AddConnections = () => {
 
         <Box textAlign="center" padding="10" style={{ minHeight: "500px" }}>
           <Box>
-            <Autocomplete
-              id="autocomplete-input"
-              open={autocompleteOpen}
-              onClose={() => {
-                setAutocompleteOpen(false);
-              }}
-              options={options}
-              noOptionsText={t("NO_USERS_FOUND")}
-              getOptionLabel={getOptionLabel} // Adjust this based on your API response structure
-              getOptionKey={(option) => option.userId}
-              onChange={handleOnSelectSearchedUser}
-              inputValue={inputValue}
-              onInputChange={handleInputChange}
-              renderInput={(params) => (
-                <TextField {...params} label="Search" variant="outlined" />
-              )}
-            />
             {/* <input
               label="Search for a user..."
               type="text"
@@ -1161,537 +1152,635 @@ const AddConnections = () => {
               }}
             />
           </Box> */}
-          <div>
-            <Popover
-              id={id}
-              open={openPopover}
-              anchorEl={anchorEl}
-              onClose={handlePopoverClose}
-              anchorOrigin={{
-                vertical: "bottom",
-                horizontal: "left",
-              }}
-            >
-              <Typography sx={{ p: 2 }}>
-                {userQuerySearchData &&
-                  userQuerySearchData?.length > 0 &&
-                  userQuerySearchData?.map((item) => (
-                    <List sx={{}} style={{ color: "gray", cursor: "pointer" }}>
-                      <ListItem>
-                        <ListItemText
-                          primary={`${item.firstName}${
-                            item.lastName ? ` ${item.lastName}` : ""
-                          }`}
-                          secondary={`${item.designation}`}
-                          onClick={() => onClickSearchedUser(item.userId)}
-                        />
-                      </ListItem>
-                      <Divider />
-                    </List>
-                  ))}
-                {(!userQuerySearchData || userQuerySearchData.length === 0) && (
-                  <Box>
-                    <p>{t("NO_USERS_FOUND")}</p>
-                  </Box>
-                )}
-              </Typography>
-            </Popover>
-          </div>
-          <Grid container spacing={2} className="pt-8 xs-p-0">
-          <Grid item xs={12} md={4} lg={4} className="sm-p-25 left-container">
-            <Box className="d-flex my-15" style={{justifyContent:"space-between"}}>
-                  <Box className="h4-title">Connections</Box>
-                  <Button type="button" className="custom-btn-default xs-mr-10">Add New</Button>
-            </Box>
-          <TabContext value={value} className="addConnection">
-            <Box sx={{ borderBottom: 1, borderColor: "divider" }}>
-              <TabList
-                onChange={handleChange}
-                aria-label="lab API tabs example"
-              >
-                <Tab
-                  label="My Connections"
-                  value="1"
-                  style={{ fontSize: "12px", color: "#484848" }}
-                  onClick={() => {
-                    handleTabClick("Tab1");
-                    setCurrentPage(1);
-                    onMyConnection();
-                  }}
-                />
-                <Tab
-                  label="Add New"
-                  value="2"
-                  style={{ fontSize: "12px", color: "#484848" }}
-                  onClick={() => {
-                    handleTabClick("Tab2");
-                    setCurrentPage(1);
-                    handleSearch();
-                  }}
-                />
-              </TabList>
-            </Box>
-            <TabPanel value="1" style={{ padding: "0" }}>
-              <Box className="scroll-45">
-              {invitationReceiverByUser &&
-                invitationReceiverByUser.length === 0 &&
-                invitationAcceptedUsers &&
-                invitationAcceptedUsers.length === 0 &&
-                invitationNotAcceptedUsers &&
-                invitationNotAcceptedUsers.length === 0 && (
-                  <Box>
-                    <p>{t("NO_USERS_FOUND")}</p>
-                  </Box>
-                )}
 
-              {invitationReceiverByUser &&
-                invitationReceiverByUser?.map((item) => (
-                  <List sx={{}} style={{ color: "gray", cursor: "pointer" }}>
-                    <ListItem key={item.userId} className="connection-tab">
-                      <ListItemText
-                        primary={`${item.firstName}${
-                          item.lastName ? ` ${item.lastName}` : ""
-                        }   | ${item.designation}`}
-                        secondary={
-                          item.messageRequest.length > 20 ? (
-                            <>
-                              {expandedMessageId === item.userId
-                                ? item.messageRequest
-                                : // : `${item.messageRequest.substring(0, 20)}...`}
-                                  `${item.messageRequest.substring(0, 20)}`}
-                              <span
-                                style={{ color: "blue", cursor: "pointer" }}
-                                onClick={() =>
-                                  handleShowFullMessage(item.userId)
-                                }
+            <Grid container spacing={2} className="pt-8 xs-p-0">
+              <Grid
+                item
+                xs={12}
+                md={4}
+                lg={4}
+                className="sm-p-25 left-container"
+              >
+                <Box
+                  className="d-flex my-15"
+                  style={{ justifyContent: "space-between" }}
+                >
+                  <Box className="h4-title">Connections</Box>
+                  <Button
+                    type="button"
+                    className="custom-btn-default xs-mr-10"
+                    onClick={handleButtonClick}
+                  >
+                    Add New
+                  </Button>
+                </Box>
+                <TabContext value={value} className="addConnection">
+                  {!showTableTwo ? (
+                    <>
+                      <Box sx={{ borderBottom: 1, borderColor: "divider" }}>
+                        <TabList
+                          onChange={handleChange}
+                          aria-label="lab API tabs example"
+                        >
+                          <Tab
+                            label="My Connections"
+                            value="1"
+                            style={{ fontSize: "12px", color: "#484848" }}
+                            onClick={() => {
+                              handleTabClick("Tab1");
+                              setCurrentPage(1);
+                              onMyConnection();
+                            }}
+                          />
+                          <Tab
+                            label="Connection Requests"
+                            value="2"
+                            style={{ fontSize: "12px", color: "#484848" }}
+                            onClick={() => {
+                              handleTabClick("Tab2");
+                              setCurrentPage(1);
+                              handleSearch();
+                            }}
+                          />
+                        </TabList>
+                      </Box>
+
+                      <TabPanel value="1" style={{ padding: "0" }}>
+                        <Box className="scroll-45">
+                          {invitationReceiverByUser &&
+                            invitationReceiverByUser.length === 0 &&
+                            invitationAcceptedUsers &&
+                            invitationAcceptedUsers.length === 0 &&
+                            invitationNotAcceptedUsers &&
+                            invitationNotAcceptedUsers.length === 0 && (
+                              <Box>
+                                <p>{t("NO_USERS_FOUND")}</p>
+                              </Box>
+                            )}
+
+                          {invitationAcceptedUsers &&
+                            invitationAcceptedUsers?.map((item) => (
+                              <List
+                                sx={{}}
+                                style={{ color: "green", cursor: "pointer" }}
+                                className="connection-tab"
                               >
-                                {" "}
-                                {expandedMessageId === item.userId
-                                  ? "show less"
-                                  : "show more"}
-                              </span>
-                            </>
-                          ) : (
-                            item.messageRequest
-                          )
-                        }
+                                <ListItem
+                                  component={RouterLink}
+                                  to={{
+                                    pathname: "/message",
+                                  }}
+                                  className="bg-blue"
+                                >
+                                  <ListItemText
+                                    primary={
+                                      <span
+                                        style={{
+                                          color:
+                                            item && item.isRead === false
+                                              ? "black"
+                                              : "black",
+                                          fontWeight:
+                                            item && item.isRead === false
+                                              ? "bold"
+                                              : "normal",
+                                        }}
+                                      >
+                                        {item.firstName}
+                                        {item.lastName
+                                          ? ` ${item.lastName}`
+                                          : ""}
+                                      </span>
+                                    }
+                                    secondary={item.designation}
+                                    onClick={() =>
+                                      handleAcceptedChatOpen(
+                                        item.userId,
+                                        `${item.firstName}${
+                                          item.lastName
+                                            ? ` ${item.lastName}`
+                                            : ""
+                                        }`,
+                                        item.designation
+                                      )
+                                    }
+                                  />
+                                </ListItem>
+                                <Divider />
+                              </List>
+                            ))}
+
+                          {invitationNotAcceptedUsers &&
+                            invitationNotAcceptedUsers?.map((item) => (
+                              <List
+                                sx={{}}
+                                style={{ fontSize: "14px", cursor: "pointer" }}
+                                onClick={() => userClick(item)}
+                                className="connection-tab"
+                              >
+                                <ListItem>
+                                  <ListItemText
+                                    primary={`${item.firstName} ${
+                                      item.lastName ? item.lastName : ""
+                                    } | ${item.designation}`}
+                                  />
+                                </ListItem>
+                                <Box className="left-bx">
+                                  <custom-chip>{t("REQUEST_SENT")}</custom-chip>
+                                </Box>
+                                <Divider />
+                              </List>
+                            ))}
+                          <div>
+                            {showChatModal && (
+                              <Modal
+                                open={showChatModal}
+                                onClose={handleCloseModal}
+                                aria-labelledby="modal-title"
+                                aria-describedby="modal-desc"
+                                className="sx-bottom"
+                                sx={{
+                                  display: "flex",
+                                  justifyContent: "center",
+                                  alignItems: "flex-end",
+                                  pt: "10vh",
+                                  p: "0",
+                                }}
+                              >
+                                <ModalContent sx={{ width: 400 }} style={{}}>
+                                  <div style={{ textAlign: "center" }}>
+                                    <h2
+                                      style={{
+                                        fontSize: "14px",
+                                        textAlign: "center",
+                                        padding: "13px",
+                                      }}
+                                    >
+                                      {t("INVITATION_NOT_ACCEPTED")}
+                                    </h2>
+                                    <Button
+                                      onClick={(e) => {
+                                        setShowChatModal(false);
+                                      }}
+                                      style={{
+                                        background: "#004367",
+                                        border: "solid 1px #004367",
+                                        borderRadius: "10px",
+                                        color: "#fff",
+                                        padding: "10px 12px",
+                                        margin: "0 10px",
+                                        fontWeight: "500",
+                                        fontSize: "12px",
+                                        width: "50%",
+                                        marginBottom: "10px",
+                                      }}
+                                    >
+                                      {t("CLOSE")}
+                                    </Button>
+                                  </div>
+                                </ModalContent>
+                              </Modal>
+                            )}
+                          </div>
+                        </Box>
+                      </TabPanel>
+                      <TabPanel value="2">
+                        <Box className="scroll">
+                          {invitationReceiverByUser &&
+                            invitationReceiverByUser?.map((item) => (
+                              <List
+                                sx={{}}
+                                style={{ color: "gray", cursor: "pointer" }}
+                              >
+                                <ListItem
+                                  key={item.userId}
+                                  className="connection-tab"
+                                >
+                                  <ListItemText
+                                    primary={`${item.firstName}${
+                                      item.lastName ? ` ${item.lastName}` : ""
+                                    }   | ${item.designation}`}
+                                    secondary={
+                                      item.messageRequest.length > 20 ? (
+                                        <>
+                                          {expandedMessageId === item.userId
+                                            ? item.messageRequest
+                                            : // : `${item.messageRequest.substring(0, 20)}...`}
+                                              `${item.messageRequest.substring(
+                                                0,
+                                                20
+                                              )}`}
+                                          <span
+                                            style={{
+                                              color: "blue",
+                                              cursor: "pointer",
+                                            }}
+                                            onClick={() =>
+                                              handleShowFullMessage(item.userId)
+                                            }
+                                          >
+                                            {" "}
+                                            {expandedMessageId === item.userId
+                                              ? "show less"
+                                              : "show more"}
+                                          </span>
+                                        </>
+                                      ) : (
+                                        item.messageRequest
+                                      )
+                                    }
+                                  />
+                                  <div
+                                    style={{
+                                      display: "flex",
+                                      justifyContent: "flex-end",
+                                      marginTop: "10px",
+                                    }}
+                                  >
+                                    <Link
+                                      href="#"
+                                      underline="none"
+                                      color="#004367"
+                                      onClick={() => acceptChat(item.userId)}
+                                      style={{ marginLeft: "10px" }}
+                                    >
+                                      <CheckCircleOutlineIcon
+                                        style={{
+                                          fontSize: "22px",
+                                          color: "#484848",
+                                        }}
+                                      />
+                                    </Link>
+                                    <span style={{ margin: "0 5px" }}></span>
+                                    <Link
+                                      href="#"
+                                      underline="none"
+                                      color="#7d7a7a"
+                                      onClick={() => rejectChat(item.userId)}
+                                    >
+                                      <CancelOutlinedIcon
+                                        style={{
+                                          fontSize: "22px",
+                                          color: "#484848",
+                                        }}
+                                      />
+                                    </Link>
+                                  </div>
+                                </ListItem>
+
+                                <Divider />
+                              </List>
+                            ))}
+                        </Box>
+                      </TabPanel>
+                    </>
+                  ) : (
+                    <Box>
+                      <Box display="flex" my={3} justifyContent="center">
+                        <Box className="h4-title">Add New Connection</Box>
+                      </Box>
+                      <Autocomplete
+                        id="autocomplete-input"
+                        open={autocompleteOpen}
+                        onClose={() => {
+                          setAutocompleteOpen(false);
+                        }}
+                        options={options}
+                        noOptionsText={t("NO_USERS_FOUND")}
+                        getOptionLabel={getOptionLabel} // Adjust this based on your API response structure
+                        getOptionKey={(option) => option.userId}
+                        onChange={handleOnSelectSearchedUser}
+                        inputValue={inputValue}
+                        onInputChange={handleInputChange}
+                        renderInput={(params) => (
+                          <TextField
+                            {...params}
+                            label="Search"
+                            variant="outlined"
+                          />
+                        )}
                       />
-                      <div
+                      <div>
+                        <Popover
+                          id={id}
+                          open={openPopover}
+                          anchorEl={anchorEl}
+                          onClose={handlePopoverClose}
+                          anchorOrigin={{
+                            vertical: "bottom",
+                            horizontal: "left",
+                          }}
+                        >
+                          <Typography sx={{ p: 2 }}>
+                            {userQuerySearchData &&
+                              userQuerySearchData?.length > 0 &&
+                              userQuerySearchData?.map((item) => (
+                                <List
+                                  sx={{}}
+                                  style={{ color: "gray", cursor: "pointer" }}
+                                >
+                                  <ListItem>
+                                    <ListItemText
+                                      primary={`${item.firstName}${
+                                        item.lastName ? ` ${item.lastName}` : ""
+                                      }`}
+                                      secondary={`${item.designation}`}
+                                      onClick={() =>
+                                        onClickSearchedUser(item.userId)
+                                      }
+                                    />
+                                  </ListItem>
+                                  <Divider />
+                                </List>
+                              ))}
+                            {(!userQuerySearchData ||
+                              userQuerySearchData.length === 0) && (
+                              <Box>
+                                <p>{t("NO_USERS_FOUND")}</p>
+                              </Box>
+                            )}
+                          </Typography>
+                        </Popover>
+                      </div>
+                      <Box
                         style={{
                           display: "flex",
-                          justifyContent: "flex-end",
-                          marginTop: "10px",
+                          justifyContent: "space-between",
                         }}
+                        className="filter-domain my-20 connection-tab"
                       >
-                        <Link
-                          href="#"
-                          underline="none"
-                          color="#004367"
-                          onClick={() => acceptChat(item.userId)}
-                          style={{ marginLeft: "10px" }}
-                        >
-                          <CheckCircleOutlineIcon
-                            style={{ fontSize: "22px",color:"#484848" }}
+                        {userFilter && (
+                          <Filter
+                            options={userFilter.map((user) => user.firstName)}
+                            label="Filter by Name"
+                            onChange={handleUserNameFilter}
+                            className="w-30"
                           />
-                        </Link>
-                        <span style={{ margin: "0 5px" }}></span>
-                        <Link
-                          href="#"
-                          underline="none"
-                          color="#7d7a7a"
-                          onClick={() => rejectChat(item.userId)}
+                        )}
+
+                        <Filter
+                          options={designationsList}
+                          label="Filter by Designation"
+                          onChange={handleDesignationFilter}
+                          // isMulti={false}
+                          className="w-30"
+                        />
+                      </Box>
+                      <Box className="scroll">
+                        {userSearchData &&
+                          userSearchData?.map((item) => (
+                            <List
+                              key={item.id} // Add key prop to each List element
+                              sx={{ fontSize: "14px" }}
+                              onClick={() => handleUserClick(item)}
+                            >
+                              <ListItem>
+                                <ListItemText
+                                  primary={`${item.firstName}${
+                                    (item.lastName ? ` ${item.lastName}` : "",
+                                    " | ",
+                                    `${item.designation}`)
+                                  }`}
+                                  secondary={`${item.designation}`}
+                                />
+                                {item.id !== loggedInUserId && ( // Conditionally render the link
+                                  <Link
+                                    href="#"
+                                    underline="none"
+                                    color="primary"
+                                    onClick={handleOpen}
+                                    style={{
+                                      fontSize: "12px",
+                                      color: "#0E7A9C",
+                                      fontWeight: "600",
+                                    }}
+                                  >
+                                    {t("INVITE")}
+                                  </Link>
+                                )}
+                              </ListItem>
+                              <Divider />
+                            </List>
+                          ))}
+                      </Box>
+                      <Pagination
+                        count={totalPages}
+                        page={currentPage}
+                        onChange={handlePageChange}
+                      />
+                      <div>
+                        <Modal
+                          aria-labelledby="modal-title"
+                          aria-describedby="modal-desc"
+                          open={open}
+                          className="sx-bottom"
+                          onClose={() => setOpen(false)}
+                          sx={{
+                            display: "flex",
+                            justifyContent: "center",
+                            alignItems: "flex-end",
+                            pt: "10vh",
+                            p: "0",
+                          }}
                         >
-                          <CancelOutlinedIcon style={{ fontSize: "22px",color:"#484848" }} />
-                        </Link>
-                      </div>
-                    </ListItem>
+                          <ModalContent sx={{ width: 400 }} style={{}}>
+                            <h2
+                              id="unstyled-modal-title"
+                              className="modal-title"
+                              style={{
+                                paddingTop: "10px",
+                                paddingRight: "10px",
+                                paddingLeft: "10px",
+                                paddingBottom: "10px", // Changed to paddingBottom to avoid duplication
+                                backgroundColor: "#004367",
+                                color: "white",
+                                borderRadius: "4px", // Changed to "4px" from "md" for borderRadius
+                              }}
+                            >
+                              {selectedUser && (
+                                <div
+                                  style={{
+                                    fontSize: "16px",
+                                    lineHeight: "1.6",
+                                    fontWeight: "500",
+                                  }}
+                                >
+                                  {selectedUser?.firstName}{" "}
+                                  {selectedUser?.lastName}
+                                </div>
+                              )}
+                              {selectedUser && (
+                                <div
+                                  style={{
+                                    fontSize: "15px",
+                                    paddingBottom: "10px",
+                                    fontWeight: "400",
+                                  }}
+                                >
+                                  {selectedUser.designation}
+                                </div>
+                              )}
+                            </h2>
 
-                    <Divider />
-                  </List>
-                ))}
+                            {!showChat && (
+                              <p
+                                style={{
+                                  fontSize: "12px",
+                                  paddingLeft: "10px",
+                                  paddingRight: "10px",
+                                }}
+                                id="unstyled-modal-description"
+                                className="modal-description"
+                              >
+                                <Box
+                                  style={{
+                                    fontSize: "12px",
+                                    color: "#484848",
+                                    paddingBottom: "15px",
+                                  }}
+                                >
+                                  {/* {selectedUser.firstName} {selectedUser.lastName} */}
+                                  {/* {t("CONNECT_TEXT")} */}
+                                  {selectedUser.bio}
+                                </Box>
+                                <Box>{t("CONNECT_WITH_THEM")}</Box>
+                              </p>
+                            )}
+                            {showChat && (
+                              <div>
+                                <TextField
+                                  multiline
+                                  minRows={5}
+                                  maxRows={10}
+                                  value={textValue}
+                                  onChange={handleTextareaChange}
+                                  placeholder="Enter your text here..."
+                                  fullWidth
+                                  sx={{ fontSize: "13px" }}
+                                />
+                              </div>
+                            )}
+                            <Box
+                              style={{
+                                paddingBottom: "30px",
+                                display: "flex",
+                                justifyContent: "space-between",
+                                flexDirection: "row",
+                              }}
+                            >
+                              <Button
+                                variant="outlined"
+                                style={{
+                                  borderRadius: "10px",
+                                  color: "#004367",
+                                  padding: "10px 12px",
+                                  margin: "0 10px",
+                                  fontWeight: "500",
+                                  fontSize: "12px",
+                                  border: "solid 1px #efefea00",
+                                  width: "50%",
+                                }}
+                                onClick={handleClose}
+                              >
+                                {t("CANCEL")}
+                              </Button>
 
-              {invitationAcceptedUsers &&
-                invitationAcceptedUsers?.map((item) => (
-                  <List sx={{}} style={{ color: "green", cursor: "pointer" }} className="connection-tab">
-                    <ListItem
-                      component={RouterLink}
-                      to={{
-                        pathname: "/message",
-                      }}
-                      className="bg-blue"
-                    >
-                      <ListItemText
-                        primary={
-                          <span
-                            style={{
-                              color:
-                                item && item.isRead === false
-                                  ? "black"
-                                  : "black",
-                              fontWeight:
-                                item && item.isRead === false
-                                  ? "bold"
-                                  : "normal",
+                              <Button
+                                style={{
+                                  background: "#004367",
+                                  borderRadius: "10px",
+                                  color: "#fff",
+                                  padding: "10px 12px",
+                                  margin: "0 10px",
+                                  fontWeight: "500",
+                                  fontSize: "12px",
+                                  border: "solid 1px #004367",
+                                  width: "50%",
+                                }}
+                                onClick={
+                                  showChat ? handleSendClick : toggleChat
+                                }
+                              >
+                                {buttonText}
+                              </Button>
+                            </Box>
+                          </ModalContent>
+                        </Modal>
+
+                        {showModal && (
+                          <Modal
+                            open={showModal}
+                            onClose={handleCloseModal}
+                            aria-labelledby="modal-title"
+                            aria-describedby="modal-desc"
+                            className="sx-bottom"
+                            sx={{
+                              display: "flex",
+                              justifyContent: "center",
+                              alignItems: "flex-end",
+                              pt: "10vh",
+                              p: "0",
                             }}
                           >
-                            {item.firstName}
-                            {item.lastName ? ` ${item.lastName}` : ""}
-                          </span>
-                        }
-                        secondary={item.designation}
-                        onClick={() =>
-                          handleAcceptedChatOpen(
-                            item.userId,
-                            `${item.firstName}${
-                              item.lastName ? ` ${item.lastName}` : ""
-                            }`,
-                            item.designation
-                          )
-                        }
-                      />
-
-                    </ListItem>
-                    <Box className="left-bx"><custom-chip>{t('REQUEST_SENT')}</custom-chip></Box>
-
-                    <Divider />
-                  </List>
-                ))}
-
-              {invitationNotAcceptedUsers &&
-                invitationNotAcceptedUsers?.map((item) => (
-                  <List
-                    sx={{}}
-                    style={{ fontSize: "14px", cursor: "pointer" }}
-                    onClick={() => userClick(item)}
-                    className="connection-tab"
-                  >
-                    <ListItem>
-                      <ListItemText
-                        primary={`${item.firstName}${
-                          item.lastName ? ` ${item.lastName}` : ""
-                        }`}
-                        secondary={item.designation}
-                      />
-                    </ListItem>
-
-                    <Divider />
-                  </List>
-                ))}
-              <div>
-                {showChatModal && (
-                  <Modal
-                    open={showChatModal}
-                    onClose={handleCloseModal}
-                    aria-labelledby="modal-title"
-                    aria-describedby="modal-desc"
-                    className="sx-bottom"
-                    sx={{
-                      display: "flex",
-                      justifyContent: "center",
-                      alignItems: "flex-end",
-                      pt: "10vh",
-                      p: "0",
-                    }}
-                  >
-                    <ModalContent sx={{ width: 400 }} style={{}}>
-                      <div style={{ textAlign: "center" }}>
-                        <h2
-                          style={{
-                            fontSize: "14px",
-                            textAlign: "center",
-                            padding: "13px",
-                          }}
-                        >
-                          {t("INVITATION_NOT_ACCEPTED")}
-                        </h2>
-                        <Button
-                          onClick={(e) => {
-                            setShowChatModal(false);
-                          }}
-                          style={{
-                            background: "#004367",
-                            border: "solid 1px #004367",
-                            borderRadius: "10px",
-                            color: "#fff",
-                            padding: "10px 12px",
-                            margin: "0 10px",
-                            fontWeight: "500",
-                            fontSize: "12px",
-                            width: "50%",
-                            marginBottom: "10px",
-                          }}
-                        >
-                          {t("CLOSE")}
-                        </Button>
+                            <ModalContent sx={{ width: 400 }} style={{}}>
+                              <div
+                                style={{
+                                  padding: "10px",
+                                  textAlign: "center",
+                                }}
+                              >
+                                <h2
+                                  style={{
+                                    fontSize: "14px",
+                                    textAlign: "center",
+                                    padding: "13px",
+                                  }}
+                                >
+                                  {t("INVITATION_SEND_SUCCESSFULLY")}
+                                </h2>
+                                <Button
+                                  onClick={(e) => {
+                                    setShowModal(false);
+                                  }}
+                                  style={{
+                                    background: "#004367",
+                                    borderRadius: "10px",
+                                    color: "#fff",
+                                    padding: "10px 12px",
+                                    margin: "0 10px",
+                                    fontWeight: "500",
+                                    fontSize: "12px",
+                                    width: "40%",
+                                  }}
+                                >
+                                  {t("CLOSE")}
+                                </Button>
+                              </div>
+                            </ModalContent>
+                          </Modal>
+                        )}
                       </div>
-                    </ModalContent>
-                  </Modal>
-                )}
-              </div>
-              </Box>
-            </TabPanel>
-            <TabPanel value="2">
-              <Box
-                style={{ display: "flex", justifyContent: "space-between" }}
-                className="filter-domain my-20 connection-tab"
-              >
-                {userFilter && (
-                  <Filter
-                    options={userFilter.map((user) => user.firstName)}
-                    label="Filter by Name"
-                    onChange={handleUserNameFilter}
-                    className="w-30"
-                  />
-                )}
-
-                <Filter
-                  options={designationsList}
-                  label="Filter by Designation"
-                  onChange={handleDesignationFilter}
-                  // isMulti={false}
-                  className="w-30"
-                />
-              </Box>
-              <Box className="scroll">
-
-              {userSearchData &&
-                userSearchData?.map((item) => (
-                  <List
-                    key={item.id} // Add key prop to each List element
-                    sx={{ fontSize: "14px" }}
-                    onClick={() => handleUserClick(item)}
-                  >
-                    <ListItem>
-                      <ListItemText
-                        primary={`${item.firstName}${
-                          item.lastName ? ` ${item.lastName}` : ""
-                        }`}
-                        secondary={`${item.designation}`}
-                      />
-                      {item.id !== loggedInUserId && ( // Conditionally render the link
-                        <Link
-                          href="#"
-                          underline="none"
-                          color="primary"
-                          onClick={handleOpen}
-                          style={{
-                            fontSize: "12px",
-                            color: "#0E7A9C",
-                            fontWeight: "600",
-                          }}
-                        >
-                          {t("INVITE")}
-                        </Link>
-                      )}
-                    </ListItem>
-                    <Divider />
-                  </List>
-                ))}
-              </Box>
-              <Pagination
-                count={totalPages}
-                page={currentPage}
-                onChange={handlePageChange}
-              />
-              <div>
-                <Modal
-                  aria-labelledby="modal-title"
-                  aria-describedby="modal-desc"
-                  open={open}
-                  className="sx-bottom"
-                  onClose={() => setOpen(false)}
-                  sx={{
-                    display: "flex",
-                    justifyContent: "center",
-                    alignItems: "flex-end",
-                    pt: "10vh",
-                    p: "0",
-                  }}
-                >
-                  <ModalContent sx={{ width: 400 }} style={{}}>
-                    <h2
-                      id="unstyled-modal-title"
-                      className="modal-title"
-                      style={{
-                        paddingTop: "10px",
-                        paddingRight: "10px",
-                        paddingLeft: "10px",
-                        paddingBottom: "10px", // Changed to paddingBottom to avoid duplication
-                        backgroundColor: "#004367",
-                        color: "white",
-                        borderRadius: "4px", // Changed to "4px" from "md" for borderRadius
-                      }}
-                    >
-                      {selectedUser && (
-                        <div
-                          style={{
-                            fontSize: "16px",
-                            lineHeight: "1.6",
-                            fontWeight: "500",
-                          }}
-                        >
-                          {selectedUser?.firstName} {selectedUser?.lastName}
-                        </div>
-                      )}
-                      {selectedUser && (
-                        <div
-                          style={{
-                            fontSize: "15px",
-                            paddingBottom: "10px",
-                            fontWeight: "400",
-                          }}
-                        >
-                          {selectedUser.designation}
-                        </div>
-                      )}
-                    </h2>
-
-                    {!showChat && (
-                      <p
-                        style={{
-                          fontSize: "12px",
-                          paddingLeft: "10px",
-                          paddingRight: "10px",
-                        }}
-                        id="unstyled-modal-description"
-                        className="modal-description"
-                      >
-                        <Box
-                          style={{
-                            fontSize: "12px",
-                            color: "#484848",
-                            paddingBottom: "15px",
-                          }}
-                        >
-                          {/* {selectedUser.firstName} {selectedUser.lastName} */}
-                          {/* {t("CONNECT_TEXT")} */}
-                          {selectedUser.bio}
-                        </Box>
-                        <Box>{t("CONNECT_WITH_THEM")}</Box>
-                      </p>
-                    )}
-                    {showChat && (
-                      <div>
-                        <TextField
-                          multiline
-                          minRows={5}
-                          maxRows={10}
-                          value={textValue}
-                          onChange={handleTextareaChange}
-                          placeholder="Enter your text here..."
-                          fullWidth
-                          sx={{ fontSize: "13px" }}
-                        />
-                      </div>
-                    )}
-                    <Box
-                      style={{
-                        paddingBottom: "30px",
-                        display: "flex",
-                        justifyContent: "space-between",
-                        flexDirection: "row",
-                      }}
-                    >
-                      <Button
-                        variant="outlined"
-                        style={{
-                          borderRadius: "10px",
-                          color: "#004367",
-                          padding: "10px 12px",
-                          margin: "0 10px",
-                          fontWeight: "500",
-                          fontSize: "12px",
-                          border: "solid 1px #efefea00",
-                          width: "50%",
-                        }}
-                        onClick={handleClose}
-                      >
-                        {t("CANCEL")}
-                      </Button>
-
-                      <Button
-                        style={{
-                          background: "#004367",
-                          borderRadius: "10px",
-                          color: "#fff",
-                          padding: "10px 12px",
-                          margin: "0 10px",
-                          fontWeight: "500",
-                          fontSize: "12px",
-                          border: "solid 1px #004367",
-                          width: "50%",
-                        }}
-                        onClick={showChat ? handleSendClick : toggleChat}
-                      >
-                        {buttonText}
-                      </Button>
                     </Box>
-                  </ModalContent>
-                </Modal>
-
-                {showModal && (
-                  <Modal
-                    open={showModal}
-                    onClose={handleCloseModal}
-                    aria-labelledby="modal-title"
-                    aria-describedby="modal-desc"
-                    className="sx-bottom"
-                    sx={{
-                      display: "flex",
-                      justifyContent: "center",
-                      alignItems: "flex-end",
-                      pt: "10vh",
-                      p: "0",
-                    }}
-                  >
-                    <ModalContent sx={{ width: 400 }} style={{}}>
-                      <div style={{ padding: "10px", textAlign: "center" }}>
-                        <h2
-                          style={{
-                            fontSize: "14px",
-                            textAlign: "center",
-                            padding: "13px",
-                          }}
-                        >
-                          {t("INVITATION_SEND_SUCCESSFULLY")}
-                        </h2>
-                        <Button
-                          onClick={(e) => {
-                            setShowModal(false);
-                          }}
-                          style={{
-                            background: "#004367",
-                            borderRadius: "10px",
-                            color: "#fff",
-                            padding: "10px 12px",
-                            margin: "0 10px",
-                            fontWeight: "500",
-                            fontSize: "12px",
-                            width: "40%",
-                          }}
-                        >
-                          {t("CLOSE")}
-                        </Button>
-                      </div>
-                    </ModalContent>
-                  </Modal>
-                )}
-              </div>
-            </TabPanel>
-          </TabContext>
-          </Grid>
-          <Grid item xs={12} md={4} lg={4} className="sm-p-25 pt-8 pb-20 xs-hide">
-            <Box className="text-center center-container">
-              <Box>
-              <ForumOutlinedIcon style={{fontSize:"100px"}}/>
-                <Box className="demo-chat">{t("START_A_CONVERSATION")}</Box>
-                <Box className="demo-text">{t("CLICK_ON_ANY_CONTACT")}</Box>
-              </Box>
-            </Box>
-          </Grid>
-          </Grid>
-         
-        </Box>
+                  )}
+                </TabContext>
+              </Grid>
+              <Grid
+                item
+                xs={12}
+                md={4}
+                lg={4}
+                className="sm-p-25 pt-8 pb-20 xs-hide"
+              >
+                <Box className="text-center center-container">
+                  <Box>
+                    <ForumOutlinedIcon style={{ fontSize: "100px" }} />
+                    <Box className="demo-chat">{t("START_A_CONVERSATION")}</Box>
+                    <Box className="demo-text">{t("CLICK_ON_ANY_CONTACT")}</Box>
+                  </Box>
+                </Box>
+              </Grid>
+            </Grid>
+          </Box>
         </Box>
       </Container>
       <Footer />

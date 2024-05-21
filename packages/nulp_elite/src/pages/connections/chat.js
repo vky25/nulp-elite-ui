@@ -13,7 +13,7 @@ import {
 import Box from "@mui/material/Box";
 import * as util from "../../services/utilService";
 const axios = require("axios");
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import { useStore } from "configs/zustandStore";
 import { IconButton, Menu, MenuItem } from "@mui/material";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
@@ -86,7 +86,11 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const Message = (props) => {
+const Chat = ({
+  senderUserId: propSenderUserId,
+  receiverUserId: propReceiverUserId,
+  onChatSent,
+}) => {
   const classes = useStyles();
   const [message, setMessage] = useState("");
   const [messages, setMessages] = useState([]);
@@ -95,7 +99,6 @@ const Message = (props) => {
   const [pageSize, setPageSize] = useState(10);
   const [searchQuery, setSearchQuery] = useState("");
   const dataStore = useStore((state) => state.data);
-  const receiverUserId = dataStore.userId || localStorage.getItem("userId");
   const [anchorEl, setAnchorEl] = useState(null);
   const navigate = useNavigate();
   const [reason, setReason] = useState("");
@@ -104,13 +107,90 @@ const Message = (props) => {
   const [showUnblockOption, setShowUnblockOption] = useState(false); // State to show/hide unblock option
   const [toasterOpen, setToasterOpen] = useState(false);
   const [toasterMessage, setToasterMessage] = useState("");
+  const [receiverData, setReceiverData] = useState([]);
+  const [prefilledMessage, setPrefilledMessage] = useState(
+    "Hello, I would like to connect with you regarding some queries i had in your course."
+  );
+  const [textValue, setTextValue] = useState("");
+  const location = useLocation();
+  const {
+    senderUserId: routeSenderUserId,
+    receiverUserId: routeReceiverUserId,
+  } = location.state || {};
+
+  const senderUserId = propSenderUserId || routeSenderUserId;
+  const receiverUserId = propReceiverUserId || routeReceiverUserId;
+
   // const [openModal, setDialogOpen] = useState(false);
 
   const { t } = useTranslation();
   useEffect(() => {
     const _userId = util.userId();
     setLoggedInUserId(_userId);
-  }, []);
+    const getInvitationNotAcceptedUserByIds = async () => {
+      const requestBody = {
+        request: {
+          filters: {
+            status: "1",
+            userId: [receiverUserId],
+          },
+        },
+      };
+
+      try {
+        const url = `${urlConfig.URLS.LEARNER_PREFIX}${urlConfig.URLS.ADMIN.USER_SEARCH}`;
+        const response = await fetch(url, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(requestBody),
+        });
+
+        if (!response.ok) {
+          showErrorMessage(t("FAILED_TO_FETCH_DATA"));
+          throw new Error(t("FAILED_TO_FETCH_DATA"));
+        }
+
+        const responseData = await response.json();
+        const content = responseData?.result?.response?.content || [];
+        const userInfoPromises = content.map((item) => fetchUserInfo(item.id));
+        const userInfoList = await Promise.all(userInfoPromises);
+
+        // Add designation and bio to each item
+        content.forEach((item, index) => {
+          item.designation = userInfoList[index].designation || "";
+          item.bio = userInfoList[index].bio || "";
+        });
+        setReceiverData(content);
+      } catch (error) {
+        console.error("Error fetching data:", error);
+        showErrorMessage(t("FAILED_TO_FETCH_DATA"));
+      }
+    };
+    getInvitationNotAcceptedUserByIds();
+  }, [receiverUserId]);
+
+  const fetchUserInfo = async (userId) => {
+    try {
+      const url = `${urlConfig.URLS.POFILE_PAGE.USER_READ}`;
+      const response = await axios.post(
+        url,
+        { user_ids: [userId] },
+        {
+          withCredentials: true,
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }
+      );
+
+      return response.data.result[0] || {};
+    } catch (error) {
+      showErrorMessage(t("FAILED_TO_FETCH_DATA"));
+      console.error(error);
+    }
+  };
   useEffect(() => {
     if (loggedInUserId) {
       // Fetch block user status when component mounts
@@ -158,7 +238,7 @@ const Message = (props) => {
     try {
       const url = `${
         urlConfig.URLS.DIRECT_CONNECT.GET_CHATS
-      }?sender_id=${loggedInUserId}&receiver_id=${receiverUserId}&is_accepted=${true}`;
+      }?sender_id=${senderUserId}&receiver_id=${receiverUserId}&is_accepted=${true}`;
 
       // Check if the user is not blocked before fetching chats
       if (!isBlocked) {
@@ -174,19 +254,17 @@ const Message = (props) => {
   };
 
   const sendMessage = async () => {
-    if (message.trim() !== "") {
+    if (textValue.trim() !== "") {
       try {
-        const url = `${urlConfig.URLS.DIRECT_CONNECT.SEND_CHAT}`;
-        console.log("Sending message:", message);
+        const url = `${urlConfig.URLS.DIRECT_CONNECT.SEND_CHATS}`;
+        console.log("Sending message:", textValue);
 
         await axios.post(
           url,
           {
             sender_id: loggedInUserId,
             receiver_id: receiverUserId,
-            message: message,
-            sender_email: "sender@gmail.com",
-            receiver_email: "receiver@gmail.com",
+            message: textValue,
           },
           {
             withCredentials: true,
@@ -196,7 +274,11 @@ const Message = (props) => {
           }
         );
         setMessage("");
+
         fetchChats(); // Fetch messages after sending a message
+        if (onChatSent) {
+          onChatSent();
+        }
       } catch (error) {
         console.error("Error saving message:", error);
         showErrorMessage(t("FAILED_TO_SEND_CHAT"));
@@ -207,7 +289,7 @@ const Message = (props) => {
   const updateMessage = async () => {
     try {
       const url = `${urlConfig.URLS.DIRECT_CONNECT.UPDATE_CHAT}`;
-      console.log("updating message:", message);
+      console.log("updating message:", textValue);
 
       const data = await axios.put(
         url,
@@ -336,32 +418,43 @@ const Message = (props) => {
     handleMenuClose(); // Close the menu after the action is completed
   };
 
+  const handleTextareaChange = (event) => {
+    setPrefilledMessage(event.target.value);
+    setTextValue(event.target.value);
+  };
   return (
     <div className={classes.chatContainer}>
-      {toasterMessage && <ToasterCommon response={toasterMessage} />}
-      <div className={classes.chatHeader}>
-        <Box style={{ display: "flex", alignItems: "center" }}>
+      <div
+        className={classes.chatHeader}
+        style={{
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "space-between",
+        }}
+      >
+        <Box className="d-flex" style={{ alignItems: "center" }}>
           <IconButton onClick={handleGoBack}>
             <ArrowBackIcon />
           </IconButton>
-          <Box
-            sx={{
-              fontSize: "20px",
-              fontWeight: "500",
-              paddingLeft: "10px",
-              color: "#484848",
-            }}
-          >
-            <div>
-              {dataStore.fullName || localStorage.getItem("chatName")}
-              <Typography
-                variant="body2"
-                sx={{ fontSize: "12px", textAlign: "left" }}
-              >
-                {dataStore.designation || localStorage.getItem("designation")}
-              </Typography>
-            </div>
-          </Box>
+          {receiverData && receiverData?.length > 0 && (
+            <Box
+              sx={{
+                fontSize: "20px",
+                fontWeight: "500",
+                paddingLeft: "10px",
+                color: "#484848",
+                textAlign: "left",
+              }}
+            >
+              <div>
+                <Typography className="h2-title">
+                  {receiverData[0].firstName}{" "}
+                  {receiverData[0].lastName && receiverData[0].lastName}
+                </Typography>
+                <Box className="h5-title">{receiverData[0].designation}</Box>
+              </div>
+            </Box>
+          )}
         </Box>
         <Box
           style={{
@@ -385,243 +478,132 @@ const Message = (props) => {
           )}
         </Box>
       </div>
-      <Dialog
-        // open={open}
-        // onClose={handleClose}
-
-        open={dialogOpen}
-        onClose={handleDialogClose}
-      >
-        <DialogTitle>
-          {" "}
-          <Box className="h5-title">{t("BLOCK_USER")}</Box>
-        </DialogTitle>
-        <DialogContent>
-          <Box className="h5-title">
-            Are you sure you want to block this user?
+      {receiverData && receiverData.length > 0 && !messages.length > 0 ? (
+        <div className={classes.chat}>
+          <Box className="h5-title my-15" style={{ color: "#484848" }}>
+            {receiverData[0]?.bio}
+            <Box className="my-15">
+              Connect with them to get insights on what they do or simply
+              answers to your question!
+            </Box>
           </Box>
-          <Box py={2}>
-            <TextField
-              id="reason"
-              name="reason"
-              label={
-                <span>
-                  {t("REASON")}
-                  <span style={{ color: "red", marginLeft: "2px" }}>*</span>
-                </span>
-              }
-              multiline
-              rows={3}
-              variant="outlined"
-              fullWidth
-              value={reason}
-              onChange={(e) => setReason(e.target.value)}
-            />
-          </Box>{" "}
-        </DialogContent>
-        <DialogActions>
-          <Button onClick={handleDialogClose} className="custom-btn-default">
-            {"CANCEL"}
-          </Button>
-          <Button
-            onClick={handleBlockUserConfirmed}
-            className="custom-btn-primary"
-            disabled={!reason}
-            style={{
-              background: !reason ? "rgba(0, 67, 103, 0.5)" : "#004367",
-            }}
-          >
-            {"BLOCK"}
-          </Button>
-        </DialogActions>
-      </Dialog>
+          <Alert severity="info" style={{ margin: "10px 0" }}>
+            This is an auto-generated message, click to edit.
+          </Alert>
 
-      <Alert severity="info" style={{ margin: "10px 0" }}>
-        {t("YOUR_CHAT_WILL_DISAPPEAR")}
-      </Alert>
-      <div className={classes.chat}>
-        {messages.map((msg, index) => (
-          <div key={index}>
-            {index === 0 ||
-            getTimeAgo(msg.timestamp) !==
-              getTimeAgo(messages[index - 1].timestamp) ? (
-              <div style={{ margin: "0 auto", textAlign: "center" }}>
-                <Box className="dayDisplay">{getTimeAgo(msg.timestamp)}</Box>
-              </div>
-            ) : null}
-            <div
-              className={
-                msg.sender_id === loggedInUserId
-                  ? `${classes.senderMessage} ${classes.message}`
-                  : `${classes.receiverMessage} ${classes.message}`
-              }
-            >
-              <div>{msg.message}</div>
-              <Box
-                style={{
-                  display: "flex",
-                  alignItems: "center",
-                  justifyContent: "flex-end",
-                }}
+          <TextField
+            multiline
+            minRows={2}
+            maxRows={10}
+            value={prefilledMessage}
+            onChange={handleTextareaChange}
+            fullWidth
+            sx={{ fontSize: "13px" }}
+          />
+          <Button style={{ color: "#484848" }} onClick={sendMessage}>
+            <SendIcon />
+          </Button>
+        </div>
+      ) : messages.length > 0 ? (
+        <div className={classes.chat}>
+          <Alert severity="info" style={{ margin: "10px 0" }}>
+            {t("YOUR_CHAT_WILL_DISAPPEAR")}
+          </Alert>
+          {messages.map((msg, index) => (
+            <div key={index}>
+              {index === 0 ||
+              getTimeAgo(msg.timestamp) !==
+                getTimeAgo(messages[index - 1].timestamp) ? (
+                <div style={{ margin: "0 auto", textAlign: "center" }}>
+                  <Box className="dayDisplay">{getTimeAgo(msg.timestamp)}</Box>
+                </div>
+              ) : null}
+              <div
+                className={
+                  msg.sender_id === loggedInUserId
+                    ? `${classes.senderMessage} ${classes.message}`
+                    : `${classes.receiverMessage} ${classes.message}`
+                }
               >
-                <div
+                <div>{msg.message}</div>
+                <Box
                   style={{
-                    fontSize: "10px",
-                    color: "#484848",
-                    fontWeight: "400",
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "flex-end",
                   }}
                 >
-                  {getTime(msg.timestamp)}
-                </div>
-                {msg.sender_id === loggedInUserId ? (
                   <div
                     style={{
-                      display: "flex",
-                      alignItems: "center",
-                      fontSize: "13px",
-                      justifyContent: "flex-end",
+                      fontSize: "10px",
+                      color: "#484848",
+                      fontWeight: "400",
                     }}
                   >
-                    {msg.is_read ? (
-                      <DoneAllIcon
-                        style={{
-                          color: "#00ebff",
-                          fontSize: "15px",
-                          paddingLeft: "6px",
-                        }}
-                      />
-                    ) : (
-                      <DoneAllIcon
-                        style={{
-                          color: "#bdbaba",
-                          fontSize: "18px",
-                          paddingRight: "10px",
-                        }}
-                      />
-                    )}
-                    {/* {msg.is_read ? "Read" : "Delivered"} */}
+                    {getTime(msg.timestamp)}
                   </div>
-                ) : null}
-              </Box>
-            </div>
-            {msg.is_accepted ? (
-              <div style={{ textAlign: "center" }}>
-                <Alert
-                  className="my-10"
-                  iconMapping={{
-                    success: <CheckCircleOutlineIcon fontSize="inherit" />,
-                  }}
-                >
-                  {t("YOU_CHAT_ACCEPTED")}
-                </Alert>
+                  {msg.sender_id === loggedInUserId ? (
+                    <div
+                      style={{
+                        display: "flex",
+                        alignItems: "center",
+                        fontSize: "13px",
+                        justifyContent: "flex-end",
+                      }}
+                    >
+                      {msg.is_read ? (
+                        <DoneAllIcon
+                          style={{
+                            color: "#00ebff",
+                            fontSize: "15px",
+                            paddingLeft: "6px",
+                          }}
+                        />
+                      ) : (
+                        <DoneAllIcon
+                          style={{
+                            color: "#bdbaba",
+                            fontSize: "18px",
+                            paddingRight: "10px",
+                          }}
+                        />
+                      )}
+                      {/* {msg.is_read ? "Read" : "Delivered"} */}
+                    </div>
+                  ) : null}
+                </Box>
               </div>
-            ) : null}
-          </div>
-        ))}
-      </div>
-
-      {isBlocked ? (
-        <Alert severity="warning" style={{ marginBottom: "10px" }}>
-          {t("USER_BLOCKED_YOU_CANNOT")}
-        </Alert>
-      ) : (
-        <>
-          <div className={classes.messageInput}>
-            <TextField
-              variant="outlined"
-              placeholder="Type your message..."
-              fullWidth
-              className="border-none"
-              style={{
-                background: "#fff",
-                border: "none",
-                borderRadius: "5px",
-              }}
-              value={message}
-              onChange={(e) => setMessage(e.target.value)}
-              disabled={isBlocked} // Disable input field if user is blocked
-            />
-            <Button
-              onClick={sendMessage}
-              style={{ color: "#484848" }}
-              disabled={isBlocked} // Disable send button if user is blocked
-            >
-              <SendIcon />
-            </Button>
-          </div>
-        </>
-      )}
+              {msg.is_accepted ? (
+                <div style={{ textAlign: "center" }}>
+                  <Alert
+                    className="my-10"
+                    iconMapping={{
+                      success: <CheckCircleOutlineIcon fontSize="inherit" />,
+                    }}
+                  >
+                    {t("YOU_CHAT_ACCEPTED")}
+                  </Alert>
+                </div>
+              ) : null}
+            </div>
+          ))}
+          <TextField
+            multiline
+            minRows={2}
+            maxRows={10}
+            value={textValue}
+            onChange={handleTextareaChange}
+            placeholder="Enter your message here..."
+            fullWidth
+            sx={{ fontSize: "13px" }}
+          />
+          <Button style={{ color: "#484848" }} onClick={sendMessage}>
+            <SendIcon />
+          </Button>
+        </div>
+      ) : null}
     </div>
-    //      <div className={classes.chatContainer}>
-    //      <div className={classes.chatHeader} style={{ display: "flex",alignItems:"center" ,justifyContent:"space-between"}}>
-    //        <Box  className="d-flex" style={{alignItems:"center"}}>
-    //          <IconButton onClick={handleGoBack}>
-    //            <ArrowBackIcon />
-    //          </IconButton>
-    //          <Box
-    //            sx={{ fontSize: "20px", fontWeight: "500", paddingLeft: "10px" ,color:"#484848",textAlign:"left"}}
-    //          >
-    //            <div>
-    //              <Typography
-    //               className="h2-title"
-    //              >
-    //               Anya Gupta
-    //            </Typography>
-    //            <Box  className="h5-title">Content creator, commisioner</Box>
-    //            </div>
-    //          </Box>
-    //          </Box>
-    //          <Box
-    //           style={{
-    //             display: "flex",
-    //             alignItems: "center",
-    //             fontSize: "18px",
-    //             cursor: "pointer",
-    //           }}
-    //         >
-    //           {!isBlocked && (
-    //             <IconButton
-    //               onClick={handleBlockUser}
-    //              className="block-btn"
-    //             >
-    //               <BlockIcon style={{fontSize:"16px",paddingRight:"8px"}}/>
-    //               {t("BLOCK")}
-    //             </IconButton>
-    //           )}
-    //           {showUnblockOption && (
-    //             <IconButton
-    //               onClick={handleUnblockUser}
-    //              className="unblock-btn"
-    //             >
-    //               <BlockIcon style={{fontSize:"16px",paddingRight:"8px"}}/>
-    //               {t("UNBLOCK")}
-    //             </IconButton>
-    //           )}
-    //         </Box>
-
-    //      </div>
-    //        <div className={classes.chat}>
-    //         <Box className="h5-title my-15" style={{color:"#484848"}}>
-    //        Anya Gupta is a manager with the department of Revenue and taxes and has actively contributed to the growth and authenticity of the knowledge curated for the betterment of the department.
-    // <Box className="my-15">Connect with them to get insights on what they do or simply answers to your question!</Box>
-    // </Box>
-    //        </div>
-    //            <TextField
-    //              variant="outlined"
-    //              placeholder="Hello Anya Gupta, I would like to connect with you regarding some queries i had in your course."
-    //              fullWidth
-    //              className="border-none"
-    //              style={{ background: "#fff", border: "none",borderRadius:"5px" }}
-
-    //            />
-    //            <Button
-    //              style={{color:"#484848"}}
-    //            >
-    //              <SendIcon />
-    //            </Button>
-
-    //    </div>
   );
 };
 
-export default Message;
+export default Chat;
