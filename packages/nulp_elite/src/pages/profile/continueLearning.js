@@ -106,7 +106,7 @@ const ContinueLearning = () => {
             {error}
           </Alert>
         )}
-        <Breadcrumbs
+        {/* <Breadcrumbs
           aria-label="breadcrumb"
           style={{
             padding: "25px 0",
@@ -120,7 +120,7 @@ const ContinueLearning = () => {
           <Typography color="#484848" aria-current="page">
             {t("Continue Learning")}
           </Typography>
-        </Breadcrumbs>
+        </Breadcrumbs> */}
         {/* <Box style={{ margin: "20px 0" }}>
           <Search></Search>
         </Box> */}
