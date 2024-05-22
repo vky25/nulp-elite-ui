@@ -574,6 +574,7 @@ const AddConnections = () => {
       const userListWithChat = await Promise.all(
         userList.map(async (item) => {
           const userChat = await getChat(item.id);
+
           if (userChat?.length > 0) {
             // Find the latest chat message
             const latestChat = userChat.reduce((latest, current) => {
@@ -581,17 +582,14 @@ const AddConnections = () => {
                 ? current
                 : latest;
             });
-            const isRead = userChat.map((item) => {
-              if (item.is_read === false) {
-                return false;
-              } else {
-                return true;
-              }
-            });
+
+            // Determine if all messages are read
+            const allRead = userChat.every((chat) => chat.is_read);
+
             item = {
               ...item,
               latestChat: latestChat.message,
-              isRead: isRead,
+              isRead: allRead,
             };
           } else {
             item = { ...item, latestChat: null, isRead: true };
@@ -1276,105 +1274,6 @@ const AddConnections = () => {
                               </Box>
                             )}
 
-                          {/* {invitationAcceptedUsers &&
-                            invitationAcceptedUsers?.map((item) => (
-                              <List
-                                sx={{}}
-                                style={{ color: "green", cursor: "pointer" }}
-                                className="connection-tab"
-                              >
-                                <ListItem
-                                  onClick={() => {
-                                    showMessages(item.userId);
-                                  }}
-                                  className="bg-blue"
-                                >
-                                  <ListItemText
-                                    primary={
-                                      <span
-                                        style={{
-                                          color:
-                                            item && item.isRead === false
-                                              ? "black"
-                                              : "black",
-                                          fontWeight:
-                                            item && item.isRead === false
-                                              ? "bold"
-                                              : "normal",
-                                        }}
-                                      >
-                                        {`${item.firstName} ${
-                                          item.lastName ? item.lastName : " "
-                                        } | ${item.designation}`}
-                                      </span>
-                                    }
-                                    secondary={item.latestChat}
-                                    onClick={() =>
-                                      handleAcceptedChatOpen(
-                                        item.userId,
-                                        `${item.firstName}${
-                                          item.lastName
-                                            ? ` ${item.lastName}`
-                                            : ""
-                                        }`,
-                                        item.designation
-                                      )
-                                    }
-                                  />
-                                </ListItem>
-                                <Divider />
-                              </List>
-                            ))} */}
-                          {/* {invitationAcceptedUsers &&
-                            invitationAcceptedUsers.map((item) => (
-                              <List
-                                sx={{}}
-                                style={{ color: "green", cursor: "pointer" }}
-                                className="connection-tab"
-                                key={item.userId}
-                              >
-                                <ListItem
-                                  onClick={() => {
-                                    showMessages(item.userId);
-                                  }}
-                                  className="bg-blue"
-                                >
-                                  <ListItemText
-                                    primary={
-                                      <span
-                                        style={{
-                                          color:
-                                            item && item.isRead === false
-                                              ? "black"
-                                              : "black",
-                                          fontWeight:
-                                            item && item.isRead === false
-                                              ? "bold"
-                                              : "normal",
-                                        }}
-                                      >
-                                        {`${item.firstName} ${
-                                          item.lastName ? item.lastName : " "
-                                        } | ${item.designation}`}
-                                      </span>
-                                    }
-                                    secondary={item.latestChat}
-                                    onClick={() =>
-                                      handleAcceptedChatOpen(
-                                        item.userId,
-                                        `${item.firstName}${
-                                          item.lastName
-                                            ? ` ${item.lastName}`
-                                            : ""
-                                        }`,
-                                        item.designation
-                                      )
-                                    }
-                                  />
-                                </ListItem>
-                                <Divider />
-                              </List>
-                            ))} */}
                           {invitationAcceptedUsers &&
                             invitationAcceptedUsers.map((item) => (
                               <List
@@ -1719,10 +1618,12 @@ const AddConnections = () => {
                                 />
                                 {item.id !== loggedInUserId && ( // Conditionally render the link
                                   <Link
-                                    href="#"
                                     underline="none"
                                     color="primary"
-                                    onClick={handleOpen}
+                                    // onClick={handleOpen}
+                                    onClick={() => {
+                                      showMessages(item.userId);
+                                    }}
                                     style={{
                                       fontSize: "12px",
                                       color: "#0E7A9C",
@@ -1962,7 +1863,6 @@ const AddConnections = () => {
                       <Chat
                         senderUserId={selectedChatUser.senderUserId}
                         receiverUserId={selectedChatUser.receiverUserId}
-                        onChatSent={() => setSelectedChatUser(null)} // Handle chat sent event
                       />
                     )}
                   </Box>
