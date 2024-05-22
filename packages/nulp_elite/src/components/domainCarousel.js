@@ -4,6 +4,7 @@ import Typography from "@mui/joy/Typography";
 import Carousel from "react-multi-carousel";
 import "react-multi-carousel/lib/styles.css";
 import domainWithImage from "../assets/domainImgForm.json";
+import { Tooltip } from "@mui/material";
 
 const responsive = {
   superLargeDesktop: {
@@ -186,11 +187,15 @@ export default function DomainCarousel({ domains, onSelectDomain }) {
                 >
                   {/* {(domain.image != undefined) && <img src={require(baseImgUrl+domain.image)}  style={{width:'40px',objectFit:'contain'}} alt={domain.name} />}
                 {(domain.image == undefined)&& <img src={require("../assets/swm.png")}  style={{width:'40px',objectFit:'contain'}} alt={domain.name} />} */}
-                  <img
-                    src={require(`../assets/domainImgs${domain.image}`)}
-                    style={{ width: "40px", objectFit: "contain" }}
-                    alt={domain.name}
-                  />
+                  <Tooltip title={domain.description}>
+                    <img
+                      className="domainHover"
+                      src={require(`../assets/domainImgs${domain.image}`)}
+                      style={{ width: "40px", objectFit: "contain" }}
+                      alt={domain.name}
+                    />
+                  </Tooltip>
+
                   {/* <img src={require("../assets/swm.png")}  style={{width:'40px',objectFit:'contain'}} alt={domain.name} /> */}
                 </Box>
                 {activeDomain === domain && (
