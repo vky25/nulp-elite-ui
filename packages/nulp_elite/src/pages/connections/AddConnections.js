@@ -16,7 +16,7 @@ import Divider from "@mui/material/Divider";
 import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
 import Search from "components/search";
-import { useLocation, Navigate } from "react-router-dom";
+import { useLocation, Navigate, useNavigate } from "react-router-dom";
 import * as util from "../../services/utilService";
 import Header from "components/header";
 import Footer from "components/Footer";
@@ -37,6 +37,7 @@ import Autocomplete from "@mui/material/Autocomplete";
 import ToasterCommon from "../ToasterCommon";
 import ForumOutlinedIcon from "@mui/icons-material/ForumOutlined";
 import Grid from "@mui/material/Grid";
+import Chat from "./chat";
 
 // Define modal styles
 const useStyles = makeStyles((theme) => ({
@@ -56,6 +57,7 @@ const useStyles = makeStyles((theme) => ({
     borderTopRightRadius: 0,
   },
 }));
+
 
 const AddConnections = () => {
   const [value, setValue] = React.useState("1");
@@ -109,6 +111,9 @@ const AddConnections = () => {
   const [toasterOpen, setToasterOpen] = useState(false);
   const [toasterMessage, setToasterMessage] = useState("");
   const [showTableTwo, setShowTableTwo] = useState(false);
+  const [isMobile, setIsMobile] = useState(window.innerWidth <= 767);
+  const navigate = useNavigate();
+  const [selectedChatUser, setSelectedChatUser] = useState(null);
 
   const showErrorMessage = (msg) => {
     setToasterMessage(msg);
@@ -117,6 +122,11 @@ const AddConnections = () => {
     }, 2000);
     setToasterOpen(true);
   };
+  useEffect(() => {
+    const handleResize = () => setIsMobile(window.innerWidth <= 767);
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
 
   const getChat = async (userId) => {
     setIsLoading(true);
@@ -126,7 +136,6 @@ const AddConnections = () => {
       sender_id: loggedInUserId,
       receiver_id: userId,
       is_accepted: true,
-      is_read: false,
     });
 
     try {
@@ -541,9 +550,6 @@ const AddConnections = () => {
           status: "1",
           userId: userIds,
         },
-        // query: searchQuery,
-        // pageNumber: currentPage,
-        // pageSize: pageSize,
       },
     };
 
@@ -569,7 +575,26 @@ const AddConnections = () => {
         userList.map(async (item) => {
           const userChat = await getChat(item.id);
           if (userChat?.length > 0) {
-            item = { ...item, isRead: false };
+            // Find the latest chat message
+            const latestChat = userChat.reduce((latest, current) => {
+              return new Date(current.timestamp) > new Date(latest.timestamp)
+                ? current
+                : latest;
+            });
+            const isRead = userChat.map((item) => {
+              if (item.is_read === false) {
+                return false;
+              } else {
+                return true;
+              }
+            });
+            item = {
+              ...item,
+              latestChat: latestChat.message,
+              isRead: isRead,
+            };
+          } else {
+            item = { ...item, latestChat: null, isRead: true };
           }
 
           return item;
@@ -713,7 +738,7 @@ const AddConnections = () => {
     };
 
     try {
-      const url = `${urlConfig.URLS.DIRECT_CONNECT.ACCEPT_CHATS}`;
+      const url = `${urlConfig.URLS.DIRECT_CONNECT.ACCEPT_CHAT}`;
       const response = await fetch(url, {
         method: "POST",
         headers: {
@@ -745,7 +770,7 @@ const AddConnections = () => {
     };
 
     try {
-      const url = `${urlConfig.URLS.DIRECT_CONNECT.REJECT_CHATS}`;
+      const url = `${urlConfig.URLS.DIRECT_CONNECT.REJECT_CHAT}`;
       const response = await fetch(url, {
         method: "POST",
         headers: {
@@ -1114,6 +1139,24 @@ const AddConnections = () => {
   const handleButtonClick = () => {
     setShowTableTwo(true);
   };
+  const handleBackClick = () => {
+    setShowTableTwo(false);
+    handleTabClick("Tab1");
+    setCurrentPage(1);
+    onMyConnection();
+  };
+  const showMessages = (creatorId) => {
+    if (isMobile) {
+      navigate("/chat", {
+        state: { senderUserId: loggedInUserId, receiverUserId: creatorId },
+      });
+    } else {
+      setSelectedChatUser({
+        senderUserId: loggedInUserId,
+        receiverUserId: creatorId,
+      });
+    }
+  };
 
   return (
     <Box>
@@ -1166,13 +1209,27 @@ const AddConnections = () => {
                   style={{ justifyContent: "space-between" }}
                 >
                   <Box className="h4-title">Connections</Box>
-                  <Button
-                    type="button"
-                    className="custom-btn-default xs-mr-10"
-                    onClick={handleButtonClick}
-                  >
-                    Add New
-                  </Button>
+                  {!showTableTwo ? (
+                    <Button
+                      type="button"
+                      className="custom-btn-default xs-mr-10"
+                      onClick={() => {
+                        setCurrentPage(1);
+                        handleSearch();
+                        handleButtonClick();
+                      }}
+                    >
+                      Add New
+                    </Button>
+                  ) : (
+                    <Button
+                      type="button"
+                      className="viewAll xs-mr-10"
+                      onClick={handleBackClick}
+                    >
+                      Back
+                    </Button>
+                  )}
                 </Box>
                 <TabContext value={value} className="addConnection">
                   {!showTableTwo ? (
@@ -1193,13 +1250,13 @@ const AddConnections = () => {
                             }}
                           />
                           <Tab
-                            label="Connection Requests"
+                            label={`Connection Requests (${
+                              invitationReceiverByUser?.length || 0
+                            })`}
                             value="2"
                             style={{ fontSize: "12px", color: "#484848" }}
                             onClick={() => {
                               handleTabClick("Tab2");
-                              setCurrentPage(1);
-                              handleSearch();
                             }}
                           />
                         </TabList>
@@ -1218,7 +1275,7 @@ const AddConnections = () => {
                               </Box>
                             )}
 
-                          {invitationAcceptedUsers &&
+                          {/* {invitationAcceptedUsers &&
                             invitationAcceptedUsers?.map((item) => (
                               <List
                                 sx={{}}
@@ -1226,9 +1283,8 @@ const AddConnections = () => {
                                 className="connection-tab"
                               >
                                 <ListItem
-                                  component={RouterLink}
-                                  to={{
-                                    pathname: "/message",
+                                  onClick={() => {
+                                    showMessages(item.userId);
                                   }}
                                   className="bg-blue"
                                 >
@@ -1246,13 +1302,62 @@ const AddConnections = () => {
                                               : "normal",
                                         }}
                                       >
-                                        {item.firstName}
-                                        {item.lastName
-                                          ? ` ${item.lastName}`
-                                          : ""}
+                                        {`${item.firstName} ${
+                                          item.lastName ? item.lastName : " "
+                                        } | ${item.designation}`}
                                       </span>
                                     }
-                                    secondary={item.designation}
+                                    secondary={item.latestChat}
+                                    onClick={() =>
+                                      handleAcceptedChatOpen(
+                                        item.userId,
+                                        `${item.firstName}${
+                                          item.lastName
+                                            ? ` ${item.lastName}`
+                                            : ""
+                                        }`,
+                                        item.designation
+                                      )
+                                    }
+                                  />
+                                </ListItem>
+                                <Divider />
+                              </List>
+                            ))} */}
+                          {invitationAcceptedUsers &&
+                            invitationAcceptedUsers.map((item) => (
+                              <List
+                                sx={{}}
+                                style={{ color: "green", cursor: "pointer" }}
+                                className="connection-tab"
+                                key={item.userId}
+                              >
+                                <ListItem
+                                  onClick={() => {
+                                    showMessages(item.userId);
+                                  }}
+                                  className="bg-blue"
+                                >
+                                  <ListItemText
+                                    primary={
+                                      <span
+                                        style={{
+                                          color:
+                                            item && item.isRead === false
+                                              ? "black"
+                                              : "black",
+                                          fontWeight:
+                                            item && item.isRead === false
+                                              ? "bold"
+                                              : "normal",
+                                        }}
+                                      >
+                                        {`${item.firstName} ${
+                                          item.lastName ? item.lastName : " "
+                                        } | ${item.designation}`}
+                                      </span>
+                                    }
+                                    secondary={item.latestChat}
                                     onClick={() =>
                                       handleAcceptedChatOpen(
                                         item.userId,
@@ -1359,20 +1464,26 @@ const AddConnections = () => {
                                   <ListItemText
                                     primary={`${item.firstName}${
                                       item.lastName ? ` ${item.lastName}` : ""
-                                    }   | ${item.designation}`}
+                                    } | ${item.designation}`}
                                     secondary={
                                       item.messageRequest.length > 20 ? (
-                                        <>
+                                        <div
+                                          style={{
+                                            border: "1px solid #ddd",
+                                            padding: "10px",
+                                            borderRadius: "5px",
+                                            backgroundColor: "#f9f9f9",
+                                          }}
+                                        >
                                           {expandedMessageId === item.userId
                                             ? item.messageRequest
-                                            : // : `${item.messageRequest.substring(0, 20)}...`}
-                                              `${item.messageRequest.substring(
+                                            : `${item.messageRequest.substring(
                                                 0,
                                                 20
                                               )}`}
                                           <span
                                             style={{
-                                              color: "blue",
+                                              color: "#0E7A9C!important",
                                               cursor: "pointer",
                                             }}
                                             onClick={() =>
@@ -1381,10 +1492,10 @@ const AddConnections = () => {
                                           >
                                             {" "}
                                             {expandedMessageId === item.userId
-                                              ? "show less"
-                                              : "show more"}
+                                              ? "read less"
+                                              : "read more"}
                                           </span>
-                                        </>
+                                        </div>
                                       ) : (
                                         item.messageRequest
                                       )
@@ -1455,7 +1566,7 @@ const AddConnections = () => {
                         renderInput={(params) => (
                           <TextField
                             {...params}
-                            label="Search"
+                            label="Search for a User"
                             variant="outlined"
                           />
                         )}
@@ -1537,9 +1648,7 @@ const AddConnections = () => {
                               <ListItem>
                                 <ListItemText
                                   primary={`${item.firstName}${
-                                    (item.lastName ? ` ${item.lastName}` : "",
-                                    " | ",
-                                    `${item.designation}`)
+                                    item.lastName ? ` ${item.lastName}` : ""
                                   }`}
                                   secondary={`${item.designation}`}
                                 />
@@ -1764,20 +1873,35 @@ const AddConnections = () => {
                   )}
                 </TabContext>
               </Grid>
+
               <Grid
                 item
                 xs={12}
-                md={4}
-                lg={4}
-                className="sm-p-25 pt-8 pb-20 xs-hide"
+                md={8}
+                lg={8}
+                className="pt-8 pb-20 xs-hide addConnectChat"
               >
-                <Box className="text-center center-container">
-                  <Box>
-                    <ForumOutlinedIcon style={{ fontSize: "100px" }} />
-                    <Box className="demo-chat">{t("START_A_CONVERSATION")}</Box>
-                    <Box className="demo-text">{t("CLICK_ON_ANY_CONTACT")}</Box>
+                {!isMobile && (
+                  <Box className="text-center center-container">
+                    {!selectedChatUser ? (
+                      <Box>
+                        <ForumOutlinedIcon style={{ fontSize: "100px" }} />
+                        <Box className="demo-chat">
+                          {t("START_A_CONVERSATION")}
+                        </Box>
+                        <Box className="demo-text">
+                          {t("CLICK_ON_ANY_CONTACT")}
+                        </Box>
+                      </Box>
+                    ) : (
+                      <Chat
+                        senderUserId={selectedChatUser.senderUserId}
+                        receiverUserId={selectedChatUser.receiverUserId}
+                        onChatSent={() => setSelectedChatUser(null)} // Handle chat sent event
+                      />
+                    )}
                   </Box>
-                </Box>
+                )}
               </Grid>
             </Grid>
           </Box>
