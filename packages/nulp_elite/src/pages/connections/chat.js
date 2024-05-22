@@ -559,9 +559,6 @@ const Chat = ({
               answers to your question!
             </Box>
           </Box>
-          <Alert severity="info" style={{ margin: "10px 0" }}>
-            This is an auto-generated message, click to edit.
-          </Alert>
         </div>
       ) : messages.length > 0 ? (
         <div className={classes.chat}>
@@ -657,7 +654,7 @@ const Chat = ({
         <>
           {receiverData && receiverData.length > 0 && !messages.length > 0 && (
             <Alert severity="info" style={{ margin: "10px 0" }}>
-              This is an auto-generated message, click to edit.
+              {t("SYSTEM_GENERATED_MESSAGE")}
             </Alert>
           )}
           <TextField
