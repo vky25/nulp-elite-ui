@@ -296,7 +296,6 @@ const AllContent = () => {
         {t("FILTER_BY_POPULAR_DOMAIN")}
       </Box> */}
       {domain && (
-   
         <Carousel
           swipeable={false}
           draggable={false}
@@ -313,17 +312,18 @@ const AllContent = () => {
           dotListClass="custom-dot-list-style"
           itemClass="carousel-item-padding-40-px"
         >
-          <DomainCarousel onSelectDomain={handleDomainFilter} domains={domain} />
+          <DomainCarousel
+            onSelectDomain={handleDomainFilter}
+            domains={domain}
+          />
         </Carousel>
-                      
-  )}
-
+      )}
 
       <Container maxWidth="xxl" role="main" className="container-pb pb-30">
-      <Box className="text-heading lg-d-flex my-20">
-                  You are viewing content for :
-                  <Box className="text-primary">Mobility and accessibliy</Box>
-                </Box>
+        <Box className="text-heading lg-d-flex my-20">
+          You are viewing content for :
+          <Box className="text-primary">Mobility and accessibliy</Box>
+        </Box>
         {error && (
           <Alert severity="error" className="my-10">
             {error}
@@ -342,12 +342,14 @@ const AllContent = () => {
             // console.log(data,"hi"),
 
             <React.Fragment key={category}>
-               
-            <Box className="d-flex" style={{justifyContent:"space-between"}}>
+              <Box
+                className="d-flex"
+                style={{ justifyContent: "space-between" }}
+              >
                 <Box
                   style={{
                     display: "inline-block",
-                    margin:"30px 0"
+                    margin: "30px 0",
                   }}
                   className="h4-title"
                 >
@@ -361,18 +363,14 @@ const AllContent = () => {
                     {category}{" "}
                   </Box>{" "}
                 </Box>
-                    <Box>
-                {items?.length > 4 && (
-                 
-                 <Link
-                    to={`/view-all/${category}`}
-                   className="viewAll"
-                  >
-                    {t("VIEW_ALL")}
-                  </Link>
-                )}
+                <Box>
+                  {items?.length > 4 && (
+                    <Link to={`/view-all/${category}`} className="viewAll">
+                      {t("VIEW_ALL")}
+                    </Link>
+                  )}
                 </Box>
-                </Box>
+              </Box>
               {isMobile ? (
                 <Carousel
                   swipeable={false}
