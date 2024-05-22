@@ -102,6 +102,18 @@ body {
   font-size: 14px !important;
 }
 @media (min-width: 320px) {
+  .MuiDrawer-paperAnchorLeft .css-1hskriy {
+    width: 381px !important;
+  }
+  .MuiDrawer-paperAnchorLeft .css-1hskriy {
+    width: 281px !important;
+    padding:30px;
+  }
+  .filter-bx .MuiInputBase-formControl{
+    background: #fff !important;
+    padding: 0 !important;
+    width: 281px;
+  }
   .contentCreator{
     position: absolute;
      top: 0;
@@ -225,6 +237,9 @@ body {
  }
  }
  @media(min-width:769px) {
+  .filter-bx .MuiInputBase-formControl{
+    width: 400px;
+  }
   .contentCreator{
      left: 35%;
  }
@@ -553,6 +568,9 @@ border-radius: 10px 10px 0px 0px;
 .mt-15{
   margin-top: 15px;
 }
+.mt-20{
+  margin-top: 20px;
+}
 .addConnection .jss3{
   background-color: transparent !important;
   border-bottom: solid 3px #004367 !important;
@@ -591,17 +609,23 @@ button{
 .jc-en{
   justify-content: flex-end;
 }
+.jc-bw{
+  justify-content: space-between;
+}
 
 .viewAll{
-  background: #D9D9D9;
-  padding: 9px 25px;
-  border-radius: 12px;
-  text-align: center;
-  color: #000000;
-  font-size: 12px;
-  font-weight: 500;
-  text-decoration: none;
-  border: none;
+  background: #D9D9D9 !important;
+  padding: 9px 25px !important;
+  border-radius: 12px !important;
+  text-align: center !important;
+  color: #000000 !important;
+  font-size: 12px !important;
+  font-weight: 500 !important;
+  text-decoration: none !important;
+  border: none !important;
+}
+.viewAll:hover{
+  background: #D9D9D9 !important;
 }
 .labelOne{
   background: #DDDDDD !important;
@@ -827,6 +851,9 @@ custom-chip{
   text-align: left;
   margin: 7px 0 10px 0;
 }
+.text-grey{
+  color: #484848 !important;
+}
 .mr-30{
   margin-right: 30px;
 }
@@ -927,4 +954,44 @@ custom-chip{
     border: none !important;
     padding: 25px 0;
     float: right;
+}
+
+.filter-bx{
+  box-shadow: 0px 4px 4px 0px #00000040;
+}
+.filter-bx .css-zun73v.Mui-checked{
+  color:#212121 ;
+}
+.filter-bx li{
+  padding: 0 !important;
+}
+.filter-title{
+  font-size: 16px !important;
+  color: #000;
+  font-weight: 400 !important;
+}
+.filter-text{
+    color:#212121 !important;
+    font-size: 14px !important;
+    font-weight: 500 !important;
+  
+}
+.filter-ul-text span{
+  color:#4f4f4f !important;
+  font-size: 12px !important;
+  font-weight: 500 !important;
+  padding: 5px !important;
+}
+
+
+.filter-bx .MuiInputBase-input{
+  padding: 12px 5px !important;
+}
+
+.filter-bx .MuiInputLabel-animated{
+  font-size: 12px !important;
+}
+
+.filter-bx .MuiFormControl-root{
+  margin-left: 0 !important;
 }
