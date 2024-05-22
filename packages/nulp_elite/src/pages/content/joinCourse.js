@@ -40,6 +40,7 @@ import ToasterCommon from "../ToasterCommon";
 import { TextField } from "@mui/material";
 import Chat from "pages/connections/chat";
 
+
 const JoinCourse = () => {
   const { t } = useTranslation();
   const [userData, setUserData] = useState();
@@ -305,13 +306,13 @@ const JoinCourse = () => {
           <Box>
             <Button
               onClick={handleLinkClick}
-              className="custom-btn-primary my-20"
+              className="custom-btn-primary my-20 mr-5"
             >
               {t("START_LEARNING")}
             </Button>
             <Button
               onClick={handleLeaveCourseClick} // Open confirmation dialog
-              className="custom-btn-default"
+              className="custom-btn-danger"
             >
               {t("LEAVE_COURSE")}
             </Button>
@@ -326,12 +327,12 @@ const JoinCourse = () => {
                   </DialogContentText>
                 </DialogContent>
                 <DialogActions>
-                  <Button onClick={handleConfirmationClose} color="primary">
+                  <Button onClick={handleConfirmationClose} className="custom-btn-default">
                     {t("CANCEL")}
                   </Button>
                   <Button
                     onClick={handleLeaveConfirmed}
-                    color="primary"
+                   className="custom-btn-primary"
                     autoFocus
                   >
                     {t("LEAVE_COURSE")}
@@ -642,8 +643,8 @@ const JoinCourse = () => {
             <label>{t("CONSENT_TEXT")}</label>
           </div>
           <Box className="d-flex jc-en">
-            <Button onClick={handleDontShareClick}>{t("DONT_SHARE")}</Button>
-            <Button onClick={handleShareClick} disabled={!shareEnabled}>
+            <Button onClick={handleDontShareClick} className="custom-btn-primary pr-18">{t("DONT_SHARE")}</Button>
+            <Button onClick={handleShareClick} className="custom-btn-default" disabled={!shareEnabled}>
               {t("SHARE")}
             </Button>
           </Box>
@@ -653,9 +654,41 @@ const JoinCourse = () => {
       <Container maxWidth="xxl" role="main" className="container-pb">
         <Grid container spacing={2}>
           <Grid item xs={12} md={4} lg={4} className="sm-p-25 left-container">
+          {/* <Breadcrumbs
+            aria-label="breadcrumb"
+            style={{
+              padding: "25px 0",
+              fontSize: "16px",
+              fontWeight: "600",
+            }}
+          >
+            <Link underline="hover" color="#004367" href="/profile">
+              {t("ALL_CONTENT")}
+            </Link>
+            <Typography color="#484848" aria-current="page">
+              {t("LEARNING_HISTORY")}
+            </Typography>
+          </Breadcrumbs>  */}
             <Grid container spacing={2}>
+            <Breadcrumbs
+                  aria-label="breadcrumb"
+                 className="h6-title my-15"
+                >
+                   <Link underline="hover" style={{maxHeight:"inherit"}}                   onClick={handleGoBack}
+ color="#004367" href="/profile">
+              {t("ALL_CONTENT")}
+            </Link>
+                  <Link
+                    underline="hover"
+                    href=""
+                    aria-current="page"
+                   className="h6-title twoLineEllipsis"
+                  >
+                    {userData?.result?.content?.name}
+                  </Link>
+                </Breadcrumbs>
               <Grid item xs={8} className="xs-p-0">
-                <Link
+                {/* <Link
                   onClick={handleGoBack}
                   style={{
                     display: "block",
@@ -665,28 +698,13 @@ const JoinCourse = () => {
                     marginBottom: "10px",
                     color: "rgb(0, 67, 103)",
                   }}
-                >
-                  <ArrowBackOutlinedIcon
+                > */}
+                  {/* <ArrowBackOutlinedIcon
                     style={{ width: "0.65em", height: "0.65em" }}
                   />{" "}
                   Back
-                </Link>
-                <Breadcrumbs
-                  aria-label="breadcrumb"
-                  style={{
-                    fontSize: "16px",
-                    fontWeight: "600",
-                  }}
-                >
-                  <Link
-                    underline="hover"
-                    href=""
-                    aria-current="page"
-                   className="h3-title"
-                  >
-                    {userData?.result?.content?.name}
-                  </Link>
-                </Breadcrumbs>
+                </Link> */}
+             
               </Grid>
               <Grid item xs={4}>
                 <Link
@@ -699,7 +717,8 @@ const JoinCourse = () => {
                 ></Link>
               </Grid>
             </Grid>
-
+<Box  className="h3-title">                    {userData?.result?.content?.name}
+</Box>
             <Box>
               <Typography
                 variant="h7"
@@ -799,6 +818,7 @@ const JoinCourse = () => {
               </Box>
             </Box>
             <Accordion
+            className="xs-hide"
               style={{
                 background: "#F9FAFC",
                 borderRadius: "10px",
@@ -809,16 +829,17 @@ const JoinCourse = () => {
                 expandIcon={<ExpandMoreIcon />}
                 aria-controls="panel1-content"
                 id="panel1-header"
+                className="h4-title"
               >
                 {t("CERTIFICATION_CRITERIA")}
               </AccordionSummary>
               <AccordionDetails style={{ background: "#fff" }}>
                 <ul>
-                  <li>
+                  <li className="pl-18 h6-title">
                     {t("COMPLETION_CERTIFICATE_ISSUED")} 100%
                     {t("COMPLETION")}
                   </li>
-                  <li>
+                  <li className="pl-18 h6-title">
                     {t("CERT_ISSUED_SCORE")} 60% {t("OR_GREATER")}{" "}
                     {t("ASSESSMENT")}
                   </li>
@@ -826,6 +847,7 @@ const JoinCourse = () => {
               </AccordionDetails>
             </Accordion>
             <Accordion
+             className="xs-hide"
               style={{
                 background: "#F9FAFC",
                 borderRadius: "10px",
@@ -836,18 +858,13 @@ const JoinCourse = () => {
                 expandIcon={<ExpandMoreIcon />}
                 aria-controls="panel1-content"
                 id="panel1-header"
+                className="h4-title"
               >
                 {t("OTHER_DETAILS")}
               </AccordionSummary>
               <AccordionDetails style={{ background: "#fff" }}>
                 <Typography
-                  variant="h7"
-                  style={{
-                    fontWeight: "500",
-                    margin: "9px 0",
-                    display: "block",
-                    fontSize: "14px",
-                  }}
+                 className="h6-title"
                 >
                   {t("CREATED_ON")}:{" "}
                   {userData &&
@@ -855,13 +872,7 @@ const JoinCourse = () => {
                     formatDate(userData.result.content.children[0].createdOn)}
                 </Typography>
                 <Typography
-                  variant="h7"
-                  style={{
-                    fontWeight: "500",
-                    margin: "9px 0",
-                    display: "block",
-                    fontSize: "14px",
-                  }}
+                 className="h6-title"
                 >
                   {t("UPDATED_ON")}:{" "}
                   {userData &&
@@ -871,24 +882,12 @@ const JoinCourse = () => {
                     )}
                 </Typography>
                 <Typography
-                  variant="h7"
-                  style={{
-                    fontWeight: "500",
-                    margin: "9px 0",
-                    display: "block",
-                    fontSize: "14px",
-                  }}
+                 className="h6-title"
                 >
                   {t("CREDITS")}:
                 </Typography>
                 <Typography
-                  variant="h7"
-                  style={{
-                    fontWeight: "500",
-                    margin: "9px 0",
-                    display: "block",
-                    fontSize: "14px",
-                  }}
+                 className="h6-title"
                 >
                   {t("LICENSE_TERMS")}:{" "}
                   {userData?.result?.content?.licenseDetails?.name}
@@ -903,7 +902,7 @@ const JoinCourse = () => {
                 </Typography>
               </AccordionDetails>
             </Accordion>
-            <div>
+            <div className="xs-hide">
               <React.Fragment>
                 {chat.length === 0 && (
                   <Button
@@ -952,22 +951,7 @@ const JoinCourse = () => {
               </React.Fragment>
               {_userId && creatorId && (
                 <Modal open={open} onClose={handleClose}>
-                  <div
-                    style={{
-                      position: "absolute",
-                      top: "50%",
-                      left: "50%",
-                      padding: "20px",
-                      boxShadow: "0 3px 5px rgba(0, 0, 0, 0.3)",
-                      outline: "none",
-                      borderRadius: 8,
-                      width: "90%", // Relative width
-                      maxWidth: "500px", // Maximum width
-                      height: "80%", // Relative height
-                      maxHeight: "90vh", // Maximum height
-                      overflowY: "auto", // Scroll if content overflows
-                    }}
-                  >
+                  <div className="contentCreator">
                     <Chat
                       senderUserId={_userId}
                       receiverUserId={creatorId}
@@ -976,7 +960,8 @@ const JoinCourse = () => {
                   </div>
                 </Modal>
               )}
-            </div>            <Box className="my-20">
+           </div>           
+         <Box className="my-20 xs-hide">
                  <Link href="#" className="pr-5"> <img src={require("../../assets/fb.png")} alt=""/></Link>
                  <Link  href="#" className="pr-5">  <img src={require("../../assets/whatsapp.png")} alt=""/></Link>
                  <Link  href="#" className="pr-5">  <img src={require("../../assets/linkedin.png")} alt=""/></Link>
@@ -1057,8 +1042,8 @@ const JoinCourse = () => {
                       {faqIndex.name}
                     </AccordionSummary>
                     {faqIndex.children.map((faqIndexname) => (
-                      <AccordionDetails style={{ paddingLeft: "35px",borderBottom:"solid 1px #484848" }}>
-                        <SummarizeOutlinedIcon />
+                      <AccordionDetails className="border-bottom" style={{ paddingLeft: "35px"}}>
+                        <SummarizeOutlinedIcon style={{fontSize:"17px",paddingRight:"10px"}}/>
 
                         <Link
                           href="#"
@@ -1075,7 +1060,173 @@ const JoinCourse = () => {
                 ))}
               </AccordionDetails>
             </Accordion>
-          
+            <Accordion
+            className="lg-hide"
+              style={{
+                background: "#F9FAFC",
+                borderRadius: "10px",
+                marginTop: "10px",
+              }}
+            >
+              <AccordionSummary
+                expandIcon={<ExpandMoreIcon />}
+                aria-controls="panel1-content"
+                id="panel1-header"
+                className="h4-title"
+              >
+                {t("CERTIFICATION_CRITERIA")}
+              </AccordionSummary>
+              <AccordionDetails style={{ background: "#fff" }}>
+                <ul>
+                  <li className="pl-18 h6-title">
+                    {t("COMPLETION_CERTIFICATE_ISSUED")} 100%
+                    {t("COMPLETION")}
+                  </li>
+                  <li className="pl-18 h6-title">
+                    {t("CERT_ISSUED_SCORE")} 60% {t("OR_GREATER")}{" "}
+                    {t("ASSESSMENT")}
+                  </li>
+                </ul>
+              </AccordionDetails>
+            </Accordion>
+            <Accordion
+             className="lg-hide"
+              style={{
+                background: "#F9FAFC",
+                borderRadius: "10px",
+                marginTop: "10px",
+              }}
+            >
+              <AccordionSummary
+                expandIcon={<ExpandMoreIcon />}
+                aria-controls="panel1-content"
+                id="panel1-header"
+                className="h4-title"
+              >
+                {t("OTHER_DETAILS")}
+              </AccordionSummary>
+              <AccordionDetails style={{ background: "#fff" }}>
+                <Typography
+                 className="h6-title"
+                >
+                  {t("CREATED_ON")}:{" "}
+                  {userData &&
+                    userData.result &&
+                    formatDate(userData.result.content.children[0].createdOn)}
+                </Typography>
+                <Typography
+                 className="h6-title"
+                >
+                  {t("UPDATED_ON")}:{" "}
+                  {userData &&
+                    userData.result &&
+                    formatDate(
+                      userData.result.content.children[0].lastUpdatedOn
+                    )}
+                </Typography>
+                <Typography
+                 className="h6-title"
+                >
+                  {t("CREDITS")}:
+                </Typography>
+                <Typography
+                 className="h6-title"
+                >
+                  {t("LICENSE_TERMS")}:{" "}
+                  {userData?.result?.content?.licenseDetails?.name}
+                  {t("FOR_DETAILS")}:{" "}
+                  <a
+                    href={userData?.result?.content?.licenseDetails?.url}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  >
+                    {userData?.result?.content?.licenseDetails?.url}
+                  </a>
+                </Typography>
+              </AccordionDetails>
+            </Accordion>
+            <div className="lg-hide">
+              <React.Fragment>
+                {chat.length === 0 && (
+                  <Button
+                    onClick={handleDirectConnect}
+                    variant="contained"
+                    className="custom-btn-primary my-20"
+                    style={{
+                      background: "#004367",
+                    }}
+                  >
+                    {t("CONNECT_WITH_CREATOR")}
+                  </Button>
+                )}
+                {chat.length > 0 && chat[0]?.is_accepted === false && (
+                  <React.Fragment>
+                    <Alert severity="warning" style={{ margin: "10px 0" }}>
+                      {t("YOUR_CHAT_REQUEST_IS_PENDING")}
+                    </Alert>
+                    <Button
+                      variant="contained"
+                      className="custom-btn-primary my-20"
+                      style={{
+                        background:
+                          chat.length > 0 && chat[0]?.is_accepted === false
+                            ? "#a9b3f5"
+                            : "#004367",
+                      }}
+                      disabled
+                    >
+                      {t("CHAT_WITH_CREATOR")}
+                    </Button>
+                  </React.Fragment>
+                )}
+                {chat.length > 0 && chat[0].is_accepted === true && (
+                  <Button
+                    onClick={handleDirectConnect}
+                    variant="contained"
+                    className="custom-btn-primary my-20"
+                    style={{
+                      background: "#004367",
+                    }}
+                  >
+                    {t("CHAT_WITH_CREATOR")}
+                  </Button>
+                )}
+              </React.Fragment>
+              {_userId && creatorId && (
+                <Modal open={open} onClose={handleClose}>
+                  <div
+                    style={{
+                      position: "absolute",
+                      top: "0",
+                      left: "35%",
+                      padding: "20px",
+                      boxShadow: "0 3px 5px rgba(0, 0, 0, 0.3)",
+                      outline: "none",
+                      borderRadius: 8,
+                      width: "90%", // Relative width
+                      maxWidth: "500px", // Maximum width
+                      height: "80%", // Relative height
+                      maxHeight: "90vh", // Maximum height
+                      overflowY: "auto", // Scroll if content overflows
+                    }}
+                    className="contentCreator"
+                  >
+                    <Chat
+                      senderUserId={_userId}
+                      receiverUserId={creatorId}
+                      onChatSent={handleClose}
+                    />{" "}
+                  </div>
+                </Modal>
+              )}
+           </div>           
+         <Box className="my-20 lg-hide social-icons">
+                 <Link href="#" className="pr-5"> <img src={require("../../assets/fb.png")} alt=""/></Link>
+                 <Link  href="#" className="pr-5">  <img src={require("../../assets/whatsapp.png")} alt=""/></Link>
+                 <Link  href="#" className="pr-5">  <img src={require("../../assets/linkedin.png")} alt=""/></Link>
+                 <Link  href="#" className="pr-5">  <img src={require("../../assets/twitter.png")} alt=""/></Link>
+
+            </Box>
           </Grid>
         </Grid>
       </Container>

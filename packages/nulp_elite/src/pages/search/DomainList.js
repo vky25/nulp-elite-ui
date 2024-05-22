@@ -26,6 +26,10 @@ import DomainCarousel from "components/domainCarousel";
 import NoResult from "pages/content/noResultFound";
 import BoxCard from "../../components/Card";
 import SummarizeOutlinedIcon from "@mui/icons-material/SummarizeOutlined";
+import BookmarkAddedOutlinedIcon from '@mui/icons-material/BookmarkAddedOutlined';
+import VerifiedOutlinedIcon from '@mui/icons-material/VerifiedOutlined';
+
+
 
 const Item = styled(Paper)(({ theme }) => ({
   backgroundColor: theme.palette.mode === "dark" ? "#1A2027" : "#fff",
@@ -500,17 +504,14 @@ const DomainList = () => {
       <Container maxWidth="xxl" role="main" className="container-pb">
         {error && <Alert severity="error">{error}</Alert>}
 
-        <Box textAlign="center" padding="10">
+        <Box textAlign="center">
           <p style={{ display: "flex", justifyContent: "space-between" }}>
             <Box
-              style={{
-                display: "inline-block",
-                fontSize: "18px",
-                color: "#484848",
-              }}
+            
             >
-              <SummarizeOutlinedIcon style={{ verticalAlign: "top" }} />{" "}
+              <VerifiedOutlinedIcon className="text-grey" style={{ verticalAlign: "top" }} />{" "}
               <Box
+              className="h3-title"
                 style={{
                   display: "inline-block",
                 }}
@@ -520,7 +521,7 @@ const DomainList = () => {
             </Box>
           </p>
           {isMobile ? (
-            <Box sx={{ paddingTop: "30px" }}>
+            <Box style={{paddingTop:"0"}}>
               {isLoading ? (
                 <p>{t("LOADING")}</p>
               ) : error ? (
@@ -535,7 +536,7 @@ const DomainList = () => {
                     {popularCourses.slice(0, 8).map((items, index) => (
                       <Grid
                         item
-                        xs={12}
+                        xs={6}
                         sm={isMobile ? 6 : 12} // Show 2 courses per line on mobile view
                         md={6}
                         lg={3}
@@ -557,7 +558,7 @@ const DomainList = () => {
               )}
             </Box>
           ) : (
-            <Box sx={{ paddingTop: "30px" }}>
+            <Box sx={{ paddingTop: "0" }}>
               {isLoading ? (
                 <p>{t("LOADING")}</p>
               ) : error ? (
@@ -567,7 +568,6 @@ const DomainList = () => {
                   <Grid
                     container
                     spacing={2}
-                    style={{ margin: "20px 0", marginBottom: "10px" }}
                   >
                     {popularCourses.slice(0, 8).map((items) => (
                       <Grid
@@ -599,17 +599,14 @@ const DomainList = () => {
       <Container maxWidth="xxl" role="main" className="container-pb">
         {error && <Alert severity="error">{error}</Alert>}
 
-        <Box textAlign="center" padding="10">
+        <Box textAlign="center">
           <p style={{ display: "flex", justifyContent: "space-between" }}>
             <Box
-              style={{
-                display: "inline-block",
-                fontSize: "18px",
-                color: "#484848",
-              }}
+             
             >
-              <SummarizeOutlinedIcon style={{ verticalAlign: "top" }} />{" "}
+              <BookmarkAddedOutlinedIcon className="text-grey" style={{ verticalAlign: "top" }} />{" "}
               <Box
+              className="h3-title"
                 style={{
                   display: "inline-block",
                 }}
@@ -619,7 +616,7 @@ const DomainList = () => {
             </Box>
           </p>
           {isMobile ? (
-            <Box sx={{ paddingTop: "30px" }}>
+            <Box sx={{ paddingTop: "0" }}>
               {isLoading ? (
                 <p>{t("LOADING")}</p>
               ) : error ? (
@@ -629,12 +626,11 @@ const DomainList = () => {
                   <Grid
                     container
                     spacing={2}
-                    style={{ margin: "20px 0", marginBottom: "10px" }}
                   >
                     {recentlyAddedCourses.slice(0, 8).map((items, index) => (
                       <Grid
                         item
-                        xs={12}
+                        xs={6}
                         sm={isMobile ? 6 : 12} // Show 2 courses per line on mobile view
                         md={6}
                         lg={3}

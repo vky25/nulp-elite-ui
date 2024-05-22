@@ -40,7 +40,7 @@ const useStyles = makeStyles((theme) => ({
   },
   chatHeader: {
     padding: "8px 16px",
-    backgroundColor: "#FFE6C8",
+    backgroundColor: "#FFE6C8 !important",
     color: "#484848",
     display: "flex",
     alignItems: "center",
@@ -52,6 +52,7 @@ const useStyles = makeStyles((theme) => ({
     overflowY: "auto",
     padding: "16px",
     borderBottom: "1px solid #DDDDDD",
+    background:"#FFE6C8 !important"
   },
   messageInput: {
     display: "flex",
@@ -65,7 +66,7 @@ const useStyles = makeStyles((theme) => ({
     padding: "8px",
     margin: "25px 0",
     textAlign: "right",
-    background: "#F1FAFF",
+    background: "#F1FAFF  !important",
     color: "#484848",
     fontSize: "16px",
     fontWeight: "400",
@@ -80,7 +81,7 @@ const useStyles = makeStyles((theme) => ({
     display: "table",
     borderRadius: "5px",
     color: "#212121",
-    backgroundColor: "#fff",
+    backgroundColor: "#fff !important",
     fontSize: "16px",
     fontWeight: "400",
   },
@@ -544,6 +545,7 @@ const Message = (props) => {
             <Button
               onClick={sendMessage}
               style={{ color: "#484848" }}
+              className="btn-chat"
               disabled={isBlocked} // Disable send button if user is blocked
             >
               <SendIcon />
