@@ -114,6 +114,7 @@ const AddConnections = () => {
   const [isMobile, setIsMobile] = useState(window.innerWidth <= 767);
   const navigate = useNavigate();
   const [selectedChatUser, setSelectedChatUser] = useState(null);
+  const [selectedUserId, setSelectedUserId] = useState(null);
 
   const showErrorMessage = (msg) => {
     setToasterMessage(msg);
@@ -1155,6 +1156,7 @@ const AddConnections = () => {
         senderUserId: loggedInUserId,
         receiverUserId: creatorId,
       });
+      setSelectedUserId(creatorId);
     }
   };
 
@@ -1324,7 +1326,7 @@ const AddConnections = () => {
                                 <Divider />
                               </List>
                             ))} */}
-                          {invitationAcceptedUsers &&
+                          {/* {invitationAcceptedUsers &&
                             invitationAcceptedUsers.map((item) => (
                               <List
                                 sx={{}}
@@ -1348,6 +1350,70 @@ const AddConnections = () => {
                                               : "black",
                                           fontWeight:
                                             item && item.isRead === false
+                                              ? "bold"
+                                              : "normal",
+                                        }}
+                                      >
+                                        {`${item.firstName} ${
+                                          item.lastName ? item.lastName : " "
+                                        } | ${item.designation}`}
+                                      </span>
+                                    }
+                                    secondary={item.latestChat}
+                                    onClick={() =>
+                                      handleAcceptedChatOpen(
+                                        item.userId,
+                                        `${item.firstName}${
+                                          item.lastName
+                                            ? ` ${item.lastName}`
+                                            : ""
+                                        }`,
+                                        item.designation
+                                      )
+                                    }
+                                  />
+                                </ListItem>
+                                <Divider />
+                              </List>
+                            ))} */}
+                          {invitationAcceptedUsers &&
+                            invitationAcceptedUsers.map((item) => (
+                              <List
+                                sx={{}}
+                                style={{ color: "green", cursor: "pointer" }}
+                                className="connection-tab"
+                                key={item.userId}
+                              >
+                                <ListItem
+                                  onClick={() => {
+                                    showMessages(item.userId);
+                                  }}
+                                  className="bg-blue"
+                                  style={{
+                                    fontWeight:
+                                      item.userId === selectedUserId
+                                        ? "bold"
+                                        : "normal",
+                                    color:
+                                      item.userId === selectedUserId
+                                        ? "black"
+                                        : "inherit",
+                                  }}
+                                >
+                                  <ListItemText
+                                    primary={
+                                      <span
+                                        style={{
+                                          color:
+                                            item.userId === selectedUserId
+                                              ? "black"
+                                              : item.isRead === false
+                                              ? "black"
+                                              : "black",
+                                          fontWeight:
+                                            item.userId === selectedUserId
+                                              ? "bold"
+                                              : item.isRead === false
                                               ? "bold"
                                               : "normal",
                                         }}
