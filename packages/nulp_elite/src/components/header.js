@@ -184,7 +184,7 @@ function Header() {
           <Box className="d-flex">
 
            
-<Toolbar disableGutters style={{justifyContent:"space-between", background:"#fff",width:"100%"}} className="lg-hide">
+<Toolbar disableGutters style={{justifyContent:"space-between", background:"#fff",width:"100%"}} className="lg-hide lg-mt-10">
   <Box className="d-flex lg-hide">
             <IconButton
               size="large"
@@ -273,7 +273,7 @@ function Header() {
           </Toolbar>
             {/* Search Box */}
             <Box
-              className="xs-hide d-flex header-bg w-40"
+              className="xs-hide d-flex header-bg w-40 mr-30"
              
             >
               <Box className="h1-title px-10 pr-20">{t('EXPLORE')}</Box>
