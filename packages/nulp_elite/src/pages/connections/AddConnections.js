@@ -58,6 +58,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
+
 const AddConnections = () => {
   const [value, setValue] = React.useState("1");
   const handleChange = (event, newValue) => {
@@ -1225,7 +1226,7 @@ const AddConnections = () => {
                   ) : (
                     <Button
                       type="button"
-                      className="custom-btn-default xs-mr-10"
+                      className="viewAll xs-mr-10"
                       onClick={handleBackClick}
                     >
                       Back
@@ -1548,7 +1549,7 @@ const AddConnections = () => {
                                               )}`}
                                           <span
                                             style={{
-                                              color: "blue",
+                                              color: "#0E7A9C!important",
                                               cursor: "pointer",
                                             }}
                                             onClick={() =>
@@ -1557,8 +1558,8 @@ const AddConnections = () => {
                                           >
                                             {" "}
                                             {expandedMessageId === item.userId
-                                              ? "show less"
-                                              : "show more"}
+                                              ? "read less"
+                                              : "read more"}
                                           </span>
                                         </div>
                                       ) : (
