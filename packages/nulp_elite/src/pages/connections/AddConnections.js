@@ -1584,14 +1584,14 @@ const AddConnections = () => {
                         }}
                         className="filter-domain my-20 connection-tab"
                       >
-                        {userFilter && (
+                        {/* {userFilter && (
                           <Filter
                             options={userFilter.map((user) => user.firstName)}
                             label="Filter by Name"
                             onChange={handleUserNameFilter}
                             className="w-30"
                           />
-                        )}
+                        )} */}
 
                         <Filter
                           options={designationsList}
