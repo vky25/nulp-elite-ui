@@ -58,7 +58,6 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-
 const AddConnections = () => {
   const [value, setValue] = React.useState("1");
   const handleChange = (event, newValue) => {
@@ -1136,6 +1135,7 @@ const AddConnections = () => {
     console.log("Selected Option:", user);
   };
   const handleButtonClick = () => {
+    setSelectedChatUser(null);
     setShowTableTwo(true);
   };
   const handleBackClick = () => {
@@ -1143,6 +1143,7 @@ const AddConnections = () => {
     handleTabClick("Tab1");
     setCurrentPage(1);
     onMyConnection();
+    setSelectedChatUser(null);
   };
   const showMessages = (creatorId) => {
     if (isMobile) {
@@ -1162,11 +1163,7 @@ const AddConnections = () => {
     <Box>
       <Header />
       {toasterMessage && <ToasterCommon response={toasterMessage} />}
-      <Container
-        maxWidth="xxl"
-        role="main"
-        className="container-pb pt-0 xs-p-0"
-      >
+      <Container maxWidth="xxl" role="main" className="pt-0 xs-p-0">
         {error && (
           <Alert severity="error" className="my-10">
             {error}
@@ -1319,7 +1316,7 @@ const AddConnections = () => {
                                       >
                                         {`${item.firstName} ${
                                           item.lastName ? item.lastName : " "
-                                        } | ${item.designation}`}
+                                        } |  ${item.designation}`}
                                       </span>
                                     }
                                     secondary={item.latestChat}
@@ -1427,6 +1424,7 @@ const AddConnections = () => {
                                   className="connection-tab"
                                 >
                                   <ListItemText
+                                    style={{ fontSize: "14px", color: "#000" }}
                                     primary={`${item.firstName}${
                                       item.lastName ? ` ${item.lastName}` : ""
                                     } | ${item.designation}`}
@@ -1435,9 +1433,11 @@ const AddConnections = () => {
                                         <div
                                           style={{
                                             border: "1px solid #ddd",
-                                            padding: "10px",
+                                            padding: "3px 10px",
                                             borderRadius: "5px",
-                                            backgroundColor: "#f9f9f9",
+                                            color: "#00000080",
+                                            fontSize: "12px",
+                                            marginTop: "10px",
                                           }}
                                         >
                                           {expandedMessageId === item.userId
@@ -1448,7 +1448,7 @@ const AddConnections = () => {
                                               )}`}
                                           <span
                                             style={{
-                                              color: "#0E7A9C!important",
+                                              color: "#0E7A9C",
                                               cursor: "pointer",
                                             }}
                                             onClick={() =>
@@ -1512,8 +1512,13 @@ const AddConnections = () => {
                     </>
                   ) : (
                     <Box>
-                      <Box display="flex" my={3} justifyContent="center">
-                        <Box className="h4-title">Add New Connection</Box>
+                      <Box
+                        display="flex"
+                        my={3}
+                        justifyContent="center"
+                        style={{ borderBottom: "solid 1px #ddd" }}
+                      >
+                        <Box className="h5-title">Add New Connection</Box>
                       </Box>
                       <Autocomplete
                         id="autocomplete-input"
@@ -1532,6 +1537,7 @@ const AddConnections = () => {
                           <TextField
                             {...params}
                             label="Search for a User"
+                            className="searchUser"
                             variant="outlined"
                           />
                         )}
@@ -1612,6 +1618,7 @@ const AddConnections = () => {
                             >
                               <ListItem>
                                 <ListItemText
+                                  className="inviteText"
                                   primary={`${item.firstName}${
                                     item.lastName ? ` ${item.lastName}` : ""
                                   }`}
@@ -1629,6 +1636,7 @@ const AddConnections = () => {
                                       fontSize: "12px",
                                       color: "#0E7A9C",
                                       fontWeight: "600",
+                                      cursor: "pointer",
                                     }}
                                   >
                                     {t("INVITE")}
@@ -1644,198 +1652,6 @@ const AddConnections = () => {
                         page={currentPage}
                         onChange={handlePageChange}
                       />
-                      <div>
-                        <Modal
-                          aria-labelledby="modal-title"
-                          aria-describedby="modal-desc"
-                          open={open}
-                          className="sx-bottom"
-                          onClose={() => setOpen(false)}
-                          sx={{
-                            display: "flex",
-                            justifyContent: "center",
-                            alignItems: "flex-end",
-                            pt: "10vh",
-                            p: "0",
-                          }}
-                        >
-                          <ModalContent sx={{ width: 400 }} style={{}}>
-                            <h2
-                              id="unstyled-modal-title"
-                              className="modal-title"
-                              style={{
-                                paddingTop: "10px",
-                                paddingRight: "10px",
-                                paddingLeft: "10px",
-                                paddingBottom: "10px", // Changed to paddingBottom to avoid duplication
-                                backgroundColor: "#004367",
-                                color: "white",
-                                borderRadius: "4px", // Changed to "4px" from "md" for borderRadius
-                              }}
-                            >
-                              {selectedUser && (
-                                <div
-                                  style={{
-                                    fontSize: "16px",
-                                    lineHeight: "1.6",
-                                    fontWeight: "500",
-                                  }}
-                                >
-                                  {selectedUser?.firstName}{" "}
-                                  {selectedUser?.lastName}
-                                </div>
-                              )}
-                              {selectedUser && (
-                                <div
-                                  style={{
-                                    fontSize: "15px",
-                                    paddingBottom: "10px",
-                                    fontWeight: "400",
-                                  }}
-                                >
-                                  {selectedUser.designation}
-                                </div>
-                              )}
-                            </h2>
-
-                            {!showChat && (
-                              <p
-                                style={{
-                                  fontSize: "12px",
-                                  paddingLeft: "10px",
-                                  paddingRight: "10px",
-                                }}
-                                id="unstyled-modal-description"
-                                className="modal-description"
-                              >
-                                <Box
-                                  style={{
-                                    fontSize: "12px",
-                                    color: "#484848",
-                                    paddingBottom: "15px",
-                                  }}
-                                >
-                                  {/* {selectedUser.firstName} {selectedUser.lastName} */}
-                                  {/* {t("CONNECT_TEXT")} */}
-                                  {selectedUser.bio}
-                                </Box>
-                                <Box>{t("CONNECT_WITH_THEM")}</Box>
-                              </p>
-                            )}
-                            {showChat && (
-                              <div>
-                                <TextField
-                                  multiline
-                                  minRows={5}
-                                  maxRows={10}
-                                  value={textValue}
-                                  onChange={handleTextareaChange}
-                                  placeholder="Enter your text here..."
-                                  fullWidth
-                                  sx={{ fontSize: "13px" }}
-                                />
-                              </div>
-                            )}
-                            <Box
-                              style={{
-                                paddingBottom: "30px",
-                                display: "flex",
-                                justifyContent: "space-between",
-                                flexDirection: "row",
-                              }}
-                            >
-                              <Button
-                                variant="outlined"
-                                style={{
-                                  borderRadius: "10px",
-                                  color: "#004367",
-                                  padding: "10px 12px",
-                                  margin: "0 10px",
-                                  fontWeight: "500",
-                                  fontSize: "12px",
-                                  border: "solid 1px #efefea00",
-                                  width: "50%",
-                                }}
-                                onClick={handleClose}
-                              >
-                                {t("CANCEL")}
-                              </Button>
-
-                              <Button
-                                style={{
-                                  background: "#004367",
-                                  borderRadius: "10px",
-                                  color: "#fff",
-                                  padding: "10px 12px",
-                                  margin: "0 10px",
-                                  fontWeight: "500",
-                                  fontSize: "12px",
-                                  border: "solid 1px #004367",
-                                  width: "50%",
-                                }}
-                                onClick={
-                                  showChat ? handleSendClick : toggleChat
-                                }
-                              >
-                                {buttonText}
-                              </Button>
-                            </Box>
-                          </ModalContent>
-                        </Modal>
-
-                        {showModal && (
-                          <Modal
-                            open={showModal}
-                            onClose={handleCloseModal}
-                            aria-labelledby="modal-title"
-                            aria-describedby="modal-desc"
-                            className="sx-bottom"
-                            sx={{
-                              display: "flex",
-                              justifyContent: "center",
-                              alignItems: "flex-end",
-                              pt: "10vh",
-                              p: "0",
-                            }}
-                          >
-                            <ModalContent sx={{ width: 400 }} style={{}}>
-                              <div
-                                style={{
-                                  padding: "10px",
-                                  textAlign: "center",
-                                }}
-                              >
-                                <h2
-                                  style={{
-                                    fontSize: "14px",
-                                    textAlign: "center",
-                                    padding: "13px",
-                                  }}
-                                >
-                                  {t("INVITATION_SEND_SUCCESSFULLY")}
-                                </h2>
-                                <Button
-                                  onClick={(e) => {
-                                    setShowModal(false);
-                                  }}
-                                  style={{
-                                    background: "#004367",
-                                    borderRadius: "10px",
-                                    color: "#fff",
-                                    padding: "10px 12px",
-                                    margin: "0 10px",
-                                    fontWeight: "500",
-                                    fontSize: "12px",
-                                    width: "40%",
-                                  }}
-                                >
-                                  {t("CLOSE")}
-                                </Button>
-                              </div>
-                            </ModalContent>
-                          </Modal>
-                        )}
-                      </div>
                     </Box>
                   )}
                 </TabContext>
@@ -1849,9 +1665,9 @@ const AddConnections = () => {
                 className="pt-8 pb-20 xs-hide addConnectChat"
               >
                 {!isMobile && (
-                  <Box className="text-center center-container">
+                  <Box className="text-center">
                     {!selectedChatUser ? (
-                      <Box>
+                      <Box className="center-container">
                         <ForumOutlinedIcon style={{ fontSize: "100px" }} />
                         <Box className="demo-chat">
                           {t("START_A_CONVERSATION")}
