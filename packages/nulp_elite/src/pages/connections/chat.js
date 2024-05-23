@@ -112,18 +112,18 @@ const Chat = ({
     "Hello, I would like to connect with you regarding some queries i had in your course."
   );
   const [textValue, setTextValue] = useState("");
+
   const location = useLocation();
   const {
     senderUserId: routeSenderUserId,
     receiverUserId: routeReceiverUserId,
   } = location.state || {};
-
+  const [isMobile, setIsMobile] = useState(window.innerWidth <= 767);
   const senderUserId = propSenderUserId || routeSenderUserId;
   const receiverUserId = propReceiverUserId || routeReceiverUserId;
 
-  // const [openModal, setDialogOpen] = useState(false);
-
   const { t } = useTranslation();
+
   useEffect(() => {
     const _userId = util.userId();
     setLoggedInUserId(_userId);
@@ -170,6 +170,12 @@ const Chat = ({
     };
     getInvitationNotAcceptedUserByIds();
   }, [receiverUserId]);
+
+  useEffect(() => {
+    const handleResize = () => setIsMobile(window.innerWidth <= 767);
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
 
   const fetchUserInfo = async (userId) => {
     try {
@@ -238,7 +244,7 @@ const Chat = ({
     try {
       const url = `${
         urlConfig.URLS.DIRECT_CONNECT.GET_CHATS
-      }?sender_id=${senderUserId}&receiver_id=${receiverUserId}&is_accepted=${true}`;
+      }?sender_id=${loggedInUserId}&receiver_id=${receiverUserId}&is_accepted=${true}`;
 
       // Check if the user is not blocked before fetching chats
       if (!isBlocked) {
@@ -246,6 +252,13 @@ const Chat = ({
           withCredentials: true,
         });
         setMessages(response.data.result || []);
+        if (!response.data.result.length > 0) {
+          setTextValue(
+            "Hello, I would like to connect with you regarding some queries i had in your course."
+          );
+        } else {
+          setTextValue("");
+        }
       }
     } catch (error) {
       console.error("Error fetching chats:", error);
@@ -274,7 +287,10 @@ const Chat = ({
           }
         );
         setMessage("");
-
+        setTextValue("");
+        if (!messages.length > 0) {
+          navigate(-1);
+        }
         fetchChats(); // Fetch messages after sending a message
         if (onChatSent) {
           onChatSent();
@@ -433,9 +449,11 @@ const Chat = ({
         }}
       >
         <Box className="d-flex" style={{ alignItems: "center" }}>
-          <IconButton onClick={handleGoBack}>
-            <ArrowBackIcon />
-          </IconButton>
+          {isMobile && (
+            <IconButton onClick={handleGoBack}>
+              <ArrowBackIcon />
+            </IconButton>
+          )}
           {receiverData && receiverData?.length > 0 && (
             <Box
               sx={{
@@ -456,28 +474,82 @@ const Chat = ({
             </Box>
           )}
         </Box>
-        <Box
-          style={{
-            display: "flex",
-            alignItems: "center",
-            fontSize: "18px",
-            cursor: "pointer",
-          }}
-        >
-          {!isBlocked && (
-            <IconButton onClick={handleBlockUser} className="block-btn">
-              <BlockIcon style={{ fontSize: "16px", paddingRight: "8px" }} />
-              {t("BLOCK")}
-            </IconButton>
-          )}
-          {showUnblockOption && (
-            <IconButton onClick={handleUnblockUser} className="unblock-btn">
-              <BlockIcon style={{ fontSize: "16px", paddingRight: "8px" }} />
-              {t("UNBLOCK")}
-            </IconButton>
-          )}
-        </Box>
+
+        {messages.length > 0 && (
+          <Box
+            style={{
+              display: "flex",
+              alignItems: "center",
+              fontSize: "18px",
+              cursor: "pointer",
+            }}
+          >
+            {!isBlocked && (
+              <IconButton onClick={handleBlockUser} className="block-btn">
+                <BlockIcon style={{ fontSize: "16px", paddingRight: "8px" }} />
+                {t("BLOCK")}
+              </IconButton>
+            )}
+            {showUnblockOption && (
+              <IconButton onClick={handleUnblockUser} className="unblock-btn">
+                <BlockIcon style={{ fontSize: "16px", paddingRight: "8px" }} />
+                {t("UNBLOCK")}
+              </IconButton>
+            )}
+          </Box>
+        )}
       </div>
+      <Dialog
+        // open={open}
+        // onClose={handleClose}
+
+        open={dialogOpen}
+        onClose={handleDialogClose}
+      >
+        <DialogTitle>
+          {" "}
+          <Box className="h5-title">{t("BLOCK_USER")}</Box>
+        </DialogTitle>
+        <DialogContent>
+          <Box className="h5-title">
+            Are you sure you want to block this user?
+          </Box>
+          <Box py={2}>
+            <TextField
+              id="reason"
+              name="reason"
+              label={
+                <span>
+                  {t("REASON")}
+                  <span style={{ color: "red", marginLeft: "2px" }}>*</span>
+                </span>
+              }
+              multiline
+              rows={3}
+              variant="outlined"
+              fullWidth
+              value={reason}
+              onChange={(e) => setReason(e.target.value)}
+            />
+          </Box>{" "}
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={handleDialogClose} className="custom-btn-default">
+            {"CANCEL"}
+          </Button>
+          <Button
+            onClick={handleBlockUserConfirmed}
+            className="custom-btn-primary"
+            disabled={!reason}
+            style={{
+              background: !reason ? "rgba(0, 67, 103, 0.5)" : "#004367",
+            }}
+          >
+            {"BLOCK"}
+          </Button>
+        </DialogActions>
+      </Dialog>
+
       {receiverData && receiverData.length > 0 && !messages.length > 0 ? (
         <div className={classes.chat}>
           <Box className="h5-title my-15" style={{ color: "#484848" }}>
@@ -487,22 +559,6 @@ const Chat = ({
               answers to your question!
             </Box>
           </Box>
-          <Alert severity="info" style={{ margin: "10px 0" }}>
-            This is an auto-generated message, click to edit.
-          </Alert>
-
-          <TextField
-            multiline
-            minRows={2}
-            maxRows={10}
-            value={prefilledMessage}
-            onChange={handleTextareaChange}
-            fullWidth
-            sx={{ fontSize: "13px" }}
-          />
-          <Button style={{ color: "#484848" }} onClick={sendMessage}>
-            <SendIcon />
-          </Button>
         </div>
       ) : messages.length > 0 ? (
         <div className={classes.chat}>
@@ -587,21 +643,40 @@ const Chat = ({
               ) : null}
             </div>
           ))}
+        </div>
+      ) : null}
+
+      {isBlocked ? (
+        <Alert severity="warning" style={{ marginBottom: "10px" }}>
+          {t("USER_BLOCKED_YOU_CANNOT")}
+        </Alert>
+      ) : (
+        <>
+          {receiverData && receiverData.length > 0 && !messages.length > 0 && (
+            <Alert severity="info" style={{ margin: "10px 0" }}>
+              {t("SYSTEM_GENERATED_MESSAGE")}
+            </Alert>
+          )}
           <TextField
             multiline
             minRows={2}
             maxRows={10}
             value={textValue}
             onChange={handleTextareaChange}
+            disabled={isBlocked}
             placeholder="Enter your message here..."
             fullWidth
             sx={{ fontSize: "13px" }}
           />
-          <Button style={{ color: "#484848" }} onClick={sendMessage}>
+          <Button
+            style={{ color: "#484848" }}
+            onClick={sendMessage}
+            disabled={isBlocked}
+          >
             <SendIcon />
           </Button>
-        </div>
-      ) : null}
+        </>
+      )}
     </div>
   );
 };
