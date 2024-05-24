@@ -226,10 +226,14 @@ body {
     margin-right: 10px !important;
   }
   .leftshade {
-    width: 64px !important;
+    width: 85px !important;
+    left: -17px;
+    height: 100px;
   }
   .rightshade {
-    width: 64px !important;
+    width: 85px !important;
+    right: -17px !important;
+    height: 100px !important;
   }
   .sx-bottom {
     bottom: 50px;
