@@ -43,7 +43,6 @@ body {
   -webkit-line-clamp: 3;
   -webkit-box-orient: vertical;
   width: 96%;
-  height: 61px;
   text-align: left;
 }
 .ribbonCard {
@@ -162,7 +161,7 @@ body {
     background: #484848;
     border-radius: 30px;
     color: #fff;
-    right: 31px;
+    right: 5px;
     display: block;
     text-align: center;
     position: fixed;
@@ -692,6 +691,9 @@ button {
   margin: 10px !important;
   border-radius: 5px !important;
 }
+.labelOne:hover {
+  background: #dddddd !important;
+}
 .labeltwo {
   background: #e1f5ff !important;
   color: #212121 !important;
@@ -701,6 +703,9 @@ button {
   padding: 3px 15px !important;
   margin: 10px !important;
   border-radius: 5px !important;
+}
+.labeltwo:hover {
+  background: #e1f5ff !important;
 }
 .textLeft {
   text-align: left !important;
@@ -1112,4 +1117,21 @@ custom-chip {
 }
 .xs-hide a {
   text-decoration: none;
+}
+.Menuactive {
+  background: #0e7a9c;
+  padding: 10px;
+  border-radius: 5px;
+  color: #fff !important;
+}
+.allContent .MuiGrid-item {
+  flex: 1;
+  display: flex;
+  flex-direction: colum;
+}
+.allContent .cardBox {
+  flex: 1;
+}
+.jss1.jss3.MuiTabs-indicator {
+  background: transparent !important;
 }
