@@ -215,11 +215,11 @@ const Chat = ({
   };
 
   useEffect(() => {
-    if (loggedInUserId && !isBlocked) {
+    if (loggedInUserId && !isBlocked && messages.length>0) {
       const intervalId = setInterval(fetchChats, 5000);
       return () => clearInterval(intervalId);
     }
-  }, [loggedInUserId, isBlocked]);
+  }, [loggedInUserId, isBlocked,messages]);
 
   const fetchBlockUserStatus = async () => {
     try {
