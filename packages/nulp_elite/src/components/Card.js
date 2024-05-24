@@ -42,7 +42,7 @@ export default function BoxCard({ items, index, onClick }) {
         sx={{
           height: 140,
           borderTopLeftRadius: "10px",
-          borderTopRightRadius: "0",
+          borderTopRightRadius: "10px",
           position: "relative",
           backgroundRepeat: "no-repeat",
           background:
@@ -69,7 +69,7 @@ export default function BoxCard({ items, index, onClick }) {
           zIndex: 999,
           margin: "0",
           borderTopLeftRadius: "5px",
-          borderTopRightRadius: "15px",
+          borderTopRightRadius: "20px",
         }}
       ></div>
       <CardContent>
@@ -93,7 +93,7 @@ export default function BoxCard({ items, index, onClick }) {
           gutterBottom
           variant="h5"
           component="div"
-          className="cardTitle mt-20"
+          className="cardTitle mt-40"
         >
           {items.name}
         </Typography>
@@ -112,22 +112,30 @@ export default function BoxCard({ items, index, onClick }) {
           )}
         </Typography>
       </CardContent>
-      {/* {items.board || items.gradeLevel ? ( */}
-      <Divider></Divider>
-      <Box className="my-10 textLeft">
-        {/* {items.se_boards && ( */}
-        <Button size="small" className="labelOne">
-          label1 {items.se_boards}
-        </Button>
-        {/* )}  */}
-        {/* {items.se_gradeLevels && (  */}
-        <Button size="small" className="labeltwo">
-          {" "}
-          label1l1{items.se_gradeLevels}
-        </Button>
-        {/* )}  */}
-      </Box>
-      {/* ) : null} */}
+
+      {items.board ||
+      items.gradeLevel ||
+      items.se_boards ||
+      items.se_gradeLevels ? (
+        <div>
+          <Divider></Divider>
+          <Box className="my-10 textLeft">
+            {items.board ||
+              (items.se_boards && (
+                <Button size="small" className="labelOne">
+                  {items.board || items.se_boards}
+                </Button>
+              ))}
+            {items.gradeLevel ||
+              (items.se_gradeLevels && (
+                <Button size="small" className="labeltwo">
+                  {" "}
+                  {items.gradeLevel || items.se_gradeLevels}
+                </Button>
+              ))}
+          </Box>
+        </div>
+      ) : null}
     </Card>
   );
 }
