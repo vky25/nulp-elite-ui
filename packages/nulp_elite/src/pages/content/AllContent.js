@@ -319,7 +319,11 @@ const AllContent = () => {
         </Carousel>
       )}
 
-      <Container maxWidth="xxl" role="main" className="container-pb pb-30">
+      <Container
+        maxWidth="xxl"
+        role="main"
+        className="container-pb pb-30 allContent"
+      >
         <Box className="text-heading lg-d-flex my-20">
           You are viewing content for :
           <Box className="text-primary">Mobility and accessibliy</Box>

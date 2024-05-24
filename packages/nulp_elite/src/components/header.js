@@ -1,4 +1,4 @@
-import * as React from "react";
+import React, { useState, useEffect } from "react";
 import AppBar from "@mui/material/AppBar";
 import Box from "@mui/material/Box";
 import Toolbar from "@mui/material/Toolbar";
@@ -21,7 +21,6 @@ import Select from "@mui/material/Select";
 import LanguageIcon from "@mui/icons-material/Language";
 import { useTranslation } from "react-i18next";
 import { changeLanguage } from "i18next";
-import { useState } from "react";
 import LiveHelpOutlinedIcon from "@mui/icons-material/LiveHelpOutlined";
 import LogoutOutlinedIcon from "@mui/icons-material/LogoutOutlined";
 import GTranslateIcon from "@mui/icons-material/GTranslate";
@@ -55,6 +54,11 @@ function Header() {
   const handleCloseUserMenu = () => {
     setAnchorElUser(null);
   };
+  const [activePath, setActivePath] = useState(location.pathname);
+
+  useEffect(() => {
+    setActivePath(location.pathname);
+  }, [location.pathname]);
 
   return (
     <>
@@ -328,12 +332,14 @@ function Header() {
             >
               <Link
                 href="/all"
+                className={activePath === "/all" ? "Menuactive" : ""}
                 underline="none"
                 style={{
                   my: 2,
                   color: "#484848",
                   display: "flex",
                   margin: "0 20px",
+                  padding: "10px",
                 }}
               >
                 <MenuBookOutlinedIcon
@@ -343,12 +349,14 @@ function Header() {
               </Link>
               <Link
                 href="/addConnections"
+                className={activePath === "/addConnections" ? "Menuactive" : ""}
                 underline="none"
                 style={{
                   my: 2,
                   color: "#484848",
                   display: "flex",
                   margin: "0 20px",
+                  padding: "10px",
                 }}
               >
                 <ChatOutlinedIcon

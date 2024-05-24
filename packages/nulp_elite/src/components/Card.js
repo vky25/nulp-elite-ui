@@ -120,19 +120,17 @@ export default function BoxCard({ items, index, onClick }) {
         <div>
           <Divider></Divider>
           <Box className="my-10 textLeft">
-            {items.board ||
-              (items.se_boards && (
-                <Button size="small" className="labelOne">
-                  {items.board || items.se_boards}
-                </Button>
-              ))}
-            {items.gradeLevel ||
-              (items.se_gradeLevels && (
-                <Button size="small" className="labeltwo">
-                  {" "}
-                  {items.gradeLevel || items.se_gradeLevels}
-                </Button>
-              ))}
+            {(items.board || items.se_boards) && (
+              <Button type="button" size="small" className="labelOne">
+                {items.board || items.se_boards}
+              </Button>
+            )}
+            {(items.gradeLevel || items.se_gradeLevels) && (
+              <Button type="button" size="small" className="labeltwo">
+                {" "}
+                {items.gradeLevel || items.se_gradeLevels}
+              </Button>
+            )}
           </Box>
         </div>
       ) : null}
