@@ -1132,3 +1132,6 @@ custom-chip {
 .allContent .cardBox {
   flex: 1;
 }
+.jss1.jss3.MuiTabs-indicator {
+  background: transparent !important;
+}

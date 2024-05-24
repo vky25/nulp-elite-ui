@@ -63,7 +63,7 @@ export default function BoxCard({ items, index, onClick }) {
           left: 0,
           right: "0",
           width: "100%",
-          height: "38%",
+          height: "141px",
           background:
             "linear-gradient(45deg, RGBA(28, 25, 25, 0.46) 7%, RGBA(20, 18, 18, 0.57) 45%)",
           zIndex: 999,
