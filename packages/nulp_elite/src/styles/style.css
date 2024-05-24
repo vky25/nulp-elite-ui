@@ -188,6 +188,21 @@ body {
   }
 }
 @media (max-width: 768px) {
+  .MuiTabs-scroller {
+    margin-right: 10px;
+  }
+  .xs-pr-0 {
+    padding-right: 0 !important;
+  }
+  .xs-pr-16 {
+    padding-right: 16px !important;
+  }
+  .carousel-container-domain.react-multi-carousel-list {
+    background: #f4fbff;
+    box-shadow: 0 4px 4px 0 #00000040;
+    padding: 18px 0;
+    margin-top: 0 !important;
+  }
   .scroll-45,
   .scroll {
     height: 67vh;
@@ -211,10 +226,14 @@ body {
     margin-right: 10px !important;
   }
   .leftshade {
-    width: 64px !important;
+    width: 85px !important;
+    left: -17px;
+    height: 100px;
   }
   .rightshade {
-    width: 64px !important;
+    width: 85px !important;
+    right: -17px !important;
+    height: 100px !important;
   }
   .sx-bottom {
     bottom: 50px;
@@ -251,8 +270,18 @@ body {
   .xs-p-0 {
     padding-top: 0 !important;
   }
+  .xs-pb-20 {
+    padding-bottom: 20px !important;
+  }
 }
 @media (min-width: 769px) {
+  .react-multi-carousel-list {
+    display: block !important;
+  }
+  .bg-blue {
+    width: 100%;
+    justify-content: space-between;
+  }
   .filter-bx .MuiInputBase-formControl {
     width: 400px;
   }
@@ -269,6 +298,10 @@ body {
 @media (min-width: 769px) {
   .custom-dot-list-style {
     display: none !important;
+  }
+  .carousel-bx {
+    justify-content: space-evenly;
+    padding: 14px;
   }
   .lg-d-flex {
     display: flex;
@@ -327,9 +360,9 @@ body {
     padding: 0 25px;
   }
 
-  .react-multi-carousel-list {
+  /* .react-multi-carousel-list {
     padding: 20px !important;
-  }
+  } */
   .imgBorder {
     border: solid 1px #e1e1e1;
   }
@@ -591,7 +624,7 @@ Footer {
   margin-top: 15px;
 }
 .mt-20 {
-  margin-top: 20px;
+  margin-top: 20px !important;
 }
 .addConnection .jss3 {
   background-color: transparent !important;
@@ -815,7 +848,8 @@ button {
   font-size: 16px !important;
   font-weight: 500 !important;
   text-align: center !important;
-  width: 51%;
+  width: 52%;
+  padding-left: 0 !important;
 }
 .MuiTabs-indicator {
   border-bottom: 4px solid #0e7a9c !important;
@@ -960,6 +994,7 @@ custom-chip {
 .social-icons a {
   text-decoration: none !important;
   color: #fff;
+  border: none !important;
 }
 .addConnectChat .center-container {
   transform: translate(0, 80%);
@@ -1028,9 +1063,9 @@ custom-chip {
   background-color: rgb(255, 255, 255);
   transition: box-shadow 300ms cubic-bezier(0.4, 0, 0.2, 1) 0ms;
   border-radius: 4px;
-  box-shadow: rgba(0, 0, 0, 0.2) 0px 11px 15px -7px,
+  /* box-shadow: rgba(0, 0, 0, 0.2) 0px 11px 15px -7px,
     rgba(0, 0, 0, 0.14) 0px 24px 38px 3px, rgba(0, 0, 0, 0.12) 0px 9px 46px 8px;
-  transform: scale(1.5);
+  transform: scale(1.5); */
   cursor: pointer;
 }
 
@@ -1071,4 +1106,10 @@ custom-chip {
 }
 .left-container .MuiTab-root {
   background: #fff !important;
+}
+.custom-dot-list-style-hide {
+  display: none !important;
+}
+.xs-hide a {
+  text-decoration: none;
 }

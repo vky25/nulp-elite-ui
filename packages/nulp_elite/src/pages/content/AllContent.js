@@ -344,12 +344,15 @@ const AllContent = () => {
             <React.Fragment key={category}>
               <Box
                 className="d-flex"
-                style={{ justifyContent: "space-between" }}
+                style={{
+                  justifyContent: "space-between",
+                  alignItems: "center",
+                }}
               >
                 <Box
                   style={{
                     display: "inline-block",
-                    margin: "30px 0",
+                    margin: "33px 0px 20px",
                   }}
                   className="h4-title"
                 >

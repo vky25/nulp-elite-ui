@@ -206,5 +206,8 @@
   "CLICK_ON_ANY_CONTACT": "Click on any contact and send them a connection request!",
   "REASON": "Reason",
   "SYSTEM_GENERATED_MESSAGE": "This is an auto-generated message, click to edit.",
-  "ALL_CONTENT":"All Content"
+  "ALL_CONTENT": "All Content",
+  "COMPLETION_CERTIFICATE_ISSUED": "Completion certificate issued",
+  "COMPLETION": "Completion",
+  "ASSESSMENT": "Assesment"
 }

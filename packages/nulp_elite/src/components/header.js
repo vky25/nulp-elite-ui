@@ -24,10 +24,10 @@ import { changeLanguage } from "i18next";
 import { useState } from "react";
 import LiveHelpOutlinedIcon from "@mui/icons-material/LiveHelpOutlined";
 import LogoutOutlinedIcon from "@mui/icons-material/LogoutOutlined";
-import GTranslateIcon from '@mui/icons-material/GTranslate';
-import MenuBookOutlinedIcon from '@mui/icons-material/MenuBookOutlined';
-import ChatOutlinedIcon from '@mui/icons-material/ChatOutlined';
-import SortOutlinedIcon from '@mui/icons-material/SortOutlined';
+import GTranslateIcon from "@mui/icons-material/GTranslate";
+import MenuBookOutlinedIcon from "@mui/icons-material/MenuBookOutlined";
+import ChatOutlinedIcon from "@mui/icons-material/ChatOutlined";
+import SortOutlinedIcon from "@mui/icons-material/SortOutlined";
 function Header() {
   const { t } = useTranslation();
   const [language, setLanguage] = useState("en");
@@ -66,217 +66,246 @@ function Header() {
         }}
       >
         <Box>
-        <Link href="/all" className="pl-18 py-15">
-              <img
-                src={require("../assets/logo.png")}
-                style={{ maxWidth: "100%" }}
-              /></Link>
+          <Link href="/all" className="pl-18 py-15">
+            <img
+              src={require("../assets/logo.png")}
+              style={{ maxWidth: "100%" }}
+            />
+          </Link>
         </Box>
-        <Box style={{
-          display: "flex",
-          alignItems:"center",
-          paddingRight:"14px"
-        }}>
-        {/* Navigation Links */}
-        <Box style={{ padding: "10px" }}>
-          <DevicesIcon
+        <Box
+          style={{
+            display: "flex",
+            alignItems: "center",
+            paddingRight: "14px",
+          }}
+        >
+          {/* Navigation Links */}
+          <Box style={{ padding: "10px" }}>
+            <DevicesIcon
+              style={{
+                padding: "0 10px",
+                verticalAlign: "middle",
+                color: "#424242",
+              }}
+            />
+
+            <Link
+              href="#"
+              underline="none"
+              style={{
+                color: "#424242",
+                fontSize: "16px",
+                borderRight: "solid 1px #424242",
+                paddingRight: "10px",
+              }}
+            >
+              {t("MAIN_CONTENT")}{" "}
+            </Link>
+          </Box>
+          <Box
             style={{
               padding: "0 10px",
-              verticalAlign: "middle",
-              color: "#424242",
-            }}
-          />
-           
-          <Link
-            href="#"
-            underline="none"
-            style={{
               color: "#424242",
               fontSize: "16px",
               borderRight: "solid 1px #424242",
-              paddingRight: "10px",
             }}
           >
-            {t("MAIN_CONTENT")}{" "}
-          </Link>
-        </Box>
-        <Box
-          style={{
-            padding: "0 10px",
-            color: "#424242",
-            fontSize: "16px",
-            borderRight: "solid 1px #424242",
-          }}
-        >
-          <Link
-            href="#"
-            underline="none"
-            style={{ color: "#424242", fontSize: "16px", paddingRight: "10px" }}
+            <Link
+              href="#"
+              underline="none"
+              style={{
+                color: "#424242",
+                fontSize: "16px",
+                paddingRight: "10px",
+              }}
+            >
+              {" "}
+              +A
+            </Link>{" "}
+            <Link
+              href="#"
+              underline="none"
+              style={{
+                color: "#424242",
+                fontSize: "16px",
+                paddingRight: "10px",
+              }}
+            >
+              A -{" "}
+            </Link>
+            <Link
+              href="#"
+              underline="none"
+              style={{
+                color: "#424242",
+                fontSize: "16px",
+                paddingRight: "10px",
+              }}
+            >
+              A
+            </Link>{" "}
+          </Box>
+          <Box
+            style={{
+              padding: "0 10px",
+              color: "#424242",
+              fontSize: "14px",
+              borderRight: "solid 1px #424242",
+            }}
           >
-            {" "}
-            +A
-          </Link>{" "}
-          <Link
-            href="#"
-            underline="none"
-            style={{ color: "#424242", fontSize: "16px", paddingRight: "10px" }}
-          >
-            A -{" "}
-          </Link>
-          <Link
-            href="#"
-            underline="none"
-            style={{ color: "#424242", fontSize: "16px", paddingRight: "10px" }}
-          >
-            A
-          </Link>{" "}
-        </Box>
-        <Box
-          style={{
-            padding: "0 10px",
-            color: "#424242",
-            fontSize: "14px",
-            borderRight: "solid 1px #424242",
-          }}
-        >
-          <WebIcon style={{ padding: "0 10px", verticalAlign: "middle" }} />
-          <Link
-            href="#"
-            underline="none"
-            style={{ color: "#424242", fontSize: "16px" }}
-          >
-            {t("SCREEN_READER")}{" "}
-          </Link>
-        </Box>
-         {/* Language Select */}
-         <Box sx={{ minWidth: 120,paddingLeft:'10px' }}>
-              <FormControl fullWidth size="small" style={{display:'flex',alignItems:'center',flexDirection:'row'}}> 
-                {/* <InputLabel id="language-select-label">
+            <WebIcon style={{ padding: "0 10px", verticalAlign: "middle" }} />
+            <Link
+              href="#"
+              underline="none"
+              style={{ color: "#424242", fontSize: "16px" }}
+            >
+              {t("SCREEN_READER")}{" "}
+            </Link>
+          </Box>
+          {/* Language Select */}
+          <Box sx={{ minWidth: 120, paddingLeft: "10px" }}>
+            <FormControl
+              fullWidth
+              size="small"
+              style={{
+                display: "flex",
+                alignItems: "center",
+                flexDirection: "row",
+              }}
+            >
+              {/* <InputLabel id="language-select-label">
                   {t("LANGUAGE")}
                 </InputLabel> */}
-                <GTranslateIcon/>
-                <Select
-                  labelId="language-select-label"
-                  id="language-select"
-                  className="language"
-                  style={{ border: "none" }}
-                  label={t("LANGUAGE")}
-                  value={language}
-                  startIcon={<LanguageIcon />}
-                  onChange={handleChangeLanguage}
-                  inputProps={{ "aria-label": t("SELECT_LANGUAGE") }}
-                >
-                  <MenuItem value="en">{t("ENGLISH")}</MenuItem>
-                  <MenuItem value="hi">{t("HINDI")}</MenuItem>
-                </Select>
-              </FormControl>
-            </Box>
-            </Box>
+              <GTranslateIcon />
+              <Select
+                labelId="language-select-label"
+                id="language-select"
+                className="language"
+                style={{ border: "none" }}
+                label={t("LANGUAGE")}
+                value={language}
+                startIcon={<LanguageIcon />}
+                onChange={handleChangeLanguage}
+                inputProps={{ "aria-label": t("SELECT_LANGUAGE") }}
+              >
+                <MenuItem value="en">{t("ENGLISH")}</MenuItem>
+                <MenuItem value="hi">{t("HINDI")}</MenuItem>
+              </Select>
+            </FormControl>
+          </Box>
+        </Box>
       </Box>
 
       {/* Top Navigation Bar */}
-      <AppBar  className="lg-my-10  bg-inherit pos-inherit mt-65">
-        <Container
-          maxWidth="xl"
-          className="p-0"
-        >
-          
+      <AppBar className="lg-my-10  bg-inherit pos-inherit mt-65">
+        <Container maxWidth="xl" className="p-0">
           <Box className="d-flex">
-
-           
-<Toolbar disableGutters style={{justifyContent:"space-between", background:"#fff",width:"100%"}} className="lg-hide lg-mt-10">
-  <Box className="d-flex lg-hide">
-            <IconButton
-              size="large"
-              aria-label="account of current user"
-              aria-controls="menu-appbar"
-              aria-haspopup="true"
-              onClick={handleOpenNavMenu}
-              color="inherit"
-              className="lg-hide"
+            <Toolbar
+              disableGutters
+              style={{
+                justifyContent: "space-between",
+                background: "#fff",
+                width: "100%",
+              }}
+              className="lg-hide lg-mt-10"
             >
-              <SortOutlinedIcon />
-            </IconButton>
-            <Box sx={{
-                  display: { xs: "block", md: "none" },
-                }}>
-              <Menu
-                id="menu-appbar"
-                anchorEl={anchorElNav}
-                anchorOrigin={{
-                  vertical: "bottom",
-                  horizontal: "left",
-                }}
-                keepMounted
-                transformOrigin={{
-                  vertical: "top",
-                  horizontal: "left",
-                }}
-                open={Boolean(anchorElNav)}
-                onClose={handleCloseNavMenu}
-                
-              >
-                <MenuItem>
-                  <Link href="/help" textAlign="center" underline="none">
-                    <LiveHelpOutlinedIcon
-                      style={{ verticalAlign: "bottom", color: "#000" }}
-                    />{" "}
-                    {t("HELP")}
-                  </Link>
-                </MenuItem>
-                <MenuItem>
-                  <Link href="/logoff" textAlign="center" underline="none">
-                    <LogoutOutlinedIcon
-                      style={{ verticalAlign: "bottom", color: "#000" }}
-                    />{" "}
-                    {t("LOGOUT")}
-                  </Link>
-                </MenuItem>
-              </Menu>
-            </Box>
-            <Link href="/all" className="pl-18 py-15">
-              <img
-                src={require("../assets/logo.png")}
-                style={{ maxWidth: "100%" }}
-              /></Link>
+              <Box className="d-flex lg-hide">
+                <IconButton
+                  size="large"
+                  aria-label="account of current user"
+                  aria-controls="menu-appbar"
+                  aria-haspopup="true"
+                  onClick={handleOpenNavMenu}
+                  color="inherit"
+                  className="lg-hide"
+                >
+                  <SortOutlinedIcon />
+                </IconButton>
+                <Box
+                  sx={{
+                    display: { xs: "block", md: "none" },
+                  }}
+                >
+                  <Menu
+                    id="menu-appbar"
+                    anchorEl={anchorElNav}
+                    anchorOrigin={{
+                      vertical: "bottom",
+                      horizontal: "left",
+                    }}
+                    keepMounted
+                    transformOrigin={{
+                      vertical: "top",
+                      horizontal: "left",
+                    }}
+                    open={Boolean(anchorElNav)}
+                    onClose={handleCloseNavMenu}
+                  >
+                    <MenuItem>
+                      <Link href="/help" textAlign="center" underline="none">
+                        <LiveHelpOutlinedIcon
+                          style={{ verticalAlign: "bottom", color: "#000" }}
+                        />{" "}
+                        {t("HELP")}
+                      </Link>
+                    </MenuItem>
+                    <MenuItem>
+                      <Link href="/logoff" textAlign="center" underline="none">
+                        <LogoutOutlinedIcon
+                          style={{ verticalAlign: "bottom", color: "#000" }}
+                        />{" "}
+                        {t("LOGOUT")}
+                      </Link>
+                    </MenuItem>
+                  </Menu>
+                </Box>
+                <Link href="/all" className="pl-18 py-15">
+                  <img
+                    src={require("../assets/logo.png")}
+                    style={{ maxWidth: "100%" }}
+                  />
+                </Link>
               </Box>
-            <Box  className="lg-hide">
-            
-               {/* Language Select */}
-         <Box sx={{ minWidth: 120,paddingLeft:'10px' }}>
-              <FormControl fullWidth size="small" style={{display:'flex',alignItems:'center',flexDirection:'row'}}> 
-                {/* <InputLabel id="language-select-label">
+              <Box className="lg-hide">
+                {/* Language Select */}
+                <Box sx={{ minWidth: 120, paddingLeft: "10px" }}>
+                  <FormControl
+                    fullWidth
+                    size="small"
+                    style={{
+                      display: "flex",
+                      alignItems: "center",
+                      flexDirection: "row",
+                    }}
+                  >
+                    {/* <InputLabel id="language-select-label">
                   {t("LANGUAGE")}
                 </InputLabel> */}
-                <GTranslateIcon style={{color:"#000"}}/>
-                <Select
-                  labelId="language-select-label"
-                  id="language-select"
-                  className="language"
-                  style={{ border: "none" }}
-                  label={t("LANGUAGE")}
-                  value={language}
-                  startIcon={<LanguageIcon />}
-                  onChange={handleChangeLanguage}
-                  inputProps={{ "aria-label": t("SELECT_LANGUAGE") }}
-                >
-                  <MenuItem value="en">{t("ENGLISH")}</MenuItem>
-                  <MenuItem value="hi">{t("HINDI")}</MenuItem>
-                </Select>
-              </FormControl>
-            </Box>
-            </Box>
+                    <GTranslateIcon style={{ color: "#000" }} />
+                    <Select
+                      labelId="language-select-label"
+                      id="language-select"
+                      className="language"
+                      style={{ border: "none" }}
+                      label={t("LANGUAGE")}
+                      value={language}
+                      startIcon={<LanguageIcon />}
+                      onChange={handleChangeLanguage}
+                      inputProps={{ "aria-label": t("SELECT_LANGUAGE") }}
+                    >
+                      <MenuItem value="en">{t("ENGLISH")}</MenuItem>
+                      <MenuItem value="hi">{t("HINDI")}</MenuItem>
+                    </Select>
+                  </FormControl>
+                </Box>
+              </Box>
 
-            {/* Language Select */}
-           
-
-          </Toolbar>
+              {/* Language Select */}
+            </Toolbar>
             {/* Search Box */}
-            <Box
-              className="xs-hide d-flex header-bg w-40 mr-30"
-             
-            >
-              <Box className="h1-title px-10 pr-20">{t('EXPLORE')}</Box>
+            <Box className="xs-hide d-flex header-bg w-40 mr-30">
+              <Box className="h1-title px-10 pr-20">{t("EXPLORE")}</Box>
               <TextField
                 placeholder={t("What do you want to learn today?  ")}
                 variant="outlined"
@@ -329,7 +358,7 @@ function Header() {
               </Link>
 
               {/* User Profile */}
-              <Tooltip title={t("OPEN_SETTINGS")}>
+              <Tooltip>
                 <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
                   <AccountCircleOutlinedIcon
                     style={{ padding: "0 10px", verticalAlign: "middle" }}
@@ -354,17 +383,17 @@ function Header() {
                 onClose={handleCloseUserMenu}
               >
                 <MenuItem>
-                  <Link href="/profile" textAlign="center">
+                  <Link href="/profile" underline="none" textAlign="center">
                     {t("PROFILE")}
                   </Link>
                 </MenuItem>
                 <MenuItem>
-                  <Link href="/help" textAlign="center">
+                  <Link href="/help" underline="none" textAlign="center">
                     {t("HELP")}
                   </Link>
                 </MenuItem>
                 <MenuItem>
-                  <Link href="/logoff" textAlign="center">
+                  <Link href="/logoff" underline="none" textAlign="center">
                     {t("LOGOUT")}
                   </Link>
                 </MenuItem>
