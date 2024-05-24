@@ -960,6 +960,7 @@ custom-chip {
 .social-icons a {
   text-decoration: none !important;
   color: #fff;
+  border: none !important;
 }
 .addConnectChat .center-container {
   transform: translate(0, 80%);

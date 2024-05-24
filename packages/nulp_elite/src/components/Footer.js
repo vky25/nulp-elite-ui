@@ -13,7 +13,10 @@ import { useTranslation } from "react-i18next";
 import { useParams,useNavigate } from "react-router-dom";
 import MenuBookOutlinedIcon from '@mui/icons-material/MenuBookOutlined';
 import ChatOutlinedIcon from '@mui/icons-material/ChatOutlined';
-
+import TwitterIcon from '@mui/icons-material/Twitter';
+import FacebookIcon from '@mui/icons-material/Facebook';
+import InstagramIcon from '@mui/icons-material/Instagram';
+import LinkedInIcon from '@mui/icons-material/LinkedIn';
 // const styles = {
 //   BottomNavigation: {
 //     width: '100%',
@@ -96,6 +99,12 @@ export default function Footer() {
   <Grid item xs={4} md={3} style={{fontSize:'14px', lineHeight:'2.4',fontWeight:'400'}}>
   {/* <Link underline="none" target="_blank" href="https://niua.org/cdg/" style={{padding:'10px 0 2px',color:'#fff', fontSize:'14px'}}>{t("CENTER_FOR_DIGITAL_GOVERNANCE")}</Link><br/> */}
     <Link  underline="none" target="_blank" href="https://nudm.mohua.gov.in/" style={{padding:'10px 0 2px',color:'#fff', fontSize:'14px'}}>{t("NATIONAL_URBAN_DIGITAL_MISSION")}</Link>
+    <Box className="social-icons">
+    <Link href="#" underline="none"><FacebookIcon/></Link>
+    <Link href="#" underline="none"><InstagramIcon/></Link>
+    <Link href="#" underline="none"><LinkedInIcon/></Link>
+    <Link href="#" underline="none"><TwitterIcon/></Link>
+    </Box>
 </Grid>
   <Grid item xs={4} md={3} style={{fontSize:'14px', lineHeight:'1.5', fontWeight:'400'}}>
   <Box style={{fontSize:'14px',fontWeight:'700'}}>{t("N0DAL_MINISTRY")}:</Box>
