@@ -49,7 +49,6 @@ import {
   LinkedinIcon,
   TwitterIcon,
 } from "react-share";
-
 const JoinCourse = () => {
   const { t } = useTranslation();
   const [userData, setUserData] = useState();
@@ -673,7 +672,7 @@ const JoinCourse = () => {
         </Box>
       </Modal>
 
-      <Container maxWidth="xxl" role="main" className="container-pb">
+      <Container maxWidth="xxl" role="main" className="container-pb xs-pr-0">
         <Grid container spacing={2}>
           <Grid item xs={12} md={4} lg={4} className="sm-p-25 left-container">
             {/* <Breadcrumbs
@@ -692,7 +691,10 @@ const JoinCourse = () => {
             </Typography>
           </Breadcrumbs>  */}
             <Grid container spacing={2}>
-              <Breadcrumbs aria-label="breadcrumb" className="h6-title my-15">
+              <Breadcrumbs
+                aria-label="breadcrumb"
+                className="h6-title my-15 pl-18"
+              >
                 <Link
                   underline="hover"
                   style={{ maxHeight: "inherit" }}
@@ -711,24 +713,7 @@ const JoinCourse = () => {
                   {userData?.result?.content?.name}
                 </Link>
               </Breadcrumbs>
-              <Grid item xs={8} className="xs-p-0">
-                {/* <Link
-                  onClick={handleGoBack}
-                  style={{
-                    display: "block",
-                    display: "flex",
-                    fontSize: "14px",
-                    paddingTop: "15px",
-                    marginBottom: "10px",
-                    color: "rgb(0, 67, 103)",
-                  }}
-                > */}
-                {/* <ArrowBackOutlinedIcon
-                    style={{ width: "0.65em", height: "0.65em" }}
-                  />{" "}
-                  Back
-                </Link> */}
-              </Grid>
+
               <Grid item xs={4}>
                 <Link
                   href="#"
@@ -785,6 +770,7 @@ const JoinCourse = () => {
                 borderRadius: "10px",
                 color: "#484848",
               }}
+              className="xs-hide"
             >
               <Typography
                 variant="h7"
@@ -974,25 +960,26 @@ const JoinCourse = () => {
               )}
             </div>
             <Box className="my-20 xs-hide">
-              <Link href="#" className="pr-5">
-                {" "}
-                <img src={require("../../assets/fb.png")} alt="" />
-              </Link>
-              <Link href="#" className="pr-5">
-                {" "}
-                <img src={require("../../assets/whatsapp.png")} alt="" />
-              </Link>
-              <Link href="#" className="pr-5">
-                {" "}
-                <img src={require("../../assets/linkedin.png")} alt="" />
-              </Link>
-              <Link href="#" className="pr-5">
-                {" "}
-                <img src={require("../../assets/twitter.png")} alt="" />
-              </Link>
+              <FacebookShareButton url={shareUrl} className="pr-5">
+                <FacebookIcon size={32} round={true} />
+              </FacebookShareButton>
+              <WhatsappShareButton url={shareUrl} className="pr-5">
+                <WhatsappIcon size={32} round={true} />
+              </WhatsappShareButton>
+              <LinkedinShareButton url={shareUrl} className="pr-5">
+                <LinkedinIcon size={32} round={true} />
+              </LinkedinShareButton>
+              <TwitterShareButton url={shareUrl} className="pr-5">
+                <img
+                  src={require("../../assets/twitter.png")}
+                  alt="Twitter"
+                  style={{ width: 32, height: 32 }}
+                />
+              </TwitterShareButton>
+            
             </Box>
           </Grid>
-          <Grid item xs={12} md={8} lg={8} className="mb-20">
+          <Grid item xs={12} md={8} lg={8} className="mb-20 xs-pr-16">
             <Box style={{ textAlign: "right" }}> {renderActionButton()}</Box>
 
             {/* <Box
@@ -1078,6 +1065,68 @@ const JoinCourse = () => {
                 ))}
               </AccordionDetails>
             </Accordion>
+            <Box
+              style={{
+                background: "#F9FAFC",
+                padding: "10px",
+                borderRadius: "10px",
+                color: "#484848",
+              }}
+              className="lg-hide"
+            >
+              <Typography
+                variant="h7"
+                style={{
+                  margin: "0 0 9px 0",
+                  display: "block",
+                  fontSize: "16px",
+                }}
+              >
+                {t("BATCH_DETAILS")}:
+              </Typography>
+              <Box
+                style={{
+                  background: "#fff",
+                  padding: "10px",
+                  borderRadius: "10px",
+                }}
+              >
+                <Typography
+                  variant="h7"
+                  style={{
+                    fontWeight: "500",
+                    margin: "9px 0",
+                    display: "block",
+                    fontSize: "14px",
+                  }}
+                >
+                  {t("BATCH_START_DATE")}: {formatDate(batchData?.startDate)}
+                </Typography>
+                <Typography
+                  variant="h7"
+                  style={{
+                    fontWeight: "500",
+                    margin: "9px 0",
+                    display: "block",
+                    fontSize: "14px",
+                  }}
+                >
+                  {t("BATCH_END_DATE")}: {formatDate(batchData?.endDate)}
+                </Typography>
+                <Typography
+                  variant="h7"
+                  style={{
+                    fontWeight: "500",
+                    margin: "9px 0",
+                    display: "block",
+                    fontSize: "14px",
+                  }}
+                >
+                  {t("LAST_DATE_FOR_ENROLLMENT")}:{" "}
+                  {formatDate(batchData?.enrollmentEndDate)}
+                </Typography>
+              </Box>
+            </Box>
             <Accordion
               className="lg-hide"
               style={{

@@ -107,8 +107,8 @@ export default function DomainCarousel({ domains, onSelectDomain }) {
             keyBoardControl={true}
             customTransition="all .5"
             transitionDuration={500}
-            containerClass="carousel-container"
-            dotListClass="custom-dot-list-style"
+            containerClass="carousel-container-domain"
+            dotListClass="custom-dot-list-style-hide"
             itemClass="carousel-item-padding-40-px"
           >
             {itemsArray &&
@@ -160,7 +160,7 @@ export default function DomainCarousel({ domains, onSelectDomain }) {
       ) : (
         <Box
           sx={{ display: "flex" }}
-          className={scrolled ? "bg-blue scrolled" : "bg-blue"}
+          className={scrolled ? "carousel-bxx scrolled" : "carousel-bx"}
         >
           {itemsArray &&
             itemsArray?.slice(0, 10).map((domain, index) => (
@@ -176,7 +176,7 @@ export default function DomainCarousel({ domains, onSelectDomain }) {
                 style={{ display: "flex", margin: "0 4px" }}
               >
                 <Box
-                  className="imgBorder"
+                  className="imgBorder domainHover"
                   style={{
                     background: "#fff",
                     padding: "10px",
@@ -187,14 +187,14 @@ export default function DomainCarousel({ domains, onSelectDomain }) {
                 >
                   {/* {(domain.image != undefined) && <img src={require(baseImgUrl+domain.image)}  style={{width:'40px',objectFit:'contain'}} alt={domain.name} />}
                 {(domain.image == undefined)&& <img src={require("../assets/swm.png")}  style={{width:'40px',objectFit:'contain'}} alt={domain.name} />} */}
-                  <Tooltip title={domain.description}>
+                  <Box title={domain.description}>
                     <img
-                      className="domainHover"
                       src={require(`../assets/domainImgs${domain.image}`)}
                       style={{ width: "40px", objectFit: "contain" }}
                       alt={domain.name}
                     />
-                  </Tooltip>
+                    {/* <Box>{domain.description}</Box> */}
+                  </Box>
 
                   {/* <img src={require("../assets/swm.png")}  style={{width:'40px',objectFit:'contain'}} alt={domain.name} /> */}
                 </Box>

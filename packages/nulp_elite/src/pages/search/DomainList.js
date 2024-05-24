@@ -26,10 +26,8 @@ import DomainCarousel from "components/domainCarousel";
 import NoResult from "pages/content/noResultFound";
 import BoxCard from "../../components/Card";
 import SummarizeOutlinedIcon from "@mui/icons-material/SummarizeOutlined";
-import BookmarkAddedOutlinedIcon from '@mui/icons-material/BookmarkAddedOutlined';
-import VerifiedOutlinedIcon from '@mui/icons-material/VerifiedOutlined';
-
-
+import BookmarkAddedOutlinedIcon from "@mui/icons-material/BookmarkAddedOutlined";
+import VerifiedOutlinedIcon from "@mui/icons-material/VerifiedOutlined";
 
 const Item = styled(Paper)(({ theme }) => ({
   backgroundColor: theme.palette.mode === "dark" ? "#1A2027" : "#fff",
@@ -381,34 +379,9 @@ const DomainList = () => {
     <div>
       <Header />
       {toasterMessage && <ToasterCommon response={toasterMessage} />}
-      {/* <Box sx={{ background: "#2D2D2D", padding: "20px" }}>
-        <p
-          style={{
-            fontSize: "20px",
-            fontWeight: "700",
-            color: "#fff",
-            paddingBottom: "5px",
-            margin: "0",
-          }}
-        >
-          {t("EXPLORE_CONTENT_RELATED_TO_YOUR_DOMAIN")}
-        </p>
-        <p
-          style={{
-            fontSize: "16px",
-            fontWeight: "700",
-            color: "#C1C1C1",
-            margin: "0",
-            paddingBottom: "30px",
-          }}
-        >
-          {t("LEARN_FROM_WELL_CURATED")}
-        </p>
-        <SearchBox onSearch={handleSearch} />
-      </Box>  */}
 
       {isMobile ? (
-        <Container maxWidth="xxl" role="main" className="container-pb">
+        <Container maxWidth="xxl" role="main">
           {error && <Alert severity="error">{error}</Alert>}
           {/* <Box sx={{background:'#fff',padding:'20px 10px 30px 10px', margin:'25px 0'}}>
 <ThemeProvider theme={theme}>
@@ -431,7 +404,7 @@ const DomainList = () => {
                 data.slice(0, 10).map((term) => (
                   <Grid
                     item
-                    xs={12}
+                    xs={6}
                     md={6}
                     lg={3}
                     style={{ marginBottom: "10px" }}
@@ -501,17 +474,24 @@ const DomainList = () => {
         <NoResult />
       )}
 
-      <Container maxWidth="xxl" role="main" className="container-pb">
+      <Container maxWidth="xxl" className="xs-pb-20" role="main">
         {error && <Alert severity="error">{error}</Alert>}
 
         <Box textAlign="center">
-          <p style={{ display: "flex", justifyContent: "space-between" }}>
-            <Box
-            
-            >
-              <VerifiedOutlinedIcon className="text-grey" style={{ verticalAlign: "top" }} />{" "}
+          <p
+            style={{
+              display: "flex",
+              justifyContent: "space-between",
+              paddingTop: "25px",
+            }}
+          >
+            <Box>
+              <VerifiedOutlinedIcon
+                className="text-grey"
+                style={{ verticalAlign: "top" }}
+              />{" "}
               <Box
-              className="h3-title"
+                className="h3-title"
                 style={{
                   display: "inline-block",
                 }}
@@ -521,7 +501,7 @@ const DomainList = () => {
             </Box>
           </p>
           {isMobile ? (
-            <Box style={{paddingTop:"0"}}>
+            <Box style={{ paddingTop: "0" }}>
               {isLoading ? (
                 <p>{t("LOADING")}</p>
               ) : error ? (
@@ -565,10 +545,7 @@ const DomainList = () => {
                 <Alert severity="error">{error}</Alert>
               ) : popularCourses.length > 0 ? (
                 <div>
-                  <Grid
-                    container
-                    spacing={2}
-                  >
+                  <Grid container spacing={2}>
                     {popularCourses.slice(0, 8).map((items) => (
                       <Grid
                         item
@@ -596,17 +573,24 @@ const DomainList = () => {
         </Box>
       </Container>
 
-      <Container maxWidth="xxl" role="main" className="container-pb">
+      <Container maxWidth="xxl" role="main">
         {error && <Alert severity="error">{error}</Alert>}
 
         <Box textAlign="center">
-          <p style={{ display: "flex", justifyContent: "space-between" }}>
-            <Box
-             
-            >
-              <BookmarkAddedOutlinedIcon className="text-grey" style={{ verticalAlign: "top" }} />{" "}
+          <p
+            style={{
+              display: "flex",
+              justifyContent: "space-between",
+              paddingTop: "25px",
+            }}
+          >
+            <Box>
+              <BookmarkAddedOutlinedIcon
+                className="text-grey"
+                style={{ verticalAlign: "top" }}
+              />{" "}
               <Box
-              className="h3-title"
+                className="h3-title"
                 style={{
                   display: "inline-block",
                 }}
@@ -623,10 +607,7 @@ const DomainList = () => {
                 <Alert severity="error">{error}</Alert>
               ) : recentlyAddedCourses.length > 0 ? (
                 <div>
-                  <Grid
-                    container
-                    spacing={2}
-                  >
+                  <Grid container spacing={2}>
                     {recentlyAddedCourses.slice(0, 8).map((items, index) => (
                       <Grid
                         item
@@ -652,7 +633,7 @@ const DomainList = () => {
               )}
             </Box>
           ) : (
-            <Box sx={{ paddingTop: "30px" }}>
+            <Box sx={{ paddingTop: "0" }}>
               {isLoading ? (
                 <p>{t("LOADING")}</p>
               ) : error ? (

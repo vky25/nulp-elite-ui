@@ -40,7 +40,7 @@ const useStyles = makeStyles((theme) => ({
   },
   chatHeader: {
     padding: "8px 16px",
-    backgroundColor: "#FFE6C8",
+    backgroundColor: "#FFE6C8 !important",
     color: "#484848",
     display: "flex",
     alignItems: "center",
@@ -52,6 +52,7 @@ const useStyles = makeStyles((theme) => ({
     overflowY: "auto",
     padding: "16px",
     borderBottom: "1px solid #DDDDDD",
+    background: "#fff5e9 !important",
   },
   messageInput: {
     display: "flex",
@@ -65,7 +66,7 @@ const useStyles = makeStyles((theme) => ({
     padding: "8px",
     margin: "25px 0",
     textAlign: "right",
-    background: "#F1FAFF",
+    background: "#F1FAFF  !important",
     color: "#484848",
     fontSize: "16px",
     fontWeight: "400",
@@ -80,12 +81,11 @@ const useStyles = makeStyles((theme) => ({
     display: "table",
     borderRadius: "5px",
     color: "#212121",
-    backgroundColor: "#fff",
+    backgroundColor: "#fff !important",
     fontSize: "16px",
     fontWeight: "400",
   },
 }));
-
 const Chat = ({
   senderUserId: propSenderUserId,
   receiverUserId: propReceiverUserId,
@@ -450,7 +450,7 @@ const Chat = ({
       >
         <Box className="d-flex" style={{ alignItems: "center" }}>
           {isMobile && (
-            <IconButton onClick={handleGoBack}>
+            <IconButton onClick={handleGoBack} style={{ paddingLeft: "0" }}>
               <ArrowBackIcon />
             </IconButton>
           )}
@@ -508,7 +508,7 @@ const Chat = ({
       >
         <DialogTitle>
           {" "}
-          <Box className="h5-title">{t("BLOCK_USER")}</Box>
+          <Box className="h3-title">{t("BLOCK_USER")}</Box>
         </DialogTitle>
         <DialogContent>
           <Box className="h5-title">
@@ -657,24 +657,26 @@ const Chat = ({
               {t("SYSTEM_GENERATED_MESSAGE")}
             </Alert>
           )}
-          <TextField
-            multiline
-            minRows={2}
-            maxRows={10}
-            value={textValue}
-            onChange={handleTextareaChange}
-            disabled={isBlocked}
-            placeholder="Enter your message here..."
-            fullWidth
-            sx={{ fontSize: "13px" }}
-          />
-          <Button
-            style={{ color: "#484848" }}
-            onClick={sendMessage}
-            disabled={isBlocked}
-          >
-            <SendIcon />
-          </Button>
+          <div className="d-flex">
+            <TextField
+              multiline
+              minRows={2}
+              maxRows={10}
+              value={textValue}
+              onChange={handleTextareaChange}
+              disabled={isBlocked}
+              placeholder="Enter your message here..."
+              fullWidth
+              sx={{ fontSize: "13px" }}
+            />
+            <Button
+              style={{ color: "#484848" }}
+              onClick={sendMessage}
+              disabled={isBlocked}
+            >
+              <SendIcon />
+            </Button>
+          </div>
         </>
       )}
     </div>

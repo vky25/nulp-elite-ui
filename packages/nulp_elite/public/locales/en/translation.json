@@ -205,5 +205,9 @@
   "START_A_CONVERSATION": "Start a conversation!",
   "CLICK_ON_ANY_CONTACT": "Click on any contact and send them a connection request!",
   "REASON": "Reason",
-  "SYSTEM_GENERATED_MESSAGE": "This is an auto-generated message, click to edit."
+  "SYSTEM_GENERATED_MESSAGE": "This is an auto-generated message, click to edit.",
+  "ALL_CONTENT": "All Content",
+  "COMPLETION_CERTIFICATE_ISSUED": "Completion certificate issued",
+  "COMPLETION": "Completion",
+  "ASSESSMENT": "Assesment"
 }
