@@ -253,6 +253,13 @@ body {
   }
 }
 @media (min-width: 769px) {
+  .react-multi-carousel-list {
+    display: block !important;
+  }
+  .bg-blue {
+    width: 100%;
+    justify-content: space-between;
+  }
   .filter-bx .MuiInputBase-formControl {
     width: 400px;
   }
@@ -269,6 +276,10 @@ body {
 @media (min-width: 769px) {
   .custom-dot-list-style {
     display: none !important;
+  }
+  .carousel-bx {
+    justify-content: space-evenly;
+    padding: 14px;
   }
   .lg-d-flex {
     display: flex;
@@ -327,9 +338,9 @@ body {
     padding: 0 25px;
   }
 
-  .react-multi-carousel-list {
+  /* .react-multi-carousel-list {
     padding: 20px !important;
-  }
+  } */
   .imgBorder {
     border: solid 1px #e1e1e1;
   }
@@ -1029,9 +1040,9 @@ custom-chip {
   background-color: rgb(255, 255, 255);
   transition: box-shadow 300ms cubic-bezier(0.4, 0, 0.2, 1) 0ms;
   border-radius: 4px;
-  box-shadow: rgba(0, 0, 0, 0.2) 0px 11px 15px -7px,
+  /* box-shadow: rgba(0, 0, 0, 0.2) 0px 11px 15px -7px,
     rgba(0, 0, 0, 0.14) 0px 24px 38px 3px, rgba(0, 0, 0, 0.12) 0px 9px 46px 8px;
-  transform: scale(1.5);
+  transform: scale(1.5); */
   cursor: pointer;
 }
 
