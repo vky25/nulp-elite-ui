@@ -314,6 +314,7 @@ const ContentList = (props) => {
               //   activeStates[index] ? "carousel-active-ui" : ""
               // }`}
               // onSelectDomain={handleDomainFilter}
+              selectedDomainCode={domain}
               domains={domainList}
             />
           </Carousel>

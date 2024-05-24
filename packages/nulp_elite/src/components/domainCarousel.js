@@ -26,14 +26,19 @@ const responsive = {
   },
 };
 
-export default function DomainCarousel({ domains, onSelectDomain }) {
+export default function DomainCarousel({
+  domains,
+  onSelectDomain,
+  selectedDomainCode,
+}) {
   const dotsToShow = 4; // Number of dots to display
   const [isActive, setIsActive] = useState(false);
   const [itemsArray, setItemsArray] = useState([]);
   const [data, setData] = React.useState();
-  const [activeStates, setActiveStates] = useState(
-    () => domains?.map(() => false) // Initialize all items as inactive
-  );
+  const [activeStates, setActiveStates] = useState(null);
+  // (
+  //   () => domains?.map(() => false) // Initialize all items as inactive
+  // );
   const [isMobile, setIsMobile] = useState(window.innerWidth <= 767);
   const [activeDomain, setActiveDomain] = useState(null);
   const [scrolled, setScrolled] = useState(false);
@@ -73,19 +78,31 @@ export default function DomainCarousel({ domains, onSelectDomain }) {
     console.log("itemsArray---", itemsArray);
     console.log("data---", data);
   }, []);
+
+  useEffect(() => {
+    if (selectedDomainCode) {
+      domains?.map((domain, index) => {
+        if (domain.code === selectedDomainCode) {
+          setActiveStates(index);
+        }
+      });
+    }
+  }, [selectedDomainCode]);
+
   // Function to push data to the array
   const pushData = (term) => {
     setItemsArray((prevData) => [...prevData, term]);
   };
   const handleDomainClick = (query, index) => {
-    const newActiveStates = [...activeStates]; // Create a copy of activeStates
-    newActiveStates[index] = !newActiveStates[index]; // Toggle the active state at the clicked index
-    setActiveStates(newActiveStates);
+    setActiveStates(index === activeStates ? null : index);
+    // const newActiveStates = [...activeStates]; // Create a copy of activeStates
+    // newActiveStates[index] = !newActiveStates[index]; // Toggle the active state at the clicked index
+    // setActiveStates(newActiveStates);
     onSelectDomain(query);
     // setIsActive(!isActive);
   };
-  const handleMouseEnter = (domain) => {
-    setActiveDomain(domain);
+  const handleMouseEnter = (index) => {
+    setActiveDomain(index);
   };
 
   const handleMouseLeave = () => {
@@ -107,15 +124,15 @@ export default function DomainCarousel({ domains, onSelectDomain }) {
             keyBoardControl={true}
             customTransition="all .5"
             transitionDuration={500}
-            containerClass="carousel-container-domain"
-            dotListClass="custom-dot-list-style-hide"
+            containerClass="carousel-container"
+            dotListClass="custom-dot-list-style"
             itemClass="carousel-item-padding-40-px"
           >
             {itemsArray &&
               itemsArray?.slice(0, 10).map((domain, index) => (
                 <Box
                   className={`my-class ${
-                    activeStates[index] ? "carousel-active-ui" : ""
+                    activeStates === index ? "carousel-active-ui" : ""
                   }`}
                   onClick={(e) => handleDomainClick(domain.code, index)}
                   key={index}
@@ -160,13 +177,13 @@ export default function DomainCarousel({ domains, onSelectDomain }) {
       ) : (
         <Box
           sx={{ display: "flex" }}
-          className={scrolled ? "carousel-bxx scrolled" : "carousel-bx"}
+          className={scrolled ? "bg-blue scrolled" : "bg-blue"}
         >
           {itemsArray &&
             itemsArray?.slice(0, 10).map((domain, index) => (
               <Box
                 className={`my-class ${
-                  activeStates[index] ? "carousel-active-ui" : ""
+                  activeStates === index ? "carousel-active-ui" : ""
                 }`}
                 onClick={(e) => handleDomainClick(domain.code, index)}
                 key={index}
@@ -174,9 +191,11 @@ export default function DomainCarousel({ domains, onSelectDomain }) {
                 size="sm"
                 variant="outlined"
                 style={{ display: "flex", margin: "0 4px" }}
+                onMouseEnter={(event) => handleMouseEnter(index)}
+                onMouseLeave={handleMouseLeave}
               >
                 <Box
-                  className="imgBorder domainHover"
+                  className="imgBorder"
                   style={{
                     background: "#fff",
                     padding: "10px",
@@ -187,29 +206,30 @@ export default function DomainCarousel({ domains, onSelectDomain }) {
                 >
                   {/* {(domain.image != undefined) && <img src={require(baseImgUrl+domain.image)}  style={{width:'40px',objectFit:'contain'}} alt={domain.name} />}
                 {(domain.image == undefined)&& <img src={require("../assets/swm.png")}  style={{width:'40px',objectFit:'contain'}} alt={domain.name} />} */}
-                  <Box title={domain.description}>
-                    <img
-                      src={require(`../assets/domainImgs${domain.image}`)}
-                      style={{ width: "40px", objectFit: "contain" }}
-                      alt={domain.name}
-                    />
-                    {/* <Box>{domain.description}</Box> */}
-                  </Box>
+                  {/* <Tooltip title={domain.description}> */}
+                  <img
+                    className="domainHover"
+                    src={require(`../assets/domainImgs${domain.image}`)}
+                    style={{ width: "40px", objectFit: "contain" }}
+                    alt={domain.name}
+                  />
+                  {/* </Tooltip> */}
 
                   {/* <img src={require("../assets/swm.png")}  style={{width:'40px',objectFit:'contain'}} alt={domain.name} /> */}
                 </Box>
-                {activeDomain === domain && (
-                  <Box
-                    className="domainText"
-                    sx={{ alignSelf: "center", padding: "0 19px 0 5px" }}
-                  >
-                    <Typography
-                      level="title-md"
-                      style={{ fontSize: "12px", opacity: isActive ? 1 : 0 }}
-                    >
-                      {domain.name}
-                    </Typography>
-                  </Box>
+                {activeDomain === index && (
+                  <span>{domain.name}</span>
+                  // <Box
+                  //   className="domainText"
+                  //   sx={{ alignSelf: "center", padding: "0 19px 0 5px" }}
+                  // >
+                  //   <Typography
+                  //     level="title-md"
+                  //     style={{ fontSize: "12px", opacity: isActive ? 1 : 0 }}
+                  //   >
+                  //     {domain.name}
+                  //   </Typography>
+                  // </Box>
                 )}
               </Box>
             ))}
