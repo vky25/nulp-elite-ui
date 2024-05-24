@@ -244,7 +244,7 @@ const SelectPreference = ({ isOpen, onClose }) => {
     };
 
     try {
-      const url = `${urlConfig.URLS.LEARNER_PREFIX}${urlConfig.URLS.USER.UPDATE_USER_PROFILE}${_userId}`;
+      const url = `${urlConfig.URLS.LEARNER_PREFIX}${urlConfig.URLS.USER.UPDATE_USER_PROFILE}`;
       const response = await fetch(url, {
         method: "PATCH",
         headers: {
