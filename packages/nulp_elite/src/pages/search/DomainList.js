@@ -379,31 +379,6 @@ const DomainList = () => {
     <div>
       <Header />
       {toasterMessage && <ToasterCommon response={toasterMessage} />}
-      {/* <Box sx={{ background: "#2D2D2D", padding: "20px" }}>
-        <p
-          style={{
-            fontSize: "20px",
-            fontWeight: "700",
-            color: "#fff",
-            paddingBottom: "5px",
-            margin: "0",
-          }}
-        >
-          {t("EXPLORE_CONTENT_RELATED_TO_YOUR_DOMAIN")}
-        </p>
-        <p
-          style={{
-            fontSize: "16px",
-            fontWeight: "700",
-            color: "#C1C1C1",
-            margin: "0",
-            paddingBottom: "30px",
-          }}
-        >
-          {t("LEARN_FROM_WELL_CURATED")}
-        </p>
-        <SearchBox onSearch={handleSearch} />
-      </Box>  */}
 
       {isMobile ? (
         <Container maxWidth="xxl" role="main">
@@ -429,7 +404,7 @@ const DomainList = () => {
                 data.slice(0, 10).map((term) => (
                   <Grid
                     item
-                    xs={12}
+                    xs={6}
                     md={6}
                     lg={3}
                     style={{ marginBottom: "10px" }}
