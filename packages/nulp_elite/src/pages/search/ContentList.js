@@ -22,6 +22,27 @@ import { useTranslation } from "react-i18next";
 import appConfig from "../../configs/appConfig.json";
 const urlConfig = require("../../configs/urlConfig.json");
 import ToasterCommon from "../ToasterCommon";
+import Carousel from "react-multi-carousel";
+import DomainCarousel from "components/domainCarousel";
+import domainWithImage from "../../assets/domainImgForm.json";
+const responsive = {
+  superLargeDesktop: {
+    breakpoint: { max: 4000, min: 3000 },
+    items: 5,
+  },
+  desktop: {
+    breakpoint: { max: 3000, min: 1024 },
+    items: 8,
+  },
+  tablet: {
+    breakpoint: { max: 1024, min: 464 },
+    items: 2,
+  },
+  mobile: {
+    breakpoint: { max: 464, min: 0 },
+    items: 1,
+  },
+};
 
 const ContentList = (props) => {
   const [search, setSearch] = useState(true);
@@ -36,12 +57,15 @@ const ContentList = (props) => {
   const [category, setCategory] = useState([]);
   const navigate = useNavigate();
   const { domain } = location.state || {};
+  const [domainList, setDomainList] = useState([]);
   const { domainquery } = location.state || {};
   const [totalPages, setTotalPages] = useState(1);
   const [currentPage, setCurrentPage] = useState(1);
   const { t } = useTranslation();
   const [toasterOpen, setToasterOpen] = useState(false);
   const [toasterMessage, setToasterMessage] = useState("");
+  const [isMobile, setIsMobile] = useState(window.innerWidth <= 767);
+  const [channelData, setChannelData] = React.useState(true);
 
   const showErrorMessage = (msg) => {
     setToasterMessage(msg);
@@ -200,6 +224,19 @@ const ContentList = (props) => {
               label: term.name,
             }));
           setCategory(domainOptions);
+          responseData.result.framework.categories[0].terms?.map((term) => {
+            setCategory(term);
+            if (domainWithImage) {
+              domainWithImage.result.form.data.fields.map((imgItem) => {
+                if ((term && term.code) === (imgItem && imgItem.code)) {
+                  term["image"] = imgItem.image ? imgItem.image : "";
+                }
+              });
+            }
+          });
+          const domainList =
+            responseData?.result?.framework?.categories[0].terms;
+          setDomainList(domainList);
         }
       } else {
         showErrorMessage(t("FAILED_TO_FETCH_DATA"));
@@ -254,9 +291,40 @@ const ContentList = (props) => {
         />
       </Box>
 
+      <Box>
+        {domainList && domainList.length > 0 ? (
+          <Carousel
+            swipeable={false}
+            draggable={false}
+            showDots={true}
+            responsive={responsive}
+            ssr={true}
+            infinite={true}
+            autoPlaySpeed={1000}
+            keyBoardControl={true}
+            customTransition="all .5"
+            transitionDuration={500}
+            containerClass="carousel-container"
+            removeArrowOnDeviceType={["tablet", "mobile"]}
+            dotListClass="custom-dot-list-style"
+            itemClass="carousel-item-padding-40-px"
+          >
+            <DomainCarousel
+              // className={`my-class ${
+              //   activeStates[index] ? "carousel-active-ui" : ""
+              // }`}
+              // onSelectDomain={handleDomainFilter}
+              domains={domainList}
+            />
+          </Carousel>
+        ) : (
+          <NoResult />
+        )}
+      </Box>
+
       <Container maxWidth="xxl" role="main" className="container-pb">
         <Box style={{ margin: "20px 0" }}>
-          <domainCarousel></domainCarousel>
+          {/* <domainCarousel></domainCarousel> */}
           <Box
             style={{ display: "flex", justifyContent: "space-between" }}
             className="filter-domain"
@@ -310,7 +378,7 @@ const ContentList = (props) => {
                   spacing={2}
                   style={{ margin: "20px 0", marginBottom: "10px" }}
                 >
-                  {data.content.map((items, index) => (
+                  {data?.content?.map((items, index) => (
                     <Grid
                       item
                       xs={12}
