@@ -691,6 +691,9 @@ button {
   margin: 10px !important;
   border-radius: 5px !important;
 }
+.labelOne:hover {
+  background: #dddddd !important;
+}
 .labeltwo {
   background: #e1f5ff !important;
   color: #212121 !important;
@@ -700,6 +703,9 @@ button {
   padding: 3px 15px !important;
   margin: 10px !important;
   border-radius: 5px !important;
+}
+.labeltwo:hover {
+  background: #e1f5ff !important;
 }
 .textLeft {
   text-align: left !important;
