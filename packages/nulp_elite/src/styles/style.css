@@ -270,6 +270,9 @@ body {
   .xs-p-0 {
     padding-top: 0 !important;
   }
+  .xs-pb-20 {
+    padding-bottom: 20px !important;
+  }
 }
 @media (min-width: 769px) {
   .react-multi-carousel-list {

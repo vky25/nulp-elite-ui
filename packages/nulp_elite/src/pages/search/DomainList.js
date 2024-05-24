@@ -474,11 +474,17 @@ const DomainList = () => {
         <NoResult />
       )}
 
-      <Container maxWidth="xxl" role="main">
+      <Container maxWidth="xxl" className="xs-pb-20" role="main">
         {error && <Alert severity="error">{error}</Alert>}
 
         <Box textAlign="center">
-          <p style={{ display: "flex", justifyContent: "space-between" }}>
+          <p
+            style={{
+              display: "flex",
+              justifyContent: "space-between",
+              paddingTop: "25px",
+            }}
+          >
             <Box>
               <VerifiedOutlinedIcon
                 className="text-grey"
@@ -571,7 +577,13 @@ const DomainList = () => {
         {error && <Alert severity="error">{error}</Alert>}
 
         <Box textAlign="center">
-          <p style={{ display: "flex", justifyContent: "space-between" }}>
+          <p
+            style={{
+              display: "flex",
+              justifyContent: "space-between",
+              paddingTop: "25px",
+            }}
+          >
             <Box>
               <BookmarkAddedOutlinedIcon
                 className="text-grey"
@@ -621,7 +633,7 @@ const DomainList = () => {
               )}
             </Box>
           ) : (
-            <Box sx={{ paddingTop: "30px" }}>
+            <Box sx={{ paddingTop: "0" }}>
               {isLoading ? (
                 <p>{t("LOADING")}</p>
               ) : error ? (
