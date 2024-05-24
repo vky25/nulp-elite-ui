@@ -40,7 +40,6 @@ import ToasterCommon from "../ToasterCommon";
 import { TextField } from "@mui/material";
 import Chat from "pages/connections/chat";
 
-
 const JoinCourse = () => {
   const { t } = useTranslation();
   const [userData, setUserData] = useState();
@@ -327,12 +326,15 @@ const JoinCourse = () => {
                   </DialogContentText>
                 </DialogContent>
                 <DialogActions>
-                  <Button onClick={handleConfirmationClose} className="custom-btn-default">
+                  <Button
+                    onClick={handleConfirmationClose}
+                    className="custom-btn-default"
+                  >
                     {t("CANCEL")}
                   </Button>
                   <Button
                     onClick={handleLeaveConfirmed}
-                   className="custom-btn-primary"
+                    className="custom-btn-primary"
                     autoFocus
                   >
                     {t("LEAVE_COURSE")}
@@ -643,18 +645,27 @@ const JoinCourse = () => {
             <label>{t("CONSENT_TEXT")}</label>
           </div>
           <Box className="d-flex jc-en">
-            <Button onClick={handleDontShareClick} className="custom-btn-primary pr-18">{t("DONT_SHARE")}</Button>
-            <Button onClick={handleShareClick} className="custom-btn-default" disabled={!shareEnabled}>
+            <Button
+              onClick={handleDontShareClick}
+              className="custom-btn-primary pr-18"
+            >
+              {t("DONT_SHARE")}
+            </Button>
+            <Button
+              onClick={handleShareClick}
+              className="custom-btn-default"
+              disabled={!shareEnabled}
+            >
               {t("SHARE")}
             </Button>
           </Box>
         </Box>
       </Modal>
 
-      <Container maxWidth="xxl" role="main" className="container-pb">
+      <Container maxWidth="xxl" role="main" className="container-pb xs-pr-0">
         <Grid container spacing={2}>
           <Grid item xs={12} md={4} lg={4} className="sm-p-25 left-container">
-          {/* <Breadcrumbs
+            {/* <Breadcrumbs
             aria-label="breadcrumb"
             style={{
               padding: "25px 0",
@@ -670,42 +681,29 @@ const JoinCourse = () => {
             </Typography>
           </Breadcrumbs>  */}
             <Grid container spacing={2}>
-            <Breadcrumbs
-                  aria-label="breadcrumb"
-                 className="h6-title my-15"
-                >
-                   <Link underline="hover" style={{maxHeight:"inherit"}}                   onClick={handleGoBack}
- color="#004367" href="/profile">
-              {t("ALL_CONTENT")}
-            </Link>
-                  <Link
-                    underline="hover"
-                    href=""
-                    aria-current="page"
-                   className="h6-title twoLineEllipsis"
-                  >
-                    {userData?.result?.content?.name}
-                  </Link>
-                </Breadcrumbs>
-              <Grid item xs={8} className="xs-p-0">
-                {/* <Link
+              <Breadcrumbs
+                aria-label="breadcrumb"
+                className="h6-title my-15 pl-18"
+              >
+                <Link
+                  underline="hover"
+                  style={{ maxHeight: "inherit" }}
                   onClick={handleGoBack}
-                  style={{
-                    display: "block",
-                    display: "flex",
-                    fontSize: "14px",
-                    paddingTop: "15px",
-                    marginBottom: "10px",
-                    color: "rgb(0, 67, 103)",
-                  }}
-                > */}
-                  {/* <ArrowBackOutlinedIcon
-                    style={{ width: "0.65em", height: "0.65em" }}
-                  />{" "}
-                  Back
-                </Link> */}
-             
-              </Grid>
+                  color="#004367"
+                  href="/profile"
+                >
+                  {t("ALL_CONTENT")}
+                </Link>
+                <Link
+                  underline="hover"
+                  href=""
+                  aria-current="page"
+                  className="h6-title twoLineEllipsis"
+                >
+                  {userData?.result?.content?.name}
+                </Link>
+              </Breadcrumbs>
+
               <Grid item xs={4}>
                 <Link
                   href="#"
@@ -717,8 +715,7 @@ const JoinCourse = () => {
                 ></Link>
               </Grid>
             </Grid>
-<Box  className="h3-title">                    {userData?.result?.content?.name}
-</Box>
+            <Box className="h3-title"> {userData?.result?.content?.name}</Box>
             <Box>
               <Typography
                 variant="h7"
@@ -763,6 +760,7 @@ const JoinCourse = () => {
                 borderRadius: "10px",
                 color: "#484848",
               }}
+              className="xs-hide"
             >
               <Typography
                 variant="h7"
@@ -818,7 +816,7 @@ const JoinCourse = () => {
               </Box>
             </Box>
             <Accordion
-            className="xs-hide"
+              className="xs-hide"
               style={{
                 background: "#F9FAFC",
                 borderRadius: "10px",
@@ -847,7 +845,7 @@ const JoinCourse = () => {
               </AccordionDetails>
             </Accordion>
             <Accordion
-             className="xs-hide"
+              className="xs-hide"
               style={{
                 background: "#F9FAFC",
                 borderRadius: "10px",
@@ -863,17 +861,13 @@ const JoinCourse = () => {
                 {t("OTHER_DETAILS")}
               </AccordionSummary>
               <AccordionDetails style={{ background: "#fff" }}>
-                <Typography
-                 className="h6-title"
-                >
+                <Typography className="h6-title">
                   {t("CREATED_ON")}:{" "}
                   {userData &&
                     userData.result &&
                     formatDate(userData.result.content.children[0].createdOn)}
                 </Typography>
-                <Typography
-                 className="h6-title"
-                >
+                <Typography className="h6-title">
                   {t("UPDATED_ON")}:{" "}
                   {userData &&
                     userData.result &&
@@ -881,14 +875,8 @@ const JoinCourse = () => {
                       userData.result.content.children[0].lastUpdatedOn
                     )}
                 </Typography>
-                <Typography
-                 className="h6-title"
-                >
-                  {t("CREDITS")}:
-                </Typography>
-                <Typography
-                 className="h6-title"
-                >
+                <Typography className="h6-title">{t("CREDITS")}:</Typography>
+                <Typography className="h6-title">
                   {t("LICENSE_TERMS")}:{" "}
                   {userData?.result?.content?.licenseDetails?.name}
                   {t("FOR_DETAILS")}:{" "}
@@ -960,24 +948,28 @@ const JoinCourse = () => {
                   </div>
                 </Modal>
               )}
-           </div>           
-         <Box className="my-20 xs-hide">
-                 <Link href="#" className="pr-5"> <img src={require("../../assets/fb.png")} alt=""/></Link>
-                 <Link  href="#" className="pr-5">  <img src={require("../../assets/whatsapp.png")} alt=""/></Link>
-                 <Link  href="#" className="pr-5">  <img src={require("../../assets/linkedin.png")} alt=""/></Link>
-                 <Link  href="#" className="pr-5">  <img src={require("../../assets/twitter.png")} alt=""/></Link>
-
+            </div>
+            <Box className="my-20 xs-hide">
+              <Link href="#" className="pr-5">
+                {" "}
+                <img src={require("../../assets/fb.png")} alt="" />
+              </Link>
+              <Link href="#" className="pr-5">
+                {" "}
+                <img src={require("../../assets/whatsapp.png")} alt="" />
+              </Link>
+              <Link href="#" className="pr-5">
+                {" "}
+                <img src={require("../../assets/linkedin.png")} alt="" />
+              </Link>
+              <Link href="#" className="pr-5">
+                {" "}
+                <img src={require("../../assets/twitter.png")} alt="" />
+              </Link>
             </Box>
-           
           </Grid>
-          <Grid
-            item
-            xs={12}
-            md={8}
-            lg={8}
-            className="mb-20"
-          >
-            <Box style={{textAlign:"right"}}> {renderActionButton()}</Box>
+          <Grid item xs={12} md={8} lg={8} className="mb-20 xs-pr-16">
+            <Box style={{ textAlign: "right" }}> {renderActionButton()}</Box>
 
             {/* <Box
               sx={{
@@ -995,16 +987,13 @@ const JoinCourse = () => {
                 </Box>
               </Box>
             </Box> */}
-             <Box>
-              <Typography
-                className="h5-title"
-                style={{fontWeight:"600"}}
-              >
+            <Box>
+              <Typography className="h5-title" style={{ fontWeight: "600" }}>
                 {t("DESCRIPTION")}:
               </Typography>
               <Typography
                 className="twoLineEllipsis h5-title mb-15"
-                style={{fontWeight:"600"}}
+                style={{ fontWeight: "600" }}
               >
                 {userData?.result?.content?.description}
               </Typography>
@@ -1023,7 +1012,7 @@ const JoinCourse = () => {
                 aria-controls="panel1-content"
                 id="panel1-header"
                 className="h4-title"
-                style={{fontWeight:"500"}}
+                style={{ fontWeight: "500" }}
               >
                 {t("COURSES_MODULE")}
               </AccordionSummary>
@@ -1042,8 +1031,13 @@ const JoinCourse = () => {
                       {faqIndex.name}
                     </AccordionSummary>
                     {faqIndex.children.map((faqIndexname) => (
-                      <AccordionDetails className="border-bottom" style={{ paddingLeft: "35px"}}>
-                        <SummarizeOutlinedIcon style={{fontSize:"17px",paddingRight:"10px"}}/>
+                      <AccordionDetails
+                        className="border-bottom"
+                        style={{ paddingLeft: "35px" }}
+                      >
+                        <SummarizeOutlinedIcon
+                          style={{ fontSize: "17px", paddingRight: "10px" }}
+                        />
 
                         <Link
                           href="#"
@@ -1060,8 +1054,70 @@ const JoinCourse = () => {
                 ))}
               </AccordionDetails>
             </Accordion>
+            <Box
+              style={{
+                background: "#F9FAFC",
+                padding: "10px",
+                borderRadius: "10px",
+                color: "#484848",
+              }}
+              className="lg-hide"
+            >
+              <Typography
+                variant="h7"
+                style={{
+                  margin: "0 0 9px 0",
+                  display: "block",
+                  fontSize: "16px",
+                }}
+              >
+                {t("BATCH_DETAILS")}:
+              </Typography>
+              <Box
+                style={{
+                  background: "#fff",
+                  padding: "10px",
+                  borderRadius: "10px",
+                }}
+              >
+                <Typography
+                  variant="h7"
+                  style={{
+                    fontWeight: "500",
+                    margin: "9px 0",
+                    display: "block",
+                    fontSize: "14px",
+                  }}
+                >
+                  {t("BATCH_START_DATE")}: {formatDate(batchData?.startDate)}
+                </Typography>
+                <Typography
+                  variant="h7"
+                  style={{
+                    fontWeight: "500",
+                    margin: "9px 0",
+                    display: "block",
+                    fontSize: "14px",
+                  }}
+                >
+                  {t("BATCH_END_DATE")}: {formatDate(batchData?.endDate)}
+                </Typography>
+                <Typography
+                  variant="h7"
+                  style={{
+                    fontWeight: "500",
+                    margin: "9px 0",
+                    display: "block",
+                    fontSize: "14px",
+                  }}
+                >
+                  {t("LAST_DATE_FOR_ENROLLMENT")}:{" "}
+                  {formatDate(batchData?.enrollmentEndDate)}
+                </Typography>
+              </Box>
+            </Box>
             <Accordion
-            className="lg-hide"
+              className="lg-hide"
               style={{
                 background: "#F9FAFC",
                 borderRadius: "10px",
@@ -1090,7 +1146,7 @@ const JoinCourse = () => {
               </AccordionDetails>
             </Accordion>
             <Accordion
-             className="lg-hide"
+              className="lg-hide"
               style={{
                 background: "#F9FAFC",
                 borderRadius: "10px",
@@ -1106,17 +1162,13 @@ const JoinCourse = () => {
                 {t("OTHER_DETAILS")}
               </AccordionSummary>
               <AccordionDetails style={{ background: "#fff" }}>
-                <Typography
-                 className="h6-title"
-                >
+                <Typography className="h6-title">
                   {t("CREATED_ON")}:{" "}
                   {userData &&
                     userData.result &&
                     formatDate(userData.result.content.children[0].createdOn)}
                 </Typography>
-                <Typography
-                 className="h6-title"
-                >
+                <Typography className="h6-title">
                   {t("UPDATED_ON")}:{" "}
                   {userData &&
                     userData.result &&
@@ -1124,14 +1176,8 @@ const JoinCourse = () => {
                       userData.result.content.children[0].lastUpdatedOn
                     )}
                 </Typography>
-                <Typography
-                 className="h6-title"
-                >
-                  {t("CREDITS")}:
-                </Typography>
-                <Typography
-                 className="h6-title"
-                >
+                <Typography className="h6-title">{t("CREDITS")}:</Typography>
+                <Typography className="h6-title">
                   {t("LICENSE_TERMS")}:{" "}
                   {userData?.result?.content?.licenseDetails?.name}
                   {t("FOR_DETAILS")}:{" "}
@@ -1219,13 +1265,24 @@ const JoinCourse = () => {
                   </div>
                 </Modal>
               )}
-           </div>           
-         <Box className="my-20 lg-hide social-icons">
-                 <Link href="#" className="pr-5"> <img src={require("../../assets/fb.png")} alt=""/></Link>
-                 <Link  href="#" className="pr-5">  <img src={require("../../assets/whatsapp.png")} alt=""/></Link>
-                 <Link  href="#" className="pr-5">  <img src={require("../../assets/linkedin.png")} alt=""/></Link>
-                 <Link  href="#" className="pr-5">  <img src={require("../../assets/twitter.png")} alt=""/></Link>
-
+            </div>
+            <Box className="my-20 lg-hide social-icons">
+              <Link href="#" className="pr-5">
+                {" "}
+                <img src={require("../../assets/fb.png")} alt="" />
+              </Link>
+              <Link href="#" className="pr-5">
+                {" "}
+                <img src={require("../../assets/whatsapp.png")} alt="" />
+              </Link>
+              <Link href="#" className="pr-5">
+                {" "}
+                <img src={require("../../assets/linkedin.png")} alt="" />
+              </Link>
+              <Link href="#" className="pr-5">
+                {" "}
+                <img src={require("../../assets/twitter.png")} alt="" />
+              </Link>
             </Box>
           </Grid>
         </Grid>
