@@ -188,6 +188,9 @@ body {
   }
 }
 @media (max-width: 768px) {
+  .MuiTabs-scroller {
+    margin-right: 10px;
+  }
   .xs-pr-0 {
     padding-right: 0 !important;
   }
@@ -838,7 +841,8 @@ button {
   font-size: 16px !important;
   font-weight: 500 !important;
   text-align: center !important;
-  width: 51%;
+  width: 52%;
+  padding-left: 0 !important;
 }
 .MuiTabs-indicator {
   border-bottom: 4px solid #0e7a9c !important;
