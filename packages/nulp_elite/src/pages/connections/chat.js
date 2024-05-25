@@ -363,7 +363,7 @@ const Chat = ({
     setAnchorEl(null);
   };
   const handleGoBack = () => {
-    navigate("/addConnections"); // Navigate back in history
+    navigate(-1); // Navigate back in history
   };
 
   const handleDialogOpen = () => {
