@@ -176,6 +176,7 @@ function Header() {
                 display: "flex",
                 alignItems: "center",
                 flexDirection: "row",
+                paddingRight: "32px",
               }}
             >
               {/* <InputLabel id="language-select-label">
@@ -310,7 +311,7 @@ function Header() {
             {/* Search Box */}
             <Box
               className="xs-hide d-flex header-bg w-40 mr-30"
-              style={{ alignItems: "center" }}
+              style={{ alignItems: "center", paddingLeft: "23px" }}
             >
               <Box className="h1-title px-10 pr-20">{t("EXPLORE")}</Box>
               <TextField
