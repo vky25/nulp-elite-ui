@@ -214,6 +214,11 @@ const DomainList = () => {
           "organisation",
           "trackable",
           "primaryCategory",
+          "se_boards",
+          "se_gradeLevels",
+          "se_subjects",
+          "se_mediums",
+          "primaryCategory",
         ],
         facets: [
           "se_boards",
@@ -334,6 +339,10 @@ const DomainList = () => {
           "organisation",
           "trackable",
           "primaryCategory",
+          "se_boards",
+          "se_gradeLevels",
+          "se_subjects",
+          "se_mediums",
         ],
         facets: [
           "se_boards",
@@ -471,7 +480,8 @@ const DomainList = () => {
           />
         </Carousel>
       ) : (
-        <NoResult />
+        <div></div>
+        // <NoResult />
       )}
 
       <Container maxWidth="xl" className="xs-pb-20 allContent" role="main">
