@@ -43,7 +43,6 @@ body {
   -webkit-line-clamp: 3;
   -webkit-box-orient: vertical;
   width: 96%;
-  height: 61px;
   text-align: left;
 }
 .ribbonCard {
@@ -162,7 +161,7 @@ body {
     background: #484848;
     border-radius: 30px;
     color: #fff;
-    right: 31px;
+    right: 5px;
     display: block;
     text-align: center;
     position: fixed;
@@ -174,21 +173,31 @@ body {
     align-items: center;
     justify-content: center;
   }
-  .react-multi-carousel-list {
-    background: #fff;
-    box-shadow: 0px 4px 4px 0px #00000040;
-    margin-top: 10px;
-  }
+
   .carousel-active-ui {
-    background: #b0dbf2;
+    /* background: #1ea4ce; */
     justify-content: stretch;
     border-radius: 5px;
     padding: 7px;
     margin-right: 12px;
+    color: #fff;
   }
 }
 @media (max-width: 768px) {
-  .MuiTabs-scroller {
+  .cardTitle {
+    height: 64px !important;
+  }
+  .react-multi-carousel-item.carousel-item-padding-40-px {
+    margin-right: 4px !important;
+  }
+  .carousel-active-ui .imgBorder,
+  .carousel-active-ui img {
+    background: #008bd1 !important;
+  }
+  .react-multi-carousel-list {
+    padding-top: 8px !important;
+  }
+  .carousel-active-ui .MuiTabs-scroller {
     margin-right: 10px;
   }
   .xs-pr-0 {
@@ -226,14 +235,16 @@ body {
     margin-right: 10px !important;
   }
   .leftshade {
-    width: 85px !important;
-    left: -17px;
-    height: 100px;
+    height: 76px !important;
+    left: -7px !important;
+    top: -4px !important;
+    width: 88px !important;
   }
   .rightshade {
-    width: 85px !important;
-    right: -17px !important;
     height: 100px !important;
+    right: -100px !important;
+    top: -4px !important;
+    width: 137px !important;
   }
   .sx-bottom {
     bottom: 50px;
@@ -276,6 +287,20 @@ body {
 }
 @media (min-width: 769px) {
   .react-multi-carousel-list {
+    background: #fff;
+    box-shadow: 0px 4px 4px 0px #00000040;
+    margin-top: 10px;
+  }
+  .react-multi-carousel-list.carousel-container .MuiGrid-container {
+    margin-left: -2px !important;
+  }
+  .allContent .MuiGrid-grid-lg-2 {
+    flex-basis: 23.6667% !important;
+    -webkit-box-flex: 0;
+    flex-grow: 0;
+    max-width: 19.6667% !important;
+  }
+  .react-multi-carousel-list {
     display: block !important;
   }
   .bg-blue {
@@ -296,12 +321,24 @@ body {
   }
 }
 @media (min-width: 769px) {
+  .mt-2 {
+    margin-top: 2px !important;
+  }
+  .mt-9 {
+    margin-top: 9px !important;
+  }
+  .mr-20 {
+    margin-right: 20px;
+  }
   .custom-dot-list-style {
     display: none !important;
   }
   .carousel-bx {
-    justify-content: space-evenly;
+    justify-content: center;
     padding: 14px;
+  }
+  .carousel-bx .my-class {
+    margin: 0 15px !important;
   }
   .lg-d-flex {
     display: flex;
@@ -692,6 +729,9 @@ button {
   margin: 10px !important;
   border-radius: 5px !important;
 }
+.labelOne:hover {
+  background: #dddddd !important;
+}
 .labeltwo {
   background: #e1f5ff !important;
   color: #212121 !important;
@@ -701,6 +741,9 @@ button {
   padding: 3px 15px !important;
   margin: 10px !important;
   border-radius: 5px !important;
+}
+.labeltwo:hover {
+  background: #e1f5ff !important;
 }
 .textLeft {
   text-align: left !important;
@@ -732,7 +775,7 @@ button {
   font-weight: 500;
 }
 .h6-title {
-  color: #484848;
+  color: #484848 !important;
   font-size: 12px !important;
   font-weight: 400 !important;
 }
@@ -772,6 +815,9 @@ button {
 }
 .pl-18 {
   padding-left: 18px !important;
+}
+.pl-5 {
+  padding-left: 5px !important;
 }
 .pr-20 {
   padding-right: 20px !important;
@@ -838,6 +884,7 @@ button {
   border-radius: 3px;
   box-shadow: 0px 4px 4px 0px #00000040;
   background: #fff;
+  padding-bottom: 15px;
   /* height: 65vh; */
 }
 .left-container ul {
@@ -933,17 +980,18 @@ custom-chip {
 }
 
 .img-text-circle {
-  width: 60px;
-  height: 60px;
-  border-radius: 2px;
-  background-color: #d9d9d9;
-  color: rgb(255, 255, 255);
-  display: flex;
-  justify-content: center;
   align-items: center;
-  font-size: 54px;
-  font-weight: 500;
+  background-color: #d9d9d9;
+  /* border-radius: 2px !important; */
   border-radius: 100%;
+  color: #fff;
+  display: flex;
+  font-size: 37px;
+  font-weight: 500;
+  height: 50px;
+  justify-content: center;
+  width: 53px;
+  line-height: 1.1 !important;
 }
 .text-yellow {
   color: #dcab00;
@@ -1060,7 +1108,7 @@ custom-chip {
   transition: all 3s ease-in-out;
 }
 .domainHover:hover {
-  background-color: rgb(255, 255, 255);
+  background-color: #1ea4ce;
   transition: box-shadow 300ms cubic-bezier(0.4, 0, 0.2, 1) 0ms;
   border-radius: 4px;
   /* box-shadow: rgba(0, 0, 0, 0.2) 0px 11px 15px -7px,
@@ -1087,12 +1135,12 @@ custom-chip {
   height: 20px !important;
 }
 .MuiPagination-ul li .Mui-selected {
-  background: #484848;
+  background: #484848 !important;
   color: #fff;
   border-radius: 0;
   padding: 0;
   min-width: 20px !important;
-  height: 20px !important;
+  height: 25px !important;
 }
 .connection-tab .css-w49w8k .MuiOutlinedInput-root .MuiAutocomplete-input {
   padding: 0.5px 4px 7.5px 5px !important;
@@ -1112,4 +1160,31 @@ custom-chip {
 }
 .xs-hide a {
   text-decoration: none;
+}
+.Menuactive {
+  background: #0e7a9c;
+  padding: 10px;
+  border-radius: 5px;
+  color: #fff !important;
+}
+.allContent .MuiGrid-item {
+  /* flex: 1; */
+  display: flex;
+  flex-direction: column;
+}
+.allContent .cardBox {
+  flex: 1;
+}
+.jss1.jss3.MuiTabs-indicator {
+  background: transparent !important;
+}
+
+header .MuiContainer-maxWidthLg {
+  max-width: inherit !important;
+}
+.pr-18 {
+  padding-right: 18px !important;
+}
+.custom-dot-list-style-none {
+  display: none !important;
 }

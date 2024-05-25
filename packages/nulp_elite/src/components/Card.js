@@ -63,13 +63,13 @@ export default function BoxCard({ items, index, onClick }) {
           left: 0,
           right: "0",
           width: "100%",
-          height: "38%",
+          height: "141px",
           background:
             "linear-gradient(45deg, RGBA(28, 25, 25, 0.46) 7%, RGBA(20, 18, 18, 0.57) 45%)",
           zIndex: 999,
           margin: "0",
           borderTopLeftRadius: "5px",
-          borderTopRightRadius: "20px",
+          borderTopRightRadius: "5px",
         }}
       ></div>
       <CardContent>
@@ -120,19 +120,17 @@ export default function BoxCard({ items, index, onClick }) {
         <div>
           <Divider></Divider>
           <Box className="my-10 textLeft">
-            {items.board ||
-              (items.se_boards && (
-                <Button size="small" className="labelOne">
-                  {items.board || items.se_boards}
-                </Button>
-              ))}
-            {items.gradeLevel ||
-              (items.se_gradeLevels && (
-                <Button size="small" className="labeltwo">
-                  {" "}
-                  {items.gradeLevel || items.se_gradeLevels}
-                </Button>
-              ))}
+            {(items.board || items.se_boards) && (
+              <Button type="button" size="small" className="labelOne">
+                {items.board || items.se_boards}
+              </Button>
+            )}
+            {(items.gradeLevel || items.se_gradeLevels) && (
+              <Button type="button" size="small" className="labeltwo">
+                {" "}
+                {items.gradeLevel || items.se_gradeLevels}
+              </Button>
+            )}
           </Box>
         </div>
       ) : null}

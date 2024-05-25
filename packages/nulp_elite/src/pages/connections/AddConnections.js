@@ -1202,7 +1202,7 @@ const AddConnections = () => {
                 xs={12}
                 md={4}
                 lg={4}
-                className="sm-p-25 left-container"
+                className="sm-p-25 left-container mt-2"
               >
                 <Box
                   className="d-flex my-15"

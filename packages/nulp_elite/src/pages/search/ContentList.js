@@ -27,6 +27,7 @@ import DomainCarousel from "components/domainCarousel";
 import domainWithImage from "../../assets/domainImgForm.json";
 const responsive = {
   superLargeDesktop: {
+    // the naming can be any, depends on you.
     breakpoint: { max: 4000, min: 3000 },
     items: 5,
   },
@@ -262,34 +263,6 @@ const ContentList = (props) => {
     <div>
       <Header />
       {toasterMessage && <ToasterCommon response={toasterMessage} />}
-      <Box sx={{ background: "#2D2D2D", padding: "20px" }}>
-        <p
-          style={{
-            fontSize: "20px",
-            fontWeight: "700",
-            color: "#fff",
-            paddingBottom: "5px",
-            margin: "0",
-          }}
-        >
-          {t("EXPLORE_CONTENT_RELATED_TO_YOUR_DOMAIN")}
-        </p>
-        <p
-          style={{
-            fontSize: "16px",
-            fontWeight: "700",
-            color: "#C1C1C1",
-            margin: "0",
-            paddingBottom: "30px",
-          }}
-        >
-          {t("LEARN_FROM_WELL_CURATED")}
-        </p>
-        <SearchBox
-          onSearch={handleSearch}
-          domainquery={search.query || domainquery}
-        />
-      </Box>
 
       <Box>
         {domainList && domainList.length > 0 ? (
@@ -314,6 +287,7 @@ const ContentList = (props) => {
               //   activeStates[index] ? "carousel-active-ui" : ""
               // }`}
               // onSelectDomain={handleDomainFilter}
+              selectedDomainCode={domain}
               domains={domainList}
             />
           </Carousel>
@@ -322,7 +296,7 @@ const ContentList = (props) => {
         )}
       </Box>
 
-      <Container maxWidth="xxl" role="main" className="container-pb">
+      <Container maxWidth="xl" role="main" className="allContent">
         <Box style={{ margin: "20px 0" }}>
           {/* <domainCarousel></domainCarousel> */}
           <Box
@@ -344,27 +318,20 @@ const ContentList = (props) => {
             )}
           </Box>
         </Box>
-        <Link
-          onClick={handleGoBack}
-          style={{
-            display: "block",
-            display: "flex",
-            fontSize: "14px",
-            paddingTop: "30px",
-            color: "rgb(0, 67, 103)",
-          }}
-        >
-          <ArrowBackOutlinedIcon
-            style={{ width: "0.65em", height: "0.65em" }}
-          />{" "}
-          {t("BACK")}
-        </Link>
-        {domain && (
-          <Box sx={{ fontSize: "14px", marginTop: "10px" }}>
-            {t("YOU_ARE_VIEWING_CONTENTS_FOR")}
-            <Box sx={{ fontSize: "16px", fontWeight: "700" }}>{domain}</Box>
-          </Box>
-        )}
+        <Box className="d-flex jc-bw" style={{ alignItems: "center" }}>
+          {domain && (
+            <Box
+              sx={{ fontSize: "14px", marginTop: "10px", alignItems: "center" }}
+              className="d-flex"
+            >
+              {t("YOU_ARE_VIEWING_CONTENTS_FOR")}
+              <Box sx={{ fontSize: "16px", fontWeight: "700" }}>{domain}</Box>
+            </Box>
+          )}
+          <Link onClick={handleGoBack} className="viewAll">
+            {t("BACK")}
+          </Link>
+        </Box>
         <Box textAlign="center" padding="10">
           <Box sx={{ paddingTop: "30px" }}>
             {isLoading ? (
@@ -381,9 +348,9 @@ const ContentList = (props) => {
                   {data?.content?.map((items, index) => (
                     <Grid
                       item
-                      xs={12}
+                      xs={2}
                       md={6}
-                      lg={3}
+                      lg={2}
                       style={{ marginBottom: "10px" }}
                       key={items.identifier}
                     >

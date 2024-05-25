@@ -1,4 +1,4 @@
-import * as React from "react";
+import React, { useState, useEffect } from "react";
 import AppBar from "@mui/material/AppBar";
 import Box from "@mui/material/Box";
 import Toolbar from "@mui/material/Toolbar";
@@ -21,7 +21,6 @@ import Select from "@mui/material/Select";
 import LanguageIcon from "@mui/icons-material/Language";
 import { useTranslation } from "react-i18next";
 import { changeLanguage } from "i18next";
-import { useState } from "react";
 import LiveHelpOutlinedIcon from "@mui/icons-material/LiveHelpOutlined";
 import LogoutOutlinedIcon from "@mui/icons-material/LogoutOutlined";
 import GTranslateIcon from "@mui/icons-material/GTranslate";
@@ -55,6 +54,11 @@ function Header() {
   const handleCloseUserMenu = () => {
     setAnchorElUser(null);
   };
+  const [activePath, setActivePath] = useState(location.pathname);
+
+  useEffect(() => {
+    setActivePath(location.pathname);
+  }, [location.pathname]);
 
   return (
     <>
@@ -199,7 +203,7 @@ function Header() {
 
       {/* Top Navigation Bar */}
       <AppBar className="lg-my-10  bg-inherit pos-inherit mt-65">
-        <Container maxWidth="xl" className="p-0">
+        <Container className="p-0">
           <Box className="d-flex">
             <Toolbar
               disableGutters
@@ -304,7 +308,10 @@ function Header() {
               {/* Language Select */}
             </Toolbar>
             {/* Search Box */}
-            <Box className="xs-hide d-flex header-bg w-40 mr-30">
+            <Box
+              className="xs-hide d-flex header-bg w-40 mr-30"
+              style={{ alignItems: "center" }}
+            >
               <Box className="h1-title px-10 pr-20">{t("EXPLORE")}</Box>
               <TextField
                 placeholder={t("What do you want to learn today?  ")}
@@ -323,17 +330,19 @@ function Header() {
 
             {/* Other Navigation Links */}
             <Box
-              className="xs-hide header-bg py-25"
+              className="xs-hide header-bg py-15"
               sx={{ flexGrow: 1, display: "flex", justifyContent: "flex-end" }}
             >
               <Link
                 href="/all"
+                className={activePath === "/all" ? "Menuactive" : ""}
                 underline="none"
                 style={{
                   my: 2,
                   color: "#484848",
                   display: "flex",
                   margin: "0 20px",
+                  padding: "10px",
                 }}
               >
                 <MenuBookOutlinedIcon
@@ -343,12 +352,14 @@ function Header() {
               </Link>
               <Link
                 href="/addConnections"
+                className={activePath === "/addConnections" ? "Menuactive" : ""}
                 underline="none"
                 style={{
                   my: 2,
                   color: "#484848",
                   display: "flex",
                   margin: "0 20px",
+                  padding: "10px",
                 }}
               >
                 <ChatOutlinedIcon

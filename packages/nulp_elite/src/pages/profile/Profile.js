@@ -396,7 +396,7 @@ const Profile = () => {
       <Header />
       {toasterMessage && <ToasterCommon response={toasterMessage} />}
 
-      <Container maxWidth="xxl" role="main" className="container-pb xs-p-0">
+      <Container maxWidth="xxl" role="main" className="xs-p-0">
         {error && (
           <Alert severity="error" className="my-10">
             {error}
@@ -404,7 +404,13 @@ const Profile = () => {
         )}
 
         <Grid container spacing={2} className="pt-8">
-          <Grid item xs={12} md={4} lg={4} className="sm-p-25 left-container">
+          <Grid
+            item
+            xs={12}
+            md={4}
+            lg={4}
+            className="sm-p-25 left-container mt-2"
+          >
             <Box sx={{ fontSize: "18px", color: "#484848" }}>
               {t("MY_PROFILE")}
             </Box>
@@ -450,7 +456,6 @@ const Profile = () => {
                               </Box>
                             </Typography>
                           </Box>
-
                           <ModeEditIcon onClick={handleOpenEditDialog} />
                         </Box>
                         <Typography
