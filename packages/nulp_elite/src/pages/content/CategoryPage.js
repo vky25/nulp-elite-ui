@@ -202,32 +202,24 @@ const CategoryPage = () => {
             {error}
           </Alert>
         )}
-        <Link onClick={handleGoBack} className="viewAll">
-          {t("BACK")}
-        </Link>
-
-        <p
-          style={{
-            display: "inline-block",
-            borderBottom: "solid 2px #000",
-            fontSize: "14px",
-            color: "#1E1E1E",
-          }}
+        <Box
+          className="d-flex jc-bw mr-20 my-20 xs-hide"
+          style={{ alignItems: "center" }}
         >
-          {category}
-        </p>
+          <p className="h3-title">{category}</p>
+          <Link onClick={handleGoBack} className="viewAll mr-20">
+            {t("BACK")}
+          </Link>
+        </Box>
+
         <Box textAlign="center">
           <Box>
-            <Grid
-              container
-              spacing={2}
-              style={{ margin: "20px 0", marginBottom: "10px" }}
-            >
+            <Grid container spacing={2} style={{ marginTop: "10px" }}>
               {data &&
                 data.map((item) => (
                   <Grid
                     item
-                    xs={12}
+                    xs={6}
                     md={6}
                     lg={2}
                     key={item.id}
