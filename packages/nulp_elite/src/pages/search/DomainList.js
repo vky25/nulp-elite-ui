@@ -381,7 +381,7 @@ const DomainList = () => {
       {toasterMessage && <ToasterCommon response={toasterMessage} />}
 
       {isMobile ? (
-        <Container maxWidth="xxl" role="main">
+        <Container maxWidth="xxl" role="main" className="allContent">
           {error && <Alert severity="error">{error}</Alert>}
           {/* <Box sx={{background:'#fff',padding:'20px 10px 30px 10px', margin:'25px 0'}}>
 <ThemeProvider theme={theme}>
@@ -406,7 +406,7 @@ const DomainList = () => {
                     item
                     xs={6}
                     md={6}
-                    lg={3}
+                    lg={2}
                     style={{ marginBottom: "10px" }}
                   >
                     <Box
@@ -474,7 +474,7 @@ const DomainList = () => {
         <NoResult />
       )}
 
-      <Container maxWidth="xxl" className="xs-pb-20" role="main">
+      <Container maxWidth="xl" className="xs-pb-20 allContent" role="main">
         {error && <Alert severity="error">{error}</Alert>}
 
         <Box textAlign="center">
@@ -519,7 +519,7 @@ const DomainList = () => {
                         xs={6}
                         sm={isMobile ? 6 : 12} // Show 2 courses per line on mobile view
                         md={6}
-                        lg={3}
+                        lg={2}
                         key={items.identifier}
                         style={{ marginBottom: "10px" }}
                       >
@@ -551,7 +551,7 @@ const DomainList = () => {
                         item
                         xs={6}
                         md={6}
-                        lg={3}
+                        lg={2}
                         key={items.identifier}
                         style={{ marginBottom: "10px" }}
                       >
@@ -573,7 +573,7 @@ const DomainList = () => {
         </Box>
       </Container>
 
-      <Container maxWidth="xxl" role="main">
+      <Container maxWidth="xl" className="allContent" role="main">
         {error && <Alert severity="error">{error}</Alert>}
 
         <Box textAlign="center">
@@ -614,7 +614,7 @@ const DomainList = () => {
                         xs={6}
                         sm={isMobile ? 6 : 12} // Show 2 courses per line on mobile view
                         md={6}
-                        lg={3}
+                        lg={2}
                         key={items.identifier}
                         style={{ marginBottom: "10px" }}
                       >
@@ -640,17 +640,13 @@ const DomainList = () => {
                 <Alert severity="error">{error}</Alert>
               ) : recentlyAddedCourses.length > 0 ? (
                 <div>
-                  <Grid
-                    container
-                    spacing={2}
-                    style={{ margin: "20px 0", marginBottom: "10px" }}
-                  >
+                  <Grid container spacing={2} style={{ marginBottom: "10px" }}>
                     {recentlyAddedCourses.slice(0, 8).map((items) => (
                       <Grid
                         item
                         xs={6}
                         md={6}
-                        lg={3}
+                        lg={2}
                         key={items.identifier}
                         style={{ marginBottom: "10px" }}
                       >
