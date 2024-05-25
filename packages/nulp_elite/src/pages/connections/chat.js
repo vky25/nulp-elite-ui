@@ -169,6 +169,11 @@ const Chat = ({
       }
     };
     getInvitationNotAcceptedUserByIds();
+
+    if (messages.length > 0) {
+      fetchChats();
+      setTextValue("");
+    }
   }, [receiverUserId]);
 
   useEffect(() => {
@@ -215,11 +220,11 @@ const Chat = ({
   };
 
   useEffect(() => {
-    if (loggedInUserId && !isBlocked && messages.length>0) {
+    if (loggedInUserId && !isBlocked && messages.length > 0) {
       const intervalId = setInterval(fetchChats, 5000);
       return () => clearInterval(intervalId);
     }
-  }, [loggedInUserId, isBlocked,messages]);
+  }, [loggedInUserId, isBlocked, messages]);
 
   const fetchBlockUserStatus = async () => {
     try {
@@ -256,8 +261,6 @@ const Chat = ({
           setTextValue(
             "Hello, I would like to connect with you regarding some queries i had in your course."
           );
-        } else {
-          setTextValue("");
         }
       }
     } catch (error) {
@@ -289,7 +292,8 @@ const Chat = ({
         setMessage("");
         setTextValue("");
         if (!messages.length > 0) {
-          navigate(-1);
+          navigate("/addConnections");
+          window.location.reload();
         }
         fetchChats(); // Fetch messages after sending a message
         if (onChatSent) {
@@ -359,7 +363,7 @@ const Chat = ({
     setAnchorEl(null);
   };
   const handleGoBack = () => {
-    navigate(-1); // Navigate back in history
+    navigate("/addConnections"); // Navigate back in history
   };
 
   const handleDialogOpen = () => {
@@ -475,7 +479,7 @@ const Chat = ({
           )}
         </Box>
 
-        {messages.length > 0 && (
+        {receiverData && receiverData?.length > 0 && messages.length > 0 && (
           <Box
             style={{
               display: "flex",

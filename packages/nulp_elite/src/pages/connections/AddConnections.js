@@ -583,9 +583,12 @@ const AddConnections = () => {
                 : latest;
             });
 
-            // Determine if all messages are read
-            const allRead = userChat.every((chat) => chat.is_read);
-
+            const allRead = userChat.every((chat) => {
+              if (loggedInUserId !== chat.sender_id) {
+                return chat.is_read;
+              }
+              return true;
+            });
             item = {
               ...item,
               latestChat: latestChat.message,

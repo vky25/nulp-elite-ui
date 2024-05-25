@@ -43,6 +43,7 @@ import {
 } from "@mui/material";
 import styled from "styled-components";
 import LearningHistory from "./learningHistory";
+import Certificate from "./certificate";
 
 const DELAY = 1500;
 const MAX_CHARS = 500;
@@ -703,7 +704,7 @@ const Profile = () => {
               <Button
                 type="buttom"
                 className="custom-btn-primary my-30"
-                onClick={handleDownloadCertificateClick}
+                onClick={handleCertificateButtonClick}
               >
                 <ReceiptLongOutlinedIcon className="pr-5" />
                 {t("Download Certificates")}
@@ -759,32 +760,38 @@ const Profile = () => {
             </Box>
           </Grid>
           <Grid item xs={12} md={8} lg={8} className="xs-pl-0">
-            <TabContext value={value}>
-              <Box sx={{ borderBottom: 1, borderColor: "divider" }}>
-                <TabList
-                  onChange={handleChange}
-                  aria-label="lab API tabs example"
-                >
-                  <Tab
-                    label="Continue learning"
-                    className="tab-text"
-                    value="1"
-                  />
-                  <Tab
-                    label="Learning History"
-                    className="tab-text"
-                    value="2"
-                    // onClick={handleLearningHistoryClick}
-                  />
-                </TabList>
-              </Box>
-              <TabPanel value="1">
-                <ContinueLearning />
-              </TabPanel>
-              <TabPanel value="2">
-                <LearningHistory />
-              </TabPanel>
-            </TabContext>
+            {showCertificate ? (
+              <Certificate />
+            ) : (
+              <div>
+                <TabContext value={value}>
+                  <Box sx={{ borderBottom: 1, borderColor: "divider" }}>
+                    <TabList
+                      onChange={handleChange}
+                      aria-label="lab API tabs example"
+                    >
+                      <Tab
+                        label="Continue learning"
+                        className="tab-text"
+                        value="1"
+                      />
+                      <Tab
+                        label="Learning History"
+                        className="tab-text"
+                        value="2"
+                        // onClick={handleLearningHistoryClick}
+                      />
+                    </TabList>
+                  </Box>
+                  <TabPanel value="1">
+                    <ContinueLearning />
+                  </TabPanel>
+                  <TabPanel value="2">
+                    <LearningHistory />
+                  </TabPanel>
+                </TabContext>
+              </div>
+            )}
           </Grid>
         </Grid>
       </Container>
