@@ -1,9 +1,9 @@
 import React, { useState } from "react";
-import ChatIcon from "@mui/icons-material/Chat";
-import HeadsetIcon from "@mui/icons-material/Headset";
 import { Popover, Typography } from "@mui/material";
 import { makeStyles } from "@material-ui/core";
 import { Link } from "react-router-dom";
+import HeadsetMicOutlinedIcon from '@mui/icons-material/HeadsetMicOutlined';
+import { t } from "i18next";
 
 const useStyles = makeStyles((theme) => ({
   link: {
@@ -50,16 +50,17 @@ const FloatingChatIcon = () => {
         />
       </Popover>
       <Link href="#" color="primary" aria-label="chat" className="chatIcon">
-        <HeadsetIcon
+        <HeadsetMicOutlinedIcon
           onClick={handleOpenPopover}
           style={{
-            paddingTop: "13px",
+            paddingRight: "8px",
             borderRadius: "50%",
             width: "30px", // Adjust the size as needed
             height: "3  2px", // Adjust the size as needed
            
           }}
         />
+        {t("NULP_ASSIST")}
       </Link>
     </>
   );

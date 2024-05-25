@@ -16,12 +16,8 @@ import Divider from "@mui/material/Divider";
 import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
 import Search from "components/search";
-import { useLocation, Navigate } from "react-router-dom";
+import { useLocation, Navigate, useNavigate } from "react-router-dom";
 import * as util from "../../services/utilService";
-import Dialog from "@material-ui/core/Dialog";
-import DialogTitle from "@material-ui/core/DialogTitle";
-import DialogContent from "@material-ui/core/DialogContent";
-import DialogActions from "@material-ui/core/DialogActions";
 import Header from "components/header";
 import Footer from "components/Footer";
 import CheckCircleOutlineIcon from "@mui/icons-material/CheckCircleOutline";
@@ -36,6 +32,12 @@ import Alert from "@mui/material/Alert";
 import Filter from "components/filter";
 const axios = require("axios");
 const designations = require("../../configs/designations.json");
+const urlConfig = require("../../configs/urlConfig.json");
+import Autocomplete from "@mui/material/Autocomplete";
+import ToasterCommon from "../ToasterCommon";
+import ForumOutlinedIcon from "@mui/icons-material/ForumOutlined";
+import Grid from "@mui/material/Grid";
+import Chat from "./chat";
 
 // Define modal styles
 const useStyles = makeStyles((theme) => ({
@@ -102,15 +104,29 @@ const AddConnections = () => {
   const [selectedDesignation, setSelectedDesignation] = useState("");
   const [userFilter, setUserFilter] = useState("");
   const [userIds, setUserIds] = useState([]);
+  const [autocompleteOpen, setAutocompleteOpen] = useState(false);
+  const [inputValue, setInputValue] = useState("");
+  const [options, setOptions] = useState([]);
+  const [toasterOpen, setToasterOpen] = useState(false);
+  const [toasterMessage, setToasterMessage] = useState("");
+  const [showTableTwo, setShowTableTwo] = useState(false);
+  const [isMobile, setIsMobile] = useState(window.innerWidth <= 767);
+  const navigate = useNavigate();
+  const [selectedChatUser, setSelectedChatUser] = useState(null);
+  const [selectedUserId, setSelectedUserId] = useState(null);
 
-  // const handleFilterChange = (selectedOptions) => {
-  //   const selectedValues = selectedOptions.map((option) => option.value);
-  //   setFilters({ ...filters, firstName: selectedValues });
-  // };
-
-  // const filteredUsers = userData?.filter(
-  //   (user) => user.name && user.name.includes(searchQuery)
-  // );
+  const showErrorMessage = (msg) => {
+    setToasterMessage(msg);
+    setTimeout(() => {
+      setToasterMessage("");
+    }, 2000);
+    setToasterOpen(true);
+  };
+  useEffect(() => {
+    const handleResize = () => setIsMobile(window.innerWidth <= 767);
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
 
   const getChat = async (userId) => {
     setIsLoading(true);
@@ -120,12 +136,12 @@ const AddConnections = () => {
       sender_id: loggedInUserId,
       receiver_id: userId,
       is_accepted: true,
-      is_read: false,
     });
 
-    const url = `/directConnect/get-chats?${params.toString()}`;
-
     try {
+      const url = `${
+        urlConfig.URLS.DIRECT_CONNECT.GET_CHATS
+      }?${params.toString()}`;
       const response = await fetch(url, {
         method: "GET",
         headers: {
@@ -134,18 +150,21 @@ const AddConnections = () => {
       });
 
       if (!response.ok) {
-        throw new Error("Failed to get chat");
+        showErrorMessage(t("FAILED_TO_FETCH_CHAT"));
+        throw new Error(t("FAILED_TO_FETCH_CHAT"));
       }
 
       const responseData = await response.json();
       console.log("getChat", responseData.result);
       return responseData.result;
     } catch (error) {
-      setError(error.message);
+      console.error("Error fetching data:", error);
+      showErrorMessage(t("FAILED_TO_FETCH_CHAT"));
     } finally {
       setIsLoading(false);
     }
   };
+
   const getChatRequest = async (userId) => {
     setIsLoading(true);
     setError(null);
@@ -157,9 +176,10 @@ const AddConnections = () => {
       is_read: false,
     });
 
-    const url = `http://localhost:3000/directConnect/get-chats?${params.toString()}`;
-
     try {
+      const url = `${
+        urlConfig.URLS.DIRECT_CONNECT.GET_CHATS
+      }?${params.toString()}`;
       const response = await fetch(url, {
         method: "GET",
         headers: {
@@ -168,14 +188,15 @@ const AddConnections = () => {
       });
 
       if (!response.ok) {
-        throw new Error("Failed to get chat");
+        showErrorMessage(t("FAILED_TO_FETCH_CHAT"));
+        throw new Error(t("FAILED_TO_FETCH_CHAT"));
       }
 
       const responseData = await response.json();
       console.log("getChatRequest", responseData.result);
       return responseData.result;
     } catch (error) {
-      setError(error.message);
+      showErrorMessage(t("FAILED_TO_FETCH_CHAT"));
     } finally {
       setIsLoading(false);
     }
@@ -239,11 +260,9 @@ const AddConnections = () => {
 
   const handleSearch = async (selectedUserId = "") => {
     setIsLoading(true);
-    setError(null);
     setUserSearchData([]);
     setUserFilter([]);
 
-    const url = `/learner/user/v3/search`;
     let filters = {
       status: "1",
     };
@@ -263,6 +282,7 @@ const AddConnections = () => {
     };
 
     try {
+      const url = `${urlConfig.URLS.LEARNER_PREFIX}${urlConfig.URLS.ADMIN.USER_SEARCH}`;
       const response = await fetch(url, {
         method: "POST",
         headers: {
@@ -272,7 +292,8 @@ const AddConnections = () => {
       });
 
       if (!response.ok) {
-        throw new Error("Failed to fetch data");
+        showErrorMessage(t("FAILED_TO_FETCH_DATA"));
+        throw new Error(t("FAILED_TO_FETCH_DATA"));
       }
 
       let responseData = await response.json();
@@ -312,8 +333,7 @@ const AddConnections = () => {
       setUserFilter(responseUserData);
       console.log("responseSearchData", responseData);
     } catch (error) {
-      console.error("Error fetching data:", error);
-      setError("Failed to fetch data. Please try again.");
+      showErrorMessage(t("FAILED_TO_FETCH_DATA"));
     } finally {
       setIsLoading(false);
     }
@@ -323,8 +343,6 @@ const AddConnections = () => {
     setIsLoading(true);
     setError(null);
     setUserQuerySearchData([]);
-
-    const url = `/learner/user/v3/search`;
     const requestBody = {
       request: {
         filters: {
@@ -338,6 +356,7 @@ const AddConnections = () => {
     };
 
     try {
+      const url = `${urlConfig.URLS.LEARNER_PREFIX}${urlConfig.URLS.ADMIN.USER_SEARCH}`;
       const response = await fetch(url, {
         method: "POST",
         headers: {
@@ -347,7 +366,8 @@ const AddConnections = () => {
       });
 
       if (!response.ok) {
-        throw new Error("Failed to fetch data");
+        showErrorMessage(t("FAILED_TO_FETCH_DATA"));
+        throw new Error(t("FAILED_TO_FETCH_DATA"));
       }
 
       let responseData = await response.json();
@@ -365,7 +385,7 @@ const AddConnections = () => {
       setUserQuerySearchData(content);
     } catch (error) {
       console.error("Error fetching data:", error);
-      setError("Failed to fetch data. Please try again.");
+      showErrorMessage(t("FAILED_TO_FETCH_DATA"));
     } finally {
       setIsLoading(false);
     }
@@ -385,6 +405,7 @@ const AddConnections = () => {
       setShowModal(true);
     } catch (error) {
       console.error("Error sending chat request:", error);
+      showErrorMessage(t("FAILED_TO_FETCH_DATA"));
     }
   };
 
@@ -402,9 +423,10 @@ const AddConnections = () => {
       is_connection: true,
     });
 
-    const url = `/directConnect/get-chats?${params.toString()}`;
-
     try {
+      const url = `${
+        urlConfig.URLS.DIRECT_CONNECT.GET_CHATS
+      }?${params.toString()}`;
       const response = await fetch(url, {
         method: "GET",
         headers: {
@@ -413,7 +435,8 @@ const AddConnections = () => {
       });
 
       if (!response.ok) {
-        throw new Error("Failed to get connected user chat");
+        showErrorMessage(t("FAILED_TO_FETCH_CHAT"));
+        throw new Error(t("FAILED_TO_FETCH_CHAT"));
       }
       setInvitationReceivedUserByIds([]);
       setInvitationAcceptedUsers([]);
@@ -449,7 +472,9 @@ const AddConnections = () => {
       invitationAcceptedUserIds.length > 0 &&
         getInvitationAcceptedUserByIds(invitationAcceptedUserIds);
     } catch (error) {
-      setError(error.message);
+      console.error("Error fetching data:", error);
+
+      showErrorMessage(t("FAILED_TO_FETCH_CHAT"));
     } finally {
       setIsLoading(false);
     }
@@ -460,7 +485,6 @@ const AddConnections = () => {
     setError(null);
     setInvitationNotAcceptedUsers([]);
 
-    const url = `/learner/user/v3/search`;
     const requestBody = {
       request: {
         filters: {
@@ -474,6 +498,7 @@ const AddConnections = () => {
     };
 
     try {
+      const url = `${urlConfig.URLS.LEARNER_PREFIX}${urlConfig.URLS.ADMIN.USER_SEARCH}`;
       const response = await fetch(url, {
         method: "POST",
         headers: {
@@ -483,7 +508,8 @@ const AddConnections = () => {
       });
 
       if (!response.ok) {
-        throw new Error("Failed to search data");
+        showErrorMessage(t("FAILED_TO_FETCH_DATA"));
+        throw new Error(t("FAILED_TO_FETCH_DATA"));
       }
 
       const responseData = await response.json();
@@ -505,8 +531,8 @@ const AddConnections = () => {
         responseData.result.response.content
       );
     } catch (error) {
-      console.log("error", error);
-      setError(error.message);
+      console.error("Error fetching data:", error);
+      showErrorMessage(t("FAILED_TO_FETCH_DATA"));
     } finally {
       setIsLoading(false);
     }
@@ -518,20 +544,17 @@ const AddConnections = () => {
     setError(null);
     setInvitationAcceptedUsers([]);
 
-    const url = `/learner/user/v3/search`;
     const requestBody = {
       request: {
         filters: {
           status: "1",
           userId: userIds,
         },
-        // query: searchQuery,
-        // pageNumber: currentPage,
-        // pageSize: pageSize,
       },
     };
 
     try {
+      const url = `${urlConfig.URLS.LEARNER_PREFIX}${urlConfig.URLS.ADMIN.USER_SEARCH}`;
       const response = await fetch(url, {
         method: "POST",
         headers: {
@@ -541,7 +564,8 @@ const AddConnections = () => {
       });
 
       if (!response.ok) {
-        throw new Error("Failed to search data");
+        showErrorMessage(t("FAILED_TO_FETCH_DATA"));
+        throw new Error(t("FAILED_TO_FETCH_DATA"));
       }
 
       const responseData = await response.json();
@@ -550,8 +574,25 @@ const AddConnections = () => {
       const userListWithChat = await Promise.all(
         userList.map(async (item) => {
           const userChat = await getChat(item.id);
+
           if (userChat?.length > 0) {
-            item = { ...item, isRead: false };
+            // Find the latest chat message
+            const latestChat = userChat.reduce((latest, current) => {
+              return new Date(current.timestamp) > new Date(latest.timestamp)
+                ? current
+                : latest;
+            });
+
+            // Determine if all messages are read
+            const allRead = userChat.every((chat) => chat.is_read);
+
+            item = {
+              ...item,
+              latestChat: latestChat.message,
+              isRead: allRead,
+            };
+          } else {
+            item = { ...item, latestChat: null, isRead: true };
           }
 
           return item;
@@ -575,8 +616,7 @@ const AddConnections = () => {
         responseData.result.response.content
       );
     } catch (error) {
-      console.log("error", error);
-      setError(error.message);
+      showErrorMessage(t("FAILED_TO_FETCH_DATA"));
     } finally {
       setIsLoading(false);
     }
@@ -586,8 +626,6 @@ const AddConnections = () => {
     setIsLoading(true);
     setError(null);
     setInvitationReceivedUserByIds([]);
-
-    const url = `/learner/user/v3/search`;
     const requestBody = {
       request: {
         filters: {
@@ -598,6 +636,7 @@ const AddConnections = () => {
     };
 
     try {
+      const url = `${urlConfig.URLS.LEARNER_PREFIX}${urlConfig.URLS.ADMIN.USER_SEARCH}`;
       const response = await fetch(url, {
         method: "POST",
         headers: {
@@ -607,7 +646,8 @@ const AddConnections = () => {
       });
 
       if (!response.ok) {
-        throw new Error("Failed to search data");
+        showErrorMessage(t("FAILED_TO_FETCH_DATA"));
+        throw new Error(t("FAILED_TO_FETCH_DATA"));
       }
 
       const responseData = await response.json();
@@ -641,8 +681,7 @@ const AddConnections = () => {
         responseData.result.response.content
       );
     } catch (error) {
-      console.log("error", error);
-      setError(error.message);
+      showErrorMessage(t("FAILED_TO_FETCH_DATA"));
     } finally {
       setIsLoading(false);
     }
@@ -654,13 +693,15 @@ const AddConnections = () => {
     }
   };
 
-  const handleAcceptedChatOpen = (userId, name) => {
+  const handleAcceptedChatOpen = (userId, name, designation) => {
     const dataToSend = {
       userId: userId,
       fullName: name,
+      designation: designation,
     };
     localStorage.setItem("userId", userId);
     localStorage.setItem("chatName", name);
+    localStorage.setItem("designation", designation);
     setData(dataToSend);
     setSelectedUserName(name);
     getUserChat(userId);
@@ -694,9 +735,8 @@ const AddConnections = () => {
       receiver_id: loggedInUserId,
     };
 
-    const url = `/directConnect/accept-invitation`;
-
     try {
+      const url = `${urlConfig.URLS.DIRECT_CONNECT.ACCEPT_CHAT}`;
       const response = await fetch(url, {
         method: "POST",
         headers: {
@@ -705,14 +745,15 @@ const AddConnections = () => {
         body: JSON.stringify(requestBody),
       });
       if (!response.ok) {
-        throw new Error("Failed to accept chat");
+        showErrorMessage(t("FAILED_TO_FETCH_DATA"));
+        throw new Error(t("FAILED_TO_FETCH_DATA"));
       }
 
       const responseData = await response.json();
       console.log("acceptChatInvitation", responseData.result);
       onMyConnection();
     } catch (error) {
-      setError(error.message);
+      showErrorMessage(t("FAILED_TO_FETCH_DATA"));
     } finally {
       setIsLoading(false);
     }
@@ -726,9 +767,8 @@ const AddConnections = () => {
       receiver_id: loggedInUserId,
     };
 
-    const url = `/directConnect/reject-invitation`;
-
     try {
+      const url = `${urlConfig.URLS.DIRECT_CONNECT.REJECT_CHAT}`;
       const response = await fetch(url, {
         method: "POST",
         headers: {
@@ -737,14 +777,16 @@ const AddConnections = () => {
         body: JSON.stringify(requestBody),
       });
       if (!response.ok) {
-        throw new Error("Failed to block chat");
+        showErrorMessage(t("FAILED_TO_FETCH_DATA"));
+        throw new Error(t("FAILED_TO_FETCH_DATA"));
       }
 
       const responseData = await response.json();
       console.log("rejectChatInvitation", responseData.result);
       onMyConnection();
     } catch (error) {
-      setError(error.message);
+      console.error("Error fetching data:", error);
+      showErrorMessage(t("FAILED_TO_FETCH_DATA"));
     } finally {
       setIsLoading(false);
     }
@@ -761,9 +803,10 @@ const AddConnections = () => {
       is_connection: true,
     });
 
-    const url = `/directConnect/get-chats?${params.toString()}`;
-
     try {
+      const url = `${
+        urlConfig.URLS.DIRECT_CONNECT.GET_CHATS
+      }?${params.toString()}`;
       const response = await fetch(url, {
         method: "GET",
         headers: {
@@ -772,7 +815,8 @@ const AddConnections = () => {
       });
 
       if (!response.ok) {
-        throw new Error("Failed to get user chat");
+        showErrorMessage(t("FAILED_TO_FETCH_CHAT"));
+        throw new Error(t("FAILED_TO_FETCH_CHAT"));
       }
 
       const responseData = await response.json();
@@ -784,7 +828,11 @@ const AddConnections = () => {
       );
       setUserChat(userChats);
     } catch (error) {
-      setError(error.message);
+      console.error("Error fetching data:", error);
+
+      showErrorMessage(t("FAILED_TO_FETCH_CHAT"));
+
+      // Open the toaster
     } finally {
       setIsLoading(false);
     }
@@ -794,16 +842,16 @@ const AddConnections = () => {
     setIsLoading(true);
     setError(null);
 
-    const url = `/directConnect/send-chat`;
     const requestBody = {
       sender_id: loggedInUserId,
       receiver_id: userId,
       message: textValue,
-      sender_email: "snehal.sabade@tekditechnologies.com",
-      receiver_email: "mahesh.mahajan@tekditechnologies.com",
+      sender_email: "sender@gmail.com",
+      receiver_email: "receiver@gmail.com",
     };
 
     try {
+      const url = `${urlConfig.URLS.DIRECT_CONNECT.SEND_CHATS}`;
       const response = await fetch(url, {
         method: "POST",
         headers: {
@@ -813,19 +861,21 @@ const AddConnections = () => {
       });
 
       if (!response.ok) {
-        throw new Error("Failed to send chat");
+        showErrorMessage(t("FAILED_TO_FETCH_DATA"));
+        throw new Error(t("FAILED_TO_FETCH_DATA"));
       }
       setSelectedUser("");
       console.log("sentChatRequest", response);
     } catch (error) {
-      setError(error.message);
+      console.error("Error fetching data:", error);
+      showErrorMessage(t("FAILED_TO_FETCH_DATA"));
     } finally {
       setIsLoading(false);
     }
   };
 
   const onClickSearchedUser = (selectedUserId) => {
-    handlePopoverClose();
+    // handlePopoverClose();
     const allTypeOfUsers = [
       ...(invitationAcceptedUsers || []),
       ...(invitationNotAcceptedUsers || []),
@@ -892,8 +942,9 @@ const AddConnections = () => {
   };
   const fetchUserInfo = async (userId) => {
     try {
+      const url = `${urlConfig.URLS.POFILE_PAGE.USER_READ}`;
       const response = await axios.post(
-        "/custom/user/read",
+        url,
         { user_ids: [userId] },
         {
           withCredentials: true,
@@ -906,6 +957,7 @@ const AddConnections = () => {
       setUserInfo(response.data.result);
       return response.data.result[0] || {};
     } catch (error) {
+      showErrorMessage(t("FAILED_TO_FETCH_DATA"));
       console.error(error);
     }
   };
@@ -945,8 +997,9 @@ const AddConnections = () => {
 
   const handleFilter = async (event) => {
     try {
+      const url = `${urlConfig.URLS.POFILE_PAGE.USER_READ}`;
       const response = await axios.post(
-        "http://localhost:3000/custom/user/read",
+        url,
         { designations: event },
         {
           withCredentials: true,
@@ -961,6 +1014,7 @@ const AddConnections = () => {
       return newIds;
     } catch (error) {
       console.error(error);
+      showErrorMessage(t("FAILED_TO_FETCH_DATA"));
     }
   };
 
@@ -968,8 +1022,6 @@ const AddConnections = () => {
     setIsLoading(true);
     setError(null);
     setUserSearchData([]);
-
-    const url = `http://localhost:3000/learner/user/v3/search`;
 
     const requestBody = {
       request: {
@@ -983,6 +1035,7 @@ const AddConnections = () => {
     };
 
     try {
+      const url = `${urlConfig.URLS.LEARNER_PREFIX}${urlConfig.URLS.ADMIN.USER_SEARCH}`;
       const response = await fetch(url, {
         method: "POST",
         headers: {
@@ -992,7 +1045,8 @@ const AddConnections = () => {
       });
 
       if (!response.ok) {
-        throw new Error("Failed to fetch data");
+        showErrorMessage(t("FAILED_TO_FETCH_DATA"));
+        throw new Error(t("FAILED_TO_FETCH_DATA"));
       }
 
       let responseData = await response.json();
@@ -1012,17 +1066,104 @@ const AddConnections = () => {
       setUserSearchData(responseUserData);
       return responseUserData;
     } catch (error) {
-      console.error("Error fetching data:", error);
-      setError("Failed to fetch data. Please try again.");
+      showErrorMessage(t("FAILED_TO_FETCH_DATA"));
     } finally {
       setIsLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    if (!autocompleteOpen) {
+      setOptions([]);
+    }
+  }, [autocompleteOpen]);
+
+  const fetchOptions = async (searchQuery) => {
+    const requestBody = {
+      request: {
+        filters: {
+          status: "1",
+        },
+        query: searchQuery,
+        sort_by: {
+          lastUpdatedOn: "desc",
+        },
+      },
+    };
+
+    try {
+      const url = `${urlConfig.URLS.LEARNER_PREFIX}${urlConfig.URLS.ADMIN.USER_SEARCH}`;
+      const response = await fetch(url, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(requestBody),
+      });
+
+      if (!response.ok) {
+        throw new Error("Failed to fetch data");
+      }
+
+      let responseData = await response.json();
+      return responseData?.result?.response?.content || [];
+    } catch (error) {
+      console.error("Error fetching data:", error);
+      setError("Failed to fetch data. Please try again.");
+      return [];
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  const handleInputChange = async (event, newInputValue) => {
+    setInputValue(newInputValue);
+    if (newInputValue.length >= 3) {
+      const fetchedOptions = await fetchOptions(newInputValue);
+      setOptions(fetchedOptions);
+      setAutocompleteOpen(true);
+    } else {
+      setAutocompleteOpen(false);
+    }
+  };
+
+  const getOptionLabel = (option) =>
+    `${option.firstName}${option.lastName ? ` ${option.lastName}` : ""}`;
+
+  const handleOnSelectSearchedUser = (event, user) => {
+    onClickSearchedUser(user?.userId);
+    console.log("Selected Option:", user);
+  };
+  const handleButtonClick = () => {
+    setSelectedChatUser(null);
+    setShowTableTwo(true);
+  };
+  const handleBackClick = () => {
+    setShowTableTwo(false);
+    handleTabClick("Tab1");
+    setCurrentPage(1);
+    onMyConnection();
+    setSelectedChatUser(null);
+  };
+  const showMessages = (creatorId) => {
+    if (isMobile) {
+      navigate("/chat", {
+        state: { senderUserId: loggedInUserId, receiverUserId: creatorId },
+      });
+    } else {
+      setSelectedChatUser({
+        senderUserId: loggedInUserId,
+        receiverUserId: creatorId,
+      });
+      setSelectedUserId(creatorId);
     }
   };
 
   return (
     <Box>
       <Header />
-      <Container maxWidth="xxl" role="main" className="container-pb">
+      {toasterMessage && <ToasterCommon response={toasterMessage} />}
+      <Container maxWidth="xxl" role="main" className="pt-0 xs-p-0">
         {error && (
           <Alert severity="error" className="my-10">
             {error}
@@ -1031,7 +1172,7 @@ const AddConnections = () => {
 
         <Box textAlign="center" padding="10" style={{ minHeight: "500px" }}>
           <Box>
-            <input
+            {/* <input
               label="Search for a user..."
               type="text"
               onChange={(e) => {
@@ -1050,505 +1191,502 @@ const AddConnections = () => {
                 border: "1px solid #CACACA",
               }}
             />
-          </Box>
-          <div>
-            <Popover
-              id={id}
-              open={openPopover}
-              anchorEl={anchorEl}
-              onClose={handlePopoverClose}
-              anchorOrigin={{
-                vertical: "bottom",
-                horizontal: "left",
-              }}
-            >
-              <Typography sx={{ p: 2 }}>
-                {userQuerySearchData &&
-                  userQuerySearchData?.length > 0 &&
-                  userQuerySearchData?.map((item) => (
-                    <List sx={{}} style={{ color: "gray", cursor: "pointer" }}>
-                      <ListItem>
-                        <ListItemText
-                          primary={`${item.firstName}${
-                            item.lastName ? ` ${item.lastName}` : ""
-                          }`}
-                          secondary={`${item.designation}`}
-                          onClick={() => onClickSearchedUser(item.userId)}
-                        />
-                      </ListItem>
-                      <Divider />
-                    </List>
-                  ))}
-                {(!userQuerySearchData || userQuerySearchData.length === 0) && (
-                  <Box>
-                    <p>{t("NO_USERS_FOUND")}</p>
-                  </Box>
-                )}
-              </Typography>
-            </Popover>
-          </div>
-          <TabContext value={value}>
-            <Box sx={{ borderBottom: 1, borderColor: "divider" }}>
-              <TabList
-                onChange={handleChange}
-                aria-label="lab API tabs example"
-              >
-                <Tab
-                  label="My Connections"
-                  value="1"
-                  style={{ fontSize: "12px", color: "#484848" }}
-                  onClick={() => {
-                    handleTabClick("Tab1");
-                    setCurrentPage(1);
-                    onMyConnection();
-                  }}
-                />
-                <Tab
-                  label="Add New"
-                  value="2"
-                  style={{ fontSize: "12px", color: "#484848" }}
-                  onClick={() => {
-                    handleTabClick("Tab2");
-                    setCurrentPage(1);
-                    handleSearch();
-                  }}
-                />
-              </TabList>
-            </Box>
-            <TabPanel value="1" style={{ padding: "0" }}>
-              {invitationReceiverByUser &&
-                invitationReceiverByUser.length === 0 &&
-                invitationAcceptedUsers &&
-                invitationAcceptedUsers.length === 0 &&
-                invitationNotAcceptedUsers &&
-                invitationNotAcceptedUsers.length === 0 && (
-                  <Box>
-                    <p>{t("NO_USERS_FOUND")}</p>
-                  </Box>
-                )}
+          </Box> */}
 
-              {invitationReceiverByUser &&
-                invitationReceiverByUser?.map((item) => (
-                  <List sx={{}} style={{ color: "gray", cursor: "pointer" }}>
-                    <ListItem key={item.userId}>
-                      <ListItemText
-                        primary={`${item.firstName}${
-                          item.lastName ? ` ${item.lastName}` : ""
-                        }   | ${item.designation}`}
-                        secondary={
-                          item.messageRequest.length > 20 ? (
-                            <>
-                              {expandedMessageId === item.userId
-                                ? item.messageRequest
-                                : // : `${item.messageRequest.substring(0, 20)}...`}
-                                  `${item.messageRequest.substring(0, 20)}`}
-                              <span
-                                style={{ color: "blue", cursor: "pointer" }}
-                                onClick={() =>
-                                  handleShowFullMessage(item.userId)
-                                }
+            <Grid container spacing={2} className="pt-8 xs-p-0">
+              <Grid
+                item
+                xs={12}
+                md={4}
+                lg={4}
+                className="sm-p-25 left-container"
+              >
+                <Box
+                  className="d-flex my-15"
+                  style={{ justifyContent: "space-between" }}
+                >
+                  <Box className="h4-title">Connections</Box>
+                  {!showTableTwo ? (
+                    <Button
+                      type="button"
+                      className="custom-btn-default xs-mr-10"
+                      onClick={() => {
+                        setCurrentPage(1);
+                        handleSearch();
+                        handleButtonClick();
+                      }}
+                    >
+                      Add New
+                    </Button>
+                  ) : (
+                    <Button
+                      type="button"
+                      className="viewAll xs-mr-10"
+                      onClick={handleBackClick}
+                    >
+                      Back
+                    </Button>
+                  )}
+                </Box>
+                <TabContext value={value} className="addConnection">
+                  {!showTableTwo ? (
+                    <>
+                      <Box sx={{ borderBottom: 1, borderColor: "divider" }}>
+                        <TabList
+                          onChange={handleChange}
+                          aria-label="lab API tabs example"
+                        >
+                          <Tab
+                            label="My Connections"
+                            value="1"
+                            style={{ fontSize: "12px", color: "#484848" }}
+                            onClick={() => {
+                              handleTabClick("Tab1");
+                              setCurrentPage(1);
+                              onMyConnection();
+                            }}
+                          />
+                          <Tab
+                            label={`Connection Requests (${
+                              invitationReceiverByUser?.length || 0
+                            })`}
+                            value="2"
+                            style={{ fontSize: "12px", color: "#484848" }}
+                            onClick={() => {
+                              handleTabClick("Tab2");
+                            }}
+                          />
+                        </TabList>
+                      </Box>
+
+                      <TabPanel value="1" style={{ padding: "0" }}>
+                        <Box className="scroll-45">
+                          {invitationReceiverByUser &&
+                            invitationReceiverByUser.length === 0 &&
+                            invitationAcceptedUsers &&
+                            invitationAcceptedUsers.length === 0 &&
+                            invitationNotAcceptedUsers &&
+                            invitationNotAcceptedUsers.length === 0 && (
+                              <Box>
+                                <p>{t("NO_USERS_FOUND")}</p>
+                              </Box>
+                            )}
+
+                          {invitationAcceptedUsers &&
+                            invitationAcceptedUsers.map((item) => (
+                              <List
+                                sx={{}}
+                                style={{ color: "green", cursor: "pointer" }}
+                                className="connection-tab"
+                                key={item.userId}
                               >
-                                {" "}
-                                {expandedMessageId === item.userId
-                                  ? ""
-                                  : "Show More"}
-                              </span>
-                            </>
-                          ) : (
-                            item.messageRequest
-                          )
-                        }
+                                <ListItem
+                                  onClick={() => {
+                                    showMessages(item.userId);
+                                  }}
+                                  className="bg-blue"
+                                  style={{
+                                    fontWeight:
+                                      item.userId === selectedUserId
+                                        ? "bold"
+                                        : "normal",
+                                    color:
+                                      item.userId === selectedUserId
+                                        ? "black"
+                                        : "inherit",
+                                  }}
+                                >
+                                  <ListItemText
+                                    primary={
+                                      <span
+                                        style={{
+                                          color:
+                                            item.userId === selectedUserId
+                                              ? "black"
+                                              : item.isRead === false
+                                              ? "black"
+                                              : "black",
+                                          fontWeight:
+                                            item.userId === selectedUserId
+                                              ? "bold"
+                                              : item.isRead === false
+                                              ? "bold"
+                                              : "normal",
+                                        }}
+                                      >
+                                        {`${item.firstName} ${
+                                          item.lastName ? item.lastName : " "
+                                        } |  ${item.designation}`}
+                                      </span>
+                                    }
+                                    secondary={item.latestChat}
+                                    onClick={() =>
+                                      handleAcceptedChatOpen(
+                                        item.userId,
+                                        `${item.firstName}${
+                                          item.lastName
+                                            ? ` ${item.lastName}`
+                                            : ""
+                                        }`,
+                                        item.designation
+                                      )
+                                    }
+                                  />
+                                </ListItem>
+                                <Divider />
+                              </List>
+                            ))}
+
+                          {invitationNotAcceptedUsers &&
+                            invitationNotAcceptedUsers?.map((item) => (
+                              <List
+                                sx={{}}
+                                style={{ fontSize: "14px", cursor: "pointer" }}
+                                onClick={() => userClick(item)}
+                                className="connection-tab"
+                              >
+                                <ListItem>
+                                  <ListItemText
+                                    primary={`${item.firstName} ${
+                                      item.lastName ? item.lastName : ""
+                                    } | ${item.designation}`}
+                                  />
+                                </ListItem>
+                                <Box className="left-bx">
+                                  <custom-chip>{t("REQUEST_SENT")}</custom-chip>
+                                </Box>
+                                <Divider />
+                              </List>
+                            ))}
+                          <div>
+                            {showChatModal && (
+                              <Modal
+                                open={showChatModal}
+                                onClose={handleCloseModal}
+                                aria-labelledby="modal-title"
+                                aria-describedby="modal-desc"
+                                className="sx-bottom"
+                                sx={{
+                                  display: "flex",
+                                  justifyContent: "center",
+                                  alignItems: "flex-end",
+                                  pt: "10vh",
+                                  p: "0",
+                                }}
+                              >
+                                <ModalContent sx={{ width: 400 }} style={{}}>
+                                  <div style={{ textAlign: "center" }}>
+                                    <h2
+                                      style={{
+                                        fontSize: "14px",
+                                        textAlign: "center",
+                                        padding: "13px",
+                                      }}
+                                    >
+                                      {t("INVITATION_NOT_ACCEPTED")}
+                                    </h2>
+                                    <Button
+                                      onClick={(e) => {
+                                        setShowChatModal(false);
+                                      }}
+                                      style={{
+                                        background: "#004367",
+                                        border: "solid 1px #004367",
+                                        borderRadius: "10px",
+                                        color: "#fff",
+                                        padding: "10px 12px",
+                                        margin: "0 10px",
+                                        fontWeight: "500",
+                                        fontSize: "12px",
+                                        width: "50%",
+                                        marginBottom: "10px",
+                                      }}
+                                    >
+                                      {t("CLOSE")}
+                                    </Button>
+                                  </div>
+                                </ModalContent>
+                              </Modal>
+                            )}
+                          </div>
+                        </Box>
+                      </TabPanel>
+                      <TabPanel value="2">
+                        <Box className="scroll">
+                          {invitationReceiverByUser &&
+                            invitationReceiverByUser?.map((item) => (
+                              <List
+                                sx={{}}
+                                style={{ color: "gray", cursor: "pointer" }}
+                              >
+                                <ListItem
+                                  key={item.userId}
+                                  className="connection-tab"
+                                >
+                                  <ListItemText
+                                    style={{ fontSize: "14px", color: "#000" }}
+                                    primary={`${item.firstName}${
+                                      item.lastName ? ` ${item.lastName}` : ""
+                                    } | ${item.designation}`}
+                                    secondary={
+                                      item.messageRequest.length > 20 ? (
+                                        <div
+                                          style={{
+                                            border: "1px solid #ddd",
+                                            padding: "3px 10px",
+                                            borderRadius: "5px",
+                                            color: "#00000080",
+                                            fontSize: "12px",
+                                            marginTop: "10px",
+                                          }}
+                                        >
+                                          {expandedMessageId === item.userId
+                                            ? item.messageRequest
+                                            : `${item.messageRequest.substring(
+                                                0,
+                                                20
+                                              )}`}
+                                          <span
+                                            style={{
+                                              color: "#0E7A9C",
+                                              cursor: "pointer",
+                                            }}
+                                            onClick={() =>
+                                              handleShowFullMessage(item.userId)
+                                            }
+                                          >
+                                            {" "}
+                                            {expandedMessageId === item.userId
+                                              ? "read less"
+                                              : "read more"}
+                                          </span>
+                                        </div>
+                                      ) : (
+                                        item.messageRequest
+                                      )
+                                    }
+                                  />
+                                  <div
+                                    style={{
+                                      display: "flex",
+                                      justifyContent: "flex-end",
+                                      marginTop: "10px",
+                                    }}
+                                  >
+                                    <Link
+                                      href="#"
+                                      underline="none"
+                                      color="#004367"
+                                      onClick={() => acceptChat(item.userId)}
+                                      style={{ marginLeft: "10px" }}
+                                    >
+                                      <CheckCircleOutlineIcon
+                                        style={{
+                                          fontSize: "22px",
+                                          color: "#484848",
+                                        }}
+                                      />
+                                    </Link>
+                                    <span style={{ margin: "0 5px" }}></span>
+                                    <Link
+                                      href="#"
+                                      underline="none"
+                                      color="#7d7a7a"
+                                      onClick={() => rejectChat(item.userId)}
+                                    >
+                                      <CancelOutlinedIcon
+                                        style={{
+                                          fontSize: "22px",
+                                          color: "#484848",
+                                        }}
+                                      />
+                                    </Link>
+                                  </div>
+                                </ListItem>
+
+                                <Divider />
+                              </List>
+                            ))}
+                        </Box>
+                      </TabPanel>
+                    </>
+                  ) : (
+                    <Box>
+                      <Box
+                        display="flex"
+                        my={3}
+                        justifyContent="center"
+                        style={{ borderBottom: "solid 1px #ddd" }}
+                      >
+                        <Box className="h5-title">Add New Connection</Box>
+                      </Box>
+                      <Autocomplete
+                        id="autocomplete-input"
+                        open={autocompleteOpen}
+                        onClose={() => {
+                          setAutocompleteOpen(false);
+                        }}
+                        options={options}
+                        noOptionsText={t("NO_USERS_FOUND")}
+                        getOptionLabel={getOptionLabel} // Adjust this based on your API response structure
+                        getOptionKey={(option) => option.userId}
+                        onChange={handleOnSelectSearchedUser}
+                        inputValue={inputValue}
+                        onInputChange={handleInputChange}
+                        renderInput={(params) => (
+                          <TextField
+                            {...params}
+                            label="Search for a User"
+                            className="searchUser"
+                            variant="outlined"
+                          />
+                        )}
                       />
-                      <div
+                      <div>
+                        <Popover
+                          id={id}
+                          open={openPopover}
+                          anchorEl={anchorEl}
+                          onClose={handlePopoverClose}
+                          anchorOrigin={{
+                            vertical: "bottom",
+                            horizontal: "left",
+                          }}
+                        >
+                          <Typography sx={{ p: 2 }}>
+                            {userQuerySearchData &&
+                              userQuerySearchData?.length > 0 &&
+                              userQuerySearchData?.map((item) => (
+                                <List
+                                  sx={{}}
+                                  style={{ color: "gray", cursor: "pointer" }}
+                                >
+                                  <ListItem>
+                                    <ListItemText
+                                      primary={`${item.firstName}${
+                                        item.lastName ? ` ${item.lastName}` : ""
+                                      }`}
+                                      secondary={`${item.designation}`}
+                                      onClick={() =>
+                                        onClickSearchedUser(item.userId)
+                                      }
+                                    />
+                                  </ListItem>
+                                  <Divider />
+                                </List>
+                              ))}
+                            {(!userQuerySearchData ||
+                              userQuerySearchData.length === 0) && (
+                              <Box>
+                                <p>{t("NO_USERS_FOUND")}</p>
+                              </Box>
+                            )}
+                          </Typography>
+                        </Popover>
+                      </div>
+                      <Box
                         style={{
                           display: "flex",
-                          justifyContent: "flex-end",
-                          marginTop: "10px",
+                          justifyContent: "space-between",
                         }}
+                        className="filter-domain my-20 connection-tab"
                       >
-                        <Link
-                          href="#"
-                          underline="none"
-                          color="#004367"
-                          onClick={() => acceptChat(item.userId)}
-                          style={{ marginLeft: "10px" }}
-                        >
-                          <CheckCircleOutlineIcon
-                            style={{ fontSize: "28px" }}
+                        {/* {userFilter && (
+                          <Filter
+                            options={userFilter.map((user) => user.firstName)}
+                            label="Filter by Name"
+                            onChange={handleUserNameFilter}
+                            className="w-30"
                           />
-                        </Link>
-                        <span style={{ margin: "0 5px" }}></span>
-                        <Link
-                          href="#"
-                          underline="none"
-                          color="#7d7a7a"
-                          onClick={() => rejectChat(item.userId)}
-                        >
-                          <CancelOutlinedIcon style={{ fontSize: "28px" }} />
-                        </Link>
-                      </div>
-                    </ListItem>
+                        )} */}
 
-                    <Divider />
-                  </List>
-                ))}
-
-              {invitationAcceptedUsers &&
-                invitationAcceptedUsers?.map((item) => (
-                  <List sx={{}} style={{ color: "green", cursor: "pointer" }}>
-                    <ListItem
-                      component={RouterLink}
-                      to={{
-                        pathname: "/message",
-                      }}
-                    >
-                      <ListItemText
-                        primary={
-                          <span
-                            style={{
-                              color:
-                                item && item.isRead === false
-                                  ? "black"
-                                  : "black",
-                              fontWeight:
-                                item && item.isRead === false
-                                  ? "bold"
-                                  : "normal",
-                            }}
-                          >
-                            {item.firstName}
-                            {item.lastName ? ` ${item.lastName}` : ""}
-                          </span>
-                        }
-                        secondary={item.designation}
-                        onClick={() =>
-                          handleAcceptedChatOpen(
-                            item.userId,
-                            `${item.firstName}${
-                              item.lastName ? ` ${item.lastName}` : ""
-                            }`
-                          )
-                        }
-                      />
-                    </ListItem>
-                    <Divider />
-                  </List>
-                ))}
-
-              {invitationNotAcceptedUsers &&
-                invitationNotAcceptedUsers?.map((item) => (
-                  <List
-                    sx={{}}
-                    style={{ fontSize: "14px", cursor: "pointer" }}
-                    onClick={() => userClick(item)}
-                  >
-                    <ListItem>
-                      <ListItemText
-                        primary={`${item.firstName}${
-                          item.lastName ? ` ${item.lastName}` : ""
-                        }`}
-                        secondary={item.designation}
-                      />
-                    </ListItem>
-
-                    <Divider />
-                  </List>
-                ))}
-              <div>
-                {showChatModal && (
-                  <Modal
-                    open={showChatModal}
-                    onClose={handleCloseModal}
-                    aria-labelledby="modal-title"
-                    aria-describedby="modal-desc"
-                    className="sx-bottom"
-                    sx={{
-                      display: "flex",
-                      justifyContent: "center",
-                      alignItems: "flex-end",
-                      pt: "10vh",
-                      p: "0",
-                    }}
-                  >
-                    <ModalContent sx={{ width: 400 }} style={{}}>
-                      <div style={{ textAlign: "center" }}>
-                        <h2
-                          style={{
-                            fontSize: "14px",
-                            textAlign: "center",
-                            padding: "13px",
-                          }}
-                        >
-                          {t("INVITATION_NOT_ACCEPTED")}
-                        </h2>
-                        <Button
-                          onClick={(e) => {
-                            setShowChatModal(false);
-                          }}
-                          style={{
-                            background: "#004367",
-                            border: "solid 1px #004367",
-                            borderRadius: "10px",
-                            color: "#fff",
-                            padding: "10px 12px",
-                            margin: "0 10px",
-                            fontWeight: "500",
-                            fontSize: "12px",
-                            width: "50%",
-                            marginBottom: "10px",
-                          }}
-                        >
-                          {t("CLOSE")}
-                        </Button>
-                      </div>
-                    </ModalContent>
-                  </Modal>
-                )}
-              </div>
-            </TabPanel>
-            <TabPanel value="2">
-              <Box
-                style={{ display: "flex", justifyContent: "space-between" }}
-                className="filter-domain"
-              >
-                {userFilter && (
-                  <Filter
-                    options={userFilter.map((user) => user.firstName)}
-                    label="Filter by Name"
-                    onChange={handleUserNameFilter}
-                  />
-                )}
-
-                <Filter
-                  options={designationsList}
-                  label="Filter by Designation"
-                  onChange={handleDesignationFilter}
-                  // isMulti={false}
-                />
-              </Box>
-              {userSearchData &&
-                userSearchData?.map((item) => (
-                  <List
-                    key={item.id} // Add key prop to each List element
-                    sx={{ fontSize: "14px" }} // Add styling here if needed
-                    onClick={() => handleUserClick(item)}
-                  >
-                    <ListItem>
-                      <ListItemText
-                        primary={`${item.firstName}${
-                          item.lastName ? ` ${item.lastName}` : ""
-                        }`}
-                        secondary={`${item.designation}`}
-                      />
-                      <Link
-                        href="#"
-                        underline="none"
-                        color="primary"
-                        onClick={handleOpen}
-                        style={{
-                          fontSize: "14px",
-                          color: "#004367",
-                          fontWeight: "600",
-                        }}
-                      >
-                        {t("INVITE")}
-                      </Link>
-                    </ListItem>
-                    <Divider />
-                  </List>
-                ))}
-
-              <Pagination
-                count={totalPages}
-                page={currentPage}
-                onChange={handlePageChange}
-              />
-              <div>
-                <Modal
-                  aria-labelledby="modal-title"
-                  aria-describedby="modal-desc"
-                  open={open}
-                  className="sx-bottom"
-                  onClose={() => setOpen(false)}
-                  sx={{
-                    display: "flex",
-                    justifyContent: "center",
-                    alignItems: "flex-end",
-                    pt: "10vh",
-                    p: "0",
-                  }}
-                >
-                  <ModalContent sx={{ width: 400 }} style={{}}>
-                    <h2
-                      id="unstyled-modal-title"
-                      className="modal-title"
-                      style={{
-                        paddingTop: "10px",
-                        paddingRight: "10px",
-                        paddingLeft: "10px",
-                        paddingBottom: "10px", // Changed to paddingBottom to avoid duplication
-                        backgroundColor: "#004367",
-                        color: "white",
-                        borderRadius: "4px", // Changed to "4px" from "md" for borderRadius
-                      }}
-                    >
-                      {selectedUser && (
-                        <div
-                          style={{
-                            fontSize: "16px",
-                            lineHeight: "1.6",
-                            fontWeight: "500",
-                          }}
-                        >
-                          {selectedUser?.firstName} {selectedUser?.lastName}
-                        </div>
-                      )}
-                      {selectedUser && (
-                        <div
-                          style={{
-                            fontSize: "15px",
-                            paddingBottom: "10px",
-                            fontWeight: "400",
-                          }}
-                        >
-                          {selectedUser.designation}
-                        </div>
-                      )}
-                    </h2>
-
-                    {!showChat && (
-                      <p
-                        style={{
-                          fontSize: "12px",
-                          paddingLeft: "10px",
-                          paddingRight: "10px",
-                        }}
-                        id="unstyled-modal-description"
-                        className="modal-description"
-                      >
-                        <Box
-                          style={{
-                            fontSize: "12px",
-                            color: "#484848",
-                            paddingBottom: "15px",
-                          }}
-                        >
-                          {/* {selectedUser.firstName} {selectedUser.lastName} */}
-                          {/* {t("CONNECT_TEXT")} */}
-                          {selectedUser.bio}
-                        </Box>
-                        <Box>{t("CONNECT_WITH_THEM")}</Box>
-                      </p>
-                    )}
-                    {showChat && (
-                      <div>
-                        <TextField
-                          multiline
-                          minRows={5}
-                          maxRows={10}
-                          value={textValue}
-                          onChange={handleTextareaChange}
-                          placeholder="Enter your text here..."
-                          fullWidth
-                          sx={{ fontSize: "13px" }}
+                        <Filter
+                          options={designationsList}
+                          label="Filter by Designation"
+                          onChange={handleDesignationFilter}
+                          // isMulti={false}
+                          className="w-30"
                         />
-                      </div>
-                    )}
-                    <Box
-                      style={{
-                        paddingBottom: "30px",
-                        display: "flex",
-                        justifyContent: "space-between",
-                        flexDirection: "row",
-                      }}
-                    >
-                      <Button
-                        variant="outlined"
-                        style={{
-                          borderRadius: "10px",
-                          color: "#004367",
-                          padding: "10px 12px",
-                          margin: "0 10px",
-                          fontWeight: "500",
-                          fontSize: "12px",
-                          border: "solid 1px #efefea00",
-                          width: "50%",
-                        }}
-                        onClick={handleClose}
-                      >
-                        {t("CANCEL")}
-                      </Button>
-
-                      <Button
-                        style={{
-                          background: "#004367",
-                          borderRadius: "10px",
-                          color: "#fff",
-                          padding: "10px 12px",
-                          margin: "0 10px",
-                          fontWeight: "500",
-                          fontSize: "12px",
-                          border: "solid 1px #004367",
-                          width: "50%",
-                        }}
-                        onClick={showChat ? handleSendClick : toggleChat}
-                      >
-                        {buttonText}
-                      </Button>
+                      </Box>
+                      <Box className="scroll">
+                        {userSearchData &&
+                          userSearchData?.map((item) => (
+                            <List
+                              key={item.id} // Add key prop to each List element
+                              sx={{ fontSize: "14px" }}
+                              onClick={() => handleUserClick(item)}
+                            >
+                              <ListItem>
+                                <ListItemText
+                                  className="inviteText"
+                                  primary={`${item.firstName}${
+                                    item.lastName ? ` ${item.lastName}` : ""
+                                  }`}
+                                  secondary={`${item.designation}`}
+                                />
+                                {item.id !== loggedInUserId && ( // Conditionally render the link
+                                  <Link
+                                    underline="none"
+                                    color="primary"
+                                    // onClick={handleOpen}
+                                    onClick={() => {
+                                      showMessages(item.userId);
+                                    }}
+                                    style={{
+                                      fontSize: "12px",
+                                      color: "#0E7A9C",
+                                      fontWeight: "600",
+                                      cursor: "pointer",
+                                    }}
+                                  >
+                                    {t("INVITE")}
+                                  </Link>
+                                )}
+                              </ListItem>
+                              <Divider />
+                            </List>
+                          ))}
+                      </Box>
+                      <Pagination
+                        count={totalPages}
+                        page={currentPage}
+                        onChange={handlePageChange}
+                      />
                     </Box>
-                  </ModalContent>
-                </Modal>
+                  )}
+                </TabContext>
+              </Grid>
 
-                {showModal && (
-                  <Modal
-                    open={showModal}
-                    onClose={handleCloseModal}
-                    aria-labelledby="modal-title"
-                    aria-describedby="modal-desc"
-                    className="sx-bottom"
-                    sx={{
-                      display: "flex",
-                      justifyContent: "center",
-                      alignItems: "flex-end",
-                      pt: "10vh",
-                      p: "0",
-                    }}
-                  >
-                    <ModalContent sx={{ width: 400 }} style={{}}>
-                      <div style={{ padding: "10px", textAlign: "center" }}>
-                        <h2
-                          style={{
-                            fontSize: "14px",
-                            textAlign: "center",
-                            padding: "13px",
-                          }}
-                        >
-                          {t("INVITATION_SEND_SUCCESSFULLY")}
-                        </h2>
-                        <Button
-                          onClick={(e) => {
-                            setShowModal(false);
-                          }}
-                          style={{
-                            background: "#004367",
-                            borderRadius: "10px",
-                            color: "#fff",
-                            padding: "10px 12px",
-                            margin: "0 10px",
-                            fontWeight: "500",
-                            fontSize: "12px",
-                            width: "40%",
-                          }}
-                        >
-                          {t("CLOSE")}
-                        </Button>
-                      </div>
-                    </ModalContent>
-                  </Modal>
+              <Grid
+                item
+                xs={12}
+                md={8}
+                lg={8}
+                className="pt-8 pb-20 xs-hide addConnectChat"
+              >
+                {!isMobile && (
+                  <Box className="text-center">
+                    {!selectedChatUser ? (
+                      <Box className="center-container">
+                        <ForumOutlinedIcon style={{ fontSize: "100px" }} />
+                        <Box className="demo-chat">
+                          {t("START_A_CONVERSATION")}
+                        </Box>
+                        <Box className="demo-text">
+                          {t("CLICK_ON_ANY_CONTACT")}
+                        </Box>
+                      </Box>
+                    ) : (
+                      <Chat
+                        senderUserId={selectedChatUser.senderUserId}
+                        receiverUserId={selectedChatUser.receiverUserId}
+                      />
+                    )}
+                  </Box>
                 )}
-              </div>
-            </TabPanel>
-          </TabContext>
+              </Grid>
+            </Grid>
+          </Box>
         </Box>
       </Container>
       <Footer />

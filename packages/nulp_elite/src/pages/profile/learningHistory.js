@@ -14,19 +14,32 @@ import * as util from "../../services/utilService";
 import Filter from "components/filter";
 import NoResult from "pages/content/noResultFound";
 import Alert from "@mui/material/Alert";
+import appConfig from "../../configs/appConfig.json";
+const urlConfig = require("../../configs/urlConfig.json");
+import ToasterCommon from "../ToasterCommon";
 
 const LearningHistory = () => {
   const { t } = useTranslation();
   const [courseData, setCourseData] = useState(null);
   const [selectedStatus, setSelectedStatus] = useState(null);
   const [error, setError] = useState(null);
+  const [toasterOpen, setToasterOpen] = useState(false);
+  const [toasterMessage, setToasterMessage] = useState("");
+
+  const showErrorMessage = (msg) => {
+    setToasterMessage(msg);
+    setTimeout(() => {
+      setToasterMessage("");
+    }, 2000);
+    setToasterOpen(true);
+  };
+  const _userId = util.userId();
 
   useEffect(() => {
     const fetchData = async () => {
       setError(null);
       try {
-        const _userId = util.userId();
-        const url = `/learner/course/v1/user/enrollment/list/${_userId}?orgdetails=orgName,email&licenseDetails=name,description,url&fields=contentType,topic,name,channel,mimeType,appIcon,gradeLevel,resourceType,identifier,medium,pkgVersion,board,subject,trackable,primaryCategory,organisation&batchDetails=name,endDate,startDate,status,enrollmentType,createdBy,certificates`;
+        const url = `${urlConfig.URLS.LEARNER_PREFIX}${urlConfig.URLS.COURSE.GET_ENROLLED_COURSES}/${_userId}?orgdetails=${appConfig.Course.contentApiQueryParams.orgdetails}&licenseDetails=${appConfig.Course.contentApiQueryParams.licenseDetails}&fields=${urlConfig.params.enrolledCourses.fields}&batchDetails=${urlConfig.params.enrolledCourses.batchDetails}`;
         const response = await fetch(url, {
           headers: {
             "Content-Type": "application/json",
@@ -36,7 +49,7 @@ const LearningHistory = () => {
         setCourseData(data);
       } catch (error) {
         console.error("Error fetching user data:", error);
-        setError(error.message);
+        showErrorMessage(t("FAILED_TO_FETCH_DATA"));
       }
     };
     fetchData();
@@ -53,6 +66,7 @@ const LearningHistory = () => {
   return (
     <div>
       <Header />
+      {toasterMessage && <ToasterCommon response={toasterMessage} />}
       <Container maxWidth="xl" role="main" className="container-pb">
         {error && (
           <Alert severity="error" className="my-10">
@@ -60,7 +74,7 @@ const LearningHistory = () => {
           </Alert>
         )}
         <Box textAlign="center" padding="10">
-          <Breadcrumbs
+          {/* <Breadcrumbs
             aria-label="breadcrumb"
             style={{
               padding: "25px 0",
@@ -74,7 +88,7 @@ const LearningHistory = () => {
             <Typography color="#484848" aria-current="page">
               {t("LEARNING_HISTORY")}
             </Typography>
-          </Breadcrumbs>
+          </Breadcrumbs> */}
           <Box style={{ margin: "20px 0" }}>
             {/* Define static filter options */}
             <Filter

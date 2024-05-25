@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from "react";
-import URLSConfig from "../../configs/urlConfig.json";
 import { Link, useParams, useNavigate, useLocation } from "react-router-dom";
 import BoxCard from "components/Card";
 import Box from "@mui/material/Box";
@@ -20,6 +19,30 @@ import NoResult from "pages/content/noResultFound";
 import { t } from "i18next";
 import Alert from "@mui/material/Alert";
 import { useTranslation } from "react-i18next";
+import appConfig from "../../configs/appConfig.json";
+const urlConfig = require("../../configs/urlConfig.json");
+import ToasterCommon from "../ToasterCommon";
+import Carousel from "react-multi-carousel";
+import DomainCarousel from "components/domainCarousel";
+import domainWithImage from "../../assets/domainImgForm.json";
+const responsive = {
+  superLargeDesktop: {
+    breakpoint: { max: 4000, min: 3000 },
+    items: 5,
+  },
+  desktop: {
+    breakpoint: { max: 3000, min: 1024 },
+    items: 8,
+  },
+  tablet: {
+    breakpoint: { max: 1024, min: 464 },
+    items: 2,
+  },
+  mobile: {
+    breakpoint: { max: 464, min: 0 },
+    items: 1,
+  },
+};
 
 const ContentList = (props) => {
   const [search, setSearch] = useState(true);
@@ -34,10 +57,23 @@ const ContentList = (props) => {
   const [category, setCategory] = useState([]);
   const navigate = useNavigate();
   const { domain } = location.state || {};
+  const [domainList, setDomainList] = useState([]);
   const { domainquery } = location.state || {};
   const [totalPages, setTotalPages] = useState(1);
   const [currentPage, setCurrentPage] = useState(1);
   const { t } = useTranslation();
+  const [toasterOpen, setToasterOpen] = useState(false);
+  const [toasterMessage, setToasterMessage] = useState("");
+  const [isMobile, setIsMobile] = useState(window.innerWidth <= 767);
+  const [channelData, setChannelData] = React.useState(true);
+
+  const showErrorMessage = (msg) => {
+    setToasterMessage(msg);
+    setTimeout(() => {
+      setToasterMessage("");
+    }, 2000);
+    setToasterOpen(true);
+  };
 
   useEffect(() => {
     fetchData();
@@ -100,8 +136,9 @@ const ContentList = (props) => {
       "Content-Type": "application/json",
     };
 
-    const url = `/content/${URLSConfig.URLS.CONTENT.SEARCH}?orgdetails=orgName,email`;
     try {
+      const url = `${urlConfig.URLS.LEARNER_PREFIX}${urlConfig.URLS.CONTENT.SEARCH}?orgdetails=${appConfig.ContentPlayer.contentApiQueryParams.orgdetails}&licenseDetails=${appConfig.ContentPlayer.contentApiQueryParams.licenseDetails}`;
+
       const response = await contentService.getAllContents(url, req, headers);
 
       if (response.data.result.content && response.data.result.count <= 20) {
@@ -112,7 +149,7 @@ const ContentList = (props) => {
 
       setData(response.data.result);
     } catch (error) {
-      setError(error.message);
+      showErrorMessage(t("FAILED_TO_FETCH_DATA"));
     } finally {
       setIsLoading(false);
     }
@@ -138,10 +175,10 @@ const ContentList = (props) => {
   };
 
   const fetchGradeLevels = async () => {
+    const defaultFramework = localStorage.getItem("defaultFramework");
     try {
-      const response = await fetch(
-        "/api/framework/v1/read/nulp?categories=gradeLevel"
-      );
+      const url = `${urlConfig.URLS.PUBLIC_PREFIX}${urlConfig.URLS.FRAMEWORK.READ}/${defaultFramework}?categories=${urlConfig.params.framework}`;
+      const response = await fetch(url);
       const data = await response.json();
       if (
         data.result &&
@@ -161,12 +198,15 @@ const ContentList = (props) => {
       }
     } catch (error) {
       console.error("Error fetching grade levels:", error);
+      showErrorMessage(t("FAILED_TO_FETCH_DATA"));
     }
   };
 
   const Fetchdomain = async () => {
+    const defaultFramework = localStorage.getItem("defaultFramework");
     try {
-      const url = `/api/framework/v1/read/nulp?categories=board,gradeLevel,medium,class,subject`;
+      const url = `${urlConfig.URLS.PUBLIC_PREFIX}${urlConfig.URLS.FRAMEWORK.READ}/${defaultFramework}?orgdetails=${urlConfig.params.framework}`;
+
       const response = await fetch(url);
 
       if (response.ok) {
@@ -184,13 +224,27 @@ const ContentList = (props) => {
               label: term.name,
             }));
           setCategory(domainOptions);
+          responseData.result.framework.categories[0].terms?.map((term) => {
+            setCategory(term);
+            if (domainWithImage) {
+              domainWithImage.result.form.data.fields.map((imgItem) => {
+                if ((term && term.code) === (imgItem && imgItem.code)) {
+                  term["image"] = imgItem.image ? imgItem.image : "";
+                }
+              });
+            }
+          });
+          const domainList =
+            responseData?.result?.framework?.categories[0].terms;
+          setDomainList(domainList);
         }
       } else {
-        throw new Error("Failed to fetch domain data");
+        showErrorMessage(t("FAILED_TO_FETCH_DATA"));
+        throw new Error(t("FAILED_TO_FETCH_DATA"));
       }
     } catch (error) {
       console.log("Error fetching domain data:", error);
-      setError(error.message);
+      showErrorMessage(t("FAILED_TO_FETCH_DATA"));
     } finally {
       setIsLoading(false);
     }
@@ -207,6 +261,7 @@ const ContentList = (props) => {
   return (
     <div>
       <Header />
+      {toasterMessage && <ToasterCommon response={toasterMessage} />}
       <Box sx={{ background: "#2D2D2D", padding: "20px" }}>
         <p
           style={{
@@ -236,9 +291,41 @@ const ContentList = (props) => {
         />
       </Box>
 
+      <Box>
+        {domainList && domainList.length > 0 ? (
+          <Carousel
+            swipeable={false}
+            draggable={false}
+            showDots={true}
+            responsive={responsive}
+            ssr={true}
+            infinite={true}
+            autoPlaySpeed={1000}
+            keyBoardControl={true}
+            customTransition="all .5"
+            transitionDuration={500}
+            containerClass="carousel-container"
+            removeArrowOnDeviceType={["tablet", "mobile"]}
+            dotListClass="custom-dot-list-style"
+            itemClass="carousel-item-padding-40-px"
+          >
+            <DomainCarousel
+              // className={`my-class ${
+              //   activeStates[index] ? "carousel-active-ui" : ""
+              // }`}
+              // onSelectDomain={handleDomainFilter}
+              selectedDomainCode={domain}
+              domains={domainList}
+            />
+          </Carousel>
+        ) : (
+          <NoResult />
+        )}
+      </Box>
+
       <Container maxWidth="xxl" role="main" className="container-pb">
         <Box style={{ margin: "20px 0" }}>
-          <domainCarousel></domainCarousel>
+          {/* <domainCarousel></domainCarousel> */}
           <Box
             style={{ display: "flex", justifyContent: "space-between" }}
             className="filter-domain"
@@ -292,7 +379,7 @@ const ContentList = (props) => {
                   spacing={2}
                   style={{ margin: "20px 0", marginBottom: "10px" }}
                 >
-                  {data.content.map((items, index) => (
+                  {data?.content?.map((items, index) => (
                     <Grid
                       item
                       xs={12}

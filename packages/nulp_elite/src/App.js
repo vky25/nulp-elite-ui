@@ -27,7 +27,6 @@ import FAQPage from "pages/FAQPage";
 import AddConnections from "pages/connections/AddConnections";
 import DomainList from "pages/search/DomainList";
 import Registration from "pages/registration/Registration";
-import Registrationold from "pages/registration/Registrationold";
 import ContentList from "pages/search/ContentList";
 import AllContent from "pages/content/AllContent";
 import CategoryPage from "pages/content/CategoryPage";
@@ -36,12 +35,13 @@ import continueLearning from "pages/profile/continueLearning";
 import JoinCourse from "pages/content/joinCourse";
 import Player from "pages/content/Player";
 import Otp from "pages/registration/Otp";
-import SendOtp from "pages/registration/SendOtp";
 import PDFContent from "pages/content/pdf";
 import NoResult from "pages/content/noResultFound";
 import Message from "pages/connections/message";
 import Terms from "pages/terms";
 import SelectPreference from "pages/SelectPreference";
+import Chat from "pages/connections/chat";
+const urlConfig = require("./configs/urlConfig.json");
 
 function App() {
   // const [t] = useTranslation();
@@ -131,11 +131,6 @@ function App() {
     },
     {
       moduleName: "nulp_elite",
-      path: "/otp-old",
-      component: SendOtp,
-    },
-    {
-      moduleName: "nulp_elite",
       path: "/terms",
       component: Terms,
     },
@@ -143,11 +138,6 @@ function App() {
       moduleName: "nulp_elite",
       path: "/otp",
       component: Otp,
-    },
-    {
-      moduleName: "nulp_elite",
-      path: "/registrationold",
-      component: Registrationold,
     },
     {
       moduleName: "nulp_elite",
@@ -164,6 +154,11 @@ function App() {
       path: "/SelectPreference",
       component: SelectPreference,
     },
+    {
+      moduleName: "nulp_elite",
+      path: "/chat",
+      component: Chat,
+    },
   ];
 
   initializeI18n(
@@ -173,14 +168,11 @@ function App() {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const url = `/learner/user/v5/read/${_userId}`;
-        const header = "application/json";
-        const response = await fetch(url, {
-          headers: {
-            "Content-Type": "application/json",
-          },
-        });
+        const url = `${urlConfig.URLS.LEARNER_PREFIX}${urlConfig.URLS.USER.GET_PROFILE}${_userId}`;
+        const response = await fetch(url);
         const data = await response.json();
+        const rootOrgId = data.result.response.rootOrgId;
+        sessionStorage.setItem("rootOrgId", rootOrgId);
         console.log(data.result.response.framework.board);
         if (data.result.response.framework.board) {
           setCheckPref(true);

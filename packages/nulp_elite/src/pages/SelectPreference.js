@@ -12,6 +12,8 @@ import {
 } from "@mui/material";
 import * as util from "../services/utilService";
 import { useTranslation } from "react-i18next";
+const urlConfig = require("../configs/urlConfig.json");
+import ToasterCommon from "./ToasterCommon";
 
 const useStyles = makeStyles((theme) => ({
   formControl: {
@@ -41,7 +43,6 @@ const SelectPreference = ({ isOpen, onClose }) => {
   const _userId = util.userId();
   const [isUserLoggedIn, setIsUserLoggedIn] = useState([]);
   const [isRootOrg, setIsRootOrg] = useState(false);
-  const [userRootOrgId, setUserRootOrgId] = useState();
   const [frameworks, setFrameworks] = useState([]);
   const [defaultFramework, setDefaultFramework] = useState("");
   const [custodianOrgId, setCustodianOrgId] = useState("");
@@ -55,13 +56,22 @@ const SelectPreference = ({ isOpen, onClose }) => {
   const [preTopic, setPreTopic] = useState("");
   const [preSubCategory, setPreSubCategory] = useState([]);
   const [preLanguages, setPreLanguages] = useState([]);
+  const [toasterOpen, setToasterOpen] = useState(false);
+  const [toasterMessage, setToasterMessage] = useState("");
+
+  const showErrorMessage = (msg) => {
+    setToasterMessage(msg);
+    setTimeout(() => {
+      setToasterMessage("");
+    }, 2000);
+    setToasterOpen(true);
+  };
 
   useEffect(() => {
     const fetchUserDataAndSetCustodianOrgData = async () => {
       try {
-        const response = await fetch(
-          "/learner/data/v1/system/settings/get/custodianOrgId"
-        );
+        const url = `${urlConfig.URLS.LEARNER_PREFIX}${urlConfig.URLS.SYSTEM_SETTING.CUSTODIAN_ORG}`;
+        const response = await fetch(url);
         if (!response.ok) {
           throw new Error("Failed to fetch custodian organization ID");
         }
@@ -69,23 +79,26 @@ const SelectPreference = ({ isOpen, onClose }) => {
         console.log("Raw API response:", data);
         const custodianOrgId = data?.result?.response?.value;
         setCustodianOrgId(custodianOrgId);
-        setUserRootOrgId(localStorage.getItem("userRootOrgId"));
+        // setUserRootOrgId(localStorage.getItem("userRootOrgId"));
         const rootOrgId = localStorage.getItem("userRootOrgId");
         if (custodianOrgId === rootOrgId) {
-          const response = await fetch(
-            `/api/channel/v1/read/${custodianOrgId}`
-          );
+          const url = `${urlConfig.URLS.PUBLIC_PREFIX}${urlConfig.URLS.CHANNEL.READ}/${custodianOrgId}`;
+          const response = await fetch(url);
           const data = await response.json();
           const defaultFramework = data?.result?.channel?.defaultFramework;
           setDefaultFramework(defaultFramework);
+          localStorage.setItem("defaultFramework", defaultFramework);
         } else {
-          const response = await fetch(`/api/channel/v1/read/${rootOrgId}`);
+          const url = `${urlConfig.URLS.PUBLIC_PREFIX}${urlConfig.URLS.CHANNEL.READ}/${rootOrgId}`;
+          const response = await fetch(url);
           const data = await response.json();
           const defaultFramework = data?.result?.channel?.defaultFramework;
           setDefaultFramework(defaultFramework);
         }
       } catch (error) {
         console.error("Error fetching user data:", error);
+        showErrorMessage(t("FAILED_TO_FETCH_DATA"));
+        setToasterOpen(true);
       }
     };
 
@@ -93,6 +106,8 @@ const SelectPreference = ({ isOpen, onClose }) => {
   }, []);
 
   useEffect(() => {
+    const defaultFrameworkFromLocal = localStorage.getItem("defaultFramework");
+    setDefaultFramework(defaultFrameworkFromLocal);
     if (defaultFramework) {
       getFramework(defaultFramework);
     }
@@ -125,9 +140,8 @@ const SelectPreference = ({ isOpen, onClose }) => {
     setIsLoading(true);
     setError(null);
 
-    const url = `/api/framework/v1/read/${defaultFramework}`;
-
     try {
+      const url = `${urlConfig.URLS.PUBLIC_PREFIX}${urlConfig.URLS.FRAMEWORK.READ}/${defaultFramework}`;
       const response = await fetch(url, {
         method: "GET",
         headers: {
@@ -136,7 +150,8 @@ const SelectPreference = ({ isOpen, onClose }) => {
       });
 
       if (!response.ok) {
-        throw new Error("Failed to fetch data");
+        showErrorMessage(t("FAILED_TO_FETCH_DATA"));
+        throw new Error(t("FAILED_TO_FETCH_DATA"));
       }
 
       const data = await response.json();
@@ -152,7 +167,7 @@ const SelectPreference = ({ isOpen, onClose }) => {
       setLanguage(data?.result?.framework?.categories[3]?.name);
     } catch (error) {
       console.error("Error fetching data:", error);
-      setError("Failed to fetch data. Please try again.");
+      showErrorMessage(t("FAILED_TO_FETCH_DATA"));
     } finally {
       setIsLoading(false);
     }
@@ -162,9 +177,8 @@ const SelectPreference = ({ isOpen, onClose }) => {
     setIsLoading(true);
     setError(null);
 
-    const url = `/learner/user/v5/read/${_userId}?fields=organisations,roles,locations,declarations,externalIds`;
-
     try {
+      const url = `${urlConfig.URLS.LEARNER_PREFIX}${urlConfig.URLS.USER.GET_PROFILE}${_userId}?fields=${urlConfig.params.userReadParam.fields}`;
       const response = await fetch(url, {
         method: "GET",
         headers: {
@@ -173,7 +187,8 @@ const SelectPreference = ({ isOpen, onClose }) => {
       });
 
       if (!response.ok) {
-        throw new Error("Failed to fetch data");
+        showErrorMessage(t("FAILED_TO_FETCH_DATA"));
+        throw new Error(t("FAILED_TO_FETCH_DATA"));
       }
 
       const responseData = await response.json();
@@ -186,11 +201,16 @@ const SelectPreference = ({ isOpen, onClose }) => {
         setSelectedSubCategory(
           responseData?.result?.response?.framework?.gradeLevel
         );
-        setSelectedTopic(responseData?.result?.response?.framework?.subject[0]);
+
+        setSelectedTopic(
+          responseData?.result?.response?.framework?.subject &&
+            responseData?.result?.response?.framework?.subject[0]
+        );
         setSelectedLanguages(responseData?.result?.response?.framework?.medium);
 
         setPreCategory(responseData?.result?.response?.framework?.board[0]);
-        setPreTopic(responseData?.result?.response?.framework?.subject[0]);
+        responseData?.result?.response?.framework?.subject &&
+          setPreTopic(responseData?.result?.response?.framework?.subject[0]);
         setPreLanguages(responseData?.result?.response?.framework?.medium);
         setPreSubCategory(
           responseData?.result?.response?.framework?.gradeLevel
@@ -199,7 +219,7 @@ const SelectPreference = ({ isOpen, onClose }) => {
       console.log("getUserData", responseData);
     } catch (error) {
       console.error("Error fetching data:", error);
-      setError("Failed to fetch data. Please try again.");
+      showErrorMessage("Failed to fetch data. Please try again.");
     } finally {
       setIsLoading(false);
     }
@@ -209,7 +229,6 @@ const SelectPreference = ({ isOpen, onClose }) => {
     setIsLoading(true);
     setError(null);
 
-    const url = "/learner/user/v3/update";
     const requestBody = {
       params: {},
       request: {
@@ -218,13 +237,14 @@ const SelectPreference = ({ isOpen, onClose }) => {
           medium: selectedLanguages,
           gradeLevel: selectedSubCategory,
           subject: [selectedTopic],
-          id: "nulp",
+          id: defaultFramework,
         },
         userId: _userId,
       },
     };
 
     try {
+      const url = `${urlConfig.URLS.LEARNER_PREFIX}${urlConfig.URLS.USER.UPDATE_USER_PROFILE}`;
       const response = await fetch(url, {
         method: "PATCH",
         headers: {
@@ -234,13 +254,14 @@ const SelectPreference = ({ isOpen, onClose }) => {
       });
 
       if (!response.ok) {
-        throw new Error("Failed to fetch data");
+        showErrorMessage(t("FAILED_TO_FETCH_DATA"));
+        throw new Error(t("FAILED_TO_FETCH_DATA"));
       }
 
       const responseData = await response.json();
       console.log("responseData", responseData);
     } catch (error) {
-      setError(error.message);
+      showErrorMessage("Failed to fetch data. Please try again.");
     } finally {
       setIsLoading(false);
     }
@@ -290,9 +311,12 @@ const SelectPreference = ({ isOpen, onClose }) => {
 
   return (
     <div>
+      {toasterMessage && <ToasterCommon response={toasterMessage} />}
       <Box sx={{ minWidth: 120 }} className="preference">
-        <FormControl fullWidth sx={{ marginBottom: 2 }} >
-          <InputLabel id="category-label" className="year-select">{domain}</InputLabel>
+        <FormControl fullWidth sx={{ marginBottom: 2 }}>
+          <InputLabel id="category-label" className="year-select">
+            {domain}
+          </InputLabel>
           <Select
             labelId="category-label"
             value={selectedCategory}
@@ -308,7 +332,9 @@ const SelectPreference = ({ isOpen, onClose }) => {
 
         <Box sx={{ minWidth: 120 }}>
           <FormControl fullWidth sx={{ marginBottom: 2 }}>
-            <InputLabel id="sub-category-label"  className="year-select">{subDomain}</InputLabel>
+            <InputLabel id="sub-category-label" className="year-select">
+              {subDomain}
+            </InputLabel>
             <Select
               labelId="sub-category-label"
               id="sub-category-select"
@@ -329,7 +355,9 @@ const SelectPreference = ({ isOpen, onClose }) => {
         </Box>
         <Box sx={{ minWidth: 120 }}>
           <FormControl fullWidth sx={{ marginBottom: 2 }}>
-            <InputLabel id="language-label"  className="year-select">{language}</InputLabel>
+            <InputLabel id="language-label" className="year-select">
+              {language}
+            </InputLabel>
             <Select
               labelId="language-label"
               id="language-select"
@@ -349,7 +377,9 @@ const SelectPreference = ({ isOpen, onClose }) => {
           </FormControl>
         </Box>
         <FormControl fullWidth sx={{ marginBottom: 2 }}>
-          <InputLabel id="topic-label"  className="year-select">{topic}</InputLabel>
+          <InputLabel id="topic-label" className="year-select">
+            {topic}
+          </InputLabel>
           <Select
             labelId="topic-label"
             value={selectedTopic}
@@ -363,11 +393,19 @@ const SelectPreference = ({ isOpen, onClose }) => {
           </Select>
         </FormControl>
       </Box>
-      <Button className="btn-primary" onClick={handleSavePreferences} disabled={isDisabled}>
-        {t('SUBMIT')}
+      <Button
+        className="custom-btn-primary my-10"
+        onClick={handleSavePreferences}
+        disabled={isDisabled}
+      >
+        {t("SUBMIT")}
       </Button>
 
-      {!isEmptyPreference && <Button className="btn-default" onClick={handleClose}>{t('CANCEL')}</Button>}
+      {!isEmptyPreference && (
+        <Button className="custom-btn-default" onClick={handleClose}>
+          {t("CANCEL")}
+        </Button>
+      )}
     </div>
   );
 };

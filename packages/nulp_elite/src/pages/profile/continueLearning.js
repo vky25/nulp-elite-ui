@@ -12,11 +12,13 @@ import Filter from "components/filter";
 import BoxCard from "components/Card";
 import FloatingChatIcon from "../../components/FloatingChatIcon";
 import { useParams, useNavigate, useLocation } from "react-router-dom";
-import URLSConfig from "../../configs/urlConfig.json";
 import * as util from "../../services/utilService";
 import Search from "components/search";
 import NoResult from "pages/content/noResultFound";
 import Alert from "@mui/material/Alert";
+import appConfig from "../../configs/appConfig.json";
+const urlConfig = require("../../configs/urlConfig.json");
+import ToasterCommon from "../ToasterCommon";
 
 const ContinueLearning = () => {
   const { t } = useTranslation();
@@ -29,6 +31,16 @@ const ContinueLearning = () => {
   const navigate = useNavigate();
   const location = useLocation();
   const { domain } = location.state || {};
+  const [toasterOpen, setToasterOpen] = useState(false);
+  const [toasterMessage, setToasterMessage] = useState("");
+
+  const showErrorMessage = (msg) => {
+    setToasterMessage(msg);
+    setTimeout(() => {
+      setToasterMessage("");
+    }, 2000);
+    setToasterOpen(true);
+  };
 
   useEffect(() => {
     fetchData();
@@ -50,13 +62,13 @@ const ContinueLearning = () => {
       "Content-Type": "application/json",
     };
 
-    const url = `/learner/course/v1/user/enrollment/list/${_userId}?orgdetails=orgName,email&licenseDetails=name,description,url&fields=contentType,topic,name,channel,mimeType,appIcon,gradeLevel,resourceType,identifier,medium,pkgVersion,board,subject,trackable,primaryCategory,organisation&batchDetails=name,endDate,startDate,status,enrollmentType,createdBy,certificates`;
     try {
+      const url = `${urlConfig.URLS.LEARNER_PREFIX}${urlConfig.URLS.COURSE.GET_ENROLLED_COURSES}/${_userId}?orgdetails=${appConfig.Course.contentApiQueryParams.orgdetails}&licenseDetails=${appConfig.Course.contentApiQueryParams.licenseDetails}&fields=${urlConfig.params.enrolledCourses.fields}&batchDetails=${urlConfig.params.enrolledCourses.batchDetails}`;
       const response = await fetch(url, headers);
       const responseData = await response.json();
       setData(responseData.result.courses);
     } catch (error) {
-      setError(error.message);
+      showErrorMessage(t("FAILED_TO_FETCH_DATA"));
     } finally {
       setIsLoading(false);
     }
@@ -87,13 +99,14 @@ const ContinueLearning = () => {
   return (
     <div>
       {/* <Header /> */}
+      {toasterMessage && <ToasterCommon response={toasterMessage} />}
       <Container maxWidth="xxl" role="main" className="container-pb">
         {error && (
           <Alert severity="error" className="my-10">
             {error}
           </Alert>
         )}
-        <Breadcrumbs
+        {/* <Breadcrumbs
           aria-label="breadcrumb"
           style={{
             padding: "25px 0",
@@ -107,7 +120,7 @@ const ContinueLearning = () => {
           <Typography color="#484848" aria-current="page">
             {t("Continue Learning")}
           </Typography>
-        </Breadcrumbs>
+        </Breadcrumbs> */}
         {/* <Box style={{ margin: "20px 0" }}>
           <Search></Search>
         </Box> */}

@@ -28,6 +28,8 @@ import InputAdornment from "@mui/material/InputAdornment";
 import Visibility from "@mui/icons-material/Visibility";
 import VisibilityOff from "@mui/icons-material/VisibilityOff";
 import { t } from "i18next";
+const urlConfig = require("../../configs/urlConfig.json");
+import ToasterCommon from "../ToasterCommon";
 
 const DELAY = 1500;
 const MAX_CHARS = 500;
@@ -66,6 +68,8 @@ const Registration = () => {
   const setData = useStore((state) => state.setData);
   const designations = require("../../configs/designations.json");
   const [bio, setBio] = useState("");
+  const [toasterOpen, setToasterOpen] = useState(false);
+  const [toasterMessage, setToasterMessage] = useState("");
 
   const formik = useFormik({
     initialValues: {
@@ -104,6 +108,13 @@ const Registration = () => {
   });
   const [designationsList, setDesignationsList] = useState([]);
 
+  const showErrorMessage = (msg) => {
+    setToasterMessage(msg);
+    setTimeout(() => {
+      setToasterMessage("");
+    }, 2000);
+    setToasterOpen(true);
+  };
   useEffect(() => {
     setTimeout(() => {
       setLoad(true);
@@ -115,9 +126,9 @@ const Registration = () => {
       setIsLoading(true);
       setError(null);
 
-      const url = `/learner/user/v1/exists/email/${formik.values.email}?captchaResponse=${captchaResponse}`;
-
       try {
+        const url = `${urlConfig.URLS.LEARNER_PREFIX}${urlConfig.URLS.USER.EMAIL_EXIST}${formik.values.email}?captchaResponse=${captchaResponse}`;
+
         const response = await fetch(url, {
           method: "GET",
           headers: {
@@ -126,7 +137,8 @@ const Registration = () => {
         });
 
         if (!response.ok) {
-          throw new Error("Failed to check email");
+          showErrorMessage(t("EMAIL_ALREADY_EXIST"));
+          throw new Error(t("EMAIL_ALREADY_EXIST"));
         }
 
         const data = await response.json();
@@ -137,7 +149,7 @@ const Registration = () => {
           generateOtp(formik.values.email);
         }
       } catch (error) {
-        setError(error.message);
+        showErrorMessage(t("EMAIL_ALREADY_EXIST"));
       } finally {
         setIsLoading(false);
       }
@@ -149,7 +161,6 @@ const Registration = () => {
       setIsLoading(true);
       setError(null);
 
-      const url = `/learner/anonymous/otp/v1/generate?captchaResponse=${captchaResponse}`;
       const requestBody = {
         request: {
           key: email,
@@ -159,6 +170,8 @@ const Registration = () => {
       };
 
       try {
+        const url = `${urlConfig.URLS.LEARNER_PREFIX}${urlConfig.URLS.OTP.ANONYMOUS.GENERATE}?captchaResponse=${captchaResponse}`;
+
         const response = await axios.post(url, requestBody, {
           headers: {
             "Content-Type": "application/json",
@@ -166,7 +179,8 @@ const Registration = () => {
         });
 
         if (response.status !== 200) {
-          throw new Error("Failed to generate OTP");
+          showErrorMessage(t("FAILED_TO_GENERATE_OTP"));
+          throw new Error(t("FAILED_TO_GENERATE_OTP"));
         }
 
         const data = response.data;
@@ -182,7 +196,8 @@ const Registration = () => {
 
         setGoToOtp(true);
       } catch (error) {
-        setError(error.message);
+        showErrorMessage(t("FAILED_TO_GENERATE_OTP"));
+
         setIsLoading(false);
       }
     };
@@ -199,9 +214,9 @@ const Registration = () => {
     setIsLoading(true);
     setError(null);
 
-    const url = `/learner/data/v1/system/settings/get/tncConfig`;
-
     try {
+      const url = `${urlConfig.URLS.LEARNER_PREFIX}${urlConfig.URLS.SYSTEM_SETTING.TNC_CONFIG}`;
+
       const response = await fetch(url, {
         method: "GET",
         headers: {
@@ -210,14 +225,14 @@ const Registration = () => {
       });
 
       if (!response.ok) {
-        throw new Error("Failed to get terms and conditions");
+        showErrorMessage(t("FAILED_TO_FETCH_DATA"));
+        throw new Error(t("FAILED_TO_FETCH_DATA"));
       }
-
       const data = await response.json();
       console.log("response:", data.result.response.value);
       return data.result.response.value;
     } catch (error) {
-      setError(error.message);
+      showErrorMessage(t("FAILED_TO_FETCH_DATA"));
     } finally {
       setIsLoading(false);
     }
@@ -239,6 +254,7 @@ const Registration = () => {
 
   return (
     <>
+      {toasterMessage && <ToasterCommon response={toasterMessage} />}
       <Container
         maxWidth="sm"
         className="register"

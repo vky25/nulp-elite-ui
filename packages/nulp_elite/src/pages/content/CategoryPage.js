@@ -6,7 +6,6 @@ import Grid from "@mui/material/Grid";
 import { getAllContents } from "services/contentService";
 import Header from "components/header";
 import Footer from "components/Footer";
-import URLSConfig from "../../configs/urlConfig.json";
 import ArrowBackOutlinedIcon from "@mui/icons-material/ArrowBackOutlined";
 import Container from "@mui/material/Container";
 import Pagination from "@mui/material/Pagination";
@@ -18,6 +17,9 @@ import * as frameworkService from "../../services/frameworkService";
 
 import SearchBox from "components/search";
 import { t } from "i18next";
+import appConfig from "../../configs/appConfig.json";
+const urlConfig = require("../../configs/urlConfig.json");
+import ToasterCommon from "../ToasterCommon";
 
 const CategoryPage = () => {
   // const history = useHistory();
@@ -33,6 +35,16 @@ const CategoryPage = () => {
   const [totalPages, setTotalPages] = useState(1);
 
   const [itemsArray, setItemsArray] = useState([]);
+  const [toasterOpen, setToasterOpen] = useState(false);
+  const [toasterMessage, setToasterMessage] = useState("");
+
+  const showErrorMessage = (msg) => {
+    setToasterMessage(msg);
+    setTimeout(() => {
+      setToasterMessage("");
+    }, 2000);
+    setToasterOpen(true);
+  };
 
   const handleSearch = (query) => {
     // Implement your search logic here
@@ -48,6 +60,7 @@ const CategoryPage = () => {
   const handleGoBack = () => {
     navigate(-1); // Navigate back in history
   };
+
   const fetchMoreItems = async (category) => {
     setError(null);
     // Filters for API
@@ -78,7 +91,7 @@ const CategoryPage = () => {
           "se_subjects",
           "se_mediums",
           "se_gradeLevels",
-          "primaryCategory"
+          "primaryCategory",
         ],
         facets: ["channel", "gradeLevel", "subject", "medium"],
         offset: 0,
@@ -90,12 +103,12 @@ const CategoryPage = () => {
       "Content-Type": "application/json",
     };
 
-    const url = `/api/${URLSConfig.URLS.CONTENT.SEARCH}?orgdetails=orgName,email`;
     try {
+      const url = `${urlConfig.URLS.PUBLIC_PREFIX}${urlConfig.URLS.CONTENT.SEARCH}?orgdetails=${appConfig.ContentPlayer.contentApiQueryParams}`;
       const response = await getAllContents(url, data, headers);
       setData(response.data.result.content);
     } catch (error) {
-      setError(error.message);
+      showErrorMessage(t("FAILED_TO_FETCH_DATA"));
     }
   };
   // Function to push data to the array
@@ -105,23 +118,26 @@ const CategoryPage = () => {
 
   const fetchDomains = async () => {
     setError(null);
+    const rootOrgId = sessionStorage.getItem("rootOrgId");
+    const defaultFramework = localStorage.getItem("defaultFramework");
     // Headers
     const headers = {
       "Content-Type": "application/json",
       Cookie: `connect.sid=${getCookieValue("connect.sid")}`,
     };
     try {
-      const url = `/api/channel/v1/read/0130701891041689600`;
+      const url = `${urlConfig.URLS.PUBLIC_PREFIX}${urlConfig.URLS.CHANNEL.READ}/${rootOrgId}`;
       const response = await frameworkService.getChannel(url, headers);
       // console.log("channel---",response.data.result);
       setChannelData(response.data.result);
     } catch (error) {
       console.log("error---", error);
-      setError(error.message);
+      showErrorMessage(t("FAILED_TO_FETCH_DATA"));
     } finally {
     }
     try {
-      const url = `/api/framework/v1/read/nulp?categories=board,gradeLevel,medium,class,subject`;
+      const url = `${urlConfig.URLS.PUBLIC_PREFIX}${urlConfig.URLS.FRAMEWORK.READ}/${defaultFramework}?orgdetails=${appConfig.ContentPlayer.contentApiQueryParams}`;
+
       const response = await frameworkService.getSelectedFrameworkCategories(
         url,
         headers
@@ -143,7 +159,7 @@ const CategoryPage = () => {
       setDomain(response.data.result.framework.categories[0].terms);
     } catch (error) {
       console.log("nulp--  error-", error);
-      setError(error.message);
+      showErrorMessage(t("FAILED_TO_FETCH_DATA"));
     } finally {
       console.log("nulp finally---");
     }
@@ -175,6 +191,7 @@ const CategoryPage = () => {
   return (
     <>
       <Header />
+      {toasterMessage && <ToasterCommon response={toasterMessage} />}
       {domain && (
         <DomainCarousel onSelectDomain={handleDomainFilter} domains={domain} />
       )}

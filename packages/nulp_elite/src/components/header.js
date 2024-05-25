@@ -1,4 +1,4 @@
-import * as React from "react";
+import React, { useState, useEffect } from "react";
 import AppBar from "@mui/material/AppBar";
 import Box from "@mui/material/Box";
 import Toolbar from "@mui/material/Toolbar";
@@ -7,9 +7,7 @@ import Menu from "@mui/material/Menu";
 import MenuIcon from "@mui/icons-material/Menu";
 import Container from "@mui/material/Container";
 import Tooltip from "@mui/material/Tooltip";
-import GroupsOutlinedIcon from "@mui/icons-material/GroupsOutlined";
 import AccountCircleOutlinedIcon from "@mui/icons-material/AccountCircleOutlined";
-import EditNoteOutlinedIcon from "@mui/icons-material/EditNoteOutlined";
 import TextField from "@mui/material/TextField";
 import IconButton from "@mui/material/IconButton";
 import SearchIcon from "@mui/icons-material/Search";
@@ -23,11 +21,12 @@ import Select from "@mui/material/Select";
 import LanguageIcon from "@mui/icons-material/Language";
 import { useTranslation } from "react-i18next";
 import { changeLanguage } from "i18next";
-import { useState } from "react";
 import LiveHelpOutlinedIcon from "@mui/icons-material/LiveHelpOutlined";
 import LogoutOutlinedIcon from "@mui/icons-material/LogoutOutlined";
-import GTranslateIcon from '@mui/icons-material/GTranslate';
-
+import GTranslateIcon from "@mui/icons-material/GTranslate";
+import MenuBookOutlinedIcon from "@mui/icons-material/MenuBookOutlined";
+import ChatOutlinedIcon from "@mui/icons-material/ChatOutlined";
+import SortOutlinedIcon from "@mui/icons-material/SortOutlined";
 function Header() {
   const { t } = useTranslation();
   const [language, setLanguage] = useState("en");
@@ -55,216 +54,264 @@ function Header() {
   const handleCloseUserMenu = () => {
     setAnchorElUser(null);
   };
+  const [activePath, setActivePath] = useState(location.pathname);
+
+  useEffect(() => {
+    setActivePath(location.pathname);
+  }, [location.pathname]);
 
   return (
     <>
       {/* Sidebar Navigation */}
       <Box
-        className="xs-hide"
+        className="xs-hide bg-white d-flex pos-fixed"
         style={{
-          background: "#fff",
-          display: "flex",
-          justifyContent: "flex-end",
-          alignItems: "center",
+          justifyContent: "space-between",
         }}
       >
-        {/* Navigation Links */}
-        <Box style={{ padding: "10px" }}>
-          <DevicesIcon
+        <Box>
+          <Link href="/all" className="pl-18 py-15">
+            <img
+              src={require("../assets/logo.png")}
+              style={{ maxWidth: "100%" }}
+            />
+          </Link>
+        </Box>
+        <Box
+          style={{
+            display: "flex",
+            alignItems: "center",
+            paddingRight: "14px",
+          }}
+        >
+          {/* Navigation Links */}
+          <Box style={{ padding: "10px" }}>
+            <DevicesIcon
+              style={{
+                padding: "0 10px",
+                verticalAlign: "middle",
+                color: "#424242",
+              }}
+            />
+
+            <Link
+              href="#"
+              underline="none"
+              style={{
+                color: "#424242",
+                fontSize: "16px",
+                borderRight: "solid 1px #424242",
+                paddingRight: "10px",
+              }}
+            >
+              {t("MAIN_CONTENT")}{" "}
+            </Link>
+          </Box>
+          <Box
             style={{
               padding: "0 10px",
-              verticalAlign: "middle",
-              color: "#424242",
-            }}
-          />
-          <Link
-            href="#"
-            underline="none"
-            style={{
               color: "#424242",
               fontSize: "16px",
               borderRight: "solid 1px #424242",
-              paddingRight: "10px",
             }}
           >
-            {t("MAIN_CONTENT")}{" "}
-          </Link>
-        </Box>
-        <Box
-          style={{
-            padding: "0 10px",
-            color: "#424242",
-            fontSize: "16px",
-            borderRight: "solid 1px #424242",
-          }}
-        >
-          <Link
-            href="#"
-            underline="none"
-            style={{ color: "#424242", fontSize: "16px", paddingRight: "10px" }}
-          >
-            {" "}
-            +A
-          </Link>{" "}
-          <Link
-            href="#"
-            underline="none"
-            style={{ color: "#424242", fontSize: "16px", paddingRight: "10px" }}
-          >
-            A -{" "}
-          </Link>
-          <Link
-            href="#"
-            underline="none"
-            style={{ color: "#424242", fontSize: "16px", paddingRight: "10px" }}
-          >
-            A
-          </Link>{" "}
-        </Box>
-        <Box
-          style={{
-            padding: "0 10px",
-            color: "#424242",
-            fontSize: "14px",
-            borderRight: "solid 1px #424242",
-          }}
-        >
-          <WebIcon style={{ padding: "0 10px", verticalAlign: "middle" }} />
-          <Link
-            href="#"
-            underline="none"
-            style={{ color: "#424242", fontSize: "16px" }}
-          >
-            {t("SCREEN_READER")}{" "}
-          </Link>
-        </Box>
-         {/* Language Select */}
-         <Box sx={{ minWidth: 120,paddingLeft:'10px' }}>
-              <FormControl fullWidth size="small" style={{display:'flex',alignItems:'center',flexDirection:'row'}}> 
-                {/* <InputLabel id="language-select-label">
-                  {t("LANGUAGE")}
-                </InputLabel> */}
-                <GTranslateIcon/>
-                <Select
-                  labelId="language-select-label"
-                  id="language-select"
-                  className="language"
-                  style={{ border: "none" }}
-                  label={t("LANGUAGE")}
-                  value={language}
-                  startIcon={<LanguageIcon />}
-                  onChange={handleChangeLanguage}
-                  inputProps={{ "aria-label": t("SELECT_LANGUAGE") }}
-                >
-                  <MenuItem value="en">{t("ENGLISH")}</MenuItem>
-                  <MenuItem value="hi">{t("HINDI")}</MenuItem>
-                </Select>
-              </FormControl>
-            </Box>
-      </Box>
-
-      {/* Top Navigation Bar */}
-      <AppBar position="sticky" style={{ background: "#fff" }}>
-        <Container
-          maxWidth="xl"
-          style={{ paddingLeft: "0", paddingTop: "10px", paddingBottom: "8px" }}
-        >
-          <Toolbar disableGutters>
-            <IconButton
-              size="large"
-              aria-label="account of current user"
-              aria-controls="menu-appbar"
-              aria-haspopup="true"
-              onClick={handleOpenNavMenu}
-              color="inherit"
-              className="lg-hide"
+            <Link
+              href="#"
+              underline="none"
+              style={{
+                color: "#424242",
+                fontSize: "16px",
+                paddingRight: "10px",
+              }}
             >
-              <MenuIcon />
-            </IconButton>
-            <Box sx={{ flexGrow: 1, paddingLeft: "20px",display:'flex',justifyContent:'space-between' }}>
-             <Link href="/all">
-              <img
-                src={require("../assets/logo.png")}
-                style={{ maxWidth: "100%" }}
-              /></Link>
-               {/* Language Select */}
-         <Box sx={{ minWidth: 120,paddingLeft:'10px' }} className="lg-hide">
-              <FormControl fullWidth size="small" style={{display:'flex',alignItems:'center',flexDirection:'row'}}> 
-                {/* <InputLabel id="language-select-label">
-                  {t("LANGUAGE")}
-                </InputLabel> */}
-                <GTranslateIcon/>
-                <Select
-                  labelId="language-select-label"
-                  id="language-select"
-                  className="language"
-                  style={{ border: "none" }}
-                  label={t("LANGUAGE")}
-                  value={language}
-                  startIcon={<LanguageIcon />}
-                  onChange={handleChangeLanguage}
-                  inputProps={{ "aria-label": t("SELECT_LANGUAGE") }}
-                >
-                  <MenuItem value="en">{t("ENGLISH")}</MenuItem>
-                  <MenuItem value="hi">{t("HINDI")}</MenuItem>
-                </Select>
-              </FormControl>
-            </Box>
-            </Box>
-
-            {/* Language Select */}
-            <Box>
-              <Menu
-                id="menu-appbar"
-                anchorEl={anchorElNav}
-                anchorOrigin={{
-                  vertical: "bottom",
-                  horizontal: "left",
-                }}
-                keepMounted
-                transformOrigin={{
-                  vertical: "top",
-                  horizontal: "left",
-                }}
-                open={Boolean(anchorElNav)}
-                onClose={handleCloseNavMenu}
-                sx={{
-                  display: { xs: "block", md: "none" },
-                }}
-              >
-                <MenuItem>
-                  <Link href="/help" textAlign="center" underline="none">
-                    <LiveHelpOutlinedIcon
-                      style={{ verticalAlign: "bottom", color: "#000" }}
-                    />{" "}
-                    {t("HELP")}
-                  </Link>
-                </MenuItem>
-                <MenuItem>
-                  <Link href="/logoff" textAlign="center" underline="none">
-                    <LogoutOutlinedIcon
-                      style={{ verticalAlign: "bottom", color: "#000" }}
-                    />{" "}
-                    {t("LOGOUT")}
-                  </Link>
-                </MenuItem>
-              </Menu>
-            </Box>
-
-           
-
-            {/* Search Box */}
-            <Box
-              className="xs-hide"
+              {" "}
+              +A
+            </Link>{" "}
+            <Link
+              href="#"
+              underline="none"
+              style={{
+                color: "#424242",
+                fontSize: "16px",
+                paddingRight: "10px",
+              }}
+            >
+              A -{" "}
+            </Link>
+            <Link
+              href="#"
+              underline="none"
+              style={{
+                color: "#424242",
+                fontSize: "16px",
+                paddingRight: "10px",
+              }}
+            >
+              A
+            </Link>{" "}
+          </Box>
+          <Box
+            style={{
+              padding: "0 10px",
+              color: "#424242",
+              fontSize: "14px",
+              borderRight: "solid 1px #424242",
+            }}
+          >
+            <WebIcon style={{ padding: "0 10px", verticalAlign: "middle" }} />
+            <Link
+              href="#"
+              underline="none"
+              style={{ color: "#424242", fontSize: "16px" }}
+            >
+              {t("SCREEN_READER")}{" "}
+            </Link>
+          </Box>
+          {/* Language Select */}
+          <Box sx={{ minWidth: 120, paddingLeft: "10px" }}>
+            <FormControl
+              fullWidth
+              size="small"
               style={{
                 display: "flex",
                 alignItems: "center",
-                flexGrow: 3,
-                paddingLeft: "40px",
+                flexDirection: "row",
               }}
             >
+              {/* <InputLabel id="language-select-label">
+                  {t("LANGUAGE")}
+                </InputLabel> */}
+              <GTranslateIcon />
+              <Select
+                labelId="language-select-label"
+                id="language-select"
+                className="language"
+                style={{ border: "none" }}
+                label={t("LANGUAGE")}
+                value={language}
+                startIcon={<LanguageIcon />}
+                onChange={handleChangeLanguage}
+                inputProps={{ "aria-label": t("SELECT_LANGUAGE") }}
+              >
+                <MenuItem value="en">{t("ENGLISH")}</MenuItem>
+                <MenuItem value="hi">{t("HINDI")}</MenuItem>
+              </Select>
+            </FormControl>
+          </Box>
+        </Box>
+      </Box>
+
+      {/* Top Navigation Bar */}
+      <AppBar className="lg-my-10  bg-inherit pos-inherit mt-65">
+        <Container maxWidth="xl" className="p-0">
+          <Box className="d-flex">
+            <Toolbar
+              disableGutters
+              style={{
+                justifyContent: "space-between",
+                background: "#fff",
+                width: "100%",
+              }}
+              className="lg-hide lg-mt-10"
+            >
+              <Box className="d-flex lg-hide">
+                <IconButton
+                  size="large"
+                  aria-label="account of current user"
+                  aria-controls="menu-appbar"
+                  aria-haspopup="true"
+                  onClick={handleOpenNavMenu}
+                  color="inherit"
+                  className="lg-hide"
+                >
+                  <SortOutlinedIcon />
+                </IconButton>
+                <Box
+                  sx={{
+                    display: { xs: "block", md: "none" },
+                  }}
+                >
+                  <Menu
+                    id="menu-appbar"
+                    anchorEl={anchorElNav}
+                    anchorOrigin={{
+                      vertical: "bottom",
+                      horizontal: "left",
+                    }}
+                    keepMounted
+                    transformOrigin={{
+                      vertical: "top",
+                      horizontal: "left",
+                    }}
+                    open={Boolean(anchorElNav)}
+                    onClose={handleCloseNavMenu}
+                  >
+                    <MenuItem>
+                      <Link href="/help" textAlign="center" underline="none">
+                        <LiveHelpOutlinedIcon
+                          style={{ verticalAlign: "bottom", color: "#000" }}
+                        />{" "}
+                        {t("HELP")}
+                      </Link>
+                    </MenuItem>
+                    <MenuItem>
+                      <Link href="/logoff" textAlign="center" underline="none">
+                        <LogoutOutlinedIcon
+                          style={{ verticalAlign: "bottom", color: "#000" }}
+                        />{" "}
+                        {t("LOGOUT")}
+                      </Link>
+                    </MenuItem>
+                  </Menu>
+                </Box>
+                <Link href="/all" className="pl-18 py-15">
+                  <img
+                    src={require("../assets/logo.png")}
+                    style={{ maxWidth: "100%" }}
+                  />
+                </Link>
+              </Box>
+              <Box className="lg-hide">
+                {/* Language Select */}
+                <Box sx={{ minWidth: 120, paddingLeft: "10px" }}>
+                  <FormControl
+                    fullWidth
+                    size="small"
+                    style={{
+                      display: "flex",
+                      alignItems: "center",
+                      flexDirection: "row",
+                    }}
+                  >
+                    {/* <InputLabel id="language-select-label">
+                  {t("LANGUAGE")}
+                </InputLabel> */}
+                    <GTranslateIcon style={{ color: "#000" }} />
+                    <Select
+                      labelId="language-select-label"
+                      id="language-select"
+                      className="language"
+                      style={{ border: "none" }}
+                      label={t("LANGUAGE")}
+                      value={language}
+                      startIcon={<LanguageIcon />}
+                      onChange={handleChangeLanguage}
+                      inputProps={{ "aria-label": t("SELECT_LANGUAGE") }}
+                    >
+                      <MenuItem value="en">{t("ENGLISH")}</MenuItem>
+                      <MenuItem value="hi">{t("HINDI")}</MenuItem>
+                    </Select>
+                  </FormControl>
+                </Box>
+              </Box>
+
+              {/* Language Select */}
+            </Toolbar>
+            {/* Search Box */}
+            <Box className="xs-hide d-flex header-bg w-40 mr-30">
+              <Box className="h1-title px-10 pr-20">{t("EXPLORE")}</Box>
               <TextField
-                placeholder={t("SEARCH")}
+                placeholder={t("What do you want to learn today?  ")}
                 variant="outlined"
                 size="small"
                 fullWidth
@@ -280,42 +327,46 @@ function Header() {
 
             {/* Other Navigation Links */}
             <Box
-              className="xs-hide"
+              className="xs-hide header-bg py-25"
               sx={{ flexGrow: 1, display: "flex", justifyContent: "flex-end" }}
             >
               <Link
                 href="/all"
+                className={activePath === "/all" ? "Menuactive" : ""}
                 underline="none"
                 style={{
                   my: 2,
                   color: "#484848",
-                  display: "block",
+                  display: "flex",
                   margin: "0 20px",
+                  padding: "10px",
                 }}
               >
-                <EditNoteOutlinedIcon
+                <MenuBookOutlinedIcon
                   style={{ padding: "0 10px", verticalAlign: "middle" }}
                 />
                 {t("CONTENT")}
               </Link>
               <Link
                 href="/addConnections"
+                className={activePath === "/addConnections" ? "Menuactive" : ""}
                 underline="none"
                 style={{
                   my: 2,
                   color: "#484848",
-                  display: "block",
+                  display: "flex",
                   margin: "0 20px",
+                  padding: "10px",
                 }}
               >
-                <GroupsOutlinedIcon
+                <ChatOutlinedIcon
                   style={{ padding: "0 10px", verticalAlign: "middle" }}
                 />
                 {t("CONNECTIONS")}
               </Link>
 
               {/* User Profile */}
-              <Tooltip title={t("OPEN_SETTINGS")}>
+              <Tooltip>
                 <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
                   <AccountCircleOutlinedIcon
                     style={{ padding: "0 10px", verticalAlign: "middle" }}
@@ -340,23 +391,23 @@ function Header() {
                 onClose={handleCloseUserMenu}
               >
                 <MenuItem>
-                  <Link href="/profile" textAlign="center">
+                  <Link href="/profile" underline="none" textAlign="center">
                     {t("PROFILE")}
                   </Link>
                 </MenuItem>
                 <MenuItem>
-                  <Link href="/help" textAlign="center">
+                  <Link href="/help" underline="none" textAlign="center">
                     {t("HELP")}
                   </Link>
                 </MenuItem>
                 <MenuItem>
-                  <Link href="/logoff" textAlign="center">
+                  <Link href="/logoff" underline="none" textAlign="center">
                     {t("LOGOUT")}
                   </Link>
                 </MenuItem>
               </Menu>
             </Box>
-          </Toolbar>
+          </Box>
         </Container>
       </AppBar>
     </>

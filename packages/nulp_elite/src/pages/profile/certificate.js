@@ -19,12 +19,24 @@ import * as util from "../../services/utilService";
 import axios from "axios";
 import NoResult from "pages/content/noResultFound";
 import Alert from "@mui/material/Alert";
+import ToasterCommon from "../ToasterCommon";
 
 const Certificate = () => {
   const { t } = useTranslation();
   const [certData, setCertData] = useState(null);
   const [otherCertData, setOtherCertData] = useState([]);
   const [error, setError] = useState(null);
+  const urlConfig = require("../../configs/urlConfig.json");
+  const [toasterOpen, setToasterOpen] = useState(false);
+  const [toasterMessage, setToasterMessage] = useState("");
+
+  const showErrorMessage = (msg) => {
+    setToasterMessage(msg);
+    setTimeout(() => {
+      setToasterMessage("");
+    }, 2000);
+    setToasterOpen(true);
+  };
 
   useEffect(() => {
     const fetchData = async () => {
@@ -52,13 +64,13 @@ const Certificate = () => {
             },
           },
         };
-        const url = `/learner/certreg/v2/certs/search`;
+        const url = `${urlConfig.URLS.LEARNER_PREFIX}${urlConfig.URLS.CERTIFICATE.CERT_SEARCH}`;
         const response = await axios.post(url, request);
         const data = response.data;
         setCertData(data);
       } catch (error) {
         console.error("Error fetching user data:", error);
-        setError(error.message);
+        showErrorMessage(t("FAILED_TO_FETCH_DATA"));
       }
 
       try {
@@ -68,13 +80,13 @@ const Certificate = () => {
             recipient: { id: { eq: _userId } },
           },
         };
-        const url = `/learner/rc/certificate/v1/search`;
+        const url = `${urlConfig.URLS.LEARNER_PREFIX}${urlConfig.URLS.CERTIFICATE.CERTIF_SEARCH}`;
         const response = await axios.post(url, request);
         const data = response.data;
         setOtherCertData(data);
       } catch (error) {
         console.error("Error fetching user data:", error);
-        setError(error.message);
+        showErrorMessage(t("FAILED_TO_FETCH_DATA"));
       }
     };
 
@@ -90,6 +102,7 @@ const Certificate = () => {
   return (
     <div>
       <Header />
+      {toasterMessage && <ToasterCommon response={toasterMessage} />}
       <Container maxWidth="xxl" role="main" className="container-pb mb-20">
         {error && (
           <Alert severity="error" className="my-10">

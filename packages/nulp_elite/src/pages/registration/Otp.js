@@ -17,6 +17,8 @@ import Checkbox from "@mui/material/Checkbox";
 import FormGroup from "@mui/material/FormGroup";
 import { Dialog, DialogContent, DialogActions } from "@material-ui/core";
 import Alert from "@mui/material/Alert";
+const urlConfig = require("../../configs/urlConfig.json");
+import ToasterCommon from "../ToasterCommon";
 
 const Otp = () => {
   const { t } = useTranslation();
@@ -35,6 +37,16 @@ const Otp = () => {
   const [tncConfigVersion, setTncConfigVersion] = useState();
   const [birthYear, setBirthYear] = useState(2000);
   const [isChecked, setIsChecked] = useState(false);
+  const [toasterOpen, setToasterOpen] = useState(false);
+  const [toasterMessage, setToasterMessage] = useState("");
+
+  const showErrorMessage = (msg) => {
+    setToasterMessage(msg);
+    setTimeout(() => {
+      setToasterMessage("");
+    }, 2000);
+    setToasterOpen(true);
+  };
 
   useEffect(() => {
     const storedUserData = dataStore.userData;
@@ -101,7 +113,6 @@ const Otp = () => {
     setIsLoading(true);
     setError(null);
 
-    const url = `https://nulp.niua.org/learner/otp/v1/verify`;
     const requestBody = {
       request: {
         key: userData && userData.email,
@@ -110,6 +121,8 @@ const Otp = () => {
       },
     };
     try {
+      const url = `${urlConfig.URLS.LEARNER_PREFIX}${urlConfig.URLS.OTP.VERIFY}`;
+
       const response = await fetch(url, {
         method: "POST",
         headers: {
@@ -119,14 +132,15 @@ const Otp = () => {
       });
 
       if (!response.ok) {
-        throw new Error("Failed to verify OTP");
+        showErrorMessage(t("FAILED_TO_VERIFY_OTP"));
+        throw new Error(t("FAILED_TO_VERIFY_OTP"));
       }
 
       const data = await response.json();
       await signupUser(data.reqData);
       acceptTermsAndConditions();
     } catch (error) {
-      setError(error.message);
+      showErrorMessage(t("FAILED_TO_VERIFY_OTP"));
     } finally {
       setIsLoading(false);
     }
@@ -136,7 +150,6 @@ const Otp = () => {
     setIsLoading(true);
     setError(null);
 
-    const url = "/learner/user/v2/signup";
     const requestBody = {
       params: {
         source: "portal",
@@ -152,6 +165,8 @@ const Otp = () => {
       },
     };
     try {
+      const url = `${urlConfig.URLS.LEARNER_PREFIX}${urlConfig.URLS.USER.SIGN_UP_V1}`;
+
       const response = await fetch(url, {
         method: "POST",
         headers: {
@@ -161,21 +176,21 @@ const Otp = () => {
       });
 
       if (!response.ok) {
-        throw new Error("Failed to signup");
+        showErrorMessage(t("FAILED_TO_SIGNUP"));
+        throw new Error(t("FAILED_TO_SIGNUP"));
       }
 
       const data = await response.json();
       await saveUserInfoInCustomDB(data.result.userId);
       setGoToOtp(true);
     } catch (error) {
-      setError(error.message);
+      showErrorMessage(t("FAILED_TO_SIGNUP"));
     } finally {
       setIsLoading(false);
     }
   };
 
   const saveUserInfoInCustomDB = async (userId) => {
-    const url = "/custom/user/signup";
     const requestBody = {
       user_id: userId,
       designation:
@@ -186,6 +201,7 @@ const Otp = () => {
       created_by: userId,
     };
     try {
+      const url = `${urlConfig.URLS.USER.USER_SIGNUP}`;
       const response = await fetch(url, {
         method: "POST",
         headers: {
@@ -195,12 +211,13 @@ const Otp = () => {
       });
 
       if (!response.ok) {
-        throw new Error("Failed to save user data in custom DB");
+        showErrorMessage(t("FAILED_TO_FETCH_DATA"));
+        throw new Error(t("FAILED_TO_FETCH_DATA"));
       }
 
       const data = await response.json();
     } catch (error) {
-      setError(error.message);
+      showErrorMessage(t("FAILED_TO_FETCH_DATA"));
     } finally {
       setIsLoading(false);
     }
@@ -214,30 +231,29 @@ const Otp = () => {
     setError(null);
 
     try {
-      const response = await axios.post(
-        "https://nulp.niua.org/user/v2/accept/tnc",
-        {
-          request: {
-            version: tncConfigVersion,
-            identifier: userData.email,
-          },
-        }
-      );
+      const url = `${urlConfig.URLS.USER.TNC_ACCEPT_LOGIN}`;
+
+      const response = await axios.post(url, {
+        request: {
+          version: tncConfigVersion,
+          identifier: userData.email,
+        },
+      });
 
       if (!response.ok) {
-        throw new Error("Failed to verify terms&condition");
+        showErrorMessage(t("FAILED_TO_FETCH_DATA"));
+        throw new Error(t("FAILED_TO_FETCH_DATA"));
       }
 
       const data = response.data;
       console.log("acceptTermsAndConditionsresponse:", data.result);
     } catch (error) {
-      setError(error.message);
+      showErrorMessage(t("FAILED_TO_FETCH_DATA"));
     } finally {
       setIsLoading(false);
     }
   };
   const generateOtp = async (email) => {
-    const url = `/learner/anonymous/otp/v1/generate?captchaResponse=${captchaResponse}`;
     const requestBody = {
       request: {
         key: email,
@@ -246,6 +262,8 @@ const Otp = () => {
       },
     };
     try {
+      const url = `${urlConfig.URLS.LEARNER_PREFIX}${urlConfig.URLS.OTP.ANONYMOUS.GENERATE}?captchaResponse=${captchaResponse}`;
+
       const response = await axios.post(url, requestBody, {
         headers: {
           "Content-Type": "application/json",
@@ -253,13 +271,14 @@ const Otp = () => {
       });
 
       if (response.status !== 200) {
-        throw new Error("Failed to resend OTP");
+        showErrorMessage(t("FAILED_TO_VERIFY_OTP"));
+        throw new Error(t("FAILED_TO_VERIFY_OTP"));
       }
 
       const data = response.data;
     } catch (error) {
       console.log(error);
-      setError(error.message);
+      showErrorMessage(t("FAILED_TO_VERIFY_OTP"));
       setIsLoading(false);
     }
   };
@@ -286,6 +305,7 @@ const Otp = () => {
 
   return (
     <>
+      {toasterMessage && <ToasterCommon response={toasterMessage} />}
       <Container
         maxWidth="sm"
         style={{
