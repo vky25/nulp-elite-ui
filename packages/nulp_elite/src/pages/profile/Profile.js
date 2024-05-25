@@ -43,6 +43,7 @@ import {
 } from "@mui/material";
 import styled from "styled-components";
 import LearningHistory from "./learningHistory";
+import Certificate from "./certificate";
 
 const DELAY = 1500;
 const MAX_CHARS = 500;
@@ -78,7 +79,7 @@ const style = {
 };
 
 const Profile = () => {
-  const [value, setValue] = React.useState("1");
+  const [value, setValue] = useState("1");
   const handleChange = (event, newValue) => {
     setValue(newValue);
   };
@@ -109,7 +110,10 @@ const Profile = () => {
   const [toasterOpen, setToasterOpen] = useState(false);
   const [toasterMessage, setToasterMessage] = useState("");
   const [rootOrgId, setRootOrgId] = useState();
-
+  const [domain, setDomain] = useState("");
+  const [subDomain, setSubDomain] = useState("");
+  const [isMobile, setIsMobile] = useState(window.innerWidth <= 767);
+  const [showCertificate, setShowCertificate] = useState(false);
   const showErrorMessage = (msg) => {
     setToasterMessage(msg);
     setTimeout(() => {
@@ -142,8 +146,14 @@ const Profile = () => {
         otherDesignation: "",
       });
     }
+    setDomain(userData?.result?.response.framework.board);
+    setSubDomain(userData?.result?.response.framework.gradeLevel);
   }, [userData, userInfo]);
-
+  useEffect(() => {
+    const handleResize = () => setIsMobile(window.innerWidth <= 767);
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
   useEffect(() => {
     setDesignationsList(designations);
     const fetchCertificateCount = async () => {
@@ -359,9 +369,14 @@ const Profile = () => {
     navigate("/continueLearning");
   };
 
-  const handleDownloadCertificateClick = () => {
-    navigate("/certificate");
+  const handleCertificateButtonClick = () => {
+    if (isMobile) {
+      navigate("/certificate");
+    } else {
+      setShowCertificate(true);
+    }
   };
+
   const handleSearch = (query) => {
     // Implement your search logic here
     console.log("Search query:", query);
@@ -433,7 +448,6 @@ const Profile = () => {
                               {userData.result.response.lastName}
                             </Typography>
                             <Typography className="h6-title d-flex">
-                              {/* {t("DESIGNATION")} |{" "} */}
                               {userInfo[0]?.designation}{" "}
                               <Box className="twoLineEllipsis">
                                 {" "}
@@ -442,20 +456,6 @@ const Profile = () => {
                               </Box>
                             </Typography>
                           </Box>
-                          {/* <Box
-                          style={{
-                            display: "flex",
-                            fontSize: "13px",
-                            color: "#48484887",
-                          }}
-                        >
-                          {" "}
-                          <Box> ID:</Box>{" "}
-                          <Box>
-                            {userData.result.response.userName}{" "}
-                            {userData.result.response.organisations.orgName}
-                          </Box>
-                        </Box>{" "} */}
                           <ModeEditIcon onClick={handleOpenEditDialog} />
                         </Box>
                         <Typography
@@ -464,23 +464,8 @@ const Profile = () => {
                           component="div"
                           style={{ fontSize: "12px" }}
                         >
-                          {/* {t("A_MANAGER_WITH_THE_DEPARTMENT_OF_REVENUE")} */}
                           {userInfo[0]?.bio}
                         </Typography>
-                        {/* Displaying the framework.board field */}
-                        {/* <Typography
-                          variant="subtitle1"
-                          color="text.secondary"
-                          component="div"
-                          style={{
-                            fontSize: "12px",
-                            padding: "10px 0",
-                            display: "flex",
-                          }}
-                        >
-                          <Box>{t("DOMAIN")}: </Box>{" "}
-                          {userData.result.response.framework.board}
-                        </Typography> */}
                       </>
                     )}
                   </CardContent>
@@ -724,134 +709,11 @@ const Profile = () => {
               <Button
                 type="buttom"
                 className="custom-btn-primary my-30"
-                onClick={handleDownloadCertificateClick}
+                onClick={handleCertificateButtonClick}
               >
                 <ReceiptLongOutlinedIcon className="pr-5" />
                 {t("Download Certificates")}
               </Button>
-
-              {/* <Grid container spacing={2} style={{ padding: "5px 0" }}> */}
-              {/* <Grid item xs={6} md={6}>
-                  <Card
-                    sx={{
-                      marginTop: "10px",
-                      padding: "10px",
-                      boxShadow: "0px 4px 4px 0px #00000040",
-                      display: "flex",
-                      alignItems: "center",
-                    }}
-                    onClick={handleContinueLearningClick}
-                  >
-                    <Box
-                      className="profileBox"
-                      style={{
-                        background: "#004367",
-                        color: "#fff",
-                        margin: "-10px",
-                        borderTopRightRadius: "250px",
-                        borderBottomRightRadius: "250px",
-                        cursor: "pointer",
-                      }}
-                    >
-                      <LibraryAddCheckOutlinedIcon />
-                    </Box>
-
-                    <Box style={{ paddingLeft: "20px" }}>
-                      {t("CONTINUE_LEARNNG")}
-                    </Box>
-                  </Card>
-                </Grid>
-                <Grid item xs={6} md={6}>
-              
-                  <Card
-                    sx={{
-                      marginTop: "10px",
-                      padding: "10px",
-                      boxShadow: "0px 4px 4px 0px #00000040",
-                      display: "flex",
-                      alignItems: "center",
-                    }}
-                    onClick={handleDownloadCertificateClick}
-                  >
-                    <Box
-                      className="profileBox"
-                      style={{
-                        background: "#004367",
-                        color: "#fff",
-                        margin: "-10px",
-                        borderTopRightRadius: "250px",
-                        borderBottomRightRadius: "250px",
-                        cursor: "pointer",
-                      }}
-                    >
-                      <ReceiptLongOutlinedIcon />
-                    </Box>
-
-                    <Box style={{ paddingLeft: "20px" }}>
-                      {t("DOWNLOAD_CERTIFICATES")}
-                    </Box>
-                  </Card>
-                </Grid>
-                <Grid item xs={6} md={6}>
-                  <Card
-                    sx={{
-                      padding: "10px",
-                      boxShadow: "0px 4px 4px 0px #00000040",
-                      display: "flex",
-                      alignItems: "center",
-                    }}
-                    onClick={handleLearningHistoryClick}
-                  >
-                    <Box
-                      className="profileBox"
-                      style={{
-                        background: "#004367",
-                        color: "#fff",
-                        margin: "-10px",
-                        borderTopRightRadius: "250px",
-                        borderBottomRightRadius: "250px",
-                        cursor: "pointer",
-                      }}
-                    >
-                      <RestoreOutlinedIcon />
-                    </Box>
-
-                    <Box style={{ paddingLeft: "20px" }}>
-                      {t("LEARNNG_HISTORY")}
-                    </Box>
-                  </Card>
-                </Grid>
-                <Grid item xs={6} md={6}>
-                  <Card
-                    sx={{
-                      padding: "10px",
-                      boxShadow: "0px 4px 4px 0px #00000040",
-                      display: "flex",
-                      alignItems: "center",
-                    }}
-                    onClick={handleOpenModal}
-                  >
-                    <Box
-                      className="profileBox"
-                      style={{
-                        background: "#004367",
-                        color: "#fff",
-                        margin: "-10px",
-                        borderTopRightRadius: "250px",
-                        borderBottomRightRadius: "250px",
-                        cursor: "pointer",
-                      }}
-                    >
-                      <SettingsOutlinedIcon />
-                    </Box>
-
-                    <Box style={{ paddingLeft: "20px" }} className="text-center">
-                      <Button type="button" className="custom-btn-primary" onClick={handleDownloadCertificateClick} >{t("CHANGE_PREFERENCES")}</Button>
-                    </Box>
-                  </Card>
-                </Grid> */}
-
-              {/* </Grid> */}
 
               <Modal
                 // open={open}
@@ -883,85 +745,14 @@ const Profile = () => {
                 </Box>
               </Modal>
 
-              {/* <Card sx={{ marginTop: "10px", padding: "10px" }}>
-                <Box>
-                  <Box
-                    sx={{
-                      display: "flex",
-                      flexDirection: "row",
-                      justifyContent: "space-between",
-                    }}
-                  >
-                    <Box style={{ display: "flex", alignItems: "center" }}>
-                      <TimelapseOutlinedIcon style={{ paddingRight: "10px" }} />
-                      {t("LEARNING_TIME")}
-                    </Box>
-                  </Box>
-
-                  <Box
-                    sx={{
-                      display: "flex",
-                      flexDirection: "row",
-                      padding: "20px 10px",
-                      fontSize: "14px",
-                      color: "#484848",
-                      justifyContent: "space-between",
-                    }}
-                  >
-                    <Box
-                      style={{
-                        background: "#A7E0FF",
-                        padding: "20px 50px",
-                        borderRadius: "20px",
-                        marginRight: "20px",
-                      }}
-                    >
-                      {t("COURSES")}
-                      <br />
-                      <Typography
-                        variant="h5"
-                        style={{
-                          fontWeight: "700",
-                          margin: "9px 0",
-                          display: "block",
-                        }}
-                      >
-                        14h 20m
-                      </Typography>
-                    </Box>
-                    <Box
-                      style={{
-                        background: "#f7cfb6",
-                        padding: "20px 50px",
-                        borderRadius: "20px",
-                      }}
-                    >
-                      {t("WEBINARS")}
-                      <br />
-                      <Typography
-                        variant="h5"
-                        style={{
-                          fontWeight: "700",
-                          margin: "9px 0",
-                          display: "block",
-                        }}
-                      >
-                        10h 15m
-                      </Typography>
-                    </Box>
-                  </Box>
-                </Box>
-              </Card> */}
               <Box className="grey-bx p-10">
                 <Box className="h4-title d-flex">
                   <SettingsOutlinedIcon className="pr-5" />
                   User Preferences
                 </Box>
                 <Box className="mb-20">
-                  <Box className="h5-title mt-15 mb-10">
-                    Domain :<Box></Box>
-                  </Box>
-                  <Box className="h5-title">Sub-Domain:</Box>
+                  <Box className="h5-title mt-15 mb-10">Domain :{domain}</Box>
+                  <Box className="h5-title">Sub-Domain:{subDomain}</Box>
                 </Box>
               </Box>
               <Button
@@ -974,29 +765,38 @@ const Profile = () => {
             </Box>
           </Grid>
           <Grid item xs={12} md={8} lg={8} className="xs-pl-0">
-            <TabContext value={value}>
-              <Box sx={{ borderBottom: 1, borderColor: "divider" }}>
-                <TabList aria-label="lab API tabs example">
-                  <Tab
-                    label="Continue learning"
-                    className="tab-text"
-                    value="1"
-                  />
-                  <Tab
-                    label="Learning History"
-                    className="tab-text"
-                    value="2"
-                    onClick={handleLearningHistoryClick}
-                  />
-                </TabList>
-              </Box>
-              <TabPanel value="1">
-                <ContinueLearning />
-              </TabPanel>
-              <TabPanel value="2">
-                <LearningHistory />
-              </TabPanel>
-            </TabContext>
+            {showCertificate ? (
+              <Certificate />
+            ) : (
+              <div>
+                <TabContext value={value}>
+                  <Box sx={{ borderBottom: 1, borderColor: "divider" }}>
+                    <TabList
+                      onChange={handleChange}
+                      aria-label="lab API tabs example"
+                    >
+                      <Tab
+                        label="Continue learning"
+                        className="tab-text"
+                        value="1"
+                      />
+                      <Tab
+                        label="Learning History"
+                        className="tab-text"
+                        value="2"
+                        // onClick={handleLearningHistoryClick}
+                      />
+                    </TabList>
+                  </Box>
+                  <TabPanel value="1">
+                    <ContinueLearning />
+                  </TabPanel>
+                  <TabPanel value="2">
+                    <LearningHistory />
+                  </TabPanel>
+                </TabContext>
+              </div>
+            )}
           </Grid>
         </Grid>
       </Container>

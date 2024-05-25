@@ -98,7 +98,6 @@ const ContinueLearning = () => {
 
   return (
     <div>
-      {/* <Header /> */}
       {toasterMessage && <ToasterCommon response={toasterMessage} />}
       <Container maxWidth="xxl" role="main" className="container-pb">
         {error && (
@@ -106,25 +105,17 @@ const ContinueLearning = () => {
             {error}
           </Alert>
         )}
-        {/* <Breadcrumbs
-          aria-label="breadcrumb"
-          style={{
-            padding: "25px 0",
-            fontSize: "16px",
-            fontWeight: "600",
-          }}
-        >
-          <Link underline="hover" color="#004367" href="/profile">
-            {t("MY_PROFILE")}
-          </Link>
-          <Typography color="#484848" aria-current="page">
-            {t("Continue Learning")}
-          </Typography>
-        </Breadcrumbs> */}
-        {/* <Box style={{ margin: "20px 0" }}>
-          <Search></Search>
-        </Box> */}
-
+        <Box style={{ margin: "20px 0" }}>
+          <Filter
+            options={[
+              { label: "Ongoing", value: 0 },
+              { label: "Completed", value: 1 },
+              { label: "Expired", value: 2 },
+            ]}
+            label="Filter by Sub-Domain"
+            onChange={handleFilterChange}
+          />
+        </Box>
         <Box textAlign="center" padding="10">
           <Box sx={{ paddingTop: "30px" }}>
             <Grid
@@ -170,7 +161,6 @@ const ContinueLearning = () => {
         </Box>
       </Container>
       <FloatingChatIcon />
-      {/* <Footer /> */}
     </div>
   );
 };

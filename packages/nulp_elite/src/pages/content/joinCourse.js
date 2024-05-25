@@ -39,7 +39,16 @@ const urlConfig = require("../../configs/urlConfig.json");
 import ToasterCommon from "../ToasterCommon";
 import { TextField } from "@mui/material";
 import Chat from "pages/connections/chat";
-
+import {
+  FacebookShareButton,
+  WhatsappShareButton,
+  LinkedinShareButton,
+  TwitterShareButton,
+  FacebookIcon,
+  WhatsappIcon,
+  LinkedinIcon,
+  TwitterIcon,
+} from "react-share";
 const JoinCourse = () => {
   const { t } = useTranslation();
   const [userData, setUserData] = useState();
@@ -70,6 +79,7 @@ const JoinCourse = () => {
 
   const { contentId } = location.state || {};
   const _userId = util.userId(); // Assuming util.userId() is defined
+  const shareUrl = window.location.href; // Current page URL
   const style = {
     position: "absolute",
     top: "50%",
@@ -951,22 +961,23 @@ const JoinCourse = () => {
               )}
             </div>
             <Box className="my-20 xs-hide">
-              <Link href="#" className="pr-5">
-                {" "}
-                <img src={require("../../assets/fb.png")} alt="" />
-              </Link>
-              <Link href="#" className="pr-5">
-                {" "}
-                <img src={require("../../assets/whatsapp.png")} alt="" />
-              </Link>
-              <Link href="#" className="pr-5">
-                {" "}
-                <img src={require("../../assets/linkedin.png")} alt="" />
-              </Link>
-              <Link href="#" className="pr-5">
-                {" "}
-                <img src={require("../../assets/twitter.png")} alt="" />
-              </Link>
+              <FacebookShareButton url={shareUrl} className="pr-5">
+                <FacebookIcon size={32} round={true} />
+              </FacebookShareButton>
+              <WhatsappShareButton url={shareUrl} className="pr-5">
+                <WhatsappIcon size={32} round={true} />
+              </WhatsappShareButton>
+              <LinkedinShareButton url={shareUrl} className="pr-5">
+                <LinkedinIcon size={32} round={true} />
+              </LinkedinShareButton>
+              <TwitterShareButton url={shareUrl} className="pr-5">
+                <img
+                  src={require("../../assets/twitter.png")}
+                  alt="Twitter"
+                  style={{ width: 32, height: 32 }}
+                />
+              </TwitterShareButton>
+            
             </Box>
           </Grid>
           <Grid item xs={12} md={8} lg={8} className="mb-20 xs-pr-16">
@@ -1269,22 +1280,22 @@ const JoinCourse = () => {
               )}
             </div>
             <Box className="my-20 lg-hide social-icons">
-              <Link href="#" className="pr-5">
-                {" "}
-                <img src={require("../../assets/fb.png")} alt="" />
-              </Link>
-              <Link href="#" className="pr-5">
-                {" "}
-                <img src={require("../../assets/whatsapp.png")} alt="" />
-              </Link>
-              <Link href="#" className="pr-5">
-                {" "}
-                <img src={require("../../assets/linkedin.png")} alt="" />
-              </Link>
-              <Link href="#" className="pr-5">
-                {" "}
-                <img src={require("../../assets/twitter.png")} alt="" />
-              </Link>
+              <FacebookShareButton url={shareUrl} className="pr-5">
+                <FacebookIcon size={32} round={true} />
+              </FacebookShareButton>
+              <WhatsappShareButton url={shareUrl} className="pr-5">
+                <WhatsappIcon size={32} round={true} />
+              </WhatsappShareButton>
+              <LinkedinShareButton url={shareUrl} className="pr-5">
+                <LinkedinIcon size={32} round={true} />
+              </LinkedinShareButton>
+              <TwitterShareButton url={shareUrl} className="pr-5">
+                <img
+                  src={require("../../assets/twitter.png")}
+                  alt="Twitter"
+                  style={{ width: 32, height: 32 }}
+                />
+              </TwitterShareButton>
             </Box>
           </Grid>
         </Grid>

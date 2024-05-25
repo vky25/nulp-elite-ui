@@ -65,7 +65,7 @@ const LearningHistory = () => {
   };
   return (
     <div>
-      <Header />
+      {/* <Header /> */}
       {toasterMessage && <ToasterCommon response={toasterMessage} />}
       <Container maxWidth="xl" role="main" className="container-pb">
         {error && (
@@ -90,7 +90,6 @@ const LearningHistory = () => {
             </Typography>
           </Breadcrumbs> */}
           <Box style={{ margin: "20px 0" }}>
-            {/* Define static filter options */}
             <Filter
               options={[
                 { label: "Ongoing", value: 0 },
@@ -192,7 +191,7 @@ const LearningHistory = () => {
         </Box>
       </Container>
       <FloatingChatIcon />
-      <Footer />
+      {/* <Footer /> */}
     </div>
   );
 };
