@@ -250,7 +250,7 @@ const DrawerFilter = () => {
           </div>
         </Box>
       ) : (
-        <Box className="header-bg-blue p-10 pl-18 filter-bx mb-20">
+        <Box className="header-bg-blue p-10 pl-18 filter-bx">
           <Box className="d-flex jc-bw" style={{ paddingTop: "10px" }}>
             <Box className="filter-title">Filter By:</Box>
             <Button type="button" className="viewAll">
