@@ -35,7 +35,7 @@ import Alert from "@mui/material/Alert";
 
 const JoinCourse = () => {
   const { t } = useTranslation();
-  const [userData, setUserData] = useState();
+  const [courseData, setCourseData] = useState();
   const [batchData, setBatchData] = useState();
   const [batchDetails, setBatchDetails] = useState();
   const [userCourseData, setUserCourseData] = useState({});
@@ -54,7 +54,7 @@ const JoinCourse = () => {
     const fetchData = async () => {
       try {
         const response = await fetch(
-          `http://localhost:3000/api/course/v1/hierarchy/${contentId}?orgdetails=orgName,email&licenseDetails=name,description,url`,
+          `http://localhost:3000/api/course/v1/hierarchy/${contentId}`,
           {
             headers: {
               "Content-Type": "application/json",
@@ -65,7 +65,7 @@ const JoinCourse = () => {
           throw new Error("Failed to fetch course data");
         }
         const data = await response.json();
-        setUserData(data);
+        setCourseData(data);
       } catch (error) {
         console.error("Error fetching course data:", error);
       }
@@ -174,7 +174,7 @@ const JoinCourse = () => {
   };
 
   const handleLinkClick = () => {
-    navigate("/player");
+    navigate("/player", { state: { content: courseData.result.content } });
   };
 
   const handleSnackbarClose = (event, reason) => {
@@ -459,7 +459,7 @@ const JoinCourse = () => {
                     aria-current="page"
                     color="#484848"
                   >
-                    {userData?.result?.content?.name}
+                    {courseData?.result?.content?.name}
                   </Link>
                 </Breadcrumbs>
               </Grid>
@@ -494,7 +494,7 @@ const JoinCourse = () => {
                     margin: "0 10px",
                   }}
                 >
-                  {userData?.result?.content?.children[0]?.children[0]?.board}
+                  {courseData?.result?.content?.children[0]?.children[0]?.board}
                 </Button>
                 <Button
                   size="small"
@@ -506,7 +506,7 @@ const JoinCourse = () => {
                 >
                   {" "}
                   {
-                    userData?.result?.content?.children[0]?.children[0]
+                    courseData?.result?.content?.children[0]?.children[0]
                       .gradeLevel?.[0]
                   }
                 </Button>
@@ -595,7 +595,7 @@ const JoinCourse = () => {
                   fontSize: "14px",
                 }}
               >
-                {userData?.result?.content?.description}
+                {courseData?.result?.content?.description}
               </Typography>
             </Box>
 
@@ -615,7 +615,7 @@ const JoinCourse = () => {
                 {t("COURSES_MODULE")}
               </AccordionSummary>
               <AccordionDetails>
-                {userData?.result?.content?.children.map((faqIndex) => (
+                {courseData?.result?.content?.children.map((faqIndex) => (
                   <Accordion
                     key={faqIndex.id}
                     style={{ borderRadius: "10px", margin: "10px 0" }}
@@ -697,9 +697,9 @@ const JoinCourse = () => {
                   }}
                 >
                   {t("CREATED_ON")}:{" "}
-                  {userData &&
-                    userData.result &&
-                    formatDate(userData.result.content.children[0].createdOn)}
+                  {courseData &&
+                    courseData.result &&
+                    formatDate(courseData.result.content.children[0].createdOn)}
                 </Typography>
                 <Typography
                   variant="h7"
@@ -711,10 +711,10 @@ const JoinCourse = () => {
                   }}
                 >
                   {t("UPDATED_ON")}:{" "}
-                  {userData &&
-                    userData.result &&
+                  {courseData &&
+                    courseData.result &&
                     formatDate(
-                      userData.result.content.children[0].lastUpdatedOn
+                      courseData.result.content.children[0].lastUpdatedOn
                     )}
                 </Typography>
                 <Typography
@@ -738,14 +738,14 @@ const JoinCourse = () => {
                   }}
                 >
                   {t("LICENSE_TERMS")}:{" "}
-                  {userData?.result?.content?.licenseDetails?.name}
+                  {courseData?.result?.content?.licenseDetails?.name}
                   {t("FOR_DETAILS")}:{" "}
                   <a
-                    href={userData?.result?.content?.licenseDetails?.url}
+                    href={courseData?.result?.content?.licenseDetails?.url}
                     target="_blank"
                     rel="noopener noreferrer"
                   >
-                    {userData?.result?.content?.licenseDetails?.url}
+                    {courseData?.result?.content?.licenseDetails?.url}
                   </a>
                 </Typography>
               </AccordionDetails>

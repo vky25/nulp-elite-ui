@@ -165,7 +165,7 @@ function App() {
       component: SelectPreference,
     },
   ];
-  
+
   initializeI18n(
     ["translation"],
     `${process.env.PUBLIC_URL}/locales/{{lng}}/{{ns}}.json`

@@ -122,7 +122,7 @@ const AllContent = () => {
           "channel",
           "organisation",
           "trackable",
-          "primaryCategory"
+          "primaryCategory",
         ],
         facets: [
           "se_boards",
@@ -140,7 +140,7 @@ const AllContent = () => {
     };
     // console.log(data.result.content)
 
-    const url = `/api/${URLSConfig.URLS.CONTENT.SEARCH}?orgdetails=orgName,email&licenseDetails=name,description,url`;
+    const url = `/api/${URLSConfig.URLS.CONTENT.SEARCH}`;
     try {
       const response = await getAllContents(url, data, headers);
       const sortedData = response?.data?.result?.content?.sort((a, b) => {
@@ -233,17 +233,18 @@ const AllContent = () => {
       >
         <BoxCard
           items={item}
-          onClick={() => handleCardClick(item.identifier, item.primaryCategory)}
+          onClick={() => handleCardClick(item, item.primaryCategory)}
         ></BoxCard>
       </Grid>
     ));
   };
 
-  const handleCardClick = (contentId, courseType) => {
+  const handleCardClick = (item, courseType) => {
     if (courseType === "Course") {
-      navigate("/joinCourse", { state: { contentId } });
+      navigate("/joinCourse", { state: { contentId: item.identifier } });
     } else {
-      navigate("/player");
+      navigate("/player", { state: { content: item } });
+      // navigate("/player");
     }
   };
 
@@ -356,10 +357,7 @@ const AllContent = () => {
                           <BoxCard
                             items={item}
                             onClick={() =>
-                              handleCardClick(
-                                item.identifier,
-                                item.primaryCategory
-                              )
+                              handleCardClick(item, item.primaryCategory)
                             }
                           ></BoxCard>
                         </Grid>
@@ -369,10 +367,7 @@ const AllContent = () => {
                           <BoxCard
                             items={item}
                             onClick={() =>
-                              handleCardClick(
-                                item.identifier,
-                                item.primaryCategory
-                              )
+                              handleCardClick(item, item.primaryCategory)
                             }
                           ></BoxCard>
                         </Grid>
