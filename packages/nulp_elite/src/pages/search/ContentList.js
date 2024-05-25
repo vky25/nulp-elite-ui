@@ -59,7 +59,8 @@ const ContentList = (props) => {
   const [gradeLevels, setGradeLevels] = useState([]);
   const [category, setCategory] = useState([]);
   const navigate = useNavigate();
-  const { domain } = location.state || {};
+  // const { domain } = location.state || {};
+  const [domain, setDomain] = useState(location.state?.domain || undefined);
   const [domainList, setDomainList] = useState([]);
   const { domainquery } = location.state || {};
   const [totalPages, setTotalPages] = useState(1);
@@ -84,6 +85,10 @@ const ContentList = (props) => {
     Fetchdomain();
     const random = getRandomValue();
   }, [filters, search, currentPage, domainfilter]);
+
+  useEffect(() => {
+    fetchData();
+  }, [domain]);
 
   const handleFilterChange = (selectedOptions) => {
     const selectedValues = selectedOptions.map((option) => option.value);
@@ -261,6 +266,14 @@ const ContentList = (props) => {
     }
   };
 
+  const handleDomainFilter = (query) => {
+    setDomain(query);
+    setPageNumber(1);
+    setCurrentPage(1);
+    setData({});
+    navigate(`/contentList/1`, { state: { domain: query } });
+  };
+
   return (
     <div>
       <Header />
@@ -288,7 +301,7 @@ const ContentList = (props) => {
               // className={`my-class ${
               //   activeStates[index] ? "carousel-active-ui" : ""
               // }`}
-              // onSelectDomain={handleDomainFilter}
+              onSelectDomain={handleDomainFilter}
               selectedDomainCode={domain}
               domains={domainList}
             />
