@@ -331,6 +331,9 @@ body {
   }
 }
 @media (min-width: 769px) {
+  .cardTitle {
+    height: 68px;
+  }
   .profile-btn {
     font-size: 17px !important;
     color: rgb(66, 66, 66);
