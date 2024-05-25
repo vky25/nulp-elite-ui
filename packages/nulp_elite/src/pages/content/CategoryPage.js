@@ -195,48 +195,15 @@ const CategoryPage = () => {
       {domain && (
         <DomainCarousel onSelectDomain={handleDomainFilter} domains={domain} />
       )}
-      <Box sx={{ background: "#2D2D2D", padding: "20px" }} className="xs-hide">
-        <p
-          style={{
-            fontSize: "20px",
-            fontWeight: "700",
-            color: "#fff",
-            paddingBottom: "5px",
-            margin: "0",
-          }}
-        >
-          {t("EXPLORE_CONTENT_RELATED_TO_YOUR_DOMAIN")}
-        </p>
-        <p
-          style={{
-            fontSize: "16px",
-            fontWeight: "700",
-            color: "#C1C1C1",
-            margin: "0",
-            paddingBottom: "30px",
-          }}
-        >
-          {t("LEARN_FROM_WELL_CURATED")}
-        </p>
-        <SearchBox onSearch={handleSearch} />
-      </Box>
-      <Container maxWidth="xxl" role="main" className="container-pb">
+
+      <Container maxWidth="xl" role="main" className="allContent">
         {error && (
           <Alert className="my-4" severity="error">
             {error}
           </Alert>
         )}
-        <Link
-          onClick={handleGoBack}
-          style={{
-            display: "block",
-            display: "flex",
-            fontSize: "16px",
-            paddingTop: "30px",
-            color: "rgb(0, 67, 103)",
-          }}
-        >
-          <ArrowBackOutlinedIcon /> {t("BACK")}
+        <Link onClick={handleGoBack} className="viewAll">
+          {t("BACK")}
         </Link>
 
         <p
@@ -262,7 +229,7 @@ const CategoryPage = () => {
                     item
                     xs={12}
                     md={6}
-                    lg={3}
+                    lg={2}
                     key={item.id}
                     style={{ marginBottom: "10px" }}
                   >

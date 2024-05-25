@@ -69,7 +69,7 @@ export default function BoxCard({ items, index, onClick }) {
           zIndex: 999,
           margin: "0",
           borderTopLeftRadius: "5px",
-          borderTopRightRadius: "20px",
+          borderTopRightRadius: "5px",
         }}
       ></div>
       <CardContent>
