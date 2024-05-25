@@ -177,7 +177,7 @@ export default function DomainCarousel({
       ) : (
         <Box
           sx={{ display: "flex" }}
-          className={scrolled ? "bg-blue scrolled" : "carousel-bx"}
+          className={scrolled ? "carousel-bx scrolled" : "carousel-bx"}
         >
           {itemsArray &&
             itemsArray?.slice(0, 10).map((domain, index) => (

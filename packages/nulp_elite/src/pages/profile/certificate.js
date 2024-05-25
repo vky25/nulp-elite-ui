@@ -101,7 +101,7 @@ const Certificate = () => {
 
   return (
     <div>
-      <Header />
+      {/* <Header /> */}
       {toasterMessage && <ToasterCommon response={toasterMessage} />}
       <Container maxWidth="xxl" role="main" className="container-pb mb-20">
         {error && (
@@ -283,7 +283,7 @@ const Certificate = () => {
         </Box>
       </Container>
       <FloatingChatIcon />
-      <Footer />
+      {/* <Footer /> */}
     </div>
   );
 };

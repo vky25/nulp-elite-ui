@@ -25,6 +25,8 @@ import ToasterCommon from "../ToasterCommon";
 import Carousel from "react-multi-carousel";
 import DomainCarousel from "components/domainCarousel";
 import domainWithImage from "../../assets/domainImgForm.json";
+import DrawerFilter from "components/drawerFilter";
+
 const responsive = {
   superLargeDesktop: {
     // the naming can be any, depends on you.
@@ -57,7 +59,8 @@ const ContentList = (props) => {
   const [gradeLevels, setGradeLevels] = useState([]);
   const [category, setCategory] = useState([]);
   const navigate = useNavigate();
-  const { domain } = location.state || {};
+  // const { domain } = location.state || {};
+  const [domain, setDomain] = useState(location.state?.domain || undefined);
   const [domainList, setDomainList] = useState([]);
   const { domainquery } = location.state || {};
   const [totalPages, setTotalPages] = useState(1);
@@ -82,6 +85,10 @@ const ContentList = (props) => {
     Fetchdomain();
     const random = getRandomValue();
   }, [filters, search, currentPage, domainfilter]);
+
+  useEffect(() => {
+    fetchData();
+  }, [domain]);
 
   const handleFilterChange = (selectedOptions) => {
     const selectedValues = selectedOptions.map((option) => option.value);
@@ -259,6 +266,14 @@ const ContentList = (props) => {
     }
   };
 
+  const handleDomainFilter = (query) => {
+    setDomain(query);
+    setPageNumber(1);
+    setCurrentPage(1);
+    setData({});
+    navigate(`/contentList/1`, { state: { domain: query } });
+  };
+
   return (
     <div>
       <Header />
@@ -286,7 +301,7 @@ const ContentList = (props) => {
               // className={`my-class ${
               //   activeStates[index] ? "carousel-active-ui" : ""
               // }`}
-              // onSelectDomain={handleDomainFilter}
+              onSelectDomain={handleDomainFilter}
               selectedDomainCode={domain}
               domains={domainList}
             />
@@ -297,9 +312,9 @@ const ContentList = (props) => {
       </Box>
 
       <Container maxWidth="xl" role="main" className="allContent">
-        <Box style={{ margin: "20px 0" }}>
-          {/* <domainCarousel></domainCarousel> */}
-          <Box
+        {/* <Box style={{ margin: "20px 0" }}> */}
+        {/* <domainCarousel></domainCarousel> */}
+        {/* <Box
             style={{ display: "flex", justifyContent: "space-between" }}
             className="filter-domain"
           >
@@ -313,68 +328,98 @@ const ContentList = (props) => {
                 options={category}
                 label="Filter by Domain"
                 onChange={handlefilter}
-                // isMulti={false}
               />
             )}
-          </Box>
-        </Box>
-        <Box className="d-flex jc-bw" style={{ alignItems: "center" }}>
+          </Box> */}
+        {/* </Box> */}
+        <Box
+          className="d-flex jc-bw mr-20 my-20"
+          style={{ alignItems: "center" }}
+        >
           {domain && (
             <Box
-              sx={{ fontSize: "14px", marginTop: "10px", alignItems: "center" }}
-              className="d-flex"
+              sx={{ marginTop: "10px", alignItems: "center" }}
+              className="d-flex h3-title ml-neg-20"
             >
               {t("YOU_ARE_VIEWING_CONTENTS_FOR")}
-              <Box sx={{ fontSize: "16px", fontWeight: "700" }}>{domain}</Box>
+              <Box
+                sx={{ fontSize: "16px", fontWeight: "600", paddingLeft: "5px" }}
+                className="text-blueShade2"
+              >
+                {domain}
+              </Box>
             </Box>
           )}
           <Link onClick={handleGoBack} className="viewAll">
             {t("BACK")}
           </Link>
         </Box>
-        <Box textAlign="center" padding="10">
-          <Box sx={{ paddingTop: "30px" }}>
-            {isLoading ? (
-              <p>{t("LOADING")}</p>
-            ) : error ? (
-              <Alert severity="error">{error}</Alert>
-            ) : data && data.content && data.content.length > 0 ? (
-              <div>
-                <Grid
-                  container
-                  spacing={2}
-                  style={{ margin: "20px 0", marginBottom: "10px" }}
-                >
-                  {data?.content?.map((items, index) => (
+        <Grid container spacing={2} className="pt-8 mt-15">
+          <Grid
+            item
+            xs={12}
+            md={4}
+            lg={4}
+            className="sm-p-25 left-container mt-2 xs-hide"
+            style={{ padding: "0" }}
+          >
+            <DrawerFilter />
+          </Grid>
+          <Grid
+            item
+            xs={12}
+            md={4}
+            lg={8}
+            className="sm-p-25 left-container mt-2"
+          >
+            <Box textAlign="center" padding="10">
+              <Box>
+                {isLoading ? (
+                  <p>{t("LOADING")}</p>
+                ) : error ? (
+                  <Alert severity="error">{error}</Alert>
+                ) : data && data.content && data.content.length > 0 ? (
+                  <div>
                     <Grid
-                      item
-                      xs={2}
-                      md={6}
-                      lg={2}
-                      style={{ marginBottom: "10px" }}
-                      key={items.identifier}
+                      container
+                      spacing={2}
+                      style={{ margin: "20px 0", marginBottom: "10px" }}
                     >
-                      <BoxCard
-                        items={items}
-                        index={index}
-                        onClick={() =>
-                          handleCardClick(items.identifier, items.contentType)
-                        }
-                      ></BoxCard>
+                      {data?.content?.map((items, index) => (
+                        <Grid
+                          item
+                          xs={2}
+                          md={6}
+                          lg={3}
+                          style={{ marginBottom: "10px" }}
+                          key={items.identifier}
+                        >
+                          <BoxCard
+                            items={items}
+                            index={index}
+                            onClick={() =>
+                              handleCardClick(
+                                items.identifier,
+                                items.contentType
+                              )
+                            }
+                          ></BoxCard>
+                        </Grid>
+                      ))}
                     </Grid>
-                  ))}
-                </Grid>
-                <Pagination
-                  count={totalPages}
-                  page={pageNumber}
-                  onChange={handleChange}
-                />
-              </div>
-            ) : (
-              <NoResult /> // Render NoResult component when there are no search results
-            )}
-          </Box>
-        </Box>
+                    <Pagination
+                      count={totalPages}
+                      page={pageNumber}
+                      onChange={handleChange}
+                    />
+                  </div>
+                ) : (
+                  <NoResult /> // Render NoResult component when there are no search results
+                )}
+              </Box>
+            </Box>
+          </Grid>
+        </Grid>
       </Container>
       <Footer />
     </div>

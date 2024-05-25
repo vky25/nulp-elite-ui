@@ -370,7 +370,11 @@ function Header() {
 
               {/* User Profile */}
               <Tooltip>
-                <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
+                <IconButton
+                  onClick={handleOpenUserMenu}
+                  sx={{ p: 0 }}
+                  className="profile-btn"
+                >
                   <AccountCircleOutlinedIcon
                     style={{ padding: "0 10px", verticalAlign: "middle" }}
                   />{" "}
