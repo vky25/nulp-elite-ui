@@ -72,6 +72,7 @@ const AllContent = () => {
   const navigate = useNavigate();
   const [toasterOpen, setToasterOpen] = useState(false);
   const [toasterMessage, setToasterMessage] = useState("");
+  const [domainName, setDomainName] = useState();
 
   const handleResize = () => {
     setIsMobile(window.innerWidth <= 767);
@@ -81,16 +82,21 @@ const AllContent = () => {
 
     console.log("Search query:", query);
   };
-  const handleDomainFilter = (query) => {
+  const handleDomainFilter = (query, domainName) => {
     // Implement your search logic here
     setSelectedDomain(query);
+    setDomainName(domainName);
     console.log("Search query:", selectedDomain);
-    fetchData();
+    // fetchData();
   };
   useEffect(() => {
     fetchData();
     fetchDomains();
   }, []);
+
+  useEffect(() => {
+    fetchData();
+  }, [selectedDomain]);
 
   const showErrorMessage = (msg) => {
     setToasterMessage(msg);
@@ -342,7 +348,7 @@ const AllContent = () => {
           className="d-flex jc-bw mr-20 my-20"
           style={{ alignItems: "center" }}
         >
-          {selectedDomain && (
+          {domainName && (
             <Box
               sx={{ marginTop: "10px", alignItems: "center" }}
               className="d-flex h3-title ml-neg-20"
@@ -352,7 +358,7 @@ const AllContent = () => {
                 sx={{ fontSize: "16px", fontWeight: "600", paddingLeft: "5px" }}
                 className="text-blueShade2"
               >
-                {selectedDomain}
+                {domainName}
               </Box>
             </Box>
           )}
