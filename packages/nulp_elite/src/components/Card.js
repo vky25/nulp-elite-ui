@@ -13,6 +13,7 @@ export default function BoxCard({ items, index, onClick }) {
   const [imgUrl, setImgUrl] = React.useState();
 
   useEffect(() => {
+    console.log("card items----", items);
     // const random = getRandomValue();
     console.log("random banner----", RandomImage.ImagePaths[index % 10 || 10]);
     setImgUrl(RandomImage.ImagePaths[index % 10 || 10]);
