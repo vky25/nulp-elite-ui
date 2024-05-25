@@ -113,27 +113,27 @@ export default function BoxCard({ items, index, onClick }) {
         </Typography>
       </CardContent>
 
-      {items.board ||
+      {/* {items.board ||
       items.gradeLevel ||
       items.se_boards ||
-      items.se_gradeLevels ? (
-        <div>
-          <Divider></Divider>
-          <Box className="my-10 textLeft">
-            {(items.board || items.se_boards) && (
-              <Button type="button" size="small" className="labelOne">
-                {items.board || items.se_boards}
-              </Button>
-            )}
-            {(items.gradeLevel || items.se_gradeLevels) && (
-              <Button type="button" size="small" className="labeltwo">
-                {" "}
-                {items.gradeLevel || items.se_gradeLevels}
-              </Button>
-            )}
-          </Box>
-        </div>
-      ) : null}
+      items.se_gradeLevels ? ( */}
+      <div>
+        <Divider></Divider>
+        <Box className="my-10 textLeft">
+          {(items.board || items.se_boards) && (
+            <Button type="button" size="small" className="labelOne">
+              {items.board || items.se_boards}
+            </Button>
+          )}
+          {(items.gradeLevel || items.se_gradeLevels) && (
+            <Button type="button" size="small" className="labeltwo">
+              {" "}
+              {items.gradeLevel || items.se_gradeLevels}
+            </Button>
+          )}
+        </Box>
+      </div>
+      {/* ) : null} */}
     </Card>
   );
 }

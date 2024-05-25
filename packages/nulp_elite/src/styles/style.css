@@ -286,6 +286,16 @@ body {
   }
 }
 @media (min-width: 769px) {
+  .carousel-active-ui {
+    background: #1ea4ce;
+  }
+  .carousel-active-ui .imgBorder {
+    background: #1ea4ce !important;
+    border: solid 1px #1ea4ce;
+  }
+  .carousel-active-ui img {
+    filter: brightness(0) invert(1);
+  }
   .react-multi-carousel-list {
     background: #fff;
     box-shadow: 0px 4px 4px 0px #00000040;
@@ -321,6 +331,13 @@ body {
   }
 }
 @media (min-width: 769px) {
+  .profile-btn {
+    font-size: 17px !important;
+    color: rgb(66, 66, 66);
+  }
+  .ml-neg-20 {
+    margin-left: -20px !important;
+  }
   .mt-2 {
     margin-top: 2px !important;
   }
@@ -336,9 +353,19 @@ body {
   .carousel-bx {
     justify-content: center;
     padding: 14px;
+    box-shadow: 0px 4px 4px 0px #00000040;
   }
   .carousel-bx .my-class {
-    margin: 0 15px !important;
+    margin: 0 32px !important;
+  }
+  .carousel-bx .my-class:first-child {
+    margin-left: 0 !important;
+  }
+  .carousel-bx .my-class:hover {
+    background: #1ea4ce;
+    color: #fff;
+    border-radius: 4px;
+    padding: 10px 19px 10px 16px;
   }
   .lg-d-flex {
     display: flex;
@@ -363,9 +390,10 @@ body {
   }
   .scrolled {
     position: fixed !important;
-    z-index: 999999 !important;
-    top: 60px;
+    top: 86px;
     width: 100%;
+    z-index: 999999 !important;
+    background: #f4fbff;
   }
   .preference .MuiSelect-multiple {
     display: flex !important;
@@ -921,6 +949,10 @@ button {
 .pt-0 {
   padding-top: 0 !important;
 }
+.mt-15 {
+  margin-top: 15px !important;
+}
+
 /* .center-container {
   transform: translate(65%, 65%);
   margin: 0 auto;
@@ -1001,6 +1033,9 @@ custom-chip {
 }
 .text-blueShade1 {
   color: #00a2d5;
+}
+.text-blueShade2 {
+  color: #0e7a9c;
 }
 .fs-14 {
   font-size: 14px !important;
@@ -1108,7 +1143,7 @@ custom-chip {
   transition: all 3s ease-in-out;
 }
 .domainHover:hover {
-  background-color: #1ea4ce;
+  /* background-color: #1ea4ce; */
   transition: box-shadow 300ms cubic-bezier(0.4, 0, 0.2, 1) 0ms;
   border-radius: 4px;
   /* box-shadow: rgba(0, 0, 0, 0.2) 0px 11px 15px -7px,
