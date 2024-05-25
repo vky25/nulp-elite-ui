@@ -145,7 +145,7 @@ const ContinueLearning = () => {
                     item
                     xs={12}
                     md={6}
-                    lg={4}
+                    lg={3}
                     style={{ marginBottom: "10px" }}
                     key={items.contentId}
                   >

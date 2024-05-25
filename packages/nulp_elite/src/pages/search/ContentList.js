@@ -346,8 +346,8 @@ const ContentList = (props) => {
             item
             xs={12}
             md={4}
-            lg={4}
-            className="sm-p-25 left-container mt-2 xs-hide"
+            lg={3}
+            className="sm-p-25 left-container mt-2 xs-hide left-filter"
             style={{ padding: "0" }}
           >
             <DrawerFilter />
@@ -356,7 +356,7 @@ const ContentList = (props) => {
             item
             xs={12}
             md={4}
-            lg={8}
+            lg={9}
             className="sm-p-25 left-container mt-2"
           >
             <Box textAlign="center" padding="10">

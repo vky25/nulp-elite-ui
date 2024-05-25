@@ -319,109 +319,31 @@ const DrawerFilter = () => {
             <ListItem className="filter-ul-text">
               <FormControlLabel
                 control={<Checkbox />}
-                label="Energy & green building"
+                label="Environment and Climate"
               />
             </ListItem>
             <ListItem className="filter-ul-text">
               <FormControlLabel
                 control={<Checkbox />}
-                label="Disaster Mangement and Resilience"
+                label="Water Management"
+              />
+            </ListItem>
+            <ListItem className="filter-ul-text">
+              <FormControlLabel control={<Checkbox />} label="Skills" />
+            </ListItem>
+            <ListItem className="filter-ul-text">
+              <FormControlLabel control={<Checkbox />} label="Accessibility" />
+            </ListItem>
+            <ListItem className="filter-ul-text">
+              <FormControlLabel
+                control={<Checkbox />}
+                label="General Administration"
               />
             </ListItem>
             <ListItem className="filter-ul-text">
               <FormControlLabel
                 control={<Checkbox />}
-                label="Energy & green building"
-              />
-            </ListItem>
-            <ListItem className="filter-ul-text">
-              <FormControlLabel
-                control={<Checkbox />}
-                label="Disaster Mangement and Resilience"
-              />
-            </ListItem>
-            <ListItem className="filter-ul-text">
-              <FormControlLabel
-                control={<Checkbox />}
-                label="Energy & green building"
-              />
-            </ListItem>
-            <ListItem className="filter-ul-text">
-              <FormControlLabel
-                control={<Checkbox />}
-                label="Disaster Mangement and Resilience"
-              />
-            </ListItem>
-            <ListItem className="filter-ul-text">
-              <FormControlLabel
-                control={<Checkbox />}
-                label="Energy & green building"
-              />
-            </ListItem>
-            <ListItem className="filter-ul-text">
-              <FormControlLabel
-                control={<Checkbox />}
-                label="Disaster Mangement and Resilience"
-              />
-            </ListItem>
-            <ListItem className="filter-ul-text">
-              <FormControlLabel
-                control={<Checkbox />}
-                label="Energy & green building"
-              />
-            </ListItem>
-            <ListItem className="filter-ul-text">
-              <FormControlLabel
-                control={<Checkbox />}
-                label="Disaster Mangement and Resilience"
-              />
-            </ListItem>
-            <ListItem className="filter-ul-text">
-              <FormControlLabel
-                control={<Checkbox />}
-                label="Energy & green building"
-              />
-            </ListItem>
-            <ListItem className="filter-ul-text">
-              <FormControlLabel
-                control={<Checkbox />}
-                label="Disaster Mangement and Resilience"
-              />
-            </ListItem>
-            <ListItem className="filter-ul-text">
-              <FormControlLabel
-                control={<Checkbox />}
-                label="Energy & green building"
-              />
-            </ListItem>
-            <ListItem className="filter-ul-text">
-              <FormControlLabel
-                control={<Checkbox />}
-                label="Disaster Mangement and Resilience"
-              />
-            </ListItem>
-            <ListItem className="filter-ul-text">
-              <FormControlLabel
-                control={<Checkbox />}
-                label="Energy & green building"
-              />
-            </ListItem>
-            <ListItem className="filter-ul-text">
-              <FormControlLabel
-                control={<Checkbox />}
-                label="Disaster Mangement and Resilience"
-              />
-            </ListItem>
-            <ListItem className="filter-ul-text">
-              <FormControlLabel
-                control={<Checkbox />}
-                label="Energy & green building"
-              />
-            </ListItem>
-            <ListItem className="filter-ul-text">
-              <FormControlLabel
-                control={<Checkbox />}
-                label="Disaster Mangement and Resilience"
+                label="Safety and Security"
               />
             </ListItem>
           </List>
