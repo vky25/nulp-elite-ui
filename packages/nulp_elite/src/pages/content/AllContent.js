@@ -21,9 +21,9 @@ import Alert from "@mui/material/Alert";
 import appConfig from "../../configs/appConfig.json";
 const urlConfig = require("../../configs/urlConfig.json");
 import ToasterCommon from "../ToasterCommon";
-
 const responsive = {
   superLargeDesktop: {
+    // the naming can be any, depends on you.
     breakpoint: { max: 4000, min: 3000 },
     items: 5,
   },
@@ -38,6 +38,24 @@ const responsive = {
   mobile: {
     breakpoint: { max: 464, min: 0 },
     items: 1,
+  },
+};
+const responsiveCard = {
+  superLargeDesktop: {
+    breakpoint: { max: 4000, min: 3000 },
+    items: 5,
+  },
+  desktop: {
+    breakpoint: { max: 3000, min: 1024 },
+    items: 8,
+  },
+  tablet: {
+    breakpoint: { max: 1024, min: 464 },
+    items: 2,
+  },
+  mobile: {
+    breakpoint: { max: 464, min: 0 },
+    items: 2,
   },
 };
 
@@ -243,7 +261,7 @@ const AllContent = () => {
         item
         xs={isMobile ? 12 : 12}
         md={isMobile ? 12 : 6}
-        lg={isMobile ? 12 : 3}
+        lg={isMobile ? 12 : 2}
         key={item.id}
         style={{ marginBottom: "10px" }}
       >
@@ -320,11 +338,7 @@ const AllContent = () => {
         </Carousel>
       )}
 
-      <Container
-        maxWidth="xxl"
-        role="main"
-        className="container-pb pb-30 allContent"
-      >
+      <Container maxWidth="xl" role="main" className="pb-30 allContent">
         {/* <Box className="text-heading lg-d-flex my-20">
           You are viewing content for :
           <Box className="text-primary">Mobility and accessibliy</Box>
@@ -348,7 +362,7 @@ const AllContent = () => {
 
             <React.Fragment key={category}>
               <Box
-                className="d-flex"
+                className="d-flex mr-20"
                 style={{
                   justifyContent: "space-between",
                   alignItems: "center",
@@ -359,7 +373,7 @@ const AllContent = () => {
                     display: "inline-block",
                     margin: "33px 0px 20px",
                   }}
-                  className="h4-title"
+                  className="h4-title "
                 >
                   <SummarizeOutlinedIcon style={{ verticalAlign: "top" }} />{" "}
                   <Box
@@ -384,7 +398,7 @@ const AllContent = () => {
                   swipeable={false}
                   draggable={false}
                   showDots={true}
-                  responsive={responsive}
+                  responsive={responsiveCard}
                   ssr={true}
                   infinite={true}
                   autoPlaySpeed={1000}
@@ -398,7 +412,7 @@ const AllContent = () => {
                 >
                   {expandedCategory === category
                     ? items.map((item) => (
-                        <Grid item xs={12} md={6} lg={3} key={item.id}>
+                        <Grid item xs={6} md={6} lg={2} key={item.id}>
                           <BoxCard
                             items={item}
                             onClick={() =>
@@ -408,7 +422,7 @@ const AllContent = () => {
                         </Grid>
                       ))
                     : items.slice(0, 4).map((item) => (
-                        <Grid item xs={12} md={6} lg={5} key={item.id}>
+                        <Grid item xs={6} md={6} lg={2} key={item.id}>
                           <BoxCard
                             items={item}
                             onClick={() =>
@@ -422,7 +436,7 @@ const AllContent = () => {
                 <Grid container spacing={2}>
                   {expandedCategory === category
                     ? renderItems(items, category)
-                    : renderItems(items.slice(0, 4), category)}
+                    : renderItems(items.slice(0, 5), category)}
                 </Grid>
               )}
             </React.Fragment>

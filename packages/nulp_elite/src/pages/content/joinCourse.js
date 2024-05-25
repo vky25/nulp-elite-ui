@@ -347,11 +347,7 @@ const JoinCourse = () => {
         );
       } else {
         return (
-          <Button
-            onClick={handleLinkClick}
-            variant="contained"
-            style={{ background: "#9ACD32", color: "#fff" }}
-          >
+          <Button onClick={handleLinkClick} className="custom-btn-primary">
             {t("START_LEARNING")}
           </Button>
         );
@@ -418,7 +414,6 @@ const JoinCourse = () => {
             onClick={handleJoinAndOpenModal}
             // onClick={handleOpenModal}
             disabled={isExpired} // Only disable if expired (not on last day)
-            variant="contained"
             className="custom-btn-primary my-20"
             style={{
               background: isExpired ? "#ccc" : "#004367",
@@ -663,9 +658,15 @@ const JoinCourse = () => {
         </Box>
       </Modal>
 
-      <Container maxWidth="xxl" role="main" className="container-pb xs-pr-0">
+      <Container maxWidth="xxl" role="main" className="xs-pr-0">
         <Grid container spacing={2}>
-          <Grid item xs={12} md={4} lg={4} className="sm-p-25 left-container">
+          <Grid
+            item
+            xs={12}
+            md={4}
+            lg={4}
+            className="sm-p-25 left-container mt-9"
+          >
             {/* <Breadcrumbs
             aria-label="breadcrumb"
             style={{
@@ -1042,6 +1043,7 @@ const JoinCourse = () => {
 
                         <Link
                           href="#"
+                          underline="none"
                           key={faqIndexname.id}
                           style={{ verticalAlign: "super" }}
                           onClick={handleLinkClick}

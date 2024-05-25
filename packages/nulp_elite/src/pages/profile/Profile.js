@@ -380,8 +380,8 @@ const Profile = () => {
     <div>
       <Header />
       {toasterMessage && <ToasterCommon response={toasterMessage} />}
-     
-      <Container maxWidth="xxl" role="main" className="container-pb xs-p-0">
+
+      <Container maxWidth="xxl" role="main" className="xs-p-0">
         {error && (
           <Alert severity="error" className="my-10">
             {error}
@@ -389,15 +389,25 @@ const Profile = () => {
         )}
 
         <Grid container spacing={2} className="pt-8">
-          <Grid item xs={12} md={4} lg={4} className="sm-p-25 left-container">
+          <Grid
+            item
+            xs={12}
+            md={4}
+            lg={4}
+            className="sm-p-25 left-container mt-2"
+          >
             <Box sx={{ fontSize: "18px", color: "#484848" }}>
               {t("MY_PROFILE")}
             </Box>
 
-            <Box textAlign="center" padding="10" sx={{ marginTop: "22px" }} className="xs-pr-16">
+            <Box
+              textAlign="center"
+              padding="10"
+              sx={{ marginTop: "22px" }}
+              className="xs-pr-16"
+            >
               <Box className="grey-bx">
-              
-                  <Box
+                <Box
                   sx={{
                     display: "flex",
                     flexDirection: "row",
@@ -406,7 +416,7 @@ const Profile = () => {
                 >
                   {userData && (
                     <>
-                      <div className="img-text-circle" >
+                      <div className="img-text-circle">
                         {userData?.result?.response?.firstName[0]}
                       </div>
                     </>
@@ -416,19 +426,23 @@ const Profile = () => {
                   >
                     {userData && userInfo?.length > 0 && (
                       <>
-                      <Box className="d-flex">
-                        <Box>
-                          <Typography className="h4-title">
-                            {userData.result.response.firstName}{" "}
-                            {userData.result.response.lastName}
-                          </Typography>
-                          <Typography className="h6-title d-flex">
-                            {/* {t("DESIGNATION")} |{" "} */}
-                            {userInfo[0]?.designation} {" "}   <Box className="twoLineEllipsis"> | ID:  {userData.result.response.userName}{" "}                             {userData.result.response.organisations.orgName}
+                        <Box className="d-flex">
+                          <Box>
+                            <Typography className="h4-title">
+                              {userData.result.response.firstName}{" "}
+                              {userData.result.response.lastName}
+                            </Typography>
+                            <Typography className="h6-title d-flex">
+                              {/* {t("DESIGNATION")} |{" "} */}
+                              {userInfo[0]?.designation}{" "}
+                              <Box className="twoLineEllipsis">
+                                {" "}
+                                | ID: {userData.result.response.userName}{" "}
+                                {userData.result.response.organisations.orgName}
                               </Box>
-                          </Typography>
-                        </Box>
-                        {/* <Box
+                            </Typography>
+                          </Box>
+                          {/* <Box
                           style={{
                             display: "flex",
                             fontSize: "13px",
@@ -442,8 +456,8 @@ const Profile = () => {
                             {userData.result.response.organisations.orgName}
                           </Box>
                         </Box>{" "} */}
-                        <ModeEditIcon onClick={handleOpenEditDialog} />
-                        </Box>  
+                          <ModeEditIcon onClick={handleOpenEditDialog} />
+                        </Box>
                         <Typography
                           variant="subtitle1"
                           color="text.secondary"
@@ -469,11 +483,9 @@ const Profile = () => {
                         </Typography> */}
                       </>
                     )}
-
                   </CardContent>
                 </Box>
 
-                 
                 <Box className="mb-15">
                   <Box
                     sx={{
@@ -483,7 +495,10 @@ const Profile = () => {
                       padding: "0 0 12px 15px",
                     }}
                   >
-                    <Box style={{ display: "flex", alignItems: "center" }} className="h4-title">
+                    <Box
+                      style={{ display: "flex", alignItems: "center" }}
+                      className="h4-title"
+                    >
                       <EmojiEventsOutlinedIcon
                         style={{ paddingRight: "10px" }}
                       />{" "}
@@ -516,7 +531,6 @@ const Profile = () => {
                           margin: "9px 0",
                           display: "block",
                           textAlign: "left",
-                          
                         }}
                         className="fs-14 text-yellow"
                       >
@@ -547,7 +561,6 @@ const Profile = () => {
                           textAlign: "left",
                         }}
                         className="fs-14 text-blueShade0"
-
                       >
                         {t("COURSES_THAN_LAST_MONTH")}
                       </Typography>
@@ -689,7 +702,10 @@ const Profile = () => {
                         </Box>
 
                         <Box pt={4}>
-                          <Button className="custom-btn-primary mr-5" type="submit">
+                          <Button
+                            className="custom-btn-primary mr-5"
+                            type="submit"
+                          >
                             {t("SAVE")}
                           </Button>
 
@@ -703,16 +719,19 @@ const Profile = () => {
                       </form>
                     </Box>
                   </Modal>
-                  
                 )}
-
-              
               </Box>
-              <Button type="buttom" className="custom-btn-primary my-30"  onClick={handleDownloadCertificateClick}><ReceiptLongOutlinedIcon className="pr-5"/>{t('Download Certificates')}</Button>
-
+              <Button
+                type="buttom"
+                className="custom-btn-primary my-30"
+                onClick={handleDownloadCertificateClick}
+              >
+                <ReceiptLongOutlinedIcon className="pr-5" />
+                {t("Download Certificates")}
+              </Button>
 
               {/* <Grid container spacing={2} style={{ padding: "5px 0" }}> */}
-                {/* <Grid item xs={6} md={6}>
+              {/* <Grid item xs={6} md={6}>
                   <Card
                     sx={{
                       marginTop: "10px",
@@ -831,7 +850,7 @@ const Profile = () => {
                     </Box>
                   </Card>
                 </Grid> */}
-               
+
               {/* </Grid> */}
 
               <Modal
@@ -855,7 +874,7 @@ const Profile = () => {
                 <Box sx={style}>
                   <Typography
                     id="modal-modal-title"
-                   className="h4-title"
+                    className="h4-title"
                     style={{ marginBottom: "20px" }}
                   >
                     {t("SELECT_PREFERENCE")}
@@ -934,31 +953,50 @@ const Profile = () => {
                 </Box>
               </Card> */}
               <Box className="grey-bx p-10">
-                <Box className="h4-title d-flex"><SettingsOutlinedIcon className="pr-5"/>User Preferences</Box>
-                <Box className="mb-20">
-                <Box className="h5-title mt-15 mb-10">Domain :<Box></Box></Box>
-                <Box className="h5-title">Sub-Domain:</Box>
+                <Box className="h4-title d-flex">
+                  <SettingsOutlinedIcon className="pr-5" />
+                  User Preferences
                 </Box>
-
+                <Box className="mb-20">
+                  <Box className="h5-title mt-15 mb-10">
+                    Domain :<Box></Box>
+                  </Box>
+                  <Box className="h5-title">Sub-Domain:</Box>
+                </Box>
               </Box>
-              <Button type="button" className="custom-btn-primary my-30"  onClick={handleOpenModal}>{t('CHANGE_PREFERENCES')}</Button>
-
+              <Button
+                type="button"
+                className="custom-btn-primary my-30"
+                onClick={handleOpenModal}
+              >
+                {t("CHANGE_PREFERENCES")}
+              </Button>
             </Box>
           </Grid>
-          <Grid
-            item xs={12} md={8} lg={8} className="xs-pl-0"
-           
-          >
-              <TabContext  value={value}>
-                  <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
-                    <TabList  aria-label="lab API tabs example">
-                      <Tab label="Continue learning" className="tab-text" value="1" />
-                      <Tab label="Learning History" className="tab-text" value="2" onClick={handleLearningHistoryClick}/>
-                    </TabList>
-                  </Box>
-                <TabPanel value="1"><ContinueLearning /></TabPanel>
-                  <TabPanel value="2"><LearningHistory/></TabPanel>
-                </TabContext>
+          <Grid item xs={12} md={8} lg={8} className="xs-pl-0">
+            <TabContext value={value}>
+              <Box sx={{ borderBottom: 1, borderColor: "divider" }}>
+                <TabList aria-label="lab API tabs example">
+                  <Tab
+                    label="Continue learning"
+                    className="tab-text"
+                    value="1"
+                  />
+                  <Tab
+                    label="Learning History"
+                    className="tab-text"
+                    value="2"
+                    onClick={handleLearningHistoryClick}
+                  />
+                </TabList>
+              </Box>
+              <TabPanel value="1">
+                <ContinueLearning />
+              </TabPanel>
+              <TabPanel value="2">
+                <LearningHistory />
+              </TabPanel>
+            </TabContext>
           </Grid>
         </Grid>
       </Container>

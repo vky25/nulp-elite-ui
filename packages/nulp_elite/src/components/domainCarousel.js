@@ -125,7 +125,7 @@ export default function DomainCarousel({
             customTransition="all .5"
             transitionDuration={500}
             containerClass="carousel-container"
-            dotListClass="custom-dot-list-style"
+            dotListClass="custom-dot-list-style-none"
             itemClass="carousel-item-padding-40-px"
           >
             {itemsArray &&
@@ -177,7 +177,7 @@ export default function DomainCarousel({
       ) : (
         <Box
           sx={{ display: "flex" }}
-          className={scrolled ? "bg-blue scrolled" : "bg-blue"}
+          className={scrolled ? "bg-blue scrolled" : "carousel-bx"}
         >
           {itemsArray &&
             itemsArray?.slice(0, 10).map((domain, index) => (
@@ -195,42 +195,51 @@ export default function DomainCarousel({
                 onMouseLeave={handleMouseLeave}
               >
                 <Box
-                  className="imgBorder"
+                  className="d-flex"
                   style={{
-                    background: "#fff",
-                    padding: "10px",
-                    borderRadius: "10px",
-                    height: "45px",
-                    width: "45px",
+                    justifyContent: "space-between",
+                    alignItems: "center",
                   }}
                 >
-                  {/* {(domain.image != undefined) && <img src={require(baseImgUrl+domain.image)}  style={{width:'40px',objectFit:'contain'}} alt={domain.name} />}
+                  <Box
+                    className="imgBorder"
+                    style={{
+                      background: "#fff",
+                      padding: "10px",
+                      borderRadius: "10px",
+                      height: "45px",
+                      width: "45px",
+                    }}
+                  >
+                    {/* {(domain.image != undefined) && <img src={require(baseImgUrl+domain.image)}  style={{width:'40px',objectFit:'contain'}} alt={domain.name} />}
                 {(domain.image == undefined)&& <img src={require("../assets/swm.png")}  style={{width:'40px',objectFit:'contain'}} alt={domain.name} />} */}
-                  {/* <Tooltip title={domain.description}> */}
-                  <img
-                    className="domainHover"
-                    src={require(`../assets/domainImgs${domain.image}`)}
-                    style={{ width: "40px", objectFit: "contain" }}
-                    alt={domain.name}
-                  />
-                  {/* </Tooltip> */}
+                    {/* <Tooltip title={domain.description}> */}
+                    <img
+                      className="domainHover"
+                      src={require(`../assets/domainImgs${domain.image}`)}
+                      style={{ width: "40px", objectFit: "contain" }}
+                      alt={domain.name}
+                    />
 
-                  {/* <img src={require("../assets/swm.png")}  style={{width:'40px',objectFit:'contain'}} alt={domain.name} /> */}
+                    {/* </Tooltip> */}
+
+                    {/* <img src={require("../assets/swm.png")}  style={{width:'40px',objectFit:'contain'}} alt={domain.name} /> */}
+                  </Box>
+                  {activeDomain === index && (
+                    <span className="pl-5">{domain.name}</span>
+                    // <Box
+                    //   className="domainText"
+                    //   sx={{ alignSelf: "center", padding: "0 19px 0 5px" }}
+                    // >
+                    //   <Typography
+                    //     level="title-md"
+                    //     style={{ fontSize: "12px", opacity: isActive ? 1 : 0 }}
+                    //   >
+                    //     {domain.name}
+                    //   </Typography>
+                    // </Box>
+                  )}
                 </Box>
-                {activeDomain === index && (
-                  <span>{domain.name}</span>
-                  // <Box
-                  //   className="domainText"
-                  //   sx={{ alignSelf: "center", padding: "0 19px 0 5px" }}
-                  // >
-                  //   <Typography
-                  //     level="title-md"
-                  //     style={{ fontSize: "12px", opacity: isActive ? 1 : 0 }}
-                  //   >
-                  //     {domain.name}
-                  //   </Typography>
-                  // </Box>
-                )}
               </Box>
             ))}
         </Box>

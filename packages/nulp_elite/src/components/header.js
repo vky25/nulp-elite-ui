@@ -203,7 +203,7 @@ function Header() {
 
       {/* Top Navigation Bar */}
       <AppBar className="lg-my-10  bg-inherit pos-inherit mt-65">
-        <Container maxWidth="xl" className="p-0">
+        <Container className="p-0">
           <Box className="d-flex">
             <Toolbar
               disableGutters
@@ -308,7 +308,10 @@ function Header() {
               {/* Language Select */}
             </Toolbar>
             {/* Search Box */}
-            <Box className="xs-hide d-flex header-bg w-40 mr-30">
+            <Box
+              className="xs-hide d-flex header-bg w-40 mr-30"
+              style={{ alignItems: "center" }}
+            >
               <Box className="h1-title px-10 pr-20">{t("EXPLORE")}</Box>
               <TextField
                 placeholder={t("What do you want to learn today?  ")}
@@ -327,7 +330,7 @@ function Header() {
 
             {/* Other Navigation Links */}
             <Box
-              className="xs-hide header-bg py-25"
+              className="xs-hide header-bg py-15"
               sx={{ flexGrow: 1, display: "flex", justifyContent: "flex-end" }}
             >
               <Link
