@@ -17,22 +17,27 @@ import Alert from "@mui/material/Alert";
 import appConfig from "../../configs/appConfig.json";
 const urlConfig = require("../../configs/urlConfig.json");
 import ToasterCommon from "../ToasterCommon";
+import BoxCard from "components/Card";
+import { useParams, useNavigate, useLocation } from "react-router-dom";
 
 const LearningHistory = () => {
   const { t } = useTranslation();
   const [courseData, setCourseData] = useState(null);
-  const [selectedStatus, setSelectedStatus] = useState(null);
+  const [selectedStatus, setSelectedStatus] = useState([]);
   const [error, setError] = useState(null);
   const [toasterOpen, setToasterOpen] = useState(false);
   const [toasterMessage, setToasterMessage] = useState("");
+  const navigate = useNavigate();
 
   const showErrorMessage = (msg) => {
     setToasterMessage(msg);
     setTimeout(() => {
       setToasterMessage("");
+      setToasterOpen(false);
     }, 2000);
     setToasterOpen(true);
   };
+
   const _userId = util.userId();
 
   useEffect(() => {
@@ -53,19 +58,23 @@ const LearningHistory = () => {
       }
     };
     fetchData();
-  }, [selectedStatus]); // Include selectedStatus in the dependency array
-  // Function to handle filter change
-  const handleFilterChange = (selectedOption) => {
-    setSelectedStatus(selectedOption);
+  }, [_userId, t]);
+
+  const handleFilterChange = (selectedOptions) => {
+    console.log("Selected filter options:", selectedOptions); // Debug: Check selected filter options
+    setSelectedStatus(selectedOptions);
   };
-  // Function to convert Unix timestamp to human-readable date
-  const unixTimestampToHumanDate = (unixTimestamp) => {
-    const dateObject = new Date(unixTimestamp * 1000); // Multiply by 1000 to convert from seconds to milliseconds
-    return dateObject.toLocaleString(); // Convert to human-readable date format
-  };
+
+  const filteredCourses = courseData?.result?.courses?.filter((course) => {
+    if (selectedStatus.length > 0) {
+      const selectedValues = selectedStatus.map((option) => option.value);
+      return selectedValues.includes(course.status);
+    }
+    return true; // Show all if no filter selected
+  });
+
   return (
     <div>
-      {/* <Header /> */}
       {toasterMessage && <ToasterCommon response={toasterMessage} />}
       <Container maxWidth="xl" role="main" className="container-pb">
         {error && (
@@ -74,21 +83,6 @@ const LearningHistory = () => {
           </Alert>
         )}
         <Box textAlign="center" padding="10">
-          {/* <Breadcrumbs
-            aria-label="breadcrumb"
-            style={{
-              padding: "25px 0",
-              fontSize: "16px",
-              fontWeight: "600",
-            }}
-          >
-            <Link underline="hover" color="#004367" href="/profile">
-              {t("MY_PROFILE")}
-            </Link>
-            <Typography color="#484848" aria-current="page">
-              {t("LEARNING_HISTORY")}
-            </Typography>
-          </Breadcrumbs> */}
           <Box style={{ margin: "20px 0" }}>
             <Filter
               options={[
@@ -106,85 +100,20 @@ const LearningHistory = () => {
               spacing={2}
               style={{ textAlign: "left", paddingTop: "10px" }}
             >
-              {courseData?.result?.courses.length === 0 ? (
+              {filteredCourses?.length === 0 ? (
                 <NoResult />
               ) : (
-                courseData?.result?.courses
-                  .filter((course) => {
-                    if (selectedStatus === 0) {
-                      return course.batch.status === 0; // Ongoing
-                    } else if (selectedStatus === 1) {
-                      return course.batch.status === 1; // Completed
-                    } else if (selectedStatus === 2) {
-                      return course.batch.status === 2; // Expired
-                    } else {
-                      return true; // Show all if no filter selected
-                    }
-                  })
-                  .map((course) => (
-                    <Grid item xs={12} md={4} key={course.courseName}>
-                      <Card
-                        sx={{
-                          marginTop: "10px",
-                          padding: "10px",
-                          borderRadius: "10px",
-                          border: "solid 1px #EFEFEF",
-                          boxShadow: "none",
-                          color: "#484848",
-                        }}
-                      >
-                        <Typography
-                          className="twoLineEllipsis"
-                          variant="subtitle1"
-                          color="textSecondary"
-                          component="div"
-                          style={{
-                            fontSize: "14px",
-                            paddingBottom: "15px",
-                            height: "42px",
-                            fontWeight: "600",
-                          }}
-                        >
-                          {course.courseName}
-                        </Typography>
-                        <Typography
-                          variant="subtitle1"
-                          color="textSecondary"
-                          component="div"
-                          style={{ fontSize: "12px" }}
-                        >
-                          {t("CERTIFICATE_GIVEN_BY")}: {course.batch.endDate}
-                        </Typography>
-                        <Typography
-                          variant="subtitle1"
-                          color="textSecondary"
-                          component="div"
-                          style={{ fontSize: "12px" }}
-                        >
-                          {t("CERTIFICATE_ISSUE_DATE")}:{" "}
-                          {unixTimestampToHumanDate(course.completedOn)}
-                        </Typography>
-                        <Typography
-                          style={{
-                            marginTop: "10px",
-                            color:
-                              course.status === 2
-                                ? "red"
-                                : course.status === 1
-                                ? "blue"
-                                : "green",
-                            fontSize: "12px",
-                          }}
-                        >
-                          {course.status === 2
-                            ? t("Expired")
-                            : course.status === 1
-                            ? t("Completed")
-                            : t("ongoing")}
-                        </Typography>
-                      </Card>
-                    </Grid>
-                  ))
+                filteredCourses?.map((course) => (
+                  <Grid item xs={12} md={4} key={course.courseName}>
+                    <BoxCard
+                      items={course}
+                      index={courseData.result.courses.length}
+                      onClick={() =>
+                        navigate(`/joinCourse/${course.content.identifier}`)
+                      }
+                    />
+                  </Grid>
+                ))
               )}
             </Grid>
           </Card>

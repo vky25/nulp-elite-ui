@@ -114,6 +114,8 @@ const Profile = () => {
   const [subDomain, setSubDomain] = useState("");
   const [isMobile, setIsMobile] = useState(window.innerWidth <= 767);
   const [showCertificate, setShowCertificate] = useState(false);
+  const [isButtonDisabled, setIsButtonDisabled] = useState(false);
+
   const showErrorMessage = (msg) => {
     setToasterMessage(msg);
     setTimeout(() => {
@@ -373,6 +375,7 @@ const Profile = () => {
     if (isMobile) {
       navigate("/certificate");
     } else {
+      setIsButtonDisabled(true);
       setShowCertificate(true);
     }
   };
@@ -710,6 +713,10 @@ const Profile = () => {
                 type="buttom"
                 className="custom-btn-primary my-30"
                 onClick={handleCertificateButtonClick}
+                disabled={isButtonDisabled}
+                style={{
+                  backgroundColor: isButtonDisabled ? "gray" : "initial",
+                }}
               >
                 <ReceiptLongOutlinedIcon className="pr-5" />
                 {t("Download Certificates")}
