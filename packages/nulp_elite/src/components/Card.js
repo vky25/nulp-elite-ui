@@ -44,7 +44,11 @@ export default function BoxCard({ items, index, onClick }) {
   // };
 
   return (
-    <Card className="cardBox" sx={{ position: "relative", cursor: "pointer" }}>
+    <Card
+      className="cardBox"
+      sx={{ position: "relative", cursor: "pointer" }}
+      onClick={onClick}
+    >
       <CardMedia
         sx={{
           height: 140,
