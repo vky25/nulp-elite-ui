@@ -15,7 +15,6 @@ export default function BoxCard({ items, index, onClick }) {
 
   const [subdomain, setSubdomain] = React.useState();
 
-
   useEffect(() => {
     console.log("card items----", items);
     if (items.se_gradeLevels) {
@@ -71,7 +70,7 @@ export default function BoxCard({ items, index, onClick }) {
         image={
           subdomain
             ? require(`./../assets/dummyCardImgs/${subdomain}.png`)
-            : require("../assets/Management.png")
+            : require("./../assets/dummyCardImgs/Management.png")
         }
         title="green iguana"
       />
