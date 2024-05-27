@@ -49,7 +49,7 @@ const ContinueLearning = () => {
 
   const handleFilterChange = (selectedOptions) => {
     const selectedValues = selectedOptions.map((option) => option.value);
-    setFilters({ ...filters, se_gradeleverl: selectedValues });
+    setFilters({ ...filters, se_gradeLevel: selectedValues });
   };
 
   const fetchData = async () => {
@@ -73,9 +73,32 @@ const ContinueLearning = () => {
       setIsLoading(false);
     }
   };
-
-  const fetchGradeLevels = () => {
-    // Implement your logic to fetch grade levels
+  const fetchGradeLevels = async () => {
+    const defaultFramework = localStorage.getItem("defaultFramework");
+    try {
+      const url = `${urlConfig.URLS.PUBLIC_PREFIX}${urlConfig.URLS.FRAMEWORK.READ}/${defaultFramework}?categories=${urlConfig.params.framework}`;
+      const response = await fetch(url);
+      const data = await response.json();
+      if (
+        data.result &&
+        data.result.framework &&
+        data.result.framework.categories
+      ) {
+        const gradeLevelCategory = data.result.framework.categories.find(
+          (category) => category.identifier === "nulp_gradelevel"
+        );
+        if (gradeLevelCategory && gradeLevelCategory.terms) {
+          const gradeLevelsOptions = gradeLevelCategory.terms.map((term) => ({
+            value: term.code,
+            label: term.name,
+          }));
+          setGradeLevels(gradeLevelsOptions);
+        }
+      }
+    } catch (error) {
+      console.error("Error fetching grade levels:", error);
+      showErrorMessage(t("FAILED_TO_FETCH_DATA"));
+    }
   };
 
   const handleCourseStatusChange = (selectedOptions) => {
@@ -95,7 +118,14 @@ const ContinueLearning = () => {
       courseStatus.includes(courses.contents.status)
     );
   }, [courseStatus, data]);
-
+  const handleCardClick = (contentId, courseType) => {
+    if (courseType === "Course") {
+      // navigate("/joinCourse", { state: { contentId } });
+      navigate(`/joinCourse/${contentId}`);
+    } else {
+      navigate("/player");
+    }
+  };
   return (
     <div>
       {toasterMessage && <ToasterCommon response={toasterMessage} />}
@@ -107,11 +137,7 @@ const ContinueLearning = () => {
         )}
         <Box style={{ margin: "20px 0" }}>
           <Filter
-            options={[
-              { label: "Ongoing", value: 0 },
-              { label: "Completed", value: 1 },
-              { label: "Expired", value: 2 },
-            ]}
+            options={gradeLevels}
             label="Filter by Sub-Domain"
             onChange={handleFilterChange}
           />
@@ -145,13 +171,19 @@ const ContinueLearning = () => {
                     item
                     xs={12}
                     md={6}
-                    lg={4}
+                    lg={3}
                     style={{ marginBottom: "10px" }}
                     key={items.contentId}
                   >
                     <BoxCard
                       items={items.content}
                       index={filteredCourses.length}
+                      onClick={() =>
+                        handleCardClick(
+                          items.content.identifier,
+                          items.content.primaryCategory
+                        )
+                      }
                     ></BoxCard>
                   </Grid>
                 ))
