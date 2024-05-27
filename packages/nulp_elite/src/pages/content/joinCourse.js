@@ -49,6 +49,7 @@ import {
   LinkedinIcon,
   TwitterIcon,
 } from "react-share";
+import AddConnections from "pages/connections/AddConnections";
 const JoinCourse = () => {
   const { t } = useTranslation();
   const [courseData, setCourseData] = useState();
@@ -76,8 +77,10 @@ const JoinCourse = () => {
     message: "",
   });
   const [showChat, setShowChat] = useState(false);
+  const [isMobile, setIsMobile] = useState(window.innerWidth <= 767);
 
-  const { contentId } = location.state || {};
+  // const { contentId } = location.state || {};
+  const { contentId } = useParams();
   const _userId = util.userId(); // Assuming util.userId() is defined
   const shareUrl = window.location.href; // Current page URL
   const style = {
@@ -97,11 +100,16 @@ const JoinCourse = () => {
     }, 2000);
     setToasterOpen(true);
   };
+  useEffect(() => {
+    const handleResize = () => setIsMobile(window.innerWidth <= 767);
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
 
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const url = `${urlConfig.URLS.PUBLIC_PREFIX}${urlConfig.URLS.COURSE.HIERARCHY}/${contentId}?orgdetails=${appConfig.ContentPlayer.contentApiQueryParams}`;
+        const url = `${urlConfig.URLS.PUBLIC_PREFIX}${urlConfig.URLS.COURSE.HIERARCHY}/${contentId}?orgdetails=${appConfig.ContentPlayer.contentApiQueryParams}&licenseDetails=name,description,url`;
         const response = await fetch(url, {
           headers: {
             "Content-Type": "application/json",
@@ -136,19 +144,27 @@ const JoinCourse = () => {
             },
           },
         });
+
         const responseData = response.data;
-        if (
-          responseData.result.response &&
-          responseData.result.response.content
-        ) {
-          const batchDetails = responseData.result.response.content[0];
-          setBatchData({
-            startDate: batchDetails.startDate,
-            endDate: batchDetails.endDate,
-            enrollmentEndDate: batchDetails.enrollmentEndDate,
-            batchId: batchDetails.batchId,
-          });
-          setBatchDetails(batchDetails);
+
+        if (responseData.result.response) {
+          const { count, content } = responseData.result.response;
+
+          if (count === 0) {
+            // console.warn("This course has no active batches.");
+            showErrorMessage(t("This course has no active Batches")); // Assuming `showErrorMessage` is used to display messages to the user
+          } else if (content && content.length > 0) {
+            const batchDetails = content[0];
+            setBatchData({
+              startDate: batchDetails.startDate,
+              endDate: batchDetails.endDate,
+              enrollmentEndDate: batchDetails.enrollmentEndDate,
+              batchId: batchDetails.batchId,
+            });
+            setBatchDetails(batchDetails);
+          } else {
+            console.error("Batch data not found in response");
+          }
         } else {
           console.error("Batch data not found in response");
         }
@@ -230,6 +246,10 @@ const JoinCourse = () => {
   const handleDirectConnect = () => {
     if (chat.length === 0) {
       setOpen(true);
+    } else if (!isMobile) {
+      navigate("/addConnections", {
+        state: { senderUserId: _userId, receiverUserId: creatorId },
+      });
     } else {
       navigate("/chat", {
         state: { senderUserId: _userId, receiverUserId: creatorId },
@@ -741,21 +761,21 @@ const JoinCourse = () => {
                 <Button
                   size="small"
                   style={{
-                    background: "#ffefc2",
-                    color: "#484848",
+                    color: "#424242",
                     fontSize: "12px",
                     margin: "0 10px",
                   }}
+                  className="bg-blueShade3"
                 >
                   {courseData?.result?.content?.children[0]?.children[0]?.board}
                 </Button>
                 <Button
                   size="small"
                   style={{
-                    background: "#ffefc2",
-                    color: "#484848",
+                    color: "#424242",
                     fontSize: "10px",
                   }}
+                  className="bg-blueShade3"
                 >
                   {" "}
                   {
@@ -771,6 +791,7 @@ const JoinCourse = () => {
                 padding: "10px",
                 borderRadius: "10px",
                 color: "#484848",
+                boxShadow: "0px 4px 4px 0px #00000040",
               }}
               className="xs-hide"
             >
@@ -839,7 +860,7 @@ const JoinCourse = () => {
                 expandIcon={<ExpandMoreIcon />}
                 aria-controls="panel1-content"
                 id="panel1-header"
-                className="h4-title"
+                className="h4-title accordionBoxShadow"
               >
                 {t("CERTIFICATION_CRITERIA")}
               </AccordionSummary>
@@ -857,7 +878,7 @@ const JoinCourse = () => {
               </AccordionDetails>
             </Accordion>
             <Accordion
-              className="xs-hide"
+              className="xs-hide accordionBoxShadow"
               style={{
                 background: "#F9FAFC",
                 borderRadius: "10px",
@@ -978,7 +999,6 @@ const JoinCourse = () => {
                   style={{ width: 32, height: 32 }}
                 />
               </TwitterShareButton>
-            
             </Box>
           </Grid>
           <Grid item xs={12} md={8} lg={8} className="mb-20 xs-pr-16">
@@ -1075,7 +1095,7 @@ const JoinCourse = () => {
                 borderRadius: "10px",
                 color: "#484848",
               }}
-              className="lg-hide"
+              className="lg-hide accordionBoxShadow"
             >
               <Typography
                 variant="h7"
@@ -1131,7 +1151,7 @@ const JoinCourse = () => {
               </Box>
             </Box>
             <Accordion
-              className="lg-hide"
+              className="lg-hide accordionBoxShadow"
               style={{
                 background: "#F9FAFC",
                 borderRadius: "10px",
@@ -1160,7 +1180,7 @@ const JoinCourse = () => {
               </AccordionDetails>
             </Accordion>
             <Accordion
-              className="lg-hide"
+              className="lg-hide accordionBoxShadow"
               style={{
                 background: "#F9FAFC",
                 borderRadius: "10px",

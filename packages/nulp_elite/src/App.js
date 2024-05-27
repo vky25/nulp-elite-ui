@@ -100,7 +100,7 @@ function App() {
     },
     {
       moduleName: "nulp_elite",
-      path: "/joinCourse",
+      path: "/joinCourse/:contentId",
       component: JoinCourse,
     },
 
