@@ -52,7 +52,7 @@ import {
 import AddConnections from "pages/connections/AddConnections";
 const JoinCourse = () => {
   const { t } = useTranslation();
-  const [userData, setUserData] = useState();
+  const [courseData, setCourseData] = useState();
   const [batchData, setBatchData] = useState();
   const [batchDetails, setBatchDetails] = useState();
   const [userCourseData, setUserCourseData] = useState({});
@@ -120,6 +120,7 @@ const JoinCourse = () => {
           throw new Error(t("FAILED_TO_FETCH_DATA"));
         }
         const data = await response.json();
+
         setCreatorId(data?.result?.content?.createdBy);
         setUserData(data);
       } catch (error) {
@@ -270,7 +271,7 @@ const JoinCourse = () => {
   };
 
   const handleLinkClick = () => {
-    navigate("/player");
+    navigate("/player", { state: { content: courseData.result.content } });
   };
 
   const handleSnackbarClose = (event, reason) => {
@@ -766,7 +767,7 @@ const JoinCourse = () => {
                   }}
                   className="bg-blueShade3"
                 >
-                  {userData?.result?.content?.children[0]?.children[0]?.board}
+                  {courseData?.result?.content?.children[0]?.children[0]?.board}
                 </Button>
                 <Button
                   size="small"
@@ -778,7 +779,7 @@ const JoinCourse = () => {
                 >
                   {" "}
                   {
-                    userData?.result?.content?.children[0]?.children[0]
+                    courseData?.result?.content?.children[0]?.children[0]
                       .gradeLevel?.[0]
                   }
                 </Button>
@@ -1027,7 +1028,7 @@ const JoinCourse = () => {
                 className="twoLineEllipsis h5-title mb-15"
                 style={{ fontWeight: "600" }}
               >
-                {userData?.result?.content?.description}
+                {courseData?.result?.content?.description}
               </Typography>
             </Box>
 
@@ -1049,7 +1050,7 @@ const JoinCourse = () => {
                 {t("COURSES_MODULE")}
               </AccordionSummary>
               <AccordionDetails>
-                {userData?.result?.content?.children.map((faqIndex) => (
+                {courseData?.result?.content?.children.map((faqIndex) => (
                   <Accordion
                     key={faqIndex.id}
                     style={{ borderRadius: "10px", margin: "10px 0" }}
@@ -1197,29 +1198,29 @@ const JoinCourse = () => {
               <AccordionDetails style={{ background: "#fff" }}>
                 <Typography className="h6-title">
                   {t("CREATED_ON")}:{" "}
-                  {userData &&
-                    userData.result &&
-                    formatDate(userData.result.content.children[0].createdOn)}
+                  {courseData &&
+                    courseData.result &&
+                    formatDate(courseData.result.content.children[0].createdOn)}
                 </Typography>
                 <Typography className="h6-title">
                   {t("UPDATED_ON")}:{" "}
-                  {userData &&
-                    userData.result &&
+                  {courseData &&
+                    courseData.result &&
                     formatDate(
-                      userData.result.content.children[0].lastUpdatedOn
+                      courseData.result.content.children[0].lastUpdatedOn
                     )}
                 </Typography>
                 <Typography className="h6-title">{t("CREDITS")}:</Typography>
                 <Typography className="h6-title">
                   {t("LICENSE_TERMS")}:{" "}
-                  {userData?.result?.content?.licenseDetails?.name}
+                  {courseData?.result?.content?.licenseDetails?.name}
                   {t("FOR_DETAILS")}:{" "}
                   <a
-                    href={userData?.result?.content?.licenseDetails?.url}
+                    href={courseData?.result?.content?.licenseDetails?.url}
                     target="_blank"
                     rel="noopener noreferrer"
                   >
-                    {userData?.result?.content?.licenseDetails?.url}
+                    {courseData?.result?.content?.licenseDetails?.url}
                   </a>
                 </Typography>
               </AccordionDetails>
