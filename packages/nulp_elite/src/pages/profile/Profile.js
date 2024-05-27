@@ -447,7 +447,7 @@ const Profile = () => {
                       padding: "7px 7px 0",
                     }}
                   >
-                    {userData && userInfo?.length > 0 && (
+                    {userData && (
                       <>
                         <Box className="d-flex jc-bw mb-10">
                           <Box>
@@ -456,10 +456,12 @@ const Profile = () => {
                               {userData.result.response.lastName}
                             </Typography>
                             <Typography className="h6-title d-flex">
-                              {userInfo[0]?.designation}{" "}
+                              {userInfo[0]?.designation && (
+                                <>{userInfo[0].designation} </>
+                              )}
                               <Box className="twoLineEllipsis">
-                                {" "}
-                                | ID: {userData.result.response.userName}{" "}
+                                {userInfo[0]?.designation && " | "}
+                                ID: {userData.result.response.userName}{" "}
                                 {userData.result.response.organisations.orgName}
                               </Box>
                             </Typography>
