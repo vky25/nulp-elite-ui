@@ -278,7 +278,8 @@ const DomainList = () => {
 
   const handleCardClick = (contentId, courseType) => {
     if (courseType === "Course") {
-      navigate("/joinCourse", { state: { contentId } });
+      // navigate("/joinCourse", { state: { contentId } });
+      navigate(`/joinCourse/${contentId}`);
     } else {
       navigate("/player");
     }

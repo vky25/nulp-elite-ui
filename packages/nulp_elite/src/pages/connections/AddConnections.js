@@ -123,15 +123,15 @@ const AddConnections = () => {
     receiverUserId: routeReceiverUserId,
   } = location.state || {};
 
-  useEffect(() => {
-    if (routeSenderUserId && routeReceiverUserId) {
-      setSelectedChatUser({
-        senderUserId: routeSenderUserId,
-        receiverUserId: routeReceiverUserId,
-      });
-      setSelectedUserId(routeReceiverUserId);
-    }
-  }, [routeSenderUserId, routeReceiverUserId]);
+  // useEffect(() => {
+  //   if (routeSenderUserId && routeReceiverUserId) {
+  //     setSelectedChatUser({
+  //       senderUserId: routeSenderUserId,
+  //       receiverUserId: routeReceiverUserId,
+  //     });
+  //     setSelectedUserId(routeReceiverUserId);
+  //   }
+  // }, [routeSenderUserId, routeReceiverUserId]);
 
   const showErrorMessage = (msg) => {
     setToasterMessage(msg);

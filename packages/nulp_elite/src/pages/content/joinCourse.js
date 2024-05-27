@@ -65,7 +65,7 @@ const JoinCourse = () => {
   const [consentChecked, setConsentChecked] = useState(false);
   const [shareEnabled, setShareEnabled] = useState(false);
   const [openModal, setOpenModal] = useState(false);
-
+  const [userData, setUserData] = useState();
   const location = useLocation();
   const navigate = useNavigate();
   const [toasterOpen, setToasterOpen] = useState(false);
