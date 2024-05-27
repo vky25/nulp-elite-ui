@@ -70,7 +70,9 @@ const ContentList = (props) => {
   const [toasterMessage, setToasterMessage] = useState("");
   const [isMobile, setIsMobile] = useState(window.innerWidth <= 767);
   const [channelData, setChannelData] = React.useState(true);
-
+  const [globalSearchQuery, setGlobalSearchQuery] = useState(
+    location.state?.globalSearchQuery || undefined
+  );
   const showErrorMessage = (msg) => {
     setToasterMessage(msg);
     setTimeout(() => {
@@ -90,6 +92,20 @@ const ContentList = (props) => {
     fetchData();
   }, [domain]);
 
+  useEffect(() => {
+    if (
+      (location.state?.globalSearchQuery &&
+        location.state?.globalSearchQuery !== globalSearchQuery) ||
+      location.state?.globalSearchQuery === ""
+    ) {
+      setGlobalSearchQuery(location.state?.globalSearchQuery);
+    }
+  }, [location.state?.globalSearchQuery, globalSearchQuery]);
+
+  useEffect(() => {
+    fetchData();
+  }, [globalSearchQuery]);
+
   const handleFilterChange = (selectedOptions) => {
     const selectedValues = selectedOptions.map((option) => option.value);
     setFilters({ ...filters, se_gradeleverl: selectedValues });
@@ -103,6 +119,87 @@ const ContentList = (props) => {
   const handleSearch = (query) => {
     setSearch({ ...search, query });
   };
+
+  // const fetchAllData = async () => {
+  //   setIsLoading(true);
+  //   setError(null);
+
+  //   let requestData = {
+  //     request: {
+  //       filters: {
+  //         status: ["Live"],
+  //         contentType: [
+  //           "Collection",
+  //           "TextBook",
+  //           "Course",
+  //           "LessonPlan",
+  //           "Resource",
+  //           "SelfAssess",
+  //           "PracticeResource",
+  //           "LearningOutcomeDefinition",
+  //           "ExplanationResource",
+  //           "ExperientialResource",
+  //           "eTextBook",
+  //           "TVLesson",
+  //         ],
+  //       },
+  //       fields: [
+  //         "name",
+  //         "appIcon",
+  //         "mimeType",
+  //         "gradeLevel",
+  //         "identifier",
+  //         "medium",
+  //         "pkgVersion",
+  //         "board",
+  //         "subject",
+  //         "resourceType",
+  //         "primaryCategory",
+  //         "contentType",
+  //         "channel",
+  //         "organisation",
+  //         "trackable",
+  //       ],
+  //       facets: [
+  //         "se_boards",
+  //         "se_gradeLevels",
+  //         "se_subjects",
+  //         "se_mediums",
+  //         "primaryCategory",
+  //       ],
+  //       limit: 20,
+  //       query: globalSearchQuery,
+  //       offset: 20 * (currentPage - 1),
+  //       sort_by: {
+  //         lastUpdatedOn: "desc",
+  //       },
+  //     },
+  //   };
+
+  //   let req = JSON.stringify(requestData);
+
+  //   const headers = {
+  //     "Content-Type": "application/json",
+  //   };
+
+  //   try {
+  //     const url = `${urlConfig.URLS.LEARNER_PREFIX}${urlConfig.URLS.CONTENT.SEARCH}?orgdetails=${appConfig.ContentPlayer.contentApiQueryParams.orgdetails}&licenseDetails=${appConfig.ContentPlayer.contentApiQueryParams.licenseDetails}`;
+
+  //     const response = await contentService.getAllContents(url, req, headers);
+
+  //     if (response.data.result.content && response.data.result.count <= 20) {
+  //       setTotalPages(1);
+  //     } else if (response.data.result.count > 20) {
+  //       setTotalPages(Math.floor(response.data.result.count / 20));
+  //     }
+
+  //     setData(response.data.result);
+  //   } catch (error) {
+  //     showErrorMessage(t("FAILED_TO_FETCH_DATA"));
+  //   } finally {
+  //     setIsLoading(false);
+  //   }
+  // };
 
   const fetchData = async () => {
     setIsLoading(true);
@@ -130,7 +227,7 @@ const ContentList = (props) => {
           se_gradeLevels: filters.se_gradeleverl,
         },
         limit: 20,
-        query: search.query || domainquery,
+        query: search.query || domainquery || globalSearchQuery,
         offset: 20 * (currentPage - 1),
         sort_by: {
           lastUpdatedOn: "desc",
@@ -276,7 +373,7 @@ const ContentList = (props) => {
 
   return (
     <div>
-      <Header />
+      <Header globalSearchQuery={globalSearchQuery} />
       {toasterMessage && <ToasterCommon response={toasterMessage} />}
 
       <Box>
