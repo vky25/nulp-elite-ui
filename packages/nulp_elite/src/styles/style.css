@@ -53,6 +53,7 @@ body {
   -webkit-line-clamp: 1;
   -webkit-box-orient: vertical;
   height: 26px;
+  padding-top: 8px !important;
 }
 .ribbonCard {
   z-index: 999;
