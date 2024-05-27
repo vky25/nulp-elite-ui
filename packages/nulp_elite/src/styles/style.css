@@ -45,6 +45,15 @@ body {
   width: 96%;
   text-align: left;
 }
+.oneLineEllipsis {
+  z-index: 9999;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: -webkit-box;
+  -webkit-line-clamp: 1;
+  -webkit-box-orient: vertical;
+  height: 26px;
+}
 .ribbonCard {
   z-index: 999;
   font-size: 12px;
