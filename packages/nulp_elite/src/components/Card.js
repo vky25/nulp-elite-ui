@@ -186,7 +186,6 @@ export default function BoxCard({ items, index, onClick }) {
       items.se_boards ||
       items.se_gradeLevels ? (
         <div>
-          <Divider></Divider>
           <Box className="my-10 textLeft">
             {(items.board || items.se_boards) && (
               <Button type="button" size="small" className="labelOne">
