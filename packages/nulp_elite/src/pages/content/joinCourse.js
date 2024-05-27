@@ -109,7 +109,7 @@ const JoinCourse = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const url = `${urlConfig.URLS.PUBLIC_PREFIX}${urlConfig.URLS.COURSE.HIERARCHY}/${contentId}?orgdetails=${appConfig.ContentPlayer.contentApiQueryParams}`;
+        const url = `${urlConfig.URLS.PUBLIC_PREFIX}${urlConfig.URLS.COURSE.HIERARCHY}/${contentId}?orgdetails=${appConfig.ContentPlayer.contentApiQueryParams}&licenseDetails=name,description,url`;
         const response = await fetch(url, {
           headers: {
             "Content-Type": "application/json",
@@ -143,19 +143,27 @@ const JoinCourse = () => {
             },
           },
         });
+
         const responseData = response.data;
-        if (
-          responseData.result.response &&
-          responseData.result.response.content
-        ) {
-          const batchDetails = responseData.result.response.content[0];
-          setBatchData({
-            startDate: batchDetails.startDate,
-            endDate: batchDetails.endDate,
-            enrollmentEndDate: batchDetails.enrollmentEndDate,
-            batchId: batchDetails.batchId,
-          });
-          setBatchDetails(batchDetails);
+
+        if (responseData.result.response) {
+          const { count, content } = responseData.result.response;
+
+          if (count === 0) {
+            // console.warn("This course has no active batches.");
+            showErrorMessage(t("This course has no active Batches")); // Assuming `showErrorMessage` is used to display messages to the user
+          } else if (content && content.length > 0) {
+            const batchDetails = content[0];
+            setBatchData({
+              startDate: batchDetails.startDate,
+              endDate: batchDetails.endDate,
+              enrollmentEndDate: batchDetails.enrollmentEndDate,
+              batchId: batchDetails.batchId,
+            });
+            setBatchDetails(batchDetails);
+          } else {
+            console.error("Batch data not found in response");
+          }
         } else {
           console.error("Batch data not found in response");
         }

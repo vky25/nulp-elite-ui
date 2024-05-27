@@ -37,6 +37,7 @@ const CategoryPage = () => {
   const [itemsArray, setItemsArray] = useState([]);
   const [toasterOpen, setToasterOpen] = useState(false);
   const [toasterMessage, setToasterMessage] = useState("");
+  const [domainName, setDomainName] = useState();
 
   const showErrorMessage = (msg) => {
     setToasterMessage(msg);
@@ -50,12 +51,17 @@ const CategoryPage = () => {
     // Implement your search logic here
     console.log("Search query:", query);
   };
-  const handleDomainFilter = (query) => {
+  const handleDomainFilter = (query, domainName) => {
     // Implement your search logic here
     setSelectedDomain(query);
+    setDomainName(domainName);
     console.log("Search query:", selectedDomain);
     fetchMoreItems(category);
   };
+
+  useEffect(() => {
+    fetchMoreItems();
+  }, [selectedDomain]);
 
   const handleGoBack = () => {
     navigate(-1); // Navigate back in history
@@ -197,6 +203,25 @@ const CategoryPage = () => {
       )}
 
       <Container maxWidth="xl" role="main" className="allContent">
+        <Box
+          className="d-flex jc-bw mr-20 my-20"
+          style={{ alignItems: "center" }}
+        >
+          {domainName && (
+            <Box
+              sx={{ marginTop: "10px", alignItems: "center" }}
+              className="d-flex h3-title ml-neg-20"
+            >
+              {t("YOU_ARE_VIEWING_CONTENTS_FOR")}
+              <Box
+                sx={{ fontSize: "16px", fontWeight: "600", paddingLeft: "5px" }}
+                className="text-blueShade2"
+              >
+                {domainName}
+              </Box>
+            </Box>
+          )}
+        </Box>
         {error && (
           <Alert className="my-4" severity="error">
             {error}

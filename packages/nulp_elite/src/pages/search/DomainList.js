@@ -264,8 +264,10 @@ const DomainList = () => {
     console.log(domainquery);
     navigate("/contentList/1", { state: { domainquery } });
   };
-  const handleDomainFilter = (query) => {
-    navigate("/contentList/1", { state: { domain: query } });
+  const handleDomainFilter = (query, domainName) => {
+    navigate("/contentList/1", {
+      state: { domain: query, domainName: domainName },
+    });
   };
   // console.log(frameworkHardCodedData.result.framework.categories[0].terms);
 

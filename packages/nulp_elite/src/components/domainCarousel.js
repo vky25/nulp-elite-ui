@@ -93,12 +93,12 @@ export default function DomainCarousel({
   const pushData = (term) => {
     setItemsArray((prevData) => [...prevData, term]);
   };
-  const handleDomainClick = (query, index) => {
+  const handleDomainClick = (query, index, name) => {
     setActiveStates(index === activeStates ? null : index);
     // const newActiveStates = [...activeStates]; // Create a copy of activeStates
     // newActiveStates[index] = !newActiveStates[index]; // Toggle the active state at the clicked index
     // setActiveStates(newActiveStates);
-    onSelectDomain(query);
+    onSelectDomain(query, name);
     // setIsActive(!isActive);
   };
   const handleMouseEnter = (index) => {
@@ -134,7 +134,9 @@ export default function DomainCarousel({
                   className={`my-class ${
                     activeStates === index ? "carousel-active-ui" : ""
                   }`}
-                  onClick={(e) => handleDomainClick(domain.code, index)}
+                  onClick={(e) =>
+                    handleDomainClick(domain.code, index, domain.name)
+                  }
                   key={index}
                   orientation="horizontal"
                   size="sm"
@@ -185,7 +187,9 @@ export default function DomainCarousel({
                 className={`my-class ${
                   activeStates === index ? "carousel-active-ui" : ""
                 }`}
-                onClick={(e) => handleDomainClick(domain.code, index)}
+                onClick={(e) =>
+                  handleDomainClick(domain.code, index, domain.name)
+                }
                 key={index}
                 orientation="horizontal"
                 size="sm"
