@@ -8,9 +8,11 @@ import Typography from "@mui/material/Typography";
 import Box from "@mui/material/Box";
 import { Divider } from "native-base";
 import RandomImage from "../assets/cardRandomImgs.json";
+import { useTranslation } from "react-i18next";
 
 export default function BoxCard({ items, index, onClick }) {
   const [imgUrl, setImgUrl] = React.useState();
+  const { t } = useTranslation();
 
   useEffect(() => {
     // const random = getRandomValue();
@@ -35,6 +37,12 @@ export default function BoxCard({ items, index, onClick }) {
   //   // return array[randomIndex];
   //   return randomIndex;
   // };
+  // Function to convert Unix timestamp to human-readable date
+  const unixTimestampToHumanDate = (unixTimestamp) => {
+    const dateObject = new Date(unixTimestamp);
+    const options = { day: "2-digit", month: "long", year: "numeric" };
+    return dateObject.toLocaleDateString("en-GB", options); // Convert to human-readable date format
+  };
 
   return (
     <Card className="cardBox" sx={{ position: "relative", cursor: "pointer" }}>
@@ -112,28 +120,103 @@ export default function BoxCard({ items, index, onClick }) {
           )}
         </Typography>
       </CardContent>
-
-      {/* {items.board ||
+      {items.content ? (
+        <CardContent>
+          <Typography
+            gutterBottom
+            variant="h7"
+            component="div"
+            className="ribbonCard"
+          >
+            {items.content.primaryCategory && (
+              <Box className="cardCourses">
+                {" "}
+                {items.content.primaryCategory}
+              </Box>
+            )}
+          </Typography>
+          <Box className="card-img-container">
+            <img
+              src={
+                items.content.appIcon
+                  ? items.content.appIcon
+                  : require("assets/default.png")
+              }
+              className="card-img"
+            />
+          </Box>
+          <Typography
+            gutterBottom
+            variant="h5"
+            component="div"
+            className="cardTitle mt-40"
+          >
+            {items.content.name}
+          </Typography>
+          <Typography
+            variant="body2"
+            color="#5B5B5B"
+            style={{ fontSize: "11px", padding: "10px 0", textAlign: "left" }}
+          >
+            {items.enrolledDate && (
+              <Box>
+                {" "}
+                {t("ENROLLED_ON")}: :{" "}
+                {unixTimestampToHumanDate(items.enrolledDate)}{" "}
+              </Box>
+            )}
+          </Typography>
+        </CardContent>
+      ) : null}
+      {items.board ||
       items.gradeLevel ||
       items.se_boards ||
-      items.se_gradeLevels ? ( */}
-      <div>
-        <Divider></Divider>
-        <Box className="my-10 textLeft">
-          {(items.board || items.se_boards) && (
-            <Button type="button" size="small" className="labelOne">
-              {items.board || items.se_boards}
-            </Button>
-          )}
-          {(items.gradeLevel || items.se_gradeLevels) && (
-            <Button type="button" size="small" className="labeltwo">
-              {" "}
-              {items.gradeLevel || items.se_gradeLevels}
-            </Button>
-          )}
-        </Box>
-      </div>
-      {/* ) : null} */}
+      items.se_gradeLevels ? (
+        <div>
+          <Divider></Divider>
+          <Box className="my-10 textLeft">
+            {(items.board || items.se_boards) && (
+              <Button type="button" size="small" className="labelOne">
+                {items.board || items.se_boards}
+              </Button>
+            )}
+            {(items.gradeLevel || items.se_gradeLevels) && (
+              <Button type="button" size="small" className="labeltwo">
+                {" "}
+                {items.gradeLevel || items.se_gradeLevels}
+              </Button>
+            )}
+          </Box>
+        </div>
+      ) : null}
+
+      {items.content ? (
+        <div>
+          {/* <Divider></Divider> */}
+          <Box className="my-10">
+            <Typography
+              style={{
+                marginTop: "10px",
+                color:
+                  items.status === 2
+                    ? "red"
+                    : items.status === 1
+                    ? "blue"
+                    : "green",
+                fontSize: "12px",
+                padding: "10px 0",
+                textAlign: "left",
+              }}
+            >
+              {items.status === 2
+                ? t("Expired")
+                : items.status === 1
+                ? t("Completed")
+                : t("ongoing")}
+            </Typography>
+          </Box>
+        </div>
+      ) : null}
     </Card>
   );
 }

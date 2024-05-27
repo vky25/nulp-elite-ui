@@ -49,6 +49,7 @@ import {
   LinkedinIcon,
   TwitterIcon,
 } from "react-share";
+import AddConnections from "pages/connections/AddConnections";
 const JoinCourse = () => {
   const { t } = useTranslation();
   const [userData, setUserData] = useState();
@@ -76,8 +77,10 @@ const JoinCourse = () => {
     message: "",
   });
   const [showChat, setShowChat] = useState(false);
+  const [isMobile, setIsMobile] = useState(window.innerWidth <= 767);
 
-  const { contentId } = location.state || {};
+  // const { contentId } = location.state || {};
+  const { contentId } = useParams();
   const _userId = util.userId(); // Assuming util.userId() is defined
   const shareUrl = window.location.href; // Current page URL
   const style = {
@@ -97,6 +100,11 @@ const JoinCourse = () => {
     }, 2000);
     setToasterOpen(true);
   };
+  useEffect(() => {
+    const handleResize = () => setIsMobile(window.innerWidth <= 767);
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -237,6 +245,10 @@ const JoinCourse = () => {
   const handleDirectConnect = () => {
     if (chat.length === 0) {
       setOpen(true);
+    } else if (!isMobile) {
+      navigate("/addConnections", {
+        state: { senderUserId: _userId, receiverUserId: creatorId },
+      });
     } else {
       navigate("/chat", {
         state: { senderUserId: _userId, receiverUserId: creatorId },

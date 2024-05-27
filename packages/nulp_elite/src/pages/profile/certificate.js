@@ -20,6 +20,8 @@ import axios from "axios";
 import NoResult from "pages/content/noResultFound";
 import Alert from "@mui/material/Alert";
 import ToasterCommon from "../ToasterCommon";
+import { Button } from "@mui/material";
+import { useNavigate, useLocation } from "react-router-dom";
 
 const Certificate = () => {
   const { t } = useTranslation();
@@ -29,6 +31,7 @@ const Certificate = () => {
   const urlConfig = require("../../configs/urlConfig.json");
   const [toasterOpen, setToasterOpen] = useState(false);
   const [toasterMessage, setToasterMessage] = useState("");
+  const navigate = useNavigate();
 
   const showErrorMessage = (msg) => {
     setToasterMessage(msg);
@@ -98,7 +101,9 @@ const Certificate = () => {
     const options = { day: "2-digit", month: "long", year: "numeric" };
     return date.toLocaleDateString("en-GB", options);
   };
-
+  const handleGoBack = () => {
+    navigate(-1);
+  };
   return (
     <div>
       {/* <Header /> */}
@@ -125,6 +130,13 @@ const Certificate = () => {
               {t("CERTIFICATES")}
             </Link>
           </Breadcrumbs>
+          <Button
+            type="button"
+            className="viewAll xs-mr-10"
+            onClick={handleGoBack}
+          >
+            Back to Learning
+          </Button>
           <Card style={{ padding: "20px", textAlign: "left" }}>
             <Box style={{ display: "flex", alignItems: "end" }}>
               <DescriptionOutlinedIcon /> {t("CERTIFICATES")}
