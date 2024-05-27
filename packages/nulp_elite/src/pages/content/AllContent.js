@@ -267,18 +267,17 @@ const AllContent = () => {
       >
         <BoxCard
           items={item}
-          onClick={() => handleCardClick(item.identifier, item.primaryCategory)}
+          onClick={() => handleCardClick(item, item.primaryCategory)}
         ></BoxCard>
       </Grid>
     ));
   };
-
-  const handleCardClick = (contentId, courseType) => {
+const handleCardClick = (item, courseType) => {
     if (courseType === "Course") {
-      // navigate("/joinCourse", { state: { contentId } });
-      navigate(`/joinCourse/${contentId}`);
+      navigate("/joinCourse", { state: { contentId: item.identifier } });
     } else {
-      navigate("/player");
+      navigate("/player", { state: { content: item } });
+      // navigate("/player");
     }
   };
 
@@ -435,10 +434,7 @@ const AllContent = () => {
                           <BoxCard
                             items={item}
                             onClick={() =>
-                              handleCardClick(
-                                item.identifier,
-                                item.primaryCategory
-                              )
+                              handleCardClick(item, item.primaryCategory)
                             }
                           ></BoxCard>
                         </Grid>
@@ -448,10 +444,7 @@ const AllContent = () => {
                           <BoxCard
                             items={item}
                             onClick={() =>
-                              handleCardClick(
-                                item.identifier,
-                                item.primaryCategory
-                              )
+                              handleCardClick(item, item.primaryCategory)
                             }
                           ></BoxCard>
                         </Grid>
