@@ -429,7 +429,7 @@ const Profile = () => {
                   sx={{
                     display: "flex",
                     flexDirection: "row",
-                    padding: "20px 10px",
+                    padding: "20px 10px 0",
                   }}
                 >
                   {userData && (
@@ -440,11 +440,16 @@ const Profile = () => {
                     </>
                   )}
                   <CardContent
-                    style={{ textAlign: "left", paddingTop: "0", width: "83%" }}
+                    style={{
+                      textAlign: "left",
+                      paddingTop: "0",
+                      width: "85%",
+                      padding: "7px 7px 0",
+                    }}
                   >
                     {userData && userInfo?.length > 0 && (
                       <>
-                        <Box className="d-flex">
+                        <Box className="d-flex jc-bw mb-10">
                           <Box>
                             <Typography className="h4-title">
                               {userData.result.response.firstName}{" "}
@@ -461,20 +466,22 @@ const Profile = () => {
                           </Box>
                           <ModeEditIcon onClick={handleOpenEditDialog} />
                         </Box>
-                        <Typography
-                          variant="subtitle1"
-                          color="text.secondary"
-                          component="div"
-                          style={{ fontSize: "12px" }}
-                        >
-                          {userInfo[0]?.bio}
-                        </Typography>
                       </>
                     )}
                   </CardContent>
                 </Box>
+                {userData && userInfo?.length > 0 && (
+                  <Typography
+                    variant="subtitle1"
+                    color="text.secondary"
+                    component="div"
+                    style={{ fontSize: "12px", padding: "0 20px" }}
+                  >
+                    {userInfo[0]?.bio}
+                  </Typography>
+                )}
 
-                <Box className="mb-15">
+                <Box className="mb-15 mt-20">
                   <Box
                     sx={{
                       display: "flex",
@@ -568,7 +575,7 @@ const Profile = () => {
                     <Box sx={style}>
                       <Typography
                         id="modal-modal-title"
-                        className="h4-title"
+                        className="h3-title"
                         style={{ marginBottom: "20px" }}
                       >
                         {t("EDIT_PROFILE")}
@@ -689,7 +696,7 @@ const Profile = () => {
                           </Typography>
                         </Box>
 
-                        <Box pt={4}>
+                        <Box pt={4} className="d-flex jc-end">
                           <Button
                             className="custom-btn-primary mr-5"
                             type="submit"

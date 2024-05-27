@@ -76,7 +76,11 @@ const LearningHistory = () => {
   return (
     <div>
       {toasterMessage && <ToasterCommon response={toasterMessage} />}
-      <Container maxWidth="xl" role="main" className="allContent">
+      <Container
+        maxWidth="xl"
+        role="main"
+        className="allContent filter-profile"
+      >
         {error && (
           <Alert severity="error" className="my-10">
             {error}
@@ -104,7 +108,7 @@ const LearningHistory = () => {
                 <NoResult />
               ) : (
                 filteredCourses?.map((course) => (
-                  <Grid item xs={12} md={4} key={course.courseName}>
+                  <Grid item xs={12} md={3} key={course.courseName}>
                     <BoxCard
                       items={course}
                       index={courseData.result.courses.length}

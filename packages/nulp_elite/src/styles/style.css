@@ -294,6 +294,16 @@ body {
   }
 }
 @media (min-width: 769px) {
+  .filter-profile .MuiAutocomplete-root {
+    width: 34% !important;
+    margin-left: 20px;
+  }
+  .lg-my-10 {
+    margin: 6px 0;
+  }
+  .mt-65 {
+    margin-top: 92px;
+  }
   .carousel-active-ui {
     background: #1ea4ce;
   }
@@ -307,7 +317,7 @@ body {
   .react-multi-carousel-list {
     background: #fff;
     box-shadow: 0px 4px 4px 0px #00000040;
-    margin-top: 10px;
+    margin-top: 0;
   }
   .react-multi-carousel-list.carousel-container .MuiGrid-container {
     margin-left: -2px !important;
@@ -337,6 +347,12 @@ body {
   }
 }
 @media (min-width: 769px) {
+  .lg-mt-10 {
+    margin-top: 10px !important;
+  }
+  .lg-hide {
+    display: none !important;
+  }
   .left-filter {
     padding: 0px;
     box-shadow: 0px 4px 4px 0px #00000040;
@@ -386,9 +402,7 @@ body {
 .lg-d-flex {
   display: flex;
 }
-.lg-mt-10 {
-  margin-top: 10px !important;
-}
+
 .scroll {
   height: 43vh;
   overflow-y: auto;
@@ -398,12 +412,7 @@ body {
   height: 45vh;
   overflow-y: auto;
 }
-.lg-my-10 {
-  margin: 10px 0;
-}
-.mt-65 {
-  margin-top: 92px;
-}
+
 .scrolled {
   position: fixed !important;
   top: 86px;
@@ -450,9 +459,7 @@ body {
 .profileBox {
   padding: 28px;
 }
-.lg-hide {
-  display: none !important;
-}
+
 .sm-w-700 .MuiDialog-paper {
   width: 62%;
 }
@@ -646,6 +653,10 @@ Footer {
   border: solid 1px #0e7a9c !important;
   background: #fff !important;
 }
+.custom-btn-default:hover {
+  border: solid 1px #0e7a9c !important;
+  background: #fff !important;
+}
 .custom-btn-danger {
   border-radius: 30px !important;
   color: #fff !important;
@@ -656,6 +667,10 @@ Footer {
   background: #e02f1d !important;
 }
 
+.custom-btn-danger:hover {
+  border: solid 1px #e02f1d !important;
+  background: #e02f1d !important;
+}
 .card-img {
   height: 70px;
   width: 70px;
