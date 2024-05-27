@@ -65,7 +65,7 @@ const JoinCourse = () => {
   const [consentChecked, setConsentChecked] = useState(false);
   const [shareEnabled, setShareEnabled] = useState(false);
   const [openModal, setOpenModal] = useState(false);
-
+  const [userData, setUserData] = useState();
   const location = useLocation();
   const navigate = useNavigate();
   const [toasterOpen, setToasterOpen] = useState(false);
@@ -246,7 +246,7 @@ const JoinCourse = () => {
   const handleDirectConnect = () => {
     if (chat.length === 0) {
       setOpen(true);
-    } else if (!isMobile) {
+    } else if (!isMobile && chat[0]?.is_accepted == true) {
       navigate("/addConnections", {
         state: { senderUserId: _userId, receiverUserId: creatorId },
       });

@@ -14,6 +14,7 @@ export default function BoxCard({ items, index, onClick }) {
   const [imgUrl, setImgUrl] = React.useState();
 
   const [subdomain, setSubdomain] = React.useState();
+  const { t } = useTranslation();
 
   useEffect(() => {
     console.log("card items----", items);
