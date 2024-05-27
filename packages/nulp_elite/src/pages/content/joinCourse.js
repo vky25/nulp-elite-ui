@@ -1050,7 +1050,7 @@ const JoinCourse = () => {
                 {t("COURSES_MODULE")}
               </AccordionSummary>
               <AccordionDetails>
-                {courseData?.result?.content?.children.map((faqIndex) => (
+                {userData?.result?.content?.children.map((faqIndex) => (
                   <Accordion
                     key={faqIndex.id}
                     style={{ borderRadius: "10px", margin: "10px 0" }}
