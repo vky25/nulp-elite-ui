@@ -916,6 +916,7 @@ button {
   box-shadow: 0px 4px 4px 0px #00000040;
   background: #fff;
   padding-bottom: 15px;
+
   /* height: 65vh; */
 }
 .left-container ul {
@@ -1039,6 +1040,12 @@ custom-chip {
 }
 .text-blueShade2 {
   color: #0e7a9c;
+}
+.bg-blueShade3 {
+  background: #e3f5ff !important;
+}
+.bg-blueShade3:hover {
+  background: #e3f5ff !important;
 }
 .fs-14 {
   font-size: 14px !important;
@@ -1225,4 +1232,8 @@ header .MuiContainer-maxWidthLg {
 }
 .custom-dot-list-style-none {
   display: none !important;
+}
+
+.accordionBoxShadow {
+  box-shadow: 0px 4px 4px 0px #00000040 !important;
 }

@@ -35,16 +35,18 @@ const SunbirdPlayer = ({
   }, [mimeType])
 
   React.useEffect(() => {
-    if ([`/content-player`, `/quml`, `/pdf`, `/video`].includes(url)) {
-      window.addEventListener(
-        'message',
-        (event) => {
-          handleEvent(event)
-        },
-        false
-      )
+    const fetchData = () => {
+      if ([`/content-player`, `/quml`, `/pdf`, `/video`].includes(url)) {
+        window.addEventListener(
+          'message',
+          (event) => {
+            handleEvent(event)
+          },
+          false
+        )
+      }
     }
-
+    fetchData()
     return () => {
       if ([`/content-player`, `/quml`, `/pdf`, `/video`].includes(url)) {
         window.removeEventListener('message', (val) => {})
@@ -137,7 +139,7 @@ const SunbirdPlayer = ({
   if (url) {
     return (
       <VStack {...{ width, height }}>
-        <IconByName
+        {/* <IconByName
           name='CloseCircleLineIcon'
           onPress={() => {
             if (mimeType === 'application/vnd.ekstep.h5p-archive') {
@@ -158,7 +160,7 @@ const SunbirdPlayer = ({
           bg='white'
           p='0'
           rounded='full'
-        />
+        /> */}
         <iframe
           style={{ border: 'none' }}
           id='preview'

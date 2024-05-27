@@ -12,9 +12,16 @@ import { useTranslation } from "react-i18next";
 
 export default function BoxCard({ items, index, onClick }) {
   const [imgUrl, setImgUrl] = React.useState();
-  const { t } = useTranslation();
+
+  const [subdomain, setSubdomain] = React.useState();
 
   useEffect(() => {
+    console.log("card items----", items);
+    if (items.se_gradeLevels) {
+      setSubdomain(items.se_gradeLevels[0]);
+    } else if (items.gradeLevel) {
+      setSubdomain(items.gradeLevel[0]);
+    } else setSubdomain(undefined);
     // const random = getRandomValue();
     console.log("random banner----", RandomImage.ImagePaths[index % 10 || 10]);
     setImgUrl(RandomImage.ImagePaths[index % 10 || 10]);
@@ -45,7 +52,11 @@ export default function BoxCard({ items, index, onClick }) {
   };
 
   return (
-    <Card className="cardBox" sx={{ position: "relative", cursor: "pointer" }}>
+    <Card
+      className="cardBox"
+      sx={{ position: "relative", cursor: "pointer" }}
+      onClick={onClick}
+    >
       <CardMedia
         sx={{
           height: 140,
@@ -57,9 +68,9 @@ export default function BoxCard({ items, index, onClick }) {
             "linear-gradient(45deg, RGBA(28, 25, 25, 0.46) 7%, RGBA(20, 18, 18, 0.57) 45%)",
         }}
         image={
-          imgUrl
-            ? require(`./../assets/dummyCardImgs/${imgUrl}`)
-            : require("../assets/card-bg.png")
+          subdomain
+            ? require(`./../assets/dummyCardImgs/${subdomain}.png`)
+            : require("./../assets/dummyCardImgs/Management.png")
         }
         title="green iguana"
       />
