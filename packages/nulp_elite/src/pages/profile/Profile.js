@@ -442,7 +442,7 @@ const Profile = () => {
                   <CardContent
                     style={{ textAlign: "left", paddingTop: "0", width: "83%" }}
                   >
-                    {userData && userInfo?.length > 0 && (
+                    {userData && (
                       <>
                         <Box className="d-flex">
                           <Box>
@@ -451,10 +451,12 @@ const Profile = () => {
                               {userData.result.response.lastName}
                             </Typography>
                             <Typography className="h6-title d-flex">
-                              {userInfo[0]?.designation}{" "}
+                              {userInfo[0]?.designation && (
+                                <>{userInfo[0].designation} </>
+                              )}
                               <Box className="twoLineEllipsis">
-                                {" "}
-                                | ID: {userData.result.response.userName}{" "}
+                                {userInfo[0]?.designation && " | "}
+                                ID: {userData.result.response.userName}{" "}
                                 {userData.result.response.organisations.orgName}
                               </Box>
                             </Typography>
@@ -468,6 +470,7 @@ const Profile = () => {
                           style={{ fontSize: "12px" }}
                         >
                           {userInfo[0]?.bio}
+                          {""}
                         </Typography>
                       </>
                     )}
