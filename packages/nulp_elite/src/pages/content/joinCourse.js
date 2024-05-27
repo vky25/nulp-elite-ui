@@ -761,21 +761,21 @@ const JoinCourse = () => {
                 <Button
                   size="small"
                   style={{
-                    background: "#ffefc2",
-                    color: "#484848",
+                    color: "#424242",
                     fontSize: "12px",
                     margin: "0 10px",
                   }}
+                  className="bg-blueShade3"
                 >
                   {courseData?.result?.content?.children[0]?.children[0]?.board}
                 </Button>
                 <Button
                   size="small"
                   style={{
-                    background: "#ffefc2",
-                    color: "#484848",
+                    color: "#424242",
                     fontSize: "10px",
                   }}
+                  className="bg-blueShade3"
                 >
                   {" "}
                   {
@@ -791,6 +791,7 @@ const JoinCourse = () => {
                 padding: "10px",
                 borderRadius: "10px",
                 color: "#484848",
+                boxShadow: "0px 4px 4px 0px #00000040",
               }}
               className="xs-hide"
             >
@@ -859,7 +860,7 @@ const JoinCourse = () => {
                 expandIcon={<ExpandMoreIcon />}
                 aria-controls="panel1-content"
                 id="panel1-header"
-                className="h4-title"
+                className="h4-title accordionBoxShadow"
               >
                 {t("CERTIFICATION_CRITERIA")}
               </AccordionSummary>
@@ -877,7 +878,7 @@ const JoinCourse = () => {
               </AccordionDetails>
             </Accordion>
             <Accordion
-              className="xs-hide"
+              className="xs-hide accordionBoxShadow"
               style={{
                 background: "#F9FAFC",
                 borderRadius: "10px",
@@ -1094,7 +1095,7 @@ const JoinCourse = () => {
                 borderRadius: "10px",
                 color: "#484848",
               }}
-              className="lg-hide"
+              className="lg-hide accordionBoxShadow"
             >
               <Typography
                 variant="h7"
@@ -1150,7 +1151,7 @@ const JoinCourse = () => {
               </Box>
             </Box>
             <Accordion
-              className="lg-hide"
+              className="lg-hide accordionBoxShadow"
               style={{
                 background: "#F9FAFC",
                 borderRadius: "10px",
@@ -1179,7 +1180,7 @@ const JoinCourse = () => {
               </AccordionDetails>
             </Accordion>
             <Accordion
-              className="lg-hide"
+              className="lg-hide accordionBoxShadow"
               style={{
                 background: "#F9FAFC",
                 borderRadius: "10px",
