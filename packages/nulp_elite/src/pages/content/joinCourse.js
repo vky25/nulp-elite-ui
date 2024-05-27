@@ -760,21 +760,21 @@ const JoinCourse = () => {
                 <Button
                   size="small"
                   style={{
-                    background: "#ffefc2",
-                    color: "#484848",
+                    color: "#424242",
                     fontSize: "12px",
                     margin: "0 10px",
                   }}
+                  className="bg-blueShade3"
                 >
                   {userData?.result?.content?.children[0]?.children[0]?.board}
                 </Button>
                 <Button
                   size="small"
                   style={{
-                    background: "#ffefc2",
-                    color: "#484848",
+                    color: "#424242",
                     fontSize: "10px",
                   }}
+                  className="bg-blueShade3"
                 >
                   {" "}
                   {
