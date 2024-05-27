@@ -122,13 +122,17 @@ const AddConnections = () => {
     senderUserId: routeSenderUserId,
     receiverUserId: routeReceiverUserId,
   } = location.state || {};
-  // if (routeSenderUserId && routeReceiverUserId) {
-  //   setSelectedChatUser({
-  //     senderUserId: routeSenderUserId,
-  //     receiverUserId: routeReceiverUserId,
-  //   });
-  //   setSelectedUserId(routeReceiverUserId);
-  // }
+
+  // useEffect(() => {
+  //   if (routeSenderUserId && routeReceiverUserId) {
+  //     setSelectedChatUser({
+  //       senderUserId: routeSenderUserId,
+  //       receiverUserId: routeReceiverUserId,
+  //     });
+  //     setSelectedUserId(routeReceiverUserId);
+  //   }
+  // }, [routeSenderUserId, routeReceiverUserId]);
+
   const showErrorMessage = (msg) => {
     setToasterMessage(msg);
     setTimeout(() => {

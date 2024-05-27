@@ -275,7 +275,8 @@ const AllContent = () => {
   };
   const handleCardClick = (item, courseType) => {
     if (courseType === "Course") {
-      navigate("/joinCourse", { state: { contentId: item.identifier } });
+      // navigate("/joinCourse", { state: { contentId: item.identifier } });
+      navigate(`/joinCourse/${item.identifier}`);
     } else {
       navigate("/player", { state: { content: item } });
       // navigate("/player");

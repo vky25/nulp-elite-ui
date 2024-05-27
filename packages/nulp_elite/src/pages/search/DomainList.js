@@ -278,7 +278,8 @@ const DomainList = () => {
 
   const handleCardClick = (contentId, courseType) => {
     if (courseType === "Course") {
-      navigate("/joinCourse", { state: { contentId } });
+      // navigate("/joinCourse", { state: { contentId } });
+      navigate(`/joinCourse/${contentId}`);
     } else {
       navigate("/player");
     }
@@ -525,7 +526,7 @@ const DomainList = () => {
                     spacing={2}
                     style={{ margin: "20px 0", marginBottom: "10px" }}
                   >
-                    {popularCourses.slice(0, 8).map((items, index) => (
+                    {popularCourses.slice(0, 10).map((items, index) => (
                       <Grid
                         item
                         xs={6}
@@ -558,7 +559,7 @@ const DomainList = () => {
               ) : popularCourses.length > 0 ? (
                 <div>
                   <Grid container spacing={2}>
-                    {popularCourses.slice(0, 8).map((items) => (
+                    {popularCourses.slice(0, 10).map((items) => (
                       <Grid
                         item
                         xs={6}
@@ -620,7 +621,7 @@ const DomainList = () => {
               ) : recentlyAddedCourses.length > 0 ? (
                 <div>
                   <Grid container spacing={2}>
-                    {recentlyAddedCourses.slice(0, 8).map((items, index) => (
+                    {recentlyAddedCourses.slice(0, 10).map((items, index) => (
                       <Grid
                         item
                         xs={6}
@@ -653,7 +654,7 @@ const DomainList = () => {
               ) : recentlyAddedCourses.length > 0 ? (
                 <div>
                   <Grid container spacing={2} style={{ marginBottom: "10px" }}>
-                    {recentlyAddedCourses.slice(0, 8).map((items) => (
+                    {recentlyAddedCourses.slice(0, 10).map((items) => (
                       <Grid
                         item
                         xs={6}
