@@ -698,7 +698,7 @@ const Profile = () => {
                           </Typography>
                         </Box>
 
-                        <Box pt={4} className="d-flex jc-end">
+                        <Box pt={4} className="d-flex jc-en">
                           <Button
                             className="custom-btn-primary mr-5"
                             type="submit"
