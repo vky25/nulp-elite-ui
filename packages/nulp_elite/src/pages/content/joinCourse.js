@@ -722,7 +722,7 @@ const JoinCourse = () => {
                   style={{ maxHeight: "inherit" }}
                   onClick={handleGoBack}
                   color="#004367"
-                  href="/profile"
+                  href="/all"
                 >
                   {t("ALL_CONTENT")}
                 </Link>
@@ -730,7 +730,7 @@ const JoinCourse = () => {
                   underline="hover"
                   href=""
                   aria-current="page"
-                  className="h6-title twoLineEllipsis"
+                  className="h6-title oneLineEllipsis"
                 >
                   {userData?.result?.content?.name}
                 </Link>
