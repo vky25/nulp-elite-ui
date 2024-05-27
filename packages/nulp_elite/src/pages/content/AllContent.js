@@ -72,6 +72,7 @@ const AllContent = () => {
   const navigate = useNavigate();
   const [toasterOpen, setToasterOpen] = useState(false);
   const [toasterMessage, setToasterMessage] = useState("");
+  const [domainName, setDomainName] = useState();
 
   const handleResize = () => {
     setIsMobile(window.innerWidth <= 767);
@@ -81,16 +82,21 @@ const AllContent = () => {
 
     console.log("Search query:", query);
   };
-  const handleDomainFilter = (query) => {
+  const handleDomainFilter = (query, domainName) => {
     // Implement your search logic here
     setSelectedDomain(query);
+    setDomainName(domainName);
     console.log("Search query:", selectedDomain);
-    fetchData();
+    // fetchData();
   };
   useEffect(() => {
     fetchData();
     fetchDomains();
   }, []);
+
+  useEffect(() => {
+    fetchData();
+  }, [selectedDomain]);
 
   const showErrorMessage = (msg) => {
     setToasterMessage(msg);
@@ -338,6 +344,25 @@ const AllContent = () => {
       )}
 
       <Container maxWidth="xl" role="main" className="pb-30 allContent">
+        <Box
+          className="d-flex jc-bw mr-20 my-20"
+          style={{ alignItems: "center" }}
+        >
+          {domainName && (
+            <Box
+              sx={{ marginTop: "10px", alignItems: "center" }}
+              className="d-flex h3-title ml-neg-20"
+            >
+              {t("YOU_ARE_VIEWING_CONTENTS_FOR")}
+              <Box
+                sx={{ fontSize: "16px", fontWeight: "600", paddingLeft: "5px" }}
+                className="text-blueShade2"
+              >
+                {domainName}
+              </Box>
+            </Box>
+          )}
+        </Box>
         {/* <Box className="text-heading lg-d-flex my-20">
           You are viewing content for :
           <Box className="text-primary">Mobility and accessibliy</Box>
