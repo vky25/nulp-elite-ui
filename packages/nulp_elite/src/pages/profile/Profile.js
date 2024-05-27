@@ -447,20 +447,27 @@ const Profile = () => {
                         <Box className="d-flex">
                           <Box>
                             <Typography className="h4-title">
-                              {userData.result.response.firstName}{" "}
-                              {userData.result.response.lastName}
+                              {userData?.result?.response?.firstName}{" "}
+                              {userData?.result?.response?.lastName}
                             </Typography>
                             <Typography className="h6-title d-flex">
-                              {userInfo[0]?.designation && (
-                                <>{userInfo[0].designation} </>
-                              )}
+                              {userInfo?.length &&
+                                userInfo?.[0]?.designation && (
+                                  <>{userInfo[0].designation} </>
+                                )}
                               <Box className="twoLineEllipsis">
-                                {userInfo[0]?.designation && " | "}
-                                ID: {userData.result.response.userName}{" "}
-                                {userData.result.response.organisations.orgName}
+                                {userInfo?.length &&
+                                  userInfo?.[0]?.designation &&
+                                  " | "}
+                                ID: {userData?.result?.response?.userName}{" "}
+                                {
+                                  userData?.result?.response?.organisations
+                                    ?.orgName
+                                }
                               </Box>
                             </Typography>
                           </Box>
+
                           <ModeEditIcon onClick={handleOpenEditDialog} />
                         </Box>
                         <Typography
@@ -469,8 +476,7 @@ const Profile = () => {
                           component="div"
                           style={{ fontSize: "12px" }}
                         >
-                          {userInfo[0]?.bio}
-                          {""}
+                          {userInfo?.length ? userInfo[0]?.bio : ""}
                         </Typography>
                       </>
                     )}
