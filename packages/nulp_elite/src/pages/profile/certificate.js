@@ -132,7 +132,8 @@ const Certificate = () => {
           </Breadcrumbs> */}
           <Box className="d-flex jc-bw alignItems-center mb-20">
             <Box style={{ display: "flex", alignItems: "end" }}>
-              <DescriptionOutlinedIcon /> {t("CERTIFICATES")}
+              <DescriptionOutlinedIcon style={{ paddingRight: "10px" }} />{" "}
+              {t("DOWNLOAD_CERTIFICATES")}
             </Box>
             <Link
               type="button"
