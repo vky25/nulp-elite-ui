@@ -129,7 +129,7 @@ const ContinueLearning = () => {
   return (
     <div>
       {toasterMessage && <ToasterCommon response={toasterMessage} />}
-      <Container maxWidth="xxl" role="main" className="container-pb">
+      <Container maxWidth="xl" role="main" className="allContent">
         {error && (
           <Alert severity="error" className="my-10">
             {error}

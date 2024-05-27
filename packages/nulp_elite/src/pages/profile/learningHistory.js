@@ -76,7 +76,7 @@ const LearningHistory = () => {
   return (
     <div>
       {toasterMessage && <ToasterCommon response={toasterMessage} />}
-      <Container maxWidth="xl" role="main" className="container-pb">
+      <Container maxWidth="xl" role="main" className="allContent">
         {error && (
           <Alert severity="error" className="my-10">
             {error}
@@ -94,7 +94,7 @@ const LearningHistory = () => {
               onChange={handleFilterChange}
             />
           </Box>
-          <Card style={{ padding: "20px", textAlign: "left" }}>
+          <Box style={{ padding: "20px", textAlign: "left" }}>
             <Grid
               container
               spacing={2}
@@ -116,7 +116,7 @@ const LearningHistory = () => {
                 ))
               )}
             </Grid>
-          </Card>
+          </Box>
         </Box>
       </Container>
       <FloatingChatIcon />

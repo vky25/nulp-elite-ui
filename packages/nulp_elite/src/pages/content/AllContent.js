@@ -16,7 +16,7 @@ import "react-multi-carousel/lib/styles.css";
 import DomainCarousel from "components/domainCarousel";
 import SummarizeOutlinedIcon from "@mui/icons-material/SummarizeOutlined";
 import domainWithImage from "../../assets/domainImgForm.json";
-import { t } from "i18next";
+import { useTranslation } from "react-i18next";
 import Alert from "@mui/material/Alert";
 import appConfig from "../../configs/appConfig.json";
 const urlConfig = require("../../configs/urlConfig.json");
@@ -60,6 +60,7 @@ const responsiveCard = {
 };
 
 const AllContent = () => {
+  const { t } = useTranslation();
   const [data, setData] = useState([]);
   const [error, setError] = useState(null);
   const [domain, setDomain] = useState();
@@ -272,7 +273,7 @@ const AllContent = () => {
       </Grid>
     ));
   };
-const handleCardClick = (item, courseType) => {
+  const handleCardClick = (item, courseType) => {
     if (courseType === "Course") {
       navigate("/joinCourse", { state: { contentId: item.identifier } });
     } else {
