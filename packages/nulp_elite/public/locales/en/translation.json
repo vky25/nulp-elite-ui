@@ -210,5 +210,6 @@
   "COMPLETION_CERTIFICATE_ISSUED": "Completion certificate issued",
   "COMPLETION": "Completion",
   "ASSESSMENT": "Assesment",
-  "ENROLLED_ON": "Enrolled On"
+  "ENROLLED_ON": "Enrolled On",
+  "BACK_TO_LEARNNG": "Back to Learning"
 }
