@@ -61,6 +61,9 @@ const ContentList = (props) => {
   const navigate = useNavigate();
   // const { domain } = location.state || {};
   const [domain, setDomain] = useState(location.state?.domain || undefined);
+  const [domainName, setDomainName] = useState(
+    location.state?.domainName || undefined
+  );
   const [domainList, setDomainList] = useState([]);
   const { domainquery } = location.state || {};
   const [totalPages, setTotalPages] = useState(1);
@@ -357,17 +360,19 @@ const ContentList = (props) => {
 
   const handleCardClick = (contentId, courseType) => {
     if (courseType === "Course") {
-      navigate("/joinCourse", { state: { contentId } });
+      // navigate("/joinCourse", { state: { contentId } });
+      navigate(`/joinCourse/${contentId}`);
     } else {
       navigate("/player");
     }
   };
 
-  const handleDomainFilter = (query) => {
+  const handleDomainFilter = (query, domainName) => {
     setDomain(query);
     setPageNumber(1);
     setCurrentPage(1);
     setData({});
+    setDomainName(domainName);
     navigate(`/contentList/1`, { state: { domain: query } });
   };
 
@@ -433,7 +438,7 @@ const ContentList = (props) => {
           className="d-flex jc-bw mr-20 my-20"
           style={{ alignItems: "center" }}
         >
-          {domain && (
+          {domainName && (
             <Box
               sx={{ marginTop: "10px", alignItems: "center" }}
               className="d-flex h3-title ml-neg-20"
@@ -443,7 +448,7 @@ const ContentList = (props) => {
                 sx={{ fontSize: "16px", fontWeight: "600", paddingLeft: "5px" }}
                 className="text-blueShade2"
               >
-                {domain}
+                {domainName}
               </Box>
             </Box>
           )}

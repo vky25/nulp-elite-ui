@@ -38,7 +38,11 @@ import ToasterCommon from "../ToasterCommon";
 import ForumOutlinedIcon from "@mui/icons-material/ForumOutlined";
 import Grid from "@mui/material/Grid";
 import Chat from "./chat";
-
+import Dialog from "@material-ui/core/Dialog";
+import DialogActions from "@material-ui/core/DialogActions";
+import DialogContent from "@material-ui/core/DialogContent";
+import DialogContentText from "@material-ui/core/DialogContentText";
+import DialogTitle from "@material-ui/core/DialogTitle";
 // Define modal styles
 const useStyles = makeStyles((theme) => ({
   modal: {
@@ -114,6 +118,20 @@ const AddConnections = () => {
   const navigate = useNavigate();
   const [selectedChatUser, setSelectedChatUser] = useState(null);
   const [selectedUserId, setSelectedUserId] = useState(null);
+  const {
+    senderUserId: routeSenderUserId,
+    receiverUserId: routeReceiverUserId,
+  } = location.state || {};
+
+  // useEffect(() => {
+  //   if (routeSenderUserId && routeReceiverUserId) {
+  //     setSelectedChatUser({
+  //       senderUserId: routeSenderUserId,
+  //       receiverUserId: routeReceiverUserId,
+  //     });
+  //     setSelectedUserId(routeReceiverUserId);
+  //   }
+  // }, [routeSenderUserId, routeReceiverUserId]);
 
   const showErrorMessage = (msg) => {
     setToasterMessage(msg);
@@ -1162,6 +1180,15 @@ const AddConnections = () => {
     }
   };
 
+  const handleRejectClick = () => {
+    setOpen(true);
+  };
+
+  const handleConfirmReject = (userId) => {
+    rejectChat(userId);
+    setOpen(false);
+  };
+
   return (
     <Box>
       <Header />
@@ -1495,7 +1522,7 @@ const AddConnections = () => {
                                       href="#"
                                       underline="none"
                                       color="#7d7a7a"
-                                      onClick={() => rejectChat(item.userId)}
+                                      onClick={handleRejectClick}
                                     >
                                       <CancelOutlinedIcon
                                         style={{
@@ -1504,6 +1531,37 @@ const AddConnections = () => {
                                         }}
                                       />
                                     </Link>
+
+                                    <Dialog open={open} onClose={handleClose}>
+                                      <DialogTitle>
+                                        {"Are you sure?"}
+                                      </DialogTitle>
+                                      <DialogContent>
+                                        <DialogContentText>
+                                          Are you sure you want to reject this
+                                          request?
+                                        </DialogContentText>
+                                      </DialogContent>
+                                      <DialogActions>
+                                        <Button
+                                          type="button"
+                                          className="custom-btn-primary"
+                                          onClick={handleClose}
+                                        >
+                                          Cancel
+                                        </Button>
+                                        <Button
+                                          onClick={() =>
+                                            handleConfirmReject(item.userId)
+                                          }
+                                          type="button"
+                                          className="custom-btn-primary"
+                                          autoFocus
+                                        >
+                                          OK
+                                        </Button>
+                                      </DialogActions>
+                                    </Dialog>
                                   </div>
                                 </ListItem>
 

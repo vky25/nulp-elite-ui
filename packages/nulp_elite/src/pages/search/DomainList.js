@@ -214,6 +214,11 @@ const DomainList = () => {
           "organisation",
           "trackable",
           "primaryCategory",
+          "se_boards",
+          "se_gradeLevels",
+          "se_subjects",
+          "se_mediums",
+          "primaryCategory",
         ],
         facets: [
           "se_boards",
@@ -264,14 +269,17 @@ const DomainList = () => {
     console.log(domainquery);
     navigate("/contentList/1", { state: { domainquery } });
   };
-  const handleDomainFilter = (query) => {
-    navigate("/contentList/1", { state: { domain: query } });
+  const handleDomainFilter = (query, domainName) => {
+    navigate("/contentList/1", {
+      state: { domain: query, domainName: domainName },
+    });
   };
   // console.log(frameworkHardCodedData.result.framework.categories[0].terms);
 
   const handleCardClick = (contentId, courseType) => {
     if (courseType === "Course") {
-      navigate("/joinCourse", { state: { contentId } });
+      // navigate("/joinCourse", { state: { contentId } });
+      navigate(`/joinCourse/${contentId}`);
     } else {
       navigate("/player");
     }
@@ -334,6 +342,10 @@ const DomainList = () => {
           "organisation",
           "trackable",
           "primaryCategory",
+          "se_boards",
+          "se_gradeLevels",
+          "se_subjects",
+          "se_mediums",
         ],
         facets: [
           "se_boards",
@@ -471,7 +483,8 @@ const DomainList = () => {
           />
         </Carousel>
       ) : (
-        <NoResult />
+        <div></div>
+        // <NoResult />
       )}
 
       <Container maxWidth="xl" className="xs-pb-20 allContent" role="main">
@@ -513,7 +526,7 @@ const DomainList = () => {
                     spacing={2}
                     style={{ margin: "20px 0", marginBottom: "10px" }}
                   >
-                    {popularCourses.slice(0, 8).map((items, index) => (
+                    {popularCourses.slice(0, 10).map((items, index) => (
                       <Grid
                         item
                         xs={6}
@@ -546,7 +559,7 @@ const DomainList = () => {
               ) : popularCourses.length > 0 ? (
                 <div>
                   <Grid container spacing={2}>
-                    {popularCourses.slice(0, 8).map((items) => (
+                    {popularCourses.slice(0, 10).map((items) => (
                       <Grid
                         item
                         xs={6}
@@ -608,7 +621,7 @@ const DomainList = () => {
               ) : recentlyAddedCourses.length > 0 ? (
                 <div>
                   <Grid container spacing={2}>
-                    {recentlyAddedCourses.slice(0, 8).map((items, index) => (
+                    {recentlyAddedCourses.slice(0, 10).map((items, index) => (
                       <Grid
                         item
                         xs={6}
@@ -641,7 +654,7 @@ const DomainList = () => {
               ) : recentlyAddedCourses.length > 0 ? (
                 <div>
                   <Grid container spacing={2} style={{ marginBottom: "10px" }}>
-                    {recentlyAddedCourses.slice(0, 8).map((items) => (
+                    {recentlyAddedCourses.slice(0, 10).map((items) => (
                       <Grid
                         item
                         xs={6}

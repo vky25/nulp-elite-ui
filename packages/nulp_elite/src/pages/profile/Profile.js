@@ -114,6 +114,8 @@ const Profile = () => {
   const [subDomain, setSubDomain] = useState("");
   const [isMobile, setIsMobile] = useState(window.innerWidth <= 767);
   const [showCertificate, setShowCertificate] = useState(false);
+  const [isButtonDisabled, setIsButtonDisabled] = useState(false);
+
   const showErrorMessage = (msg) => {
     setToasterMessage(msg);
     setTimeout(() => {
@@ -373,6 +375,7 @@ const Profile = () => {
     if (isMobile) {
       navigate("/certificate");
     } else {
+      setIsButtonDisabled(true);
       setShowCertificate(true);
     }
   };
@@ -708,8 +711,9 @@ const Profile = () => {
               </Box>
               <Button
                 type="buttom"
-                className="custom-btn-primary my-30"
+                className="my-30 custom-btn-primary"
                 onClick={handleCertificateButtonClick}
+                disabled={isButtonDisabled}
               >
                 <ReceiptLongOutlinedIcon className="pr-5" />
                 {t("Download Certificates")}
@@ -736,7 +740,7 @@ const Profile = () => {
                 <Box sx={style}>
                   <Typography
                     id="modal-modal-title"
-                    className="h4-title"
+                    className="h3-title"
                     style={{ marginBottom: "20px" }}
                   >
                     {t("SELECT_PREFERENCE")}

@@ -16,7 +16,7 @@ import "react-multi-carousel/lib/styles.css";
 import DomainCarousel from "components/domainCarousel";
 import SummarizeOutlinedIcon from "@mui/icons-material/SummarizeOutlined";
 import domainWithImage from "../../assets/domainImgForm.json";
-import { t } from "i18next";
+import { useTranslation } from "react-i18next";
 import Alert from "@mui/material/Alert";
 import appConfig from "../../configs/appConfig.json";
 const urlConfig = require("../../configs/urlConfig.json");
@@ -60,6 +60,7 @@ const responsiveCard = {
 };
 
 const AllContent = () => {
+  const { t } = useTranslation();
   const [data, setData] = useState([]);
   const [error, setError] = useState(null);
   const [domain, setDomain] = useState();
@@ -72,6 +73,7 @@ const AllContent = () => {
   const navigate = useNavigate();
   const [toasterOpen, setToasterOpen] = useState(false);
   const [toasterMessage, setToasterMessage] = useState("");
+  const [domainName, setDomainName] = useState();
 
   const handleResize = () => {
     setIsMobile(window.innerWidth <= 767);
@@ -81,16 +83,21 @@ const AllContent = () => {
 
     console.log("Search query:", query);
   };
-  const handleDomainFilter = (query) => {
+  const handleDomainFilter = (query, domainName) => {
     // Implement your search logic here
     setSelectedDomain(query);
+    setDomainName(domainName);
     console.log("Search query:", selectedDomain);
-    fetchData();
+    // fetchData();
   };
   useEffect(() => {
     fetchData();
     fetchDomains();
   }, []);
+
+  useEffect(() => {
+    fetchData();
+  }, [selectedDomain]);
 
   const showErrorMessage = (msg) => {
     setToasterMessage(msg);
@@ -139,28 +146,22 @@ const AllContent = () => {
         fields: [
           "name",
           "appIcon",
-          "mimeType",
-          "gradeLevel",
-          "identifier",
           "medium",
-          "pkgVersion",
-          "board",
           "subject",
           "resourceType",
-          "primaryCategory",
           "contentType",
-          "channel",
           "organisation",
+          "topic",
+          "mimeType",
           "trackable",
-          "primaryCategory",
-        ],
-        facets: [
+          "gradeLevel",
           "se_boards",
-          "se_gradeLevels",
           "se_subjects",
           "se_mediums",
+          "se_gradeLevels",
           "primaryCategory",
         ],
+        facets: ["channel", "gradeLevel", "subject", "medium"],
         offset: 0,
       },
     });
@@ -267,17 +268,18 @@ const AllContent = () => {
       >
         <BoxCard
           items={item}
-          onClick={() => handleCardClick(item.identifier, item.primaryCategory)}
+          onClick={() => handleCardClick(item, item.primaryCategory)}
         ></BoxCard>
       </Grid>
     ));
   };
-
-  const handleCardClick = (contentId, courseType) => {
+  const handleCardClick = (item, courseType) => {
     if (courseType === "Course") {
-      navigate("/joinCourse", { state: { contentId } });
+      // navigate("/joinCourse", { state: { contentId: item.identifier } });
+      navigate(`/joinCourse/${item.identifier}`);
     } else {
-      navigate("/player");
+      navigate("/player", { state: { content: item } });
+      // navigate("/player");
     }
   };
 
@@ -338,6 +340,25 @@ const AllContent = () => {
       )}
 
       <Container maxWidth="xl" role="main" className="pb-30 allContent">
+        <Box
+          className="d-flex jc-bw mr-20 my-20"
+          style={{ alignItems: "center" }}
+        >
+          {domainName && (
+            <Box
+              sx={{ marginTop: "10px", alignItems: "center" }}
+              className="d-flex h3-title ml-neg-20"
+            >
+              {t("YOU_ARE_VIEWING_CONTENTS_FOR")}
+              <Box
+                sx={{ fontSize: "16px", fontWeight: "600", paddingLeft: "5px" }}
+                className="text-blueShade2"
+              >
+                {domainName}
+              </Box>
+            </Box>
+          )}
+        </Box>
         {/* <Box className="text-heading lg-d-flex my-20">
           You are viewing content for :
           <Box className="text-primary">Mobility and accessibliy</Box>
@@ -415,10 +436,7 @@ const AllContent = () => {
                           <BoxCard
                             items={item}
                             onClick={() =>
-                              handleCardClick(
-                                item.identifier,
-                                item.primaryCategory
-                              )
+                              handleCardClick(item, item.primaryCategory)
                             }
                           ></BoxCard>
                         </Grid>
@@ -428,10 +446,7 @@ const AllContent = () => {
                           <BoxCard
                             items={item}
                             onClick={() =>
-                              handleCardClick(
-                                item.identifier,
-                                item.primaryCategory
-                              )
+                              handleCardClick(item, item.primaryCategory)
                             }
                           ></BoxCard>
                         </Grid>

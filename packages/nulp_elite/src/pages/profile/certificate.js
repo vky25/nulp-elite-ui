@@ -20,6 +20,8 @@ import axios from "axios";
 import NoResult from "pages/content/noResultFound";
 import Alert from "@mui/material/Alert";
 import ToasterCommon from "../ToasterCommon";
+import { Button } from "@mui/material";
+import { useNavigate, useLocation } from "react-router-dom";
 
 const Certificate = () => {
   const { t } = useTranslation();
@@ -29,6 +31,7 @@ const Certificate = () => {
   const urlConfig = require("../../configs/urlConfig.json");
   const [toasterOpen, setToasterOpen] = useState(false);
   const [toasterMessage, setToasterMessage] = useState("");
+  const navigate = useNavigate();
 
   const showErrorMessage = (msg) => {
     setToasterMessage(msg);
@@ -98,7 +101,9 @@ const Certificate = () => {
     const options = { day: "2-digit", month: "long", year: "numeric" };
     return date.toLocaleDateString("en-GB", options);
   };
-
+  const handleGoBack = () => {
+    navigate(-1);
+  };
   return (
     <div>
       {/* <Header /> */}
@@ -110,7 +115,7 @@ const Certificate = () => {
           </Alert>
         )}
         <Box textAlign="center" padding="10">
-          <Breadcrumbs
+          {/* <Breadcrumbs
             aria-label="breadcrumb"
             style={{
               padding: "25px 0",
@@ -124,11 +129,22 @@ const Certificate = () => {
             <Link underline="hover" href="" aria-current="page" color="#484848">
               {t("CERTIFICATES")}
             </Link>
-          </Breadcrumbs>
-          <Card style={{ padding: "20px", textAlign: "left" }}>
+          </Breadcrumbs> */}
+          <Box className="d-flex jc-bw alignItems-center mb-20">
             <Box style={{ display: "flex", alignItems: "end" }}>
-              <DescriptionOutlinedIcon /> {t("CERTIFICATES")}
+              <DescriptionOutlinedIcon style={{ paddingRight: "10px" }} />{" "}
+              {t("DOWNLOAD_CERTIFICATES")}
             </Box>
+            <Link
+              type="button"
+              href="/profile"
+              className="viewAll xs-mr-10"
+              // onClick={handleGoBack}
+            >
+              {t("BACK_TO_LEARNNG")}
+            </Link>
+          </Box>
+          <Card style={{ padding: "20px", textAlign: "left" }}>
             <Grid
               container
               spacing={2}
@@ -258,6 +274,7 @@ const Certificate = () => {
                             alignItems: "end",
                             color: "#1976d2",
                           }}
+                          className="text-green"
                         >
                           <SimCardDownloadOutlinedIcon />
                           <Link
