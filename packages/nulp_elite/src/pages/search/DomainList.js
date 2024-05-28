@@ -450,27 +450,7 @@ const DomainList = () => {
           </Box>
         </Container>
       ) : domain ? (
-        <Carousel
-          swipeable={false}
-          draggable={false}
-          showDots={true}
-          responsive={responsive}
-          ssr={true}
-          infinite={true}
-          autoPlaySpeed={1000}
-          keyBoardControl={true}
-          customTransition="all .5"
-          transitionDuration={500}
-          containerClass="carousel-container"
-          removeArrowOnDeviceType={["tablet", "mobile"]}
-          dotListClass="custom-dot-list-style"
-          itemClass="carousel-item-padding-40-px"
-        >
-          <DomainCarousel
-            onSelectDomain={handleDomainFilter}
-            domains={domain}
-          />
-        </Carousel>
+        <DomainCarousel onSelectDomain={handleDomainFilter} domains={domain} />
       ) : (
         <div></div>
         // <NoResult />
