@@ -193,9 +193,9 @@ body {
   }
 }
 @media (max-width: 768px) {
-  .cardTitle {
+  /* .cardTitle {
     height: 64px !important;
-  }
+  } */
   .react-multi-carousel-item.carousel-item-padding-40-px {
     margin-right: 4px !important;
   }
@@ -263,6 +263,9 @@ body {
   }
   .xs-hide {
     display: none !important;
+  }
+  .xs-mb-75 {
+    margin-bottom: 75px;
   }
   #menu-appbar .css-3dzjca-MuiPaper-root-MuiPopover-paper-MuiMenu-paper {
     width: 300px;
@@ -360,9 +363,9 @@ body {
     background: #f9fafc;
   }
 }
-.cardTitle {
+/* .cardTitle {
   height: 68px;
-}
+} */
 .profile-btn {
   font-size: 17px !important;
   color: rgb(66, 66, 66);
