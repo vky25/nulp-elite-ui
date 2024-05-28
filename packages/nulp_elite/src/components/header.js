@@ -327,7 +327,7 @@ function Header({ globalSearchQuery }) {
               </Box>
 
               {/* Language Select */}
-            </Toolbar>
+            </Toolbar>{" "}
             {/* Search Box */}
             <Box
               className="xs-hide d-flex header-bg w-40 mr-30"
@@ -355,12 +355,28 @@ function Header({ globalSearchQuery }) {
                 }}
               />
             </Box>
-
             {/* Other Navigation Links */}
             <Box
               className="xs-hide header-bg py-15"
               sx={{ flexGrow: 1, display: "flex", justifyContent: "flex-end" }}
             >
+              <Link
+                href="/domainList"
+                className={activePath === "/domainList" ? "Menuactive" : ""}
+                underline="none"
+                style={{
+                  my: 2,
+                  color: "#484848",
+                  display: "flex",
+                  margin: "0 20px",
+                  padding: "10px",
+                }}
+              >
+                <MenuBookOutlinedIcon
+                  style={{ padding: "0 10px", verticalAlign: "middle" }}
+                />
+                {t("Home")}
+              </Link>
               <Link
                 href="/all"
                 className={activePath === "/all" ? "Menuactive" : ""}
@@ -442,6 +458,22 @@ function Header({ globalSearchQuery }) {
                 </MenuItem>
               </Menu>
             </Box>
+          </Box>
+          <Box className="lg-hide header-bg" style={{ padding: "10px" }}>
+            <TextField
+              placeholder={t("What do you want to learn today?")}
+              variant="outlined"
+              size="small"
+              style={{ background: "#fff" }}
+              fullWidth
+              InputProps={{
+                endAdornment: (
+                  <IconButton aria-label="search">
+                    <SearchIcon />
+                  </IconButton>
+                ),
+              }}
+            />
           </Box>
         </Container>
       </AppBar>
