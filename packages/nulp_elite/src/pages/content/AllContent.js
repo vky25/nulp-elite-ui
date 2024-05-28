@@ -340,11 +340,11 @@ const AllContent = () => {
       )}
 
       <Container maxWidth="xl" role="main" className="pb-30 allContent">
-        <Box
-          className="d-flex jc-bw mr-20 my-20"
-          style={{ alignItems: "center" }}
-        >
-          {domainName && (
+        {domainName && (
+          <Box
+            className="d-flex jc-bw mr-20 my-20"
+            style={{ alignItems: "center" }}
+          >
             <Box
               sx={{ marginTop: "10px", alignItems: "center" }}
               className="d-flex h3-title ml-neg-20"
@@ -357,8 +357,8 @@ const AllContent = () => {
                 {domainName}
               </Box>
             </Box>
-          )}
-        </Box>
+          </Box>
+        )}
         {/* <Box className="text-heading lg-d-flex my-20">
           You are viewing content for :
           <Box className="text-primary">Mobility and accessibliy</Box>
