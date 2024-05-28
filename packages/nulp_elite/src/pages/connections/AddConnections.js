@@ -1272,6 +1272,11 @@ const AddConnections = () => {
                               handleTabClick("Tab2");
                             }}
                           />
+                          <Tab
+                            label="Block Users"
+                            value="3"
+                            style={{ fontSize: "12px", color: "#484848" }}
+                          />
                         </TabList>
                       </Box>
 
@@ -1555,6 +1560,9 @@ const AddConnections = () => {
                               </List>
                             ))}
                         </Box>
+                      </TabPanel>
+                      <TabPanel value="3">
+                        <Box className="scroll">Block user list</Box>
                       </TabPanel>
                     </>
                   ) : (
