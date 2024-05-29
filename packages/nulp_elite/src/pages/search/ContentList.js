@@ -99,6 +99,16 @@ const ContentList = (props) => {
     fetchData();
   }, [globalSearchQuery]);
 
+  useEffect(() => {
+    if (
+      (location.state?.globalSearchQuery &&
+        location.state?.globalSearchQuery !== globalSearchQuery) ||
+      location.state?.globalSearchQuery === ""
+    ) {
+      setGlobalSearchQuery(location.state?.globalSearchQuery);
+    }
+  }, [location.state?.globalSearchQuery, globalSearchQuery]);
+
   const handleFilterChange = (selectedOptions) => {
     const selectedValues = selectedOptions.map((option) => option.value);
     setFilters({ ...filters, se_gradeleverl: selectedValues });
@@ -139,7 +149,7 @@ const ContentList = (props) => {
           se_gradeLevels: filters.se_gradeleverl,
         },
         limit: 20,
-        query: search.query || domainquery || globalSearchQuery,
+        query: search.query || globalSearchQuery,
         offset: 20 * (currentPage - 1),
         sort_by: {
           lastUpdatedOn: "desc",

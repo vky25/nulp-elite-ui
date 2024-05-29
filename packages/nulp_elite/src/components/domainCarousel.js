@@ -95,10 +95,11 @@ export default function DomainCarousel({
   };
   const handleDomainClick = (query, index, name) => {
     setActiveStates(index === activeStates ? null : index);
+    onSelectDomain(query, name);
     // const newActiveStates = [...activeStates]; // Create a copy of activeStates
     // newActiveStates[index] = !newActiveStates[index]; // Toggle the active state at the clicked index
     // setActiveStates(newActiveStates);
-    onSelectDomain(query, name);
+
     // setIsActive(!isActive);
   };
   const handleMouseEnter = (index) => {
