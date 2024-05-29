@@ -23,13 +23,13 @@ body {
   border-radius: 8px;
 }
 .cardCourses {
-  border-radius: 5px, 0px, 0px, 5px;
+  border-radius: 5px 0px 0px 5px;
   color: #15353f;
   padding: 1px 10px;
   font-size: 12px;
   background: #ffd337;
   font-weight: 500;
-  padding: 4px 25px;
+  padding: 5px;
   border-radius: 7px 0 0 6px;
 }
 .cardTitle {
@@ -89,6 +89,7 @@ body {
 }
 .MuiBottomNavigation-root {
   justify-content: space-around !important;
+  margin-top: 30px;
 }
 .navigateActive {
   /* background: #004367 !important; */
@@ -109,6 +110,30 @@ body {
   font-size: 14px !important;
 }
 @media (min-width: 320px) {
+  .labelOne {
+    background: #dddddd !important;
+    color: #212121 !important;
+    font-size: 10px !important;
+    font-weight: 400 !important;
+    padding: 0;
+    margin: 10px !important;
+    border-radius: 5px !important;
+  }
+  .labelOne:hover {
+    background: #dddddd !important;
+  }
+  .labeltwo {
+    background: #e1f5ff !important;
+    color: #212121 !important;
+    font-size: 10px !important;
+    font-weight: 400 !important;
+    padding: 0;
+    margin: 10px !important;
+    border-radius: 5px !important;
+  }
+  .labeltwo:hover {
+    background: #e1f5ff !important;
+  }
   .addConnectChat .MuiFormControl-fullWidth,
   .jss1 .MuiFormControl-fullWidth {
     width: 92% !important;
@@ -193,12 +218,24 @@ body {
   }
 }
 @media (max-width: 768px) {
+  .MuiCardContent-root {
+    padding: 16px 16px 0 16px !important;
+  }
+  .labelOne {
+    justify-content: left;
+  }
+  .labeltwo {
+    justify-content: left;
+  }
   /* .cardTitle {
     height: 64px !important;
   } */
   .react-multi-carousel-item.carousel-item-padding-40-px {
-    margin-right: 4px !important;
+    padding-right: 3px !important;
   }
+  /* .cardTitle {
+    height: 65px;
+  } */
   .carousel-active-ui .imgBorder,
   .carousel-active-ui img {
     background: #008bd1 !important;
@@ -251,9 +288,9 @@ body {
   }
   .rightshade {
     height: 100px !important;
-    right: -100px !important;
+    right: 3px !important;
     top: -4px !important;
-    width: 137px !important;
+    width: 69px !important;
   }
   .sx-bottom {
     bottom: 50px;
@@ -298,6 +335,19 @@ body {
   }
 }
 @media (min-width: 769px) {
+  .mr-20 {
+    margin-right: 20px !important;
+  }
+  .labelOne {
+    padding: 3px 15px !important;
+  }
+  .labeltwo {
+    padding: 7px 15px !important;
+  }
+  .sm-p-25 {
+    padding: 0 25px;
+  }
+
   .filter-profile .MuiAutocomplete-root {
     width: 34% !important;
     margin-left: 20px;
@@ -380,9 +430,7 @@ body {
 .mt-9 {
   margin-top: 9px !important;
 }
-.mr-20 {
-  margin-right: 20px !important;
-}
+
 .custom-dot-list-style {
   display: none !important;
 }
@@ -437,6 +485,9 @@ body {
 .mb-20 {
   margin-bottom: 20px !important;
 }
+.mb-30 {
+  margin-bottom: 30px !important;
+}
 .mb-15 {
   margin-bottom: 15px !important;
 }
@@ -449,9 +500,6 @@ body {
 }
 .sm-pt-22 {
   padding: 22px 0 0 0;
-}
-.sm-p-25 {
-  padding: 0 25px;
 }
 
 /* .react-multi-carousel-list {
@@ -780,32 +828,7 @@ button {
 .viewAll:hover {
   background: #d9d9d9 !important;
 }
-.labelOne {
-  background: #dddddd !important;
-  color: #212121 !important;
-  font-size: 10px !important;
-  font-weight: 400 !important;
-  padding: 7px 15px !important;
-  padding: 3px 15px !important;
-  margin: 10px !important;
-  border-radius: 5px !important;
-}
-.labelOne:hover {
-  background: #dddddd !important;
-}
-.labeltwo {
-  background: #e1f5ff !important;
-  color: #212121 !important;
-  font-size: 10px !important;
-  font-weight: 400 !important;
-  padding: 7px 15px !important;
-  padding: 3px 15px !important;
-  margin: 10px !important;
-  border-radius: 5px !important;
-}
-.labeltwo:hover {
-  background: #e1f5ff !important;
-}
+
 .textLeft {
   text-align: left !important;
 }

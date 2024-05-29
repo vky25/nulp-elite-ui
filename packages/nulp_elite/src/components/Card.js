@@ -135,7 +135,7 @@ export default function BoxCard({ items, index, onClick }) {
         </Typography>
       </CardContent>
       {items.content ? (
-        <CardContent>
+        <CardContent style={{ padding: "16px 16px 5px" }}>
           <Typography
             gutterBottom
             variant="h7"
