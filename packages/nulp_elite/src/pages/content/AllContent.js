@@ -408,7 +408,7 @@ const AllContent = () => {
                   containerClass="carousel-container"
                   removeArrowOnDeviceType={["tablet", "mobile"]}
                   dotListClass="custom-dot-list"
-                  itemClass="carousel-item-padding-40-px"
+                  itemClass="carousel-item-padding-40-px allContentList"
                 >
                   {expandedCategory === category
                     ? items.map((item) => (
