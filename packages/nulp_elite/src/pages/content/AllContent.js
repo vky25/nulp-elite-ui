@@ -316,27 +316,7 @@ const AllContent = () => {
         {t("FILTER_BY_POPULAR_DOMAIN")}
       </Box> */}
       {domain && (
-        <Carousel
-          swipeable={false}
-          draggable={false}
-          showDots={true}
-          responsive={responsive}
-          ssr={true}
-          infinite={true}
-          autoPlaySpeed={1000}
-          keyBoardControl={true}
-          customTransition="all .5"
-          transitionDuration={500}
-          containerClass="carousel-container"
-          removeArrowOnDeviceType={["tablet", "mobile"]}
-          dotListClass="custom-dot-list-style"
-          itemClass="carousel-item-padding-40-px"
-        >
-          <DomainCarousel
-            onSelectDomain={handleDomainFilter}
-            domains={domain}
-          />
-        </Carousel>
+        <DomainCarousel onSelectDomain={handleDomainFilter} domains={domain} />
       )}
 
       <Container maxWidth="xl" role="main" className="pb-30 allContent">
@@ -427,12 +407,12 @@ const AllContent = () => {
                   transitionDuration={500}
                   containerClass="carousel-container"
                   removeArrowOnDeviceType={["tablet", "mobile"]}
-                  dotListClass="custom-dot-list-style"
-                  itemClass="carousel-item-padding-40-px"
+                  dotListClass="custom-dot-list"
+                  itemClass="carousel-item-padding-40-px allContentList"
                 >
                   {expandedCategory === category
                     ? items.map((item) => (
-                        <Grid item xs={6} md={6} lg={2} key={item.id}>
+                        <Grid item xs={12} md={6} lg={2} key={item.id}>
                           <BoxCard
                             items={item}
                             onClick={() =>

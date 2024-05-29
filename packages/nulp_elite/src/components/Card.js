@@ -206,7 +206,7 @@ export default function BoxCard({ items, index, onClick }) {
             gutterBottom
             variant="h5"
             component="div"
-            className="cardTitle mt-40"
+            className="cardTitle mt-20"
           >
             {items.name}
           </Typography>
@@ -230,8 +230,7 @@ export default function BoxCard({ items, index, onClick }) {
         items.se_boards ||
         items.se_gradeLevels) && (
         <>
-          <Divider />
-          <Box className="my-10 textLeft">
+          <Box className="textLeft mb-20 bottom-align">
             {(items.board || items.se_boards) && (
               <Button type="button" size="small" className="labelOne">
                 {items.board || items.se_boards}
