@@ -485,7 +485,11 @@ const DomainList = ({ globalSearchQuery }) => {
         // <NoResult />
       )}
 
-      <Container maxWidth="xl" className="xs-pb-20 allContent" role="main">
+      <Container
+        maxWidth="xl"
+        className="xs-pb-20 allContent allContentList"
+        role="main"
+      >
         {error && <Alert severity="error">{error}</Alert>}
 
         <Box textAlign="center">
