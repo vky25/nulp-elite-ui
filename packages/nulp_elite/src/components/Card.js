@@ -40,15 +40,7 @@ export default function BoxCard({ items, index, onClick }) {
         onClick={onClick}
       >
         <CardMedia
-          sx={{
-            height: 140,
-            borderTopLeftRadius: "10px",
-            borderTopRightRadius: "10px",
-            position: "relative",
-            backgroundRepeat: "no-repeat",
-            background:
-              "linear-gradient(45deg, RGBA(28, 25, 25, 0.46) 7%, RGBA(20, 18, 18, 0.57) 45%)",
-          }}
+          className="card-media"
           image={
             subdomain
               ? require(`./../assets/dummyCardImgs/${subdomain}.png`)
@@ -56,23 +48,7 @@ export default function BoxCard({ items, index, onClick }) {
           }
           title="green iguana"
         />
-        <div
-          onClick={onClick}
-          style={{
-            position: "absolute",
-            top: 0,
-            left: 0,
-            right: "0",
-            width: "100%",
-            height: "141px",
-            background:
-              "linear-gradient(45deg, rgb(28 25 25 / 29%) 7%, rgb(20 18 18 / 9%) 45%)",
-            zIndex: 999,
-            margin: "0",
-            borderTopLeftRadius: "10px",
-            borderTopRightRadius: "10px",
-          }}
-        ></div>
+        <div onClick={onClick} className="card-div"></div>
         <CardContent>
           {items.content.primaryCategory && (
             <Typography
@@ -100,7 +76,7 @@ export default function BoxCard({ items, index, onClick }) {
               gutterBottom
               variant="h5"
               component="div"
-              className="cardTitle mt-40"
+              className="cardTitle mt-20"
             >
               {items.content.name}
             </Typography>
@@ -124,13 +100,14 @@ export default function BoxCard({ items, index, onClick }) {
               marginTop: "10px",
               color:
                 items.status === 2
-                  ? "blue"
+                  ? "#065872"
                   : items.status === 1
                   ? "#579b00"
                   : "#FF0000",
               fontSize: "12px",
               padding: "10px 0",
               textAlign: "left",
+              fontWeight: "500",
             }}
           >
             {items.status === 2
