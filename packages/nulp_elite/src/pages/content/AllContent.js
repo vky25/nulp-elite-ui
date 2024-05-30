@@ -21,25 +21,7 @@ import Alert from "@mui/material/Alert";
 import appConfig from "../../configs/appConfig.json";
 const urlConfig = require("../../configs/urlConfig.json");
 import ToasterCommon from "../ToasterCommon";
-const responsive = {
-  superLargeDesktop: {
-    // the naming can be any, depends on you.
-    breakpoint: { max: 4000, min: 3000 },
-    items: 5,
-  },
-  desktop: {
-    breakpoint: { max: 3000, min: 1024 },
-    items: 8,
-  },
-  tablet: {
-    breakpoint: { max: 1024, min: 464 },
-    items: 2,
-  },
-  mobile: {
-    breakpoint: { max: 464, min: 0 },
-    items: 1,
-  },
-};
+
 const responsiveCard = {
   superLargeDesktop: {
     breakpoint: { max: 4000, min: 3000 },
@@ -319,7 +301,11 @@ const AllContent = () => {
         <DomainCarousel onSelectDomain={handleDomainFilter} domains={domain} />
       )}
 
-      <Container maxWidth="xl" role="main" className="pb-30 allContent">
+      <Container
+        maxWidth="xl"
+        role="main"
+        className="pb-30 allContent xs-pb-20"
+      >
         {domainName && (
           <Box
             className="d-flex jc-bw mr-20 my-20"
@@ -362,7 +348,7 @@ const AllContent = () => {
 
             <React.Fragment key={category}>
               <Box
-                className="d-flex mr-20"
+                className="d-flex mr-20 mt-20"
                 style={{
                   justifyContent: "space-between",
                   alignItems: "center",
@@ -371,7 +357,7 @@ const AllContent = () => {
                 <Box
                   style={{
                     display: "inline-block",
-                    margin: "33px 0px 20px",
+                    margin: "25px 0px 20px",
                   }}
                   className="h4-title "
                 >
@@ -408,7 +394,7 @@ const AllContent = () => {
                   containerClass="carousel-container"
                   removeArrowOnDeviceType={["tablet", "mobile"]}
                   dotListClass="custom-dot-list"
-                  itemClass="carousel-item-padding-40-px allContentList"
+                  itemClass="carousel-item-padding-40-px allContentList xs-pb-20"
                 >
                   {expandedCategory === category
                     ? items.map((item) => (
