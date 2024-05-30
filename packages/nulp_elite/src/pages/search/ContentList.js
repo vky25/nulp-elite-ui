@@ -26,6 +26,9 @@ import Carousel from "react-multi-carousel";
 import DomainCarousel from "components/domainCarousel";
 import domainWithImage from "../../assets/domainImgForm.json";
 import DrawerFilter from "components/drawerFilter";
+import TextField from "@mui/material/TextField";
+import IconButton from "@mui/material/IconButton";
+import SearchIcon from "@mui/icons-material/Search";
 
 const responsive = {
   superLargeDesktop: {
@@ -76,6 +79,8 @@ const ContentList = (props) => {
   const [globalSearchQuery, setGlobalSearchQuery] = useState(
     location.state?.globalSearchQuery || undefined
   );
+  const [searchQuery, setSearchQuery] = useState(globalSearchQuery || "");
+
   const showErrorMessage = (msg) => {
     setToasterMessage(msg);
     setTimeout(() => {
@@ -97,7 +102,7 @@ const ContentList = (props) => {
 
   useEffect(() => {
     fetchData();
-  }, [globalSearchQuery]);
+  }, [globalSearchQuery, searchQuery]);
 
   useEffect(() => {
     if (
@@ -117,10 +122,6 @@ const ContentList = (props) => {
   const handlefilter = (selectedOption) => {
     const selectedValue = selectedOption.map((option) => option.value);
     setDomainfilter({ ...domainfilter, se_board: selectedValue });
-  };
-
-  const handleSearch = (query) => {
-    setSearch({ ...search, query });
   };
 
   const fetchData = async () => {
@@ -149,7 +150,7 @@ const ContentList = (props) => {
           se_gradeLevels: filters.se_gradeleverl,
         },
         limit: 20,
-        query: search.query || globalSearchQuery,
+        query: search.query || globalSearchQuery || searchQuery,
         offset: 20 * (currentPage - 1),
         sort_by: {
           lastUpdatedOn: "desc",
@@ -294,12 +295,60 @@ const ContentList = (props) => {
     setDomainName(domainName);
     navigate(`/contentList/1`, { state: { domain: query } });
   };
+  const handleSearch = (query) => {
+    setSearch({ ...search, query });
+    fetchData();
+  };
+
+  // const handleSearch = () => {
+  //   // navigate("/contentList/1", {
+  //   // state: { globalSearchQuery: searchQuery },
+  //   // });
+  //   fetchData();
+  // };
+
+  const handleInputChange = (event) => {
+    setSearchQuery(event.target.value);
+    console.log("value", event.target.value);
+  };
+
+  const handleKeyPress = (event) => {
+    if (event.key === "Enter") {
+      handleSearch();
+    }
+  };
 
   return (
     <div>
       <Header globalSearchQuery={globalSearchQuery} />
       {toasterMessage && <ToasterCommon response={toasterMessage} />}
 
+      <Box
+        className="lg-hide header-bg w-40 mr-30"
+        style={{ alignItems: "center", paddingLeft: "23px" }}
+      >
+        <Box className="h1-title px-10 pr-20">{t("EXPLORE")}</Box>
+        <TextField
+          placeholder={t("What do you want to learn today?  ")}
+          variant="outlined"
+          size="small"
+          fullWidth
+          value={searchQuery}
+          onChange={handleInputChange}
+          onKeyPress={handleKeyPress}
+          InputProps={{
+            endAdornment: (
+              <IconButton
+                type="submit"
+                aria-label="search"
+                onClick={handleSearch}
+              >
+                <SearchIcon />
+              </IconButton>
+            ),
+          }}
+        />
+      </Box>
       <Box>
         {domainList && domainList.length > 0 ? (
           <DomainCarousel

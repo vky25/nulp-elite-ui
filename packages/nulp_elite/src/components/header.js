@@ -459,7 +459,7 @@ function Header({ globalSearchQuery }) {
               </Menu>
             </Box>
           </Box>
-          <Box className="lg-hide header-bg" style={{ padding: "10px" }}>
+          {/* <Box className="lg-hide header-bg" style={{ padding: "10px" }}>
             <TextField
               placeholder={t("What do you want to learn today?")}
               variant="outlined"
@@ -474,7 +474,7 @@ function Header({ globalSearchQuery }) {
                 ),
               }}
             />
-          </Box>
+          </Box> */}
         </Container>
       </AppBar>
     </>
