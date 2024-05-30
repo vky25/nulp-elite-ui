@@ -41,6 +41,7 @@ import Message from "pages/connections/message";
 import Terms from "pages/terms";
 import SelectPreference from "pages/SelectPreference";
 import Chat from "pages/connections/chat";
+import SampleComponent from "components/SampleComponent";
 const urlConfig = require("./configs/urlConfig.json");
 
 function App() {
@@ -158,6 +159,11 @@ function App() {
       moduleName: "nulp_elite",
       path: "/chat",
       component: Chat,
+    },
+    {
+      moduleName: "nulp_elite",
+      path: "/webapp/demo",
+      component: SampleComponent,
     },
   ];
 

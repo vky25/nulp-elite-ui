@@ -90,9 +90,9 @@ const LearningHistory = () => {
           <Box style={{ margin: "20px 0" }}>
             <Filter
               options={[
-                { label: "Ongoing", value: 0 },
-                { label: "Completed", value: 1 },
-                { label: "Expired", value: 2 },
+                { label: "Ongoing", value: 1 },
+                { label: "Completed", value: 2 },
+                { label: "Expired", value: 0 },
               ]}
               label="Filter by Status"
               onChange={handleFilterChange}
