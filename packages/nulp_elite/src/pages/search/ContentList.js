@@ -99,6 +99,16 @@ const ContentList = (props) => {
     fetchData();
   }, [globalSearchQuery]);
 
+  useEffect(() => {
+    if (
+      (location.state?.globalSearchQuery &&
+        location.state?.globalSearchQuery !== globalSearchQuery) ||
+      location.state?.globalSearchQuery === ""
+    ) {
+      setGlobalSearchQuery(location.state?.globalSearchQuery);
+    }
+  }, [location.state?.globalSearchQuery, globalSearchQuery]);
+
   const handleFilterChange = (selectedOptions) => {
     const selectedValues = selectedOptions.map((option) => option.value);
     setFilters({ ...filters, se_gradeleverl: selectedValues });
@@ -139,7 +149,7 @@ const ContentList = (props) => {
           se_gradeLevels: filters.se_gradeleverl,
         },
         limit: 20,
-        query: search.query || domainquery || globalSearchQuery,
+        query: search.query || globalSearchQuery,
         offset: 20 * (currentPage - 1),
         sort_by: {
           lastUpdatedOn: "desc",
@@ -292,37 +302,20 @@ const ContentList = (props) => {
 
       <Box>
         {domainList && domainList.length > 0 ? (
-          <Carousel
-            swipeable={false}
-            draggable={false}
-            showDots={true}
-            responsive={responsive}
-            ssr={true}
-            infinite={true}
-            autoPlaySpeed={1000}
-            keyBoardControl={true}
-            customTransition="all .5"
-            transitionDuration={500}
-            containerClass="carousel-container"
-            removeArrowOnDeviceType={["tablet", "mobile"]}
-            dotListClass="custom-dot-list-style"
-            itemClass="carousel-item-padding-40-px"
-          >
-            <DomainCarousel
-              // className={`my-class ${
-              //   activeStates[index] ? "carousel-active-ui" : ""
-              // }`}
-              onSelectDomain={handleDomainFilter}
-              selectedDomainCode={domain}
-              domains={domainList}
-            />
-          </Carousel>
+          <DomainCarousel
+            // className={`my-class ${
+            //   activeStates[index] ? "carousel-active-ui" : ""
+            // }`}
+            onSelectDomain={handleDomainFilter}
+            selectedDomainCode={domain}
+            domains={domainList}
+          />
         ) : (
           <NoResult />
         )}
       </Box>
 
-      <Container maxWidth="xl" role="main" className="allContent">
+      <Container maxWidth="xl" role="main" className="allContent xs-pb-20">
         {/* <Box style={{ margin: "20px 0" }}> */}
         {/* <domainCarousel></domainCarousel> */}
         {/* <Box
@@ -361,7 +354,7 @@ const ContentList = (props) => {
               </Box>
             </Box>
           )}
-          <Link onClick={handleGoBack} className="viewAll">
+          <Link onClick={handleGoBack} className="viewAll xs-hide">
             {t("BACK")}
           </Link>
         </Box>
@@ -400,7 +393,7 @@ const ContentList = (props) => {
                       {data?.content?.map((items, index) => (
                         <Grid
                           item
-                          xs={2}
+                          xs={6}
                           md={6}
                           lg={3}
                           style={{ marginBottom: "10px" }}
