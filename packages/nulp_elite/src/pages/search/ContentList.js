@@ -299,20 +299,10 @@ const ContentList = (props) => {
     navigate("/contentList/1", {
       state: { globalSearchQuery: searchQuery },
     });
-    // setSearchQuery({ query });
-    // fetchData();
   };
-
-  // const handleSearch = () => {
-  //   // navigate("/contentList/1", {
-  //   // state: { globalSearchQuery: searchQuery },
-  //   // });
-  //   fetchData();
-  // };
 
   const handleInputChange = (event) => {
     setSearchQuery(event.target.value);
-    // setGlobalSearchQuery(event.target.value);
     console.log("value", event.target.value);
   };
 
@@ -339,7 +329,7 @@ const ContentList = (props) => {
           fullWidth
           value={searchQuery}
           onChange={handleInputChange}
-          onKeyPress={handleSearch}
+          onKeyPress={handleKeyPress}
           InputProps={{
             endAdornment: (
               <IconButton
