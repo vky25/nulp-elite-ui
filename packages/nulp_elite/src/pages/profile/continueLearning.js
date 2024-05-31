@@ -179,7 +179,6 @@ const ContinueLearning = () => {
                     style={{ marginBottom: "10px" }}
                     key={items.contentId}
                   >
-                    {console.log("999999999999999992222222222222222", items)}
                     <BoxCard
                       items={items.content}
                       index={filteredCourses.length}

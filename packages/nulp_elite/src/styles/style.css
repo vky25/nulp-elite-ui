@@ -992,11 +992,12 @@ button {
 }
 .MuiTab-root {
   color: #212121 !important;
-  font-size: 16px !important;
+  font-size: 12px !important;
   font-weight: 500 !important;
-  text-align: center !important;
-  width: 52%;
   padding-left: 0 !important;
+  text-align: center !important;
+  width: 33%;
+  padding: 12px 0px !important;
 }
 .MuiTabs-indicator {
   border-bottom: 4px solid #0e7a9c !important;

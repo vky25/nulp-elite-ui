@@ -118,7 +118,8 @@ const AddConnections = () => {
   const navigate = useNavigate();
   const [selectedChatUser, setSelectedChatUser] = useState(null);
   const [selectedUserId, setSelectedUserId] = useState(null);
-
+  const [blockedUserList, setBlockedUserList] = useState([]);
+  const [blockUserIds, setBlockUserIds] = useState([]);
   const showErrorMessage = (msg) => {
     setToasterMessage(msg);
     setTimeout(() => {
@@ -693,7 +694,76 @@ const AddConnections = () => {
       setIsLoading(false);
     }
   };
+  const fetchBlockUserList = async () => {
+    try {
+      const url = `${urlConfig.URLS.DIRECT_CONNECT.GET_BLOCK_USER_LIST}?sender_id=${loggedInUserId}`;
+      const responseData = await axios.get(url, {
+        withCredentials: true,
+      });
+      if (Array.isArray(responseData.data.result)) {
+        const senderIds = responseData.data.result
+          .filter(({ is_blocked }) => is_blocked)
+          .map(({ receiver_id }) => receiver_id);
 
+        console.log("Blocked Sender IDs:", senderIds);
+        setBlockUserIds(senderIds);
+        if (senderIds?.length > 0) {
+          getBlockedUserByIds(senderIds);
+        }
+      } else {
+        console.error("responseData.data.result is not an array");
+      }
+    } catch (error) {
+      console.error("Error fetching block user list:", error);
+    }
+  };
+
+  const getBlockedUserByIds = async (userIds) => {
+    setError(null);
+    setBlockedUserList([]);
+    const requestBody = {
+      request: {
+        filters: {
+          status: "1",
+          userId: userIds,
+        },
+      },
+    };
+
+    try {
+      const url = `${urlConfig.URLS.LEARNER_PREFIX}${urlConfig.URLS.ADMIN.USER_SEARCH}`;
+      const response = await fetch(url, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(requestBody),
+      });
+
+      if (!response.ok) {
+        showErrorMessage(t("FAILED_TO_FETCH_DATA"));
+        throw new Error(t("FAILED_TO_FETCH_DATA"));
+      }
+
+      const responseData = await response.json();
+      const content = responseData?.result?.response?.content || [];
+
+      const userInfoPromises = content.map((item) => fetchUserInfo(item.id));
+      const userInfoList = await Promise.all(userInfoPromises);
+
+      content.forEach((item, index) => {
+        item.designation = userInfoList[index].designation || "";
+        item.bio = userInfoList[index].bio || "";
+      });
+
+      setBlockedUserList(content);
+      console.log("setBlockedUserList", responseData.result.response.content);
+    } catch (error) {
+      showErrorMessage(t("FAILED_TO_FETCH_DATA"));
+    } finally {
+      setIsLoading(false);
+    }
+  };
   const onMyConnection = () => {
     if (loggedInUserId) {
       getConnections();
@@ -1174,7 +1244,42 @@ const AddConnections = () => {
     rejectChat(userId);
     setOpen(false);
   };
+  const handleUnblockedClick = () => {
+    setOpen(true);
+  };
+  const unBlockedUserChat = (userId) => {
+    handleUnblockUser(userId);
+    setOpen(false);
+  };
+  const handleUnblockUser = async (receiverUserId) => {
+    try {
+      const url = `${urlConfig.URLS.DIRECT_CONNECT.UNBLOCK}`;
+      console.log("UnBlocking User");
 
+      const data = await axios.post(
+        url,
+        {
+          sender_id: loggedInUserId,
+          receiver_id: receiverUserId,
+        },
+        {
+          withCredentials: true,
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }
+      );
+
+      console.log("User unblocked successfully!");
+      // Reload the page after unblocking the user
+      if (data) {
+        window.location.reload();
+      }
+    } catch (error) {
+      console.error("Error unblocking user:", error);
+      showErrorMessage(t("FAILED_TO_UNBLOCK_USER"));
+    }
+  };
   return (
     <Box>
       <Header />
@@ -1276,6 +1381,9 @@ const AddConnections = () => {
                             label="Block Users"
                             value="3"
                             style={{ fontSize: "12px", color: "#484848" }}
+                            onClick={() => {
+                              fetchBlockUserList();
+                            }}
                           />
                         </TabList>
                       </Box>
@@ -1562,7 +1670,108 @@ const AddConnections = () => {
                         </Box>
                       </TabPanel>
                       <TabPanel value="3">
-                        <Box className="scroll">Block user list</Box>
+                        <Box className="scroll">
+                          {blockedUserList &&
+                            blockedUserList.length > 0 &&
+                            blockedUserList.map((item) => (
+                              <List
+                                sx={{}}
+                                style={{ color: "green", cursor: "pointer" }}
+                                className="connection-tab"
+                                key={item.userId}
+                              >
+                                <ListItem
+                                  className="bg-blue"
+                                  style={{
+                                    fontWeight: "normal",
+                                    color: "inherit",
+                                  }}
+                                >
+                                  <ListItemText
+                                    primary={
+                                      <span
+                                        style={{
+                                          color:
+                                            item.userId === selectedUserId
+                                              ? "black"
+                                              : item.isRead === false
+                                              ? "black"
+                                              : "black",
+                                          fontWeight:
+                                            item.userId === selectedUserId
+                                              ? "bold"
+                                              : item.isRead === false
+                                              ? "bold"
+                                              : "normal",
+                                        }}
+                                      >
+                                        {`${item.firstName} ${
+                                          item.lastName ? item.lastName : " "
+                                        } |  ${item.designation}`}
+                                      </span>
+                                    }
+                                    secondary={item.latestChat}
+                                    onClick={() =>
+                                      handleAcceptedChatOpen(
+                                        item.userId,
+                                        `${item.firstName}${
+                                          item.lastName
+                                            ? ` ${item.lastName}`
+                                            : ""
+                                        }`,
+                                        item.designation
+                                      )
+                                    }
+                                  />
+                                  <Link
+                                    underline="none"
+                                    color="primary"
+                                    // onClick={handleOpen}
+                                    onClick={() => {
+                                      handleUnblockedClick();
+                                    }}
+                                    style={{
+                                      fontSize: "12px",
+                                      color: "#0E7A9C",
+                                      fontWeight: "600",
+                                      cursor: "pointer",
+                                    }}
+                                  >
+                                    {t("UNBLOCK")}
+                                  </Link>
+                                  <Dialog open={open} onClose={handleClose}>
+                                    <DialogTitle>{"Are you sure?"}</DialogTitle>
+                                    <DialogContent>
+                                      <DialogContentText>
+                                        Are you sure you want to unblock this
+                                        user?
+                                      </DialogContentText>
+                                    </DialogContent>
+                                    <DialogActions>
+                                      <Button
+                                        type="button"
+                                        className="custom-btn-primary"
+                                        onClick={handleClose}
+                                      >
+                                        Cancel
+                                      </Button>
+                                      <Button
+                                        onClick={() =>
+                                          unBlockedUserChat(item.userId)
+                                        }
+                                        type="button"
+                                        className="custom-btn-primary"
+                                        autoFocus
+                                      >
+                                        OK
+                                      </Button>
+                                    </DialogActions>
+                                  </Dialog>
+                                </ListItem>
+                                <Divider />
+                              </List>
+                            ))}
+                        </Box>
                       </TabPanel>
                     </>
                   ) : (
