@@ -102,7 +102,7 @@ const ContentList = (props) => {
 
   useEffect(() => {
     fetchData();
-  }, [globalSearchQuery, searchQuery]);
+  }, [globalSearchQuery]);
 
   useEffect(() => {
     if (
@@ -150,7 +150,7 @@ const ContentList = (props) => {
           se_gradeLevels: filters.se_gradeleverl,
         },
         limit: 20,
-        query: search.query || globalSearchQuery || searchQuery,
+        query: search.query || globalSearchQuery,
         offset: 20 * (currentPage - 1),
         sort_by: {
           lastUpdatedOn: "desc",
@@ -295,9 +295,12 @@ const ContentList = (props) => {
     setDomainName(domainName);
     navigate(`/contentList/1`, { state: { domain: query } });
   };
-  const handleSearch = (query) => {
-    setSearch({ ...search, query });
-    fetchData();
+  const handleSearch = () => {
+    navigate("/contentList/1", {
+      state: { globalSearchQuery: searchQuery },
+    });
+    // setSearchQuery({ query });
+    // fetchData();
   };
 
   // const handleSearch = () => {
@@ -309,12 +312,13 @@ const ContentList = (props) => {
 
   const handleInputChange = (event) => {
     setSearchQuery(event.target.value);
+    // setGlobalSearchQuery(event.target.value);
     console.log("value", event.target.value);
   };
 
   const handleKeyPress = (event) => {
     if (event.key === "Enter") {
-      handleSearch();
+      fetchData();
     }
   };
 
@@ -335,7 +339,7 @@ const ContentList = (props) => {
           fullWidth
           value={searchQuery}
           onChange={handleInputChange}
-          onKeyPress={handleKeyPress}
+          onKeyPress={handleSearch}
           InputProps={{
             endAdornment: (
               <IconButton

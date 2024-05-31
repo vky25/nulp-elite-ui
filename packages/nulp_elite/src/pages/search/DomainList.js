@@ -234,7 +234,7 @@ const DomainList = ({ globalSearchQuery }) => {
         ],
 
         offset: 0,
-        query: search.query || globalSearchQuery || searchQuery,
+        query: globalSearchQuery || searchQuery,
       },
     };
 
@@ -399,7 +399,6 @@ const DomainList = ({ globalSearchQuery }) => {
       >
         <Box className="h1-title px-10 pr-20">{t("EXPLORE")}</Box>
         <TextField
-          globalSearchQuery={globalSearchQuery}
           placeholder={t("What do you want to learn today?  ")}
           variant="outlined"
           size="small"
