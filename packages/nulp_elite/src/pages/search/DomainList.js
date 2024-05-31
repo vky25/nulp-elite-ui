@@ -28,6 +28,7 @@ import BoxCard from "../../components/Card";
 import SummarizeOutlinedIcon from "@mui/icons-material/SummarizeOutlined";
 import BookmarkAddedOutlinedIcon from "@mui/icons-material/BookmarkAddedOutlined";
 import VerifiedOutlinedIcon from "@mui/icons-material/VerifiedOutlined";
+const routeConfig = require("../../configs/routeConfig.json");
 
 const Item = styled(Paper)(({ theme }) => ({
   backgroundColor: theme.palette.mode === "dark" ? "#1A2027" : "#fff",
@@ -262,15 +263,19 @@ const DomainList = () => {
 
   const loadContents = async (term) => {
     // console.log(term);
-    navigate("/contentList/1", { state: { domain: term.code } });
+    navigate(routeConfig.ROUTES.CONTENTLIST_PAGE.CONTENTLIST / 1, {
+      state: { domain: term.code },
+    });
   };
 
   const handleSearch = async (domainquery) => {
     console.log(domainquery);
-    navigate("/contentList/1", { state: { domainquery } });
+    navigate(routeConfig.ROUTES.CONTENTLIST_PAGE.CONTENTLIST / 1, {
+      state: { domainquery },
+    });
   };
   const handleDomainFilter = (query, domainName) => {
-    navigate("/contentList/1", {
+    navigate(routeConfig.ROUTES.CONTENTLIST_PAGE.CONTENTLIST / 1, {
       state: { domain: query, domainName: domainName },
     });
   };
@@ -279,9 +284,12 @@ const DomainList = () => {
   const handleCardClick = (contentId, courseType) => {
     if (courseType === "Course") {
       // navigate("/joinCourse", { state: { contentId } });
-      navigate(`/joinCourse/${contentId}`);
+      navigate(
+        routeConfig.ROUTES.JOIN_COURSE_PAGE.JOIN_COURSE +
+          `${routeConfig.ROUTES.JOIN_COURSE_PAGE.CONTENT_ID}`
+      );
     } else {
-      navigate("/player");
+      navigate(routeConfig.ROUTES.PLAYER_PAGE.PLAYER);
     }
   };
 
