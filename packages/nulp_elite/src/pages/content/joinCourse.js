@@ -693,7 +693,7 @@ const JoinCourse = () => {
             xs={12}
             md={4}
             lg={4}
-            className="sm-p-25 left-container mt-9"
+            className="sm-p-25 left-container mt-9 xs-px-0"
           >
             {/* <Breadcrumbs
             aria-label="breadcrumb"
