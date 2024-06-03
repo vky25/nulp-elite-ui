@@ -1497,11 +1497,9 @@ const AddConnections = () => {
                                 onClose={handleCloseModal}
                                 aria-labelledby="modal-title"
                                 aria-describedby="modal-desc"
-                                className="sx-bottom"
                                 sx={{
                                   display: "flex",
                                   justifyContent: "center",
-                                  alignItems: "flex-end",
                                   pt: "10vh",
                                   p: "0",
                                 }}
@@ -1521,7 +1519,7 @@ const AddConnections = () => {
                                       onClick={(e) => {
                                         setShowChatModal(false);
                                       }}
-                                      className="custom-btn-primary"
+                                      className="custom-btn-default mb-10"
                                     >
                                       {t("CLOSE")}
                                     </Button>

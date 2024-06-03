@@ -223,7 +223,7 @@ function Header({ globalSearchQuery }) {
       </Box>
 
       {/* Top Navigation Bar */}
-      <AppBar className="lg-my-10  bg-inherit pos-inherit mt-65">
+      <AppBar className=" bg-inherit pos-inherit mt-65">
         <Container className="p-0">
           <Box className="d-flex">
             <Toolbar
