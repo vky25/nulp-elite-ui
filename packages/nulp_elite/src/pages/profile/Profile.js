@@ -44,7 +44,6 @@ import {
 import styled from "styled-components";
 import LearningHistory from "./learningHistory";
 import Certificate from "./certificate";
-const routeConfig = require("../../configs/routeConfig.json");
 
 const DELAY = 1500;
 const MAX_CHARS = 500;
@@ -365,19 +364,16 @@ const Profile = () => {
   };
 
   const handleLearningHistoryClick = () => {
-    // navigate("/learningHistory");
-    navigate(routeConfig.ROUTES.LEARNING_HISTORY_PAGE.LEARNING_HISTORY);
+    navigate("/learningHistory");
   };
 
   const handleContinueLearningClick = () => {
-    // navigate("/continueLearning");
-    navigate(routeConfig.ROUTES.CONTINUE_LEARNING_PAGE.CONTINUE_LEARNING);
+    navigate("/continueLearning");
   };
 
   const handleCertificateButtonClick = () => {
     if (isMobile) {
-      // navigate("/certificate");
-      navigate(routeConfig.ROUTES.CERTIFICATE_PAGE.CERTIFICATE);
+      navigate("/certificate");
     } else {
       setIsButtonDisabled(true);
       setShowCertificate(true);

@@ -43,7 +43,6 @@ import DialogActions from "@material-ui/core/DialogActions";
 import DialogContent from "@material-ui/core/DialogContent";
 import DialogContentText from "@material-ui/core/DialogContentText";
 import DialogTitle from "@material-ui/core/DialogTitle";
-const routeConfig = require("../../configs/routeConfig.json");
 // Define modal styles
 const useStyles = makeStyles((theme) => ({
   modal: {
@@ -1225,7 +1224,7 @@ const AddConnections = () => {
   };
   const showMessages = (creatorId) => {
     if (isMobile) {
-      navigate(routeConfig.ROUTES.ADDCONNECTION_PAGE.CHAT, {
+      navigate("/chat", {
         state: { senderUserId: loggedInUserId, receiverUserId: creatorId },
       });
     } else {
