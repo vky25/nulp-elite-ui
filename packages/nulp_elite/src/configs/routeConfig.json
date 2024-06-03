@@ -31,7 +31,7 @@
     },
     "JOIN_COURSE_PAGE": {
       "JOIN_COURSE": "/joinCourse",
-      "CONTENT_ID": "/contentId"
+      "CONTENT_ID": "/:contentId"
     },
     "PLAYER_PAGE": {
       "PLAYER": "/player"

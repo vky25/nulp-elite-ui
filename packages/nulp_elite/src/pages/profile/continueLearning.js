@@ -123,8 +123,7 @@ const ContinueLearning = () => {
     if (courseType === "Course") {
       // navigate("/joinCourse", { state: { contentId } });
       navigate(
-        routeConfig.ROUTES.JOIN_COURSE_PAGE.JOIN_COURSE +
-          `${routeConfig.ROUTES.JOIN_COURSE_PAGE.CONTENT_ID}`
+        routeConfig.ROUTES.JOIN_COURSE_PAGE.JOIN_COURSE + `${contentId}`
       );
     } else {
       navigate(routeConfig.ROUTES.PLAYER_PAGE.PLAYER);
