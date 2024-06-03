@@ -1224,7 +1224,7 @@ const AddConnections = () => {
                     alignItems: "center",
                   }}
                 >
-                  <Box className="h4-title">Connections</Box>
+                  <Box className="h4-title">{t("CONNECTION")}</Box>
                   {!showTableTwo ? (
                     <Button
                       type="button"
@@ -1521,8 +1521,9 @@ const AddConnections = () => {
                                       </DialogTitle>
                                       <DialogContent>
                                         <DialogContentText>
-                                          Are you sure you want to reject this
-                                          request?
+                                          {t(
+                                            "ARE_YOU_SURE_YOU_WANT_TO_REJECT_THIS_REQUEST"
+                                          )}
                                         </DialogContentText>
                                       </DialogContent>
                                       <DialogActions>

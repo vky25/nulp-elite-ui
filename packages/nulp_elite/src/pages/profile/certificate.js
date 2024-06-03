@@ -127,21 +127,6 @@ const Certificate = () => {
           >
             {t("MY_PROFILE")}
           </Box>
-          {/* <Breadcrumbs
-            aria-label="breadcrumb"
-            style={{
-              padding: "25px 0",
-              fontSize: "16px",
-              fontWeight: "600",
-            }}
-          >
-            <Link underline="hover" color="#004367" href="/profile">
-              {t("MY_PROFILE")}
-            </Link>
-            <Link underline="hover" href="" aria-current="page" color="#484848">
-              {t("CERTIFICATES")}
-            </Link>
-          </Breadcrumbs> */}
           <Box className="d-flex jc-bw alignItems-center lg-mb-20">
             <Box style={{ display: "flex", alignItems: "end" }}>
               <DescriptionOutlinedIcon style={{ paddingRight: "10px" }} />{" "}

@@ -517,7 +517,7 @@ const Chat = ({
         </DialogTitle>
         <DialogContent>
           <Box className="h5-title">
-            Are you sure you want to block this user?
+            {t("ARE_YOU_SURE_YOU_WANT_TO_BLOCK_THIS_USER")}
           </Box>
           <Box py={2}>
             <TextField
@@ -563,8 +563,7 @@ const Chat = ({
           >
             {receiverData[0]?.bio}
             <Box className="my-15">
-              Connect with them to get insights on what they do or simply
-              answers to your question!
+              {t("CONNECT_WITH_THEM_TO_GET_INSIGHTS")}
             </Box>
           </Box>
         </div>

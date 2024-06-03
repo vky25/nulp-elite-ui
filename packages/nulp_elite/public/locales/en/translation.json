@@ -217,5 +217,9 @@
   "ADD_NEW_CONNECTION": "Add New Connection",
   "ADD_NEW": "Add New",
   "OK": "Ok",
-  "BLOCK_USER_LIST": "Block user list"
+  "BLOCK_USER_LIST": "Block user list",
+  "ARE_YOU_SURE_YOU_WANT_TO_REJECT_THIS_REQUEST": " Are you sure you want to reject this request?",
+  "ARE_YOU_SURE_YOU_WANT_TO_BLOCK_THIS_USER": "  Are you sure you want to block this user?",
+  "CONNECT_WITH_THEM_TO_GET_INSIGHTS": "Connect with them to get insights on what they do or simply answers to your question!",
+  "NO_RESULT_FOUND": "No result Found"
 }

@@ -340,20 +340,20 @@ const ContentList = (props) => {
           className="d-flex jc-bw mr-20 my-20"
           style={{ alignItems: "center" }}
         >
-          {domainName && (
-            <Box
-              sx={{ marginTop: "10px", alignItems: "center" }}
-              className="d-flex h3-title ml-neg-20"
-            >
-              {t("YOU_ARE_VIEWING_CONTENTS_FOR")}
+          <Box
+            sx={{ marginTop: "10px", alignItems: "center" }}
+            className="d-flex h3-title ml-neg-20"
+          >
+            {t("YOU_ARE_VIEWING_CONTENTS_FOR")}
+            {domainName && (
               <Box
                 sx={{ fontSize: "16px", fontWeight: "600", paddingLeft: "5px" }}
                 className="text-blueShade2"
               >
                 {domainName}
               </Box>
-            </Box>
-          )}
+            )}
+          </Box>
           <Link onClick={handleGoBack} className="viewAll xs-hide">
             {t("BACK")}
           </Link>
