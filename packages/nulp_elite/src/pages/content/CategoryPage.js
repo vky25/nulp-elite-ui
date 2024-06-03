@@ -20,7 +20,6 @@ import { t } from "i18next";
 import appConfig from "../../configs/appConfig.json";
 const urlConfig = require("../../configs/urlConfig.json");
 import ToasterCommon from "../ToasterCommon";
-const routeConfig = require("../../configs/routeConfig.json");
 
 const CategoryPage = () => {
   // const history = useHistory();
@@ -193,13 +192,9 @@ const CategoryPage = () => {
 
   const handleCardClick = (contentId, courseType) => {
     if (courseType === "Course") {
-      navigate(
-        routeConfig.ROUTES.JOIN_COURSE_PAGE.JOIN_COURSE +
-          `${routeConfig.ROUTES.JOIN_COURSE_PAGE.CONTENT_ID}`
-      );
-      // navigate(`/joinCourse/${contentId}`);
+      navigate(`/joinCourse/${contentId}`);
     } else {
-      navigate(routeConfig.ROUTES.PLAYER_PAGE.PLAYER);
+      navigate("/player");
     }
   };
 

@@ -21,7 +21,6 @@ import Alert from "@mui/material/Alert";
 import appConfig from "../../configs/appConfig.json";
 const urlConfig = require("../../configs/urlConfig.json");
 import ToasterCommon from "../ToasterCommon";
-const routeConfig = require("../../configs/routeConfig.json");
 
 const responsiveCard = {
   superLargeDesktop: {
@@ -256,17 +255,12 @@ const AllContent = () => {
       </Grid>
     ));
   };
-
   const handleCardClick = (item, courseType) => {
     if (courseType === "Course") {
       // navigate("/joinCourse", { state: { contentId: item.identifier } });
-      navigate(
-        routeConfig.ROUTES.JOIN_COURSE_PAGE.JOIN_COURSE / `${item.identifier}`
-      );
+      navigate(`/joinCourse/${item.identifier}`);
     } else {
-      navigate(routeConfig.ROUTES.PLAYER_PAGE.PLAYER, {
-        state: { content: item },
-      });
+      navigate("/player", { state: { content: item } });
       // navigate("/player");
     }
   };
