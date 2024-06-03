@@ -1179,14 +1179,14 @@ const AddConnections = () => {
     <Box>
       <Header />
       {toasterMessage && <ToasterCommon response={toasterMessage} />}
-      <Container maxWidth="xxl" role="main" className="pt-0 xs-p-0">
+      <Container maxWidth="xxl" role="main" className="pt-0 xs-p-0 xs-pb-75">
         {error && (
           <Alert severity="error" className="my-10">
             {error}
           </Alert>
         )}
 
-        <Box textAlign="center" padding="10" style={{ minHeight: "500px" }}>
+        <Box textAlign="center" padding="10">
           <Box>
             {/* <input
               label="Search for a user..."
@@ -1215,13 +1215,16 @@ const AddConnections = () => {
                 xs={12}
                 md={4}
                 lg={4}
-                className="sm-p-25 left-container mt-2"
+                className="sm-p-25 left-container mt-2 pr-16 xs-shadow-none"
               >
                 <Box
                   className="d-flex my-15"
-                  style={{ justifyContent: "space-between" }}
+                  style={{
+                    justifyContent: "space-between",
+                    alignItems: "center",
+                  }}
                 >
-                  <Box className="h4-title">Connections</Box>
+                  <Box className="h4-title">{t("CONNECTION")}</Box>
                   {!showTableTwo ? (
                     <Button
                       type="button"
@@ -1232,7 +1235,7 @@ const AddConnections = () => {
                         handleButtonClick();
                       }}
                     >
-                      Add New
+                      {t("ADD_NEW")}
                     </Button>
                   ) : (
                     <Button
@@ -1240,7 +1243,7 @@ const AddConnections = () => {
                       className="viewAll xs-mr-10"
                       onClick={handleBackClick}
                     >
-                      Back
+                      {t("BACK")}
                     </Button>
                   )}
                 </Box>
@@ -1410,18 +1413,7 @@ const AddConnections = () => {
                                       onClick={(e) => {
                                         setShowChatModal(false);
                                       }}
-                                      style={{
-                                        background: "#004367",
-                                        border: "solid 1px #004367",
-                                        borderRadius: "10px",
-                                        color: "#fff",
-                                        padding: "10px 12px",
-                                        margin: "0 10px",
-                                        fontWeight: "500",
-                                        fontSize: "12px",
-                                        width: "50%",
-                                        marginBottom: "10px",
-                                      }}
+                                      className="custom-btn-primary"
                                     >
                                       {t("CLOSE")}
                                     </Button>
@@ -1529,8 +1521,9 @@ const AddConnections = () => {
                                       </DialogTitle>
                                       <DialogContent>
                                         <DialogContentText>
-                                          Are you sure you want to reject this
-                                          request?
+                                          {t(
+                                            "ARE_YOU_SURE_YOU_WANT_TO_REJECT_THIS_REQUEST"
+                                          )}
                                         </DialogContentText>
                                       </DialogContent>
                                       <DialogActions>
@@ -1539,7 +1532,7 @@ const AddConnections = () => {
                                           className="custom-btn-primary"
                                           onClick={handleClose}
                                         >
-                                          Cancel
+                                          {t("CANCEL")}
                                         </Button>
                                         <Button
                                           onClick={() =>
@@ -1549,7 +1542,7 @@ const AddConnections = () => {
                                           className="custom-btn-primary"
                                           autoFocus
                                         >
-                                          OK
+                                          {t("OK")}
                                         </Button>
                                       </DialogActions>
                                     </Dialog>
@@ -1562,7 +1555,7 @@ const AddConnections = () => {
                         </Box>
                       </TabPanel>
                       <TabPanel value="3">
-                        <Box className="scroll">Block user list</Box>
+                        <Box className="scroll">{t("BLOCK_USER_LIST")}</Box>
                       </TabPanel>
                     </>
                   ) : (
@@ -1573,7 +1566,9 @@ const AddConnections = () => {
                         justifyContent="center"
                         style={{ borderBottom: "solid 1px #ddd" }}
                       >
-                        <Box className="h5-title">Add New Connection</Box>
+                        <Box className="h5-title xs-text-left">
+                          {t("ADD_NEW_CONNECTION")}
+                        </Box>
                       </Box>
                       <Autocomplete
                         id="autocomplete-input"
@@ -1681,17 +1676,11 @@ const AddConnections = () => {
                                 />
                                 {item.id !== loggedInUserId && ( // Conditionally render the link
                                   <Link
-                                    underline="none"
+                                    className="invite-text"
                                     color="primary"
                                     // onClick={handleOpen}
                                     onClick={() => {
                                       showMessages(item.userId);
-                                    }}
-                                    style={{
-                                      fontSize: "12px",
-                                      color: "#0E7A9C",
-                                      fontWeight: "600",
-                                      cursor: "pointer",
                                     }}
                                   >
                                     {t("INVITE")}
@@ -1717,7 +1706,7 @@ const AddConnections = () => {
                 xs={12}
                 md={8}
                 lg={8}
-                className="pt-8 pb-20 xs-hide addConnectChat"
+                className="pt-8 pb-20 xs-hide addConnectChat pl-0"
               >
                 {!isMobile && (
                   <Box className="text-center">

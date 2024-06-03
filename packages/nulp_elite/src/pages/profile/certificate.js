@@ -106,31 +106,28 @@ const Certificate = () => {
   };
   return (
     <div>
-      {/* <Header /> */}
+      <Box className="lg-hide">
+        <Header />
+      </Box>
       {toasterMessage && <ToasterCommon response={toasterMessage} />}
-      <Container maxWidth="xxl" role="main" className="container-pb mb-20">
+      <Container
+        maxWidth="xxl"
+        role="main"
+        className="container-pb mb-20  xs-pb-75"
+      >
         {error && (
           <Alert severity="error" className="my-10">
             {error}
           </Alert>
         )}
-        <Box textAlign="center" padding="10">
-          {/* <Breadcrumbs
-            aria-label="breadcrumb"
-            style={{
-              padding: "25px 0",
-              fontSize: "16px",
-              fontWeight: "600",
-            }}
+        <Box textAlign="center" padding="10" className="xs-pt-15">
+          <Box
+            sx={{ fontSize: "18px", color: "#484848" }}
+            className="lg-hide text-left my-15"
           >
-            <Link underline="hover" color="#004367" href="/profile">
-              {t("MY_PROFILE")}
-            </Link>
-            <Link underline="hover" href="" aria-current="page" color="#484848">
-              {t("CERTIFICATES")}
-            </Link>
-          </Breadcrumbs> */}
-          <Box className="d-flex jc-bw alignItems-center mb-20">
+            {t("MY_PROFILE")}
+          </Box>
+          <Box className="d-flex jc-bw alignItems-center lg-mb-20">
             <Box style={{ display: "flex", alignItems: "end" }}>
               <DescriptionOutlinedIcon style={{ paddingRight: "10px" }} />{" "}
               {t("DOWNLOAD_CERTIFICATES")}
@@ -138,18 +135,17 @@ const Certificate = () => {
             <Link
               type="button"
               href="/profile"
-              className="viewAll xs-mr-10"
+              className="viewAll xs-cert-btn"
               // onClick={handleGoBack}
             >
               {t("BACK_TO_LEARNNG")}
             </Link>
           </Box>
-          <Card style={{ padding: "20px", textAlign: "left" }}>
-            <Grid
-              container
-              spacing={2}
-              style={{ textAlign: "left", paddingTop: "10px" }}
-            >
+          <Card
+            style={{ padding: "20px", textAlign: "left" }}
+            className="xs-cert-bx"
+          >
+            <Grid container spacing={2} style={{ textAlign: "left" }}>
               {(!certData || certData.result.response.content.length === 0) &&
               otherCertData.length === 0 ? (
                 <NoResult />
@@ -176,7 +172,7 @@ const Certificate = () => {
                             component="div"
                             style={{
                               fontSize: "14px",
-                              paddingBottom: "15px",
+                              paddingBottom: "0",
                               height: "42px",
                               fontWeight: "600",
                             }}
@@ -244,7 +240,7 @@ const Certificate = () => {
                           component="div"
                           style={{
                             fontSize: "14px",
-                            paddingBottom: "15px",
+                            paddingBottom: "0",
                             height: "42px",
                             fontWeight: "600",
                           }}
@@ -300,7 +296,9 @@ const Certificate = () => {
         </Box>
       </Container>
       <FloatingChatIcon />
-      {/* <Footer /> */}
+      <Box className="lg-hide">
+        <Footer />
+      </Box>
     </div>
   );
 };
