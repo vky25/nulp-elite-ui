@@ -28,6 +28,7 @@ import MenuBookOutlinedIcon from "@mui/icons-material/MenuBookOutlined";
 import ChatOutlinedIcon from "@mui/icons-material/ChatOutlined";
 import SortOutlinedIcon from "@mui/icons-material/SortOutlined";
 import { useNavigate } from "react-router-dom";
+const routeConfig = require("../configs/routeConfig.json");
 
 function Header({ globalSearchQuery }) {
   const { t } = useTranslation();
@@ -65,7 +66,7 @@ function Header({ globalSearchQuery }) {
   }, [location.pathname]);
 
   const onGlobalSearch = () => {
-    navigate("/contentList/1", {
+    navigate(routeConfig.ROUTES.CONTENTLIST_PAGE.CONTENTLIST / 1, {
       state: { globalSearchQuery: searchQuery },
     });
   };
