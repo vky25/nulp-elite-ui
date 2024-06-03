@@ -55,7 +55,8 @@
       "OTP": "/otp"
     },
     "VIEW_ALL_PAGE": {
-      "VIEW_ALL": "/view-all/:category"
+      "VIEW_ALL": "/view-all",
+      "CATEGORY": "/:category"
     },
     "MESSAGE_PAGE": {
       "MESSAGE": "/message"
