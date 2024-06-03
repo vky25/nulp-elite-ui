@@ -22,9 +22,6 @@ import Alert from "@mui/material/Alert";
 import ToasterCommon from "../ToasterCommon";
 import { Button } from "@mui/material";
 import { useNavigate, useLocation } from "react-router-dom";
-import { jsPDF } from "jspdf";
-import { svg2pdf } from "svg2pdf.js";
-import DOMPurify from "dompurify";
 
 const Certificate = () => {
   const { t } = useTranslation();
@@ -119,7 +116,7 @@ const Certificate = () => {
       const response = await axios.request(config);
       setSvgData(response.data);
       if (response.data) {
-        await downloadPDF(response.data);
+        // await downloadPDF(response.data);
       }
     } catch (error) {
       console.error("Error fetching user certificate:", error);
@@ -135,40 +132,40 @@ const Certificate = () => {
   const handleGoBack = () => {
     navigate(-1);
   };
-  const downloadPDF = async (svgData) => {
-    // Sanitize the SVG data
-    const cleanSvgData = DOMPurify.sanitize(svgData);
+  // const downloadPDF = async (svgData) => {
+  //   // Sanitize the SVG data
+  //   const cleanSvgData = DOMPurify.sanitize(svgData);
 
-    // Create a temporary div to parse the sanitized SVG data
-    const svgContainer = document.createElement("div");
-    svgContainer.innerHTML = cleanSvgData;
+  //   // Create a temporary div to parse the sanitized SVG data
+  //   const svgContainer = document.createElement("div");
+  //   svgContainer.innerHTML = cleanSvgData;
 
-    const svgElement = svgContainer.querySelector("svg");
-    if (!svgElement) {
-      console.error("No SVG element found");
-      return;
-    }
+  //   const svgElement = svgContainer.querySelector("svg");
+  //   if (!svgElement) {
+  //     console.error("No SVG element found");
+  //     return;
+  //   }
 
-    // Adjust the dimensions of the jsPDF document
-    const width = svgElement.getAttribute("width") || svgElement.clientWidth;
-    const height = svgElement.getAttribute("height") || svgElement.clientHeight;
+  //   // Adjust the dimensions of the jsPDF document
+  //   const width = svgElement.getAttribute("width") || svgElement.clientWidth;
+  //   const height = svgElement.getAttribute("height") || svgElement.clientHeight;
 
-    const doc = new jsPDF({
-      orientation: "landscape",
-      unit: "pt",
-      format: [width, height],
-    });
+  //   const doc = new jsPDF({
+  //     orientation: "landscape",
+  //     unit: "pt",
+  //     format: [width, height],
+  //   });
 
-    // Convert the SVG to PDF using svg2pdf
-    await svg2pdf(svgElement, doc, {
-      xOffset: 0,
-      yOffset: 0,
-      scale: 1,
-    });
+  //   // Convert the SVG to PDF using svg2pdf
+  //   await svg2pdf(svgElement, doc, {
+  //     xOffset: 0,
+  //     yOffset: 0,
+  //     scale: 1,
+  //   });
 
-    // Save the PDF document
-    doc.save("certificate.pdf");
-  };
+  //   // Save the PDF document
+  //   doc.save("certificate.pdf");
+  // };
 
   return (
     <div>
