@@ -1,10 +1,10 @@
 {
   "ROUTES": {
-    "ALL_CONTENT_PAGE": {
-      "ALL_CONTENT": "/all"
-    },
     "POFILE_PAGE": {
       "PROFILE": "/profile"
+    },
+    "ALL_CONTENT_PAGE": {
+      "ALL_CONTENT": "/all"
     },
     "CERTIFICATE_PAGE": {
       "CERTIFICATE": "/certificate"
@@ -19,8 +19,7 @@
       "HELP": "/help"
     },
     "ADDCONNECTION_PAGE": {
-      "ADDCONNECTION": "/addConnections",
-      "CHAT": "chat"
+      "ADDCONNECTION": "/addConnections"
     },
     "DOMAINLIST_PAGE": {
       "DOMAINLIST": "/domainList"
