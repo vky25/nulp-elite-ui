@@ -413,7 +413,7 @@ const Profile = () => {
             xs={12}
             md={4}
             lg={4}
-            className="sm-p-25 left-container profile mt-2"
+            className="sm-p-25 left-container profile lg-mt-12"
           >
             <Box sx={{ fontSize: "18px", color: "#484848" }}>
               {t("MY_PROFILE")}
@@ -703,17 +703,13 @@ const Profile = () => {
 
                         <Box pt={4} className="d-flex jc-en">
                           <Button
-                            className="custom-btn-primary mr-5"
-                            type="submit"
-                          >
-                            {t("SAVE")}
-                          </Button>
-
-                          <Button
-                            className="custom-btn-default"
+                            className="custom-btn-default mr-5"
                             onClick={handleCloseEditDialog}
                           >
                             {t("CANCEL")}
+                          </Button>
+                          <Button className="custom-btn-primary " type="submit">
+                            {t("SAVE")}
                           </Button>
                         </Box>
                       </form>
