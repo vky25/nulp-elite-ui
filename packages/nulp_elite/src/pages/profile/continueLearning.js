@@ -19,7 +19,6 @@ import Alert from "@mui/material/Alert";
 import appConfig from "../../configs/appConfig.json";
 const urlConfig = require("../../configs/urlConfig.json");
 import ToasterCommon from "../ToasterCommon";
-const routeConfig = require("../../configs/routeConfig.json");
 
 const ContinueLearning = () => {
   const { t } = useTranslation();
@@ -122,11 +121,9 @@ const ContinueLearning = () => {
   const handleCardClick = (contentId, courseType) => {
     if (courseType === "Course") {
       // navigate("/joinCourse", { state: { contentId } });
-      navigate(
-        routeConfig.ROUTES.JOIN_COURSE_PAGE.JOIN_COURSE + `${contentId}`
-      );
+      navigate(`/joinCourse/${contentId}`);
     } else {
-      navigate(routeConfig.ROUTES.PLAYER_PAGE.PLAYER);
+      navigate("/player");
     }
   };
   return (
@@ -151,11 +148,7 @@ const ContinueLearning = () => {
         </Box>
         <Box textAlign="center" padding="10">
           <Box>
-            <Grid
-              container
-              spacing={2}
-              style={{ margin: "20px 0", marginBottom: "10px" }}
-            >
+            <Grid container spacing={2}>
               {/* 
               {filteredCourses.map((items) => (
                 <Grid

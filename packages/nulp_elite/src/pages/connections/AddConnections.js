@@ -43,7 +43,6 @@ import DialogActions from "@material-ui/core/DialogActions";
 import DialogContent from "@material-ui/core/DialogContent";
 import DialogContentText from "@material-ui/core/DialogContentText";
 import DialogTitle from "@material-ui/core/DialogTitle";
-const routeConfig = require("../../configs/routeConfig.json");
 // Define modal styles
 const useStyles = makeStyles((theme) => ({
   modal: {
@@ -1225,7 +1224,7 @@ const AddConnections = () => {
   };
   const showMessages = (creatorId) => {
     if (isMobile) {
-      navigate(routeConfig.ROUTES.ADDCONNECTION_PAGE.CHAT, {
+      navigate("/chat", {
         state: { senderUserId: loggedInUserId, receiverUserId: creatorId },
       });
     } else {
@@ -1321,7 +1320,7 @@ const AddConnections = () => {
                 xs={12}
                 md={4}
                 lg={4}
-                className="sm-p-25 left-container mt-2 pr-16 xs-shadow-none"
+                className="sm-p-25 left-container lg-mt-12 pr-16 xs-shadow-none"
               >
                 <Box
                   className="d-flex my-15"
@@ -1498,31 +1497,23 @@ const AddConnections = () => {
                                 onClose={handleCloseModal}
                                 aria-labelledby="modal-title"
                                 aria-describedby="modal-desc"
-                                className="sx-bottom"
                                 sx={{
                                   display: "flex",
                                   justifyContent: "center",
-                                  alignItems: "flex-end",
                                   pt: "10vh",
                                   p: "0",
                                 }}
                               >
                                 <ModalContent sx={{ width: 400 }} style={{}}>
                                   <div style={{ textAlign: "center" }}>
-                                    <h2
-                                      style={{
-                                        fontSize: "14px",
-                                        textAlign: "center",
-                                        padding: "13px",
-                                      }}
-                                    >
+                                    <h2 className="h5-title">
                                       {t("INVITATION_NOT_ACCEPTED")}
                                     </h2>
                                     <Button
                                       onClick={(e) => {
                                         setShowChatModal(false);
                                       }}
-                                      className="custom-btn-primary"
+                                      className="custom-btn-default mb-10"
                                     >
                                       {t("CLOSE")}
                                     </Button>

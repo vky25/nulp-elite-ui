@@ -121,7 +121,7 @@ export default function DomainCarousel({
   };
 
   return (
-    <Box style={{ position: "relative" }} className="bg-blue">
+    <Box style={{ position: "relative" }} className="bg-blue mt-9">
       {isMobile ? (
         <>
           <Carousel
@@ -135,7 +135,7 @@ export default function DomainCarousel({
             keyBoardControl={true}
             customTransition="all .5"
             transitionDuration={500}
-            containerClass="carousel-container"
+            containerClass="carousel-container carousel-bx"
             dotListClass="custom-dot-list-style-none"
             itemClass="carousel-item-padding-40-px"
           >
@@ -184,8 +184,6 @@ export default function DomainCarousel({
                 </Box>
               ))}
           </Carousel>
-          <Box className="leftshade"></Box>
-          <Box className="rightshade"></Box>
         </>
       ) : (
         <Box

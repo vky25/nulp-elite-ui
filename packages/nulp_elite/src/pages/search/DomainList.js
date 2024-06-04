@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from "react";
-// import { Box, Heading, Text, Button } from '@chakra-ui/react';
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 import { useTranslation } from "react-i18next";
 import Typography from "@mui/material/Typography";
@@ -28,7 +27,6 @@ import BoxCard from "../../components/Card";
 import SummarizeOutlinedIcon from "@mui/icons-material/SummarizeOutlined";
 import BookmarkAddedOutlinedIcon from "@mui/icons-material/BookmarkAddedOutlined";
 import VerifiedOutlinedIcon from "@mui/icons-material/VerifiedOutlined";
-const routeConfig = require("../../configs/routeConfig.json");
 import TextField from "@mui/material/TextField";
 import IconButton from "@mui/material/IconButton";
 import SearchIcon from "@mui/icons-material/Search";
@@ -270,19 +268,16 @@ const DomainList = ({ globalSearchQuery }) => {
 
   const loadContents = async (term) => {
     // console.log(term);
-    navigate(routeConfig.ROUTES.CONTENTLIST_PAGE.CONTENTLIST / 1, {
-      state: { domain: term.code },
-    });
+    navigate("/contentList/1", { state: { domain: term.code } });
   };
 
   const handleSearch = async (domainquery) => {
     console.log(domainquery);
-    navigate(routeConfig.ROUTES.CONTENTLIST_PAGE.CONTENTLIST / 1, {
-      state: { domainquery },
-    });
+    navigate("/contentList/1", { state: { domainquery } });
   };
   const handleDomainFilter = (query, domainName) => {
-    navigate(routeConfig.ROUTES.CONTENTLIST_PAGE.CONTENTLIST / 1, {
+    setDomain(query);
+    navigate("/contentList/1", {
       state: { domain: query, domainName: domainName },
     });
   };
@@ -291,11 +286,9 @@ const DomainList = ({ globalSearchQuery }) => {
   const handleCardClick = (contentId, courseType) => {
     if (courseType === "Course") {
       // navigate("/joinCourse", { state: { contentId } });
-      navigate(
-        routeConfig.ROUTES.JOIN_COURSE_PAGE.JOIN_COURSE + `${contentId}`
-      );
+      navigate(`/joinCourse/${contentId}`);
     } else {
-      navigate(routeConfig.ROUTES.PLAYER_PAGE.PLAYER);
+      navigate("/player");
     }
   };
 
@@ -400,10 +393,9 @@ const DomainList = ({ globalSearchQuery }) => {
 
       {/* Search Box */}
       <Box
-        className="lg-hide d-flex header-bg w-40 mr-30"
+        className="lg-hide d-flex header-bg"
         style={{ alignItems: "center", paddingLeft: "23px" }}
       >
-        <Box className="h1-title px-10 pr-20">{t("EXPLORE")}</Box>
         <TextField
           placeholder={t("What do you want to learn today?  ")}
           variant="outlined"

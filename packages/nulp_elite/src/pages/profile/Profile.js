@@ -44,7 +44,6 @@ import {
 import styled from "styled-components";
 import LearningHistory from "./learningHistory";
 import Certificate from "./certificate";
-const routeConfig = require("../../configs/routeConfig.json");
 
 const DELAY = 1500;
 const MAX_CHARS = 500;
@@ -365,19 +364,16 @@ const Profile = () => {
   };
 
   const handleLearningHistoryClick = () => {
-    // navigate("/learningHistory");
-    navigate(routeConfig.ROUTES.LEARNING_HISTORY_PAGE.LEARNING_HISTORY);
+    navigate("/learningHistory");
   };
 
   const handleContinueLearningClick = () => {
-    // navigate("/continueLearning");
-    navigate(routeConfig.ROUTES.CONTINUE_LEARNING_PAGE.CONTINUE_LEARNING);
+    navigate("/continueLearning");
   };
 
   const handleCertificateButtonClick = () => {
     if (isMobile) {
-      // navigate("/certificate");
-      navigate(routeConfig.ROUTES.CERTIFICATE_PAGE.CERTIFICATE);
+      navigate("/certificate");
     } else {
       setIsButtonDisabled(true);
       setShowCertificate(true);
@@ -417,7 +413,7 @@ const Profile = () => {
             xs={12}
             md={4}
             lg={4}
-            className="sm-p-25 left-container profile mt-2"
+            className="sm-p-25 left-container profile lg-mt-12"
           >
             <Box sx={{ fontSize: "18px", color: "#484848" }}>
               {t("MY_PROFILE")}
@@ -707,17 +703,13 @@ const Profile = () => {
 
                         <Box pt={4} className="d-flex jc-en">
                           <Button
-                            className="custom-btn-primary mr-5"
-                            type="submit"
-                          >
-                            {t("SAVE")}
-                          </Button>
-
-                          <Button
-                            className="custom-btn-default"
+                            className="custom-btn-default mr-5"
                             onClick={handleCloseEditDialog}
                           >
                             {t("CANCEL")}
+                          </Button>
+                          <Button className="custom-btn-primary " type="submit">
+                            {t("SAVE")}
                           </Button>
                         </Box>
                       </form>
