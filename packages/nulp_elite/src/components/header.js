@@ -28,6 +28,7 @@ import MenuBookOutlinedIcon from "@mui/icons-material/MenuBookOutlined";
 import ChatOutlinedIcon from "@mui/icons-material/ChatOutlined";
 import SortOutlinedIcon from "@mui/icons-material/SortOutlined";
 import { useNavigate } from "react-router-dom";
+import HomeIcon from "@mui/icons-material/Home";
 
 function Header({ globalSearchQuery }) {
   const { t } = useTranslation();
@@ -372,7 +373,7 @@ function Header({ globalSearchQuery }) {
                   padding: "10px",
                 }}
               >
-                <MenuBookOutlinedIcon
+                <HomeIcon
                   style={{ padding: "0 10px", verticalAlign: "middle" }}
                 />
                 {t("Home")}
