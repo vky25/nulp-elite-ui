@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from "react";
-// import { Box, Heading, Text, Button } from '@chakra-ui/react';
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 import { useTranslation } from "react-i18next";
 import Typography from "@mui/material/Typography";
@@ -29,6 +28,9 @@ import SummarizeOutlinedIcon from "@mui/icons-material/SummarizeOutlined";
 import BookmarkAddedOutlinedIcon from "@mui/icons-material/BookmarkAddedOutlined";
 import VerifiedOutlinedIcon from "@mui/icons-material/VerifiedOutlined";
 const routeConfig = require("../../configs/routeConfig.json");
+import TextField from "@mui/material/TextField";
+import IconButton from "@mui/material/IconButton";
+import SearchIcon from "@mui/icons-material/Search";
 
 const Item = styled(Paper)(({ theme }) => ({
   backgroundColor: theme.palette.mode === "dark" ? "#1A2027" : "#fff",
@@ -70,7 +72,7 @@ const responsive = {
   },
 };
 
-const DomainList = () => {
+const DomainList = ({ globalSearchQuery }) => {
   const { t } = useTranslation();
   // console.log(data.result.categories.terms.category);
   // const [search, setSearch] = React.useState(true);
@@ -89,6 +91,8 @@ const DomainList = () => {
   const [domain, setDomain] = useState();
   const [popularCourses, setPopularCourses] = useState([]);
   const [recentlyAddedCourses, setRecentlyAddedCourses] = useState([]);
+
+  const [searchQuery, setSearchQuery] = useState(globalSearchQuery || "");
 
   const showErrorMessage = (msg) => {
     setToasterMessage(msg);
@@ -228,7 +232,9 @@ const DomainList = () => {
           "se_mediums",
           "primaryCategory",
         ],
+
         offset: 0,
+        query: globalSearchQuery || searchQuery,
       },
     };
 
@@ -275,6 +281,7 @@ const DomainList = () => {
     });
   };
   const handleDomainFilter = (query, domainName) => {
+    setDomain(query);
     navigate(routeConfig.ROUTES.CONTENTLIST_PAGE.CONTENTLIST / 1, {
       state: { domain: query, domainName: domainName },
     });
@@ -369,10 +376,54 @@ const DomainList = () => {
     }
   };
 
+  const onMobileSearch = () => {
+    navigate("/contentList/1", {
+      state: { globalSearchQuery: searchQuery },
+    });
+  };
+
+  const handleInputChange = (event) => {
+    setSearchQuery(event.target.value);
+    console.log("value", event.target.value);
+  };
+
+  const handleKeyPress = (event) => {
+    if (event.key === "Enter") {
+      onMobileSearch();
+    }
+  };
+
   return (
     <div>
       <Header />
       {toasterMessage && <ToasterCommon response={toasterMessage} />}
+
+      {/* Search Box */}
+      <Box
+        className="lg-hide d-flex header-bg"
+        style={{ alignItems: "center", paddingLeft: "23px" }}
+      >
+        <TextField
+          placeholder={t("What do you want to learn today?  ")}
+          variant="outlined"
+          size="small"
+          fullWidth
+          value={searchQuery}
+          onChange={handleInputChange}
+          onKeyPress={handleKeyPress}
+          InputProps={{
+            endAdornment: (
+              <IconButton
+                type="submit"
+                aria-label="search"
+                onClick={onMobileSearch}
+              >
+                <SearchIcon />
+              </IconButton>
+            ),
+          }}
+        />
+      </Box>
 
       {isMobile ? (
         <Container maxWidth="xl" role="main" className="allContent">

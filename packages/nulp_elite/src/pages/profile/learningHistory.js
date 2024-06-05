@@ -80,7 +80,7 @@ const LearningHistory = () => {
       <Container
         maxWidth="xl"
         role="main"
-        className="allContent filter-profile"
+        className="allContent filter-profile profile"
       >
         {error && (
           <Alert severity="error" className="my-10">
@@ -99,7 +99,7 @@ const LearningHistory = () => {
               onChange={handleFilterChange}
             />
           </Box>
-          <Box style={{ padding: "20px", textAlign: "left" }}>
+          <Box>
             <Grid
               container
               spacing={2}
@@ -109,7 +109,7 @@ const LearningHistory = () => {
                 <NoResult />
               ) : (
                 filteredCourses?.map((course) => (
-                  <Grid item xs={12} md={3} key={course.courseName}>
+                  <Grid item xs={6} md={3} key={course.courseName}>
                     <BoxCard
                       items={course}
                       index={courseData.result.courses.length}

@@ -274,34 +274,7 @@ const AllContent = () => {
     <>
       <Header />
       {toasterMessage && <ToasterCommon response={toasterMessage} />}
-      {/* <Box sx={{ background: "#2D2D2D", padding: "20px" }} className="xs-hide">
-        <p
-          style={{
-            fontSize: "20px",
-            fontWeight: "700",
-            color: "#fff",
-            paddingBottom: "5px",
-            margin: "0",
-          }}
-        >
-          {t("EXPLORE_CONTENT_RELATED_TO_YOUR_DOMAIN")}
-        </p>
-        <p
-          style={{
-            fontSize: "16px",
-            fontWeight: "700",
-            color: "#C1C1C1",
-            margin: "0",
-            paddingBottom: "30px",
-          }}
-        >
-          {t("LEARN_FROM_WELL_CURATED")}
-        </p>
-        <SearchBox onSearch={handleSearch} />
-      </Box>  */}
-      {/* <Box sx={{ fontWeight: "600", fontSize: "16px", padding: "10px" }}>
-        {t("FILTER_BY_POPULAR_DOMAIN")}
-      </Box> */}
+
       {domain && (
         <DomainCarousel onSelectDomain={handleDomainFilter} domains={domain} />
       )}

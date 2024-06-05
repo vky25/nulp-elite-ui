@@ -1,6 +1,6 @@
 // Profile.js
 
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { useTranslation } from "react-i18next";
 import Footer from "components/Footer";
 import Header from "components/header";
@@ -11,7 +11,7 @@ import SimCardDownloadOutlinedIcon from "@mui/icons-material/SimCardDownloadOutl
 import Link from "@mui/material/Link";
 import Grid from "@mui/material/Grid";
 import data from "../../assets/certificates.json";
-import DescriptionOutlinedIcon from "@mui/icons-material/DescriptionOutlined";
+import ReceiptLongIcon from "@mui/icons-material/ReceiptLong";
 import Breadcrumbs from "@mui/material/Breadcrumbs";
 import Card from "@mui/material/Card";
 import FloatingChatIcon from "../../components/FloatingChatIcon";
@@ -22,6 +22,7 @@ import Alert from "@mui/material/Alert";
 import ToasterCommon from "../ToasterCommon";
 import { Button } from "@mui/material";
 import { useNavigate, useLocation } from "react-router-dom";
+import html2pdf from "html2pdf.js";
 
 const Certificate = () => {
   const { t } = useTranslation();
@@ -32,6 +33,8 @@ const Certificate = () => {
   const [toasterOpen, setToasterOpen] = useState(false);
   const [toasterMessage, setToasterMessage] = useState("");
   const navigate = useNavigate();
+  const [svgData, setSvgData] = useState("");
+  const svgContainerRef = useRef(null);
 
   const showErrorMessage = (msg) => {
     setToasterMessage(msg);
@@ -96,6 +99,56 @@ const Certificate = () => {
     fetchData();
   }, []);
 
+  const getCertificate = async (template, osid, certificateName) => {
+    setError(null);
+    try {
+      let config = {
+        method: "get",
+        maxBodyLength: Infinity,
+        url: `${urlConfig.URLS.LEARNER_PREFIX}${urlConfig.URLS.USER.DOWNLOAD_CERTIFICATE}/${osid}`,
+        withCredentials: true,
+        headers: {
+          Accept: "image/svg+xml",
+          "Content-Type": "application/json, text/plain",
+          template: template,
+        },
+      };
+
+      const response = await axios.request(config);
+      if (response.data) {
+        setSvgData(response.data);
+        await handleDownloadPdf(certificateName);
+      }
+    } catch (error) {
+      console.error("Error fetching user certificate:", error);
+      showErrorMessage(t("FAILED_TO_FETCH_DATA"));
+    }
+  };
+  const getCertificateReport = async (id, certificateName) => {
+    setError(null);
+    try {
+      let config = {
+        method: "get",
+        maxBodyLength: Infinity,
+        url: `${urlConfig.URLS.LEARNER_PREFIX}${urlConfig.URLS.USER.DOWNLOAD_CERTIFICATE_REPORT}/${id}`,
+        withCredentials: true,
+        headers: {
+          Accept: "image/svg+xml",
+          "Content-Type": "application/json, text/plain",
+        },
+      };
+
+      const response = await axios.request(config);
+      if (response.data) {
+        setSvgData(response.data.result.printUri);
+        await handleDownloadPdf(certificateName);
+      }
+    } catch (error) {
+      console.error("Error fetching user certificate:", error);
+      showErrorMessage(t("FAILED_TO_FETCH_DATA"));
+    }
+  };
+
   const formatDate = (dateString) => {
     const date = new Date(dateString);
     const options = { day: "2-digit", month: "long", year: "numeric" };
@@ -104,52 +157,71 @@ const Certificate = () => {
   const handleGoBack = () => {
     navigate(-1);
   };
+  useEffect(() => {
+    if (svgData.startsWith("data:image/svg+xml,")) {
+      const encodedSvg = svgData.slice("data:image/svg+xml,".length);
+      const decodedSvgContent = decodeURIComponent(encodedSvg);
+      setSvgData(decodedSvgContent);
+    }
+  }, [svgData]);
+
+  const handleDownloadPdf = async (certificateName) => {
+    const element = svgContainerRef.current;
+
+    if (element) {
+      const opt = {
+        margin: 0,
+        filename: `${certificateName}.pdf`,
+        image: { type: "jpeg", quality: 0.98 },
+        html2canvas: { scale: 2 },
+        jsPDF: { unit: "in", format: "letter", orientation: "portrait" },
+      };
+
+      html2pdf().set(opt).from(element).save();
+    }
+  };
   return (
     <div>
-      {/* <Header /> */}
+      <Box className="lg-hide">
+        <Header />
+      </Box>
       {toasterMessage && <ToasterCommon response={toasterMessage} />}
-      <Container maxWidth="xxl" role="main" className="container-pb mb-20">
+      <Container
+        maxWidth="xxl"
+        role="main"
+        className="container-pb mb-20  xs-pb-75 lg-mt-12"
+      >
         {error && (
           <Alert severity="error" className="my-10">
             {error}
           </Alert>
         )}
-        <Box textAlign="center" padding="10">
-          {/* <Breadcrumbs
-            aria-label="breadcrumb"
-            style={{
-              padding: "25px 0",
-              fontSize: "16px",
-              fontWeight: "600",
-            }}
+        <Box textAlign="center" padding="10" className="xs-pt-15">
+          <Box
+            sx={{ fontSize: "18px", color: "#484848" }}
+            className="lg-hide text-left my-15"
           >
-            <Link underline="hover" color="#004367" href="/profile">
-              {t("MY_PROFILE")}
-            </Link>
-            <Link underline="hover" href="" aria-current="page" color="#484848">
-              {t("CERTIFICATES")}
-            </Link>
-          </Breadcrumbs> */}
-          <Box className="d-flex jc-bw alignItems-center mb-20">
+            {t("MY_PROFILE")}
+          </Box>
+          <Box className="d-flex jc-bw alignItems-center lg-mb-20">
             <Box style={{ display: "flex", alignItems: "end" }}>
-              <DescriptionOutlinedIcon style={{ paddingRight: "10px" }} />{" "}
+              <ReceiptLongIcon style={{ paddingRight: "10px" }} />{" "}
               {t("DOWNLOAD_CERTIFICATES")}
             </Box>
             <Link
               type="button"
               href="/profile"
-              className="viewAll xs-mr-10"
+              className="viewAll xs-cert-btn"
               // onClick={handleGoBack}
             >
               {t("BACK_TO_LEARNNG")}
             </Link>
           </Box>
-          <Card style={{ padding: "20px", textAlign: "left" }}>
-            <Grid
-              container
-              spacing={2}
-              style={{ textAlign: "left", paddingTop: "10px" }}
-            >
+          <Card
+            style={{ padding: "20px", textAlign: "left" }}
+            className="xs-cert-bx"
+          >
+            <Grid container spacing={2} style={{ textAlign: "left" }}>
               {(!certData || certData.result.response.content.length === 0) &&
               otherCertData.length === 0 ? (
                 <NoResult />
@@ -176,7 +248,7 @@ const Certificate = () => {
                             component="div"
                             style={{
                               fontSize: "14px",
-                              paddingBottom: "15px",
+                              paddingBottom: "0",
                               height: "42px",
                               fontWeight: "600",
                             }}
@@ -207,6 +279,7 @@ const Certificate = () => {
                               alignItems: "end",
                               color: "#1976d2",
                             }}
+                            className="text-green"
                           >
                             <SimCardDownloadOutlinedIcon />
                             <Link
@@ -218,9 +291,19 @@ const Certificate = () => {
                                 display: "block",
                               }}
                               key={certificate._id} // Add key prop
+                              onClick={() => {
+                                getCertificateReport(
+                                  certificate._id,
+                                  certificate._source.data.badge.name
+                                );
+                              }}
                             >
                               {t("CERTIFICATES")}
                             </Link>
+                            <div
+                              ref={svgContainerRef}
+                              dangerouslySetInnerHTML={{ __html: svgData }}
+                            />
                           </Box>
                         </Card>
                       </Grid>
@@ -244,7 +327,7 @@ const Certificate = () => {
                           component="div"
                           style={{
                             fontSize: "14px",
-                            paddingBottom: "15px",
+                            paddingBottom: "0",
                             height: "42px",
                             fontWeight: "600",
                           }}
@@ -278,17 +361,28 @@ const Certificate = () => {
                         >
                           <SimCardDownloadOutlinedIcon />
                           <Link
-                            href={certificate.pdfUrl} // Corrected usage of pdfUrl
+                            href={certificate.pdfUrl}
                             underline="none"
                             style={{
                               fontSize: "12px",
                               marginTop: "15px",
                               display: "block",
                             }}
-                            key={certificate.osid} // Add key prop
+                            key={certificate.osid}
+                            onClick={() => {
+                              getCertificate(
+                                certificate.templateUrl,
+                                certificate.osid,
+                                certificate.training.name
+                              );
+                            }}
                           >
                             {t("CERTIFICATES")}
                           </Link>
+                          <div
+                            ref={svgContainerRef}
+                            dangerouslySetInnerHTML={{ __html: svgData }}
+                          />
                         </Box>
                       </Card>
                     </Grid>
@@ -300,7 +394,9 @@ const Certificate = () => {
         </Box>
       </Container>
       <FloatingChatIcon />
-      {/* <Footer /> */}
+      <Box className="lg-hide">
+        <Footer />
+      </Box>
     </div>
   );
 };
