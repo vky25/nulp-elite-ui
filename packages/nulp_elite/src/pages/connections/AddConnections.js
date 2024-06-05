@@ -1773,6 +1773,7 @@ const AddConnections = () => {
                         onClose={() => {
                           setAutocompleteOpen(false);
                         }}
+                        icon={<CheckCircleOutlineIcon />}
                         options={options}
                         noOptionsText={t("NO_USERS_FOUND")}
                         getOptionLabel={getOptionLabel} // Adjust this based on your API response structure
@@ -1910,8 +1911,6 @@ const AddConnections = () => {
                     {!selectedChatUser ? (
                       <Box className="center-container">
                         <img src={require(`../../assets/chat.png`)} />
-
-                        <ForumOutlinedIcon style={{ fontSize: "100px" }} />
                         <Box className="demo-chat">
                           {t("START_A_CONVERSATION")}
                         </Box>
