@@ -858,7 +858,7 @@ const JoinCourse = () => {
               </Box>
             </Box>
             <Accordion
-              className="xs-hide"
+              className="xs-hide accordionBoxShadow"
               style={{
                 background: "#F9FAFC",
                 borderRadius: "10px",
@@ -869,7 +869,7 @@ const JoinCourse = () => {
                 expandIcon={<ExpandMoreIcon />}
                 aria-controls="panel1-content"
                 id="panel1-header"
-                className="h4-title accordionBoxShadow"
+                className="h4-title"
               >
                 {t("CERTIFICATION_CRITERIA")}
               </AccordionSummary>
