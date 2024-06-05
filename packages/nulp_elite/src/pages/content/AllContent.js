@@ -24,9 +24,11 @@ import ToasterCommon from "../ToasterCommon";
 import CollectionIcon from "@mui/icons-material/Collections";
 import ResourceIcon from "@mui/icons-material/LibraryBooks";
 import ContentPlaylistIcon from "@mui/icons-material/PlaylistPlay";
-import LocalLibraryIcon from '@mui/icons-material/LocalLibrary';
-import ContentCopyIcon from '@mui/icons-material/ContentCopy';
-import CardMembershipSharpIcon from '@mui/icons-material/CardMembershipSharp';
+import LocalLibraryIcon from "@mui/icons-material/LocalLibrary";
+import ContentCopyIcon from "@mui/icons-material/ContentCopy";
+import CardMembershipSharpIcon from "@mui/icons-material/CardMembershipSharp";
+const routeConfig = require("../../configs/routeConfig.json");
+
 const responsiveCard = {
   superLargeDesktop: {
     breakpoint: { max: 4000, min: 3000 },
@@ -49,13 +51,13 @@ const iconMapping = {
   Collection: CollectionIcon,
   Resource: ResourceIcon,
   "Content Playlist": ContentPlaylistIcon,
-  Course: CardMembershipSharpIcon, 
-  "Course Assessment": SummarizeOutlinedIcon, 
-  "Explanation Content": ContentCopyIcon, 
-  "Learning Resource": LocalLibraryIcon, 
+  Course: CardMembershipSharpIcon,
+  "Course Assessment": SummarizeOutlinedIcon,
+  "Explanation Content": ContentCopyIcon,
+  "Learning Resource": LocalLibraryIcon,
   "Lesson Plan Unit": SummarizeOutlinedIcon,
-  "Practice Question Set": SummarizeOutlinedIcon, 
-  LessonPlan: SummarizeOutlinedIcon, 
+  "Practice Question Set": SummarizeOutlinedIcon,
+  LessonPlan: SummarizeOutlinedIcon,
   "Course Unit": LocalLibraryIcon,
 };
 
@@ -273,9 +275,15 @@ const AllContent = () => {
   };
   const handleCardClick = (item, courseType) => {
     if (courseType === "Course") {
-      navigate(`/joinCourse/${item.identifier}`);
+      // navigate("/joinCourse", { state: { contentId: item.identifier } });
+      navigate(
+        `${routeConfig.ROUTES.JOIN_COURSE_PAGE.JOIN_COURSE}/${item.identifier}`
+      );
     } else {
-      navigate("/player", { state: { content: item } });
+      navigate(routeConfig.ROUTES.PLAYER_PAGE.PLAYER, {
+        state: { content: item },
+      });
+      // navigate("/player");
     }
   };
 
@@ -331,7 +339,8 @@ const AllContent = () => {
               return acc;
             }, {})
           ).map(([category, items]) => {
-            const IconComponent = iconMapping[category] || SummarizeOutlinedIcon;
+            const IconComponent =
+              iconMapping[category] || SummarizeOutlinedIcon;
             return (
               <React.Fragment key={category}>
                 <Box
