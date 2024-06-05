@@ -720,10 +720,18 @@ const Profile = () => {
                 )}
               </Box>
               <Button
-                type="buttom"
-                className="my-30 custom-btn-primary"
+                type="button"
+                className="my-30"
                 onClick={handleCertificateButtonClick}
                 disabled={isButtonDisabled}
+                style={{
+                  backgroundColor: isButtonDisabled ? "gray" : "#0E7A9C",
+                  borderRadius: "30px",
+                  color: "#fff",
+                  padding: "10px 25px",
+                  fontWeight: " 500",
+                  fontSize: "12px",
+                }}
               >
                 <ReceiptLongIcon className="pr-5" />
                 {t("Download Certificates")}
