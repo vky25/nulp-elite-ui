@@ -1616,9 +1616,6 @@ const AddConnections = () => {
                                     </Link>
 
                                     <Dialog open={open} onClose={handleClose}>
-                                      <DialogTitle>
-                                        {"Are you sure?"}
-                                      </DialogTitle>
                                       <DialogContent>
                                         <DialogContentText>
                                           {t(
@@ -1629,7 +1626,7 @@ const AddConnections = () => {
                                       <DialogActions>
                                         <Button
                                           type="button"
-                                          className="custom-btn-primary"
+                                          className="custom-btn-default"
                                           onClick={handleClose}
                                         >
                                           {t("CANCEL")}
@@ -1725,7 +1722,6 @@ const AddConnections = () => {
                                     {t("UNBLOCK")}
                                   </Link>
                                   <Dialog open={open} onClose={handleClose}>
-                                    <DialogTitle>{"Are you sure?"}</DialogTitle>
                                     <DialogContent>
                                       <DialogContentText>
                                         Are you sure you want to unblock this
@@ -1913,6 +1909,8 @@ const AddConnections = () => {
                   <Box className="text-center">
                     {!selectedChatUser ? (
                       <Box className="center-container">
+                        <img src={require(`../../assets/chat.png`)} />
+
                         <ForumOutlinedIcon style={{ fontSize: "100px" }} />
                         <Box className="demo-chat">
                           {t("START_A_CONVERSATION")}

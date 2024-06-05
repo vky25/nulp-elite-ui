@@ -11,7 +11,7 @@ import SimCardDownloadOutlinedIcon from "@mui/icons-material/SimCardDownloadOutl
 import Link from "@mui/material/Link";
 import Grid from "@mui/material/Grid";
 import data from "../../assets/certificates.json";
-import DescriptionOutlinedIcon from "@mui/icons-material/DescriptionOutlined";
+import ReceiptLongIcon from "@mui/icons-material/ReceiptLong";
 import Breadcrumbs from "@mui/material/Breadcrumbs";
 import Card from "@mui/material/Card";
 import FloatingChatIcon from "../../components/FloatingChatIcon";
@@ -189,7 +189,7 @@ const Certificate = () => {
       <Container
         maxWidth="xxl"
         role="main"
-        className="container-pb mb-20  xs-pb-75"
+        className="container-pb mb-20  xs-pb-75 lg-mt-12"
       >
         {error && (
           <Alert severity="error" className="my-10">
@@ -205,7 +205,7 @@ const Certificate = () => {
           </Box>
           <Box className="d-flex jc-bw alignItems-center lg-mb-20">
             <Box style={{ display: "flex", alignItems: "end" }}>
-              <DescriptionOutlinedIcon style={{ paddingRight: "10px" }} />{" "}
+              <ReceiptLongIcon style={{ paddingRight: "10px" }} />{" "}
               {t("DOWNLOAD_CERTIFICATES")}
             </Box>
             <Link

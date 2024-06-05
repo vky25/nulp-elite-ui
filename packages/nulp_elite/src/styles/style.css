@@ -4,6 +4,8 @@
   src: url("../fonts/Poppins-Light.ttf");
   src: url("../fonts/Poppins-Regular.ttf");
   src: url("../fonts/Poppins-ExtraLight.ttf");
+  src: url("../fonts/Poppins-Bold.ttf");
+  src: url("../fonts/Poppins-Medium.ttf");
 }
 
 body {
@@ -11,6 +13,12 @@ body {
   font-weight: 500;
   font-style: normal;
   background: #fff5e9;
+}
+body,
+p,
+div,
+button {
+  font-family: "Poppins", sans-serif !important;
 }
 
 /* Registration */
@@ -640,7 +648,7 @@ body {
   background: #1ea4ce;
   color: #fff;
   border-radius: 4px;
-  padding: 10px 19px 10px 16px;
+  padding: 5px;
 }
 .lg-d-flex {
   display: flex;
@@ -888,7 +896,7 @@ Footer {
 .custom-btn-default {
   border-radius: 30px !important;
   color: #004367 !important;
-  padding: 10px 25px !important;
+  padding: 6px 25px !important;
   font-weight: 500 !important;
   font-size: 12px !important;
   border: solid 1px #004367 !important;
@@ -1293,10 +1301,17 @@ custom-chip {
 }
 
 .tab-text {
+  display: inline-block !important;
   font-size: 16px !important;
-  color: #212121 !important;
-  text-align: center !important;
   font-weight: 500 !important;
+  min-height: 49px !important;
+  padding: 0 !important;
+  text-align: center !important;
+  padding-top: 10px !important;
+}
+.tab-text svg {
+  vertical-align: middle;
+  padding-right: 10px;
 }
 .tab-text.Mui-selected {
   color: #0e7a9c !important;
@@ -1423,11 +1438,13 @@ custom-chip {
 }
 .MuiPagination-ul li .Mui-selected {
   background: #484848 !important;
-  color: #fff;
   border-radius: 0;
-  padding: 0;
-  min-width: 20px !important;
+  color: #fff;
   height: 25px !important;
+  min-width: 20px !important;
+  padding: 10px !important;
+  margin: 0 !important;
+  border: none !important;
 }
 .connection-tab .css-w49w8k .MuiOutlinedInput-root .MuiAutocomplete-input {
   padding: 0.5px 4px 7.5px 5px !important;

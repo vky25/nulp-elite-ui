@@ -13,7 +13,7 @@ import EmojiEventsOutlinedIcon from "@mui/icons-material/EmojiEventsOutlined";
 import TimelapseOutlinedIcon from "@mui/icons-material/TimelapseOutlined";
 import Grid from "@mui/material/Grid";
 import LibraryAddCheckOutlinedIcon from "@mui/icons-material/LibraryAddCheckOutlined";
-import ReceiptLongOutlinedIcon from "@mui/icons-material/ReceiptLongOutlined";
+import ReceiptLongIcon from "@mui/icons-material/ReceiptLong";
 import FloatingChatIcon from "../../components/FloatingChatIcon";
 import CircularProgressWithLabel from "../../components/CircularProgressWithLabel";
 import RestoreOutlinedIcon from "@mui/icons-material/RestoreOutlined";
@@ -33,6 +33,8 @@ import Tab from "@mui/material/Tab";
 import TabContext from "@material-ui/lab/TabContext";
 import TabList from "@material-ui/lab/TabList";
 import TabPanel from "@material-ui/lab/TabPanel";
+import WatchLaterOutlinedIcon from "@mui/icons-material/WatchLaterOutlined";
+import DomainVerificationOutlinedIcon from "@mui/icons-material/DomainVerificationOutlined";
 import {
   Button,
   FormControl,
@@ -723,7 +725,7 @@ const Profile = () => {
                 onClick={handleCertificateButtonClick}
                 disabled={isButtonDisabled}
               >
-                <ReceiptLongOutlinedIcon className="pr-5" />
+                <ReceiptLongIcon className="pr-5" />
                 {t("Download Certificates")}
               </Button>
 
@@ -798,11 +800,13 @@ const Profile = () => {
                       <Tab
                         label="Continue learning"
                         className="tab-text"
+                        icon={<DomainVerificationOutlinedIcon />}
                         value="1"
                       />
                       <Tab
                         label="Learning History"
                         className="tab-text"
+                        icon={<WatchLaterOutlinedIcon />}
                         value="2"
                         // onClick={handleLearningHistoryClick}
                       />
