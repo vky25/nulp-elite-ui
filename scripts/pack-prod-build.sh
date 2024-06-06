@@ -74,5 +74,5 @@ find ../dist -type f -name 'index.html' -exec bash -c 'mv "$1" "${1%.html}.ejs" 
   <input type=\"hidden\" id=\"uciBotPhoneNumber\" value=\"<%=uciBotPhoneNumber%>\" />\
   |" "${1%.html}.ejs"' _ {} \;
 
-# rm ../dist/webapp/index.ejs  # need to uncomment this line when dev deployment
+rm ../dist/webapp/index.ejs  # need to uncomment this line when dev deployment
 cp -r ../dist/webapp/* ../dist/
