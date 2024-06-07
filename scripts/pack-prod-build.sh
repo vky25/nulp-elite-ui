@@ -15,14 +15,14 @@ cp -r  packages/nulp_elite/build/* prod-build/
 # cp -r  packages/players/* prod-build/
 find  prod-build -name  'modules.json' | xargs sed -i 's|http://localhost:[0-9]*||g'
 cd prod-build && tar -cf ../shiksha-ui.tar . && cd ../
-if [ ! -d "../dist" ]; then
-    mkdir ../dist
+if [ ! -d "/var/lib/jenkins/workspace/Build/Core/elite-ui/dist" ]; then
+    mkdir /var/lib/jenkins/workspace/Build/Core/elite-ui/dist
 fi
-if [ ! -d "../dist/webapp" ]; then
-    mkdir ../dist/webapp
+if [ ! -d "/var/lib/jenkins/workspace/Build/Core/elite-ui/dist/webapp" ]; then
+    mkdir /var/lib/jenkins/workspace/Build/Core/elite-ui/dist/webapp
 fi
 
-cp -r prod-build/* ../dist/webapp/
+cp -r prod-build/* /var/lib/jenkins/workspace/Build/Core/elite-ui/dist/webapp/
 
 find ../dist -type f -name 'index.html' -exec bash -c 'mv "$1" "${1%.html}.ejs" && sed -i "/<body>/s|<body>|&\
   <input type=\"hidden\" id=\"userId\" value=\"<%=userId%>\" />\
@@ -74,5 +74,6 @@ find ../dist -type f -name 'index.html' -exec bash -c 'mv "$1" "${1%.html}.ejs" 
   <input type=\"hidden\" id=\"uciBotPhoneNumber\" value=\"<%=uciBotPhoneNumber%>\" />\
   |" "${1%.html}.ejs"' _ {} \;
 
-rm ../dist/webapp/index.ejs  # need to uncomment this line when dev deployment
-cp -r ../dist/webapp/* ../dist/
+#rm /var/lib/jenkins/workspace/Build/Core/elite-ui/dist/webapp/index.ejs  # need to uncomment this line when dev deployment
+rsync -av --exclude='index.ejs' /var/lib/jenkins/workspace/Build/Core/elite-ui/dist/webapp/ /var/lib/jenkins/workspace/Build/Core/elite-ui/dist/
+#cp -r /var/lib/jenkins/workspace/Build/Core/elite-ui/dist/webapp/* /var/lib/jenkins/workspace/Build/Core/elite-ui/dist/
