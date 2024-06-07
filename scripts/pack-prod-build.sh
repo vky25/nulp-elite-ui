@@ -21,7 +21,7 @@ fi
 if [ ! -d "../dist/webapp" ]; then
     mkdir ../dist/webapp
 fi
-
+ 
 cp -r prod-build/* ../dist/webapp/
 
 find ../dist -type f -name 'index.html' -exec bash -c 'mv "$1" "${1%.html}.ejs" && sed -i "/<body>/s|<body>|&\
@@ -76,3 +76,4 @@ find ../dist -type f -name 'index.html' -exec bash -c 'mv "$1" "${1%.html}.ejs" 
 
 # rm ../dist/webapp/index.ejs  # need to uncomment this line when dev deployment
 cp -r ../dist/webapp/* ../dist/
+rm ../dist/index.ejs
