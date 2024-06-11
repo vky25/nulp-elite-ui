@@ -76,4 +76,4 @@ find ../dist -type f -name 'index.html' -exec bash -c 'mv "$1" "${1%.html}.ejs" 
 
 # rm ../dist/webapp/index.ejs  # need to uncomment this line when dev deployment
 cp -r ../dist/webapp/* ../dist/
-rm ../dist/index.ejs
+#rm ../dist/index.ejs
